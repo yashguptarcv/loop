@@ -1,15 +1,11 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Users Management')
+@section('title', isset($user) ? 'Edit User' : 'Create User')
 
 @section('content')
 <div class="container mx-auto px-4 py-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-[var(--color-text-primary)]">
-            @isset($user) Edit User @else Create User @endisset
-        </h1>
-        <x-back :route="route('admin.settings.users.index')" title="Back to Users"/>    
-    </div>
+    
+    @include('admin::components.common.back-button', ['route' => route('admin.settings.users.index'), 'name' => isset($user) ? 'Edit User' : 'Create User'])
 
     <div class="bg-[var(--color-white)] rounded-xl shadow-sm border border-[var(--color-border)] p-6">
         <form id="userForm" class="form-ajax" method="POST" 

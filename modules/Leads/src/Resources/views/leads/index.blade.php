@@ -40,8 +40,10 @@
 
 @section('content')
 <div class="container mx-auto px-4 py-8">
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Leads Management</h1>
+    
+    <div class="flex justify-between items-center mb-8">    
+        @include('admin::components.common.back-button', ['route' => '', 'name' => 'Lead Managment'])
+        
         @if(bouncer()->hasPermission('admin.leads.create'))
         <a href="{{route('admin.leads.create')}}" class="bg-[var(--color-hover)] text-[var(--color-text-inverted)] px-4 py-2 rounded-lg flex items-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">

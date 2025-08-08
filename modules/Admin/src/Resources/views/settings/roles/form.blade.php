@@ -1,14 +1,11 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Role Management')
+@section('title',  isset($role) ? 'Edit Role' : 'Create Role')
 
 @section('content')
     <div class="p-6  min-h-screen">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800" id="form-title">{{ isset($role) ? 'Edit Role' : 'Create Role' }}
-            </h2>
-            <x-back :route="route('admin.settings.roles.index')" title="Back to Roles" />
-        </div>
+
+        @include('admin::components.common.back-button', ['route' => route('admin.settings.roles.index'), 'name' =>  isset($role) ? 'Edit Role' : 'Create Role'])
 
         <form id="role-form" method="POST"
             action="{{ isset($role) ? route('admin.settings.roles.update', $role->id) : route('admin.settings.roles.store') }}"

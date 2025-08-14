@@ -16,6 +16,7 @@ class Button extends Component
     public ?string $name;
     public array $calls;
     public string $class;
+    public string $custom_class;
 
     public function __construct(
         string $as = 'button',        // 'button' or 'a'
@@ -28,7 +29,8 @@ class Button extends Component
         string $id = null,
         string $name = null,
         array $calls = [],
-        string $class = ''
+        string $class = '',
+        string $custom_class = ''
     ) {
         $this->as = $as;
         $this->type = $type;
@@ -41,6 +43,7 @@ class Button extends Component
         $this->name = $name;
         $this->calls = $calls;
         $this->class = $class;
+        $this->custom_class = $custom_class;
     }
 
     public function render()

@@ -1,0 +1,12 @@
+{
+    "name": "Catalog",
+    "version": "1.0.0",
+    "enabled": true,
+    "last_enabled_at": "2025-08-12T10:45:49+00:00",
+    "last_disabled_at": null,
+    "applied_migrations": [],
+    "failed_migrations": [],
+    "dependencies": [],
+    "dependents": [],
+    "config": []
+}

@@ -1,65 +1,54 @@
-<div id="activity-tab" class="tab-content active">
-                            <div class="activity-item">
-                                <div class="flex items-start">
-                                    <div class="w-10 h-10 rounded-full bg-[var(--color-hover)] text-[var(--color-text-inverted)]-100 flex items-center justify-center text-blue-600 text-sm font-bold mr-3">
-                                        AM
-                                    </div>
-                                    <div>
-                                        <div class="flex items-center">
-                                            <p class="font-medium text-gray-900">Alex Morgan</p>
-                                            <span class="mx-2 text-gray-400">•</span>
-                                            <span class="text-sm text-gray-500">Today, 10:30 AM</span>
-                                        </div>
-                                        <p class="text-gray-700">Had a 30-minute call with John to discuss the enterprise package requirements.</p>
-                                        <div class="mt-2 flex items-center text-sm text-gray-500">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                            </svg>
-                                            Scheduled follow-up for Friday
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="activity-item">
-                                <div class="flex items-start">
-                                    <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-sm font-bold mr-3">
-                                        JS
-                                    </div>
-                                    <div>
-                                        <div class="flex items-center">
-                                            <p class="font-medium text-gray-900">John Smith</p>
-                                            <span class="mx-2 text-gray-400">•</span>
-                                            <span class="text-sm text-gray-500">Yesterday, 2:15 PM</span>
-                                        </div>
-                                        <p class="text-gray-700">Sent email with additional questions about the integration capabilities.</p>
-                                        <div class="mt-2">
-                                            <a href="#" class="text-sm text-blue-600 hover:underline">View Email</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="activity-item">
-                                <div class="flex items-start">
-                                    <div class="w-10 h-10 rounded-full bg-[var(--color-hover)] text-[var(--color-text-inverted)]-100 flex items-center justify-center text-blue-600 text-sm font-bold mr-3">
-                                        AM
-                                    </div>
-                                    <div>
-                                        <div class="flex items-center">
-                                            <p class="font-medium text-gray-900">Alex Morgan</p>
-                                            <span class="mx-2 text-gray-400">•</span>
-                                            <span class="text-sm text-gray-500">May 18, 2023</span>
-                                        </div>
-                                        <p class="text-gray-700">Initial demo call completed. John seemed very interested in our premium features.</p>
-                                        <div class="mt-2 flex items-center text-sm text-gray-500">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                            </svg>
-                                            Viewed demo recording
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    @if(!empty($lead->activities))
+    @foreach($lead->activities as $activity)
+    <div class="activity-item mb-2">
+        <div class="flex items-start">
+            @php
+                $nameHash = crc32($activity->admin->name);
+                $colors = [
+                    'bg-red-100 text-red-600',
+                    'bg-blue-100 text-blue-600',
+                    'bg-green-100 text-green-600',
+                    'bg-yellow-100 text-yellow-600',
+                    'bg-purple-100 text-purple-600',
+                    'bg-pink-100 text-pink-600',
+                    'bg-indigo-100 text-indigo-600'
+                ];
+                $colorIndex = abs($nameHash) % count($colors);
+                $colorClass = $colors[$colorIndex];
+                $initials = strtoupper(substr($activity->admin->name, 0, 2));
+            @endphp
+            
+            <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold mr-3 {{ $colorClass }}">
+                {{ $initials }}
+            </div>
+            <div class="flex-1">
+                <div class="flex items-center">
+                    <p class="font-medium text-gray-900">{{ $activity->admin->name }}</p>
+                    <span class="mx-2 text-gray-400">•</span>
+                    <span class="text-sm text-gray-500">{{ $activity->created_at->diffForHumans() }}</span>
+                    <span class="ml-2 px-2 py-1 text-xs rounded-full 
+                        @if($activity->type === 'call') bg-blue-100 text-blue-800
+                        @elseif($activity->type === 'email') bg-green-100 text-green-800
+                        @elseif($activity->type === 'meeting') bg-purple-100 text-purple-800
+                        @else bg-gray-100 text-gray-800 @endif">
+                        {{ ucfirst($activity->type) }}
+                    </span>
+                </div>
+                <div class="prose max-w-none mt-2 text-gray-700">
+                    {!! $activity->description !!}
+                </div>
+                @if($activity->duration_minutes > 0)
+                <div class="mt-2 text-sm text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Duration: {{ $activity->duration_minutes }} minutes
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+    @endforeach
+    @else
+        <p class="text-gray-500">No activities yet</p>
+    @endif

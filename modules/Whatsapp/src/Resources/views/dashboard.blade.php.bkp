@@ -11,11 +11,11 @@
     <div class="max-w-7xl mx-auto">
         <div class="mb-8 flex items-center justify-between flex-wrap gap-2">
             <div>
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-1">Compose WhatsApp Message</h1>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white-200 mb-1">Compose WhatsApp Message</h1>
                 <p class="text-gray-600 text-sm">Send text messages, templates, or images via WhatsApp Business</p>
             </div>
             <a href="{{ route('admin.whatsapp.templates.index') }}"
-                class="inline-block px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition">
+                class="inline-block px-4 py-2 bg-blue-100 text-white-200 text-sm font-medium rounded-md hover:bg-blue-700 transition">
                 View All Templates
             </a>
         </div>
@@ -29,7 +29,7 @@
                         <!-- Phone & Name -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             <div>
-                                <label for="template_recipient_phone" class="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+                                <label for="template_recipient_phone" class="block text-sm font-medium text-gray-700 dark:text-white-200 mb-2">
                                     Phone Number *
                                 </label>
                                 <input type="text" id="template_recipient_phone" name="recipient_phone"
@@ -37,7 +37,7 @@
                                     placeholder="e.g., 1234567890" required>
                             </div>
                             <div>
-                                <label for="template_recipient_name" class="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+                                <label for="template_recipient_name" class="block text-sm font-medium text-gray-700 dark:text-white-200 mb-2">
                                     Recipient Name
                                 </label>
                                 <input type="text" id="template_recipient_name" name="recipient_name"
@@ -48,7 +48,7 @@
                         <!-- Template & Language -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             <div>
-                                <label for="template_name" class="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+                                <label for="template_name" class="block text-sm font-medium text-gray-700 dark:text-white-200 mb-2">
                                     Template Name *
                                 </label>
                                 <select id="template_name" name="template_name"
@@ -61,7 +61,7 @@
                                 </select>
                             </div>
                             <div>
-                                <label for="language" class="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+                                <label for="language" class="block text-sm font-medium text-gray-700 dark:text-white-200 mb-2">
                                     Language
                                 </label>
                                 <select id="language" name="language"
@@ -77,7 +77,7 @@
                         <!-- Header Info -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                             <div>
-                                <label for="header_type" class="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+                                <label for="header_type" class="block text-sm font-medium text-gray-700 dark:text-white-200 mb-2">
                                     Header Type
                                 </label>
                                 <select id="header_type" name="header_type"
@@ -90,7 +90,7 @@
                                 </select>
                             </div>
                             <div>
-                                <label for="header_value" class="block text-sm font-medium text-gray-700 dark:text-white mb-2">
+                                <label for="header_value" class="block text-sm font-medium text-gray-700 dark:text-white-200 mb-2">
                                     Header Value (Text or Media URL)
                                 </label>
                                 <input type="text" id="header_value" name="header_value"
@@ -100,7 +100,7 @@
                             </div>
                         </div>
                         <button type="submit"
-                            class="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            class="w-full bg-blue-600 text-white-200 py-3 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                             Send Template Message
                         </button>
                     </form>
@@ -109,7 +109,7 @@
             <!-- Sidebar -->
             <div>
                 <div class="bg-white dark:bg-gray-800 border-2 dark:border-white rounded-lg shadow p-6 mb-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Tips</h3>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white-200 mb-4">Tips</h3>
                     <ul class="space-y-2 text-sm text-gray-600 dark:text-white">
                         <li>• Include country code in phone numbers</li>
                         <li>• Templates must be pre-approved by Meta</li>
@@ -133,7 +133,7 @@
                     class="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Parameter ${parameterCount + 1}">
             <button type="button" onclick="removeParameter(this)"
-                    class="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">
+                    class="px-3 py-2 bg-red-600 text-white-200 rounded-md hover:bg-red-700">
                 -
             </button>
             `;

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('datagrid_saved_filters', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->unsigned();
-            $table->string('name');
-            $table->string('src');
+            $table->string('name', 100);
+            $table->string('src', 100);
             $table->json('applied');
             $table->timestamps();
 

@@ -30,7 +30,15 @@ class LeadModel extends Model
         'status_id',
         'source_id',
         'assigned_to',
-        'created_by'
+        'industries',
+        'address',
+        'address_2',
+        'country',
+        'state',
+        'city',
+        'postal_code',
+        'custom_fields',
+        'created_by',
     ];
 
     protected $casts = [
@@ -71,6 +79,11 @@ class LeadModel extends Model
     public function attachments()
     {
         return $this->hasMany(LeadAttachmentModel::class, 'lead_id')->latest();
+    }
+
+    public function application()
+    {
+        return $this->hasMany(Application::class, 'lead_id')->latest();
     }
 
     public function syncTags(array|string $tags)

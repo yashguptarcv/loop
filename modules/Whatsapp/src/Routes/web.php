@@ -23,8 +23,8 @@ Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->
             Route::get('/', [WhatsAppTemplateController::class, 'index'])->name('index');
             Route::resource('templates', WhatsAppTemplateController::class);
             
-            Route::get('/templates/sync', [WhatsAppTemplateController::class, 'sync'])->name('templates.sync');
-            Route::post('/templates/bulk-delete', [WhatsAppTemplateController::class, 'bulkDelete'])->name('templates.bulk-delete');
+            Route::get('/whatsapp/templates/sync', [WhatsAppTemplateController::class, 'sync'])->name('templates.sync');
+            Route::post('/whatsapp/templates/bulk-delete', [WhatsAppTemplateController::class, 'bulkDelete'])->name('templates.bulk-delete');
 
             
             Route::get('/compose', [WhatsAppController::class, 'compose'])->name('compose');

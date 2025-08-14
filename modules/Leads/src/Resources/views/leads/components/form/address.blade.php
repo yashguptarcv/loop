@@ -1,5 +1,5 @@
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 pb-2 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white-200 mb-6 pb-2 border-b border-blue-200 dark:border-blue-700">
                 Address Information
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -55,18 +55,31 @@
                     <label for="country" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Country
                     </label>
-                    <select id="country" name="country"
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 @error('country') border-red-500 dark:border-red-400 @enderror">
-                        <option value="">Select Country</option>
-                        <option value="US" {{ old('country', $lead->country ?? '') == 'US' ? 'selected' : '' }}>United States</option>
-                        <option value="CA" {{ old('country', $lead->country ?? '') == 'CA' ? 'selected' : '' }}>Canada</option>
-                        <option value="UK" {{ old('country', $lead->country ?? '') == 'UK' ? 'selected' : '' }}>United Kingdom</option>
-                        <option value="AU" {{ old('country', $lead->country ?? '') == 'AU' ? 'selected' : '' }}>Australia</option>
-                        <option value="IN" {{ old('country', $lead->country ?? '') == 'IN' ? 'selected' : '' }}>India</option>
-                    </select>
-                    @error('country')
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
+                    <div id="auto-complete">
+                        <input
+                            type="text"
+                            autocomplete="dropdown"
+                            name="country_name"
+                            value=""
+                            placeholder="autocomplete ( countries )"
+                            id="input-country_id"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                            data-table="countries"
+                            data-select_columns="id, name"
+                            data-search_column="name"
+                            data-target="country"
+                            data-original-value="" />
+                        <input
+                            type="hidden"
+                            name="country"
+                            id="country"
+                            value="{{ old('country', $lead->country ?? '') }}"
+                            class="mt-1"
+                            data-original-value="" />
+                        @error('country')
+                            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
             </div>
         </div>

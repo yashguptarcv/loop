@@ -7,6 +7,27 @@ return [
         'permission' => 'admin.index',
     ],
     [
+        'label' => 'Catalog',
+        'route' => '#',
+        'icon'  => 'blur_linear',
+        'permission' => 'admin.whatsapp.index',
+        'children' => [
+            [
+                'label' => 'Categories',
+                'route' => 'admin.catalog.categories.index',
+                'permission' => 'admin.catalog.categories.index',
+                'icon' => 'chevron_right'
+            ],
+
+            [
+                'label' => 'Products',
+                'route' => 'admin.catalog.products.index',
+                'permission' => 'admin.catalog.products.index',
+                'icon' => 'chevron_right'
+            ]
+        ]
+    ],
+    [
         'label' => 'Customers',
         'route' => 'admin.customers.index',
         'icon'  => 'people',
@@ -19,6 +40,12 @@ return [
         'permission' => 'admin.leads.index',
     ],
     [
+        'label' => 'Meetings',
+        'route' => 'admin.meetings.index',
+        'icon'  => 'event',
+        'permission' => 'admin.meetings.index',
+    ],
+    [
         'label' => 'Whatsapp',
         'route' => 'admin.whatsapp.index',
         'icon'  => 'comment',
@@ -26,40 +53,40 @@ return [
     ],
     [
         'label' => 'Sales',
-        'route' => 'admin.whatsapp.index',
-        'icon'  => 'comment',
-        'permission' => 'admin.whatsapp.index',
+        'route' => 'admin.settings.index',
+        'icon'  => 'trending_up',
+        'permission' => 'admin.settings.index',
         'children' => [
             [
                 'label' => 'Orders',
                 'route' => 'admin.settings.index',
                 'permission' => 'admin.website.cms.index',
-                'icon' => 'article'
+                'icon' => 'chevron_right'
             ],
             [
                 'label' => 'Transaction',
                 'route' => 'admin.settings.index',
                 'permission' => 'admin.website.cms.index',
-                'icon' => 'article'
+                'icon' => 'chevron_right'
             ],
             [
                 'label' => 'Invoice',
                 'route' => 'admin.settings.index',
                 'permission' => 'admin.website.cms.index',
-                'icon' => 'article'
+                'icon' => 'chevron_right'
             ]
         ]
     ],
     [
         'label' => 'Website',
         'icon'  => 'web', 
-        'permission' => null,
+        'permission' => '#',
         'children' => [
             [
                 'label' => 'Coupons',
-                'route' => 'admin.settings.index',
-                'permission' => 'admin.website.cms.index',
-                'icon' => 'article'
+                'route' => 'admin.coupons.index',
+                'permission' => 'admin.coupons.index',
+                'icon' => 'chevron_right'
             ]
         ]
     ],

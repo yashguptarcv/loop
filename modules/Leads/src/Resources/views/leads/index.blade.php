@@ -39,13 +39,13 @@
 @endsection
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
+
     
     <div class="flex justify-between items-center mb-8">    
         @include('admin::components.common.back-button', ['route' => '', 'name' => 'Lead Managment'])
         
         @if(bouncer()->hasPermission('admin.leads.create'))
-        <a href="{{route('admin.leads.create')}}" class="bg-[var(--color-hover)] text-[var(--color-text-inverted)] px-4 py-2 rounded-lg flex items-center">
+        <a href="{{route('admin.leads.create')}}" class="inline-flex items-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 hover:text-blue-300 text-blue-600 bg-blue-100">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
             </svg>
@@ -70,9 +70,9 @@
                     <div class="flex justify-between items-start mb-2">
                         <h3 class="font-medium text-gray-900">
                             @if(bouncer()->hasPermission('admin.leads.details'))    
-                                <a href="{{route('admin.leads.details', $lead->id)}}">{{ $lead->name }}</a>
+                                <a class="truncate max-w-[180px]" href="{{route('admin.leads.details', $lead->id)}}">{{ $lead->name }}</a>
                             @else
-                                <a href="#">{{ $lead->name }}</a>
+                                <a class="truncate max-w-[180px]" href="#">{{ $lead->name }}</a>
                             @endif
                         </h3>
                         <span class="text-xs text-gray-500">{{ $lead->created_at->diffForHumans() }}</span>
@@ -93,7 +93,7 @@
                 </div>
                     <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
                         <div class="">
-                            <span class="mr-2">
+                            <span class="truncate max-w-[180px] mr-2">
                             {{ $lead->createdBy->name ?? 'Unknown' }}
                             </span>
                         </div>
@@ -123,7 +123,7 @@
         </div>
         @endforeach
     </div>
-</div>
+
 @endsection
 
 @section('scripts')
@@ -164,8 +164,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const {{ Str::camel($status->name) }}Count = document.getElementById('status-{{ $status->id }}-leads').children.length;
                 document.querySelector('#status-{{ $status->id }}-column span').textContent = {{ Str::camel($status->name) }}Count;
                 @endforeach
+                showToast("Lead status changed",'success', 'Success');
             } else {
-                console.error('Error updating lead status:', data.message);
+                showToast('Unable to update lead status at the time','error', 'Error');
                 // Optionally revert the UI change
             }
         })

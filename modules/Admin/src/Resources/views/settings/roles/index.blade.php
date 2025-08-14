@@ -3,5 +3,6 @@
 @section('title', 'Roles Management')
 
 @section('content')
-   <x-data-view :data="$lists" title="Roles Management" url="" />
+   @include('admin::components.common.back-button', ['route' => route('admin.settings.index'), 'name' => 'Roles Management'])
+   <x-data-view :data="$lists" title="" url="" />
 @endsection

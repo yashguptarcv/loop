@@ -16,6 +16,16 @@ return new class extends Migration
             $table->string('company')->nullable();
             $table->text('description')->nullable();
             $table->decimal('value', 10, 2)->nullable();
+            $table->string('industries')->nullable();
+            $table->string('website')->nullable();
+            $table->string('address')->nullable();
+            $table->string('address_2')->nullable();
+            $table->string('country')->nullable();
+            $table->string('state')->nullable();
+            $table->string('city')->nullable();
+            $table->string('postal_code')->nullable();
+            
+            $table->text('custom_fields')->nullable();
             
             // Foreign key to lead_statuses table
             $table->unsignedBigInteger('status_id');
@@ -28,7 +38,7 @@ return new class extends Migration
             $table->unsignedBigInteger('assigned_to')->nullable();
             $table->foreign('assigned_to')
                   ->references('id')
-                  ->on('users')
+                  ->on('admins')
                   ->onDelete('set null');
 
             // Foreign key to admins table (created by)

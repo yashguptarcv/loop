@@ -243,6 +243,7 @@ abstract class DataGrid
             icon: $action['icon'] ?? '',
             title: $action['title'],
             method: $action['method'],
+            modal: $action['modal'] ?? '',
             url: $action['url'],
         );
 
@@ -397,7 +398,7 @@ abstract class DataGrid
      */
     public function getExportFileNameWithExtension(): string
     {
-        return $this->getExportFileName().'.'.$this->getExportFileExtension();
+        return $this->getExportFileName() . '.' . $this->getExportFileExtension();
     }
 
     /**
@@ -469,16 +470,16 @@ abstract class DataGrid
                 $this->queryBuilder->where(function ($scopeQueryBuilder) use ($requestedValues) {
                     foreach ($requestedValues as $value) {
                         collect($this->columns)
-                            ->filter(fn ($column) => $column->getSearchable() && ! in_array($column->getType(), [
+                            ->filter(fn($column) => $column->getSearchable() && ! in_array($column->getType(), [
                                 ColumnTypeEnum::BOOLEAN->value,
                                 ColumnTypeEnum::AGGREGATE->value,
                             ]))
-                            ->each(fn ($column) => $scopeQueryBuilder->orWhere($column->getColumnName(), 'LIKE', '%'.$value.'%'));
+                            ->each(fn($column) => $scopeQueryBuilder->orWhere($column->getColumnName(), 'LIKE', '%' . $value . '%'));
                     }
                 });
             } else {
                 collect($this->columns)
-                    ->first(fn ($column) => $column->getIndex() === $requestedColumn)
+                    ->first(fn($column) => $column->getIndex() === $requestedColumn)
                     ->processFilter($this->queryBuilder, $requestedValues);
             }
         }
@@ -595,7 +596,7 @@ abstract class DataGrid
     protected function formatColumns(): array
     {
         return collect($this->columns)
-            ->map(fn ($column) => $column->toArray())
+            ->map(fn($column) => $column->toArray())
             ->toArray();
     }
 
@@ -605,7 +606,7 @@ abstract class DataGrid
     protected function formatActions(): array
     {
         return collect($this->actions)
-            ->map(fn ($action) => $action->toArray())
+            ->map(fn($action) => $action->toArray())
             ->toArray();
     }
 
@@ -615,7 +616,7 @@ abstract class DataGrid
     protected function formatMassActions(): array
     {
         return collect($this->massActions)
-            ->map(fn ($massAction) => $massAction->toArray())
+            ->map(fn($massAction) => $massAction->toArray())
             ->toArray();
     }
 
@@ -639,7 +640,7 @@ abstract class DataGrid
                 $getUrl = $action->url;
 
                 $record->actions[] = [
-                    'index'  => ! empty($action->index) ? $action->index : 'action_'.$index + 1,
+                    'index'  => ! empty($action->index) ? $action->index : 'action_' . $index + 1,
                     'icon'   => $action->icon,
                     'title'  => $action->title,
                     'method' => $action->method,

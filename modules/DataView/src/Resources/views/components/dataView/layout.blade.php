@@ -1,4 +1,4 @@
-<div class="container mx-auto px-4 py-6">
+
     @include('admin::components.common.back-button', ['route' => '', 'name' => $title])
 
     <!-- Top Controls -->
@@ -15,7 +15,7 @@
     <x-sidebar :data="$data" />
     <!-- Overlay -->
     <div id="filterOverlay" class="fixed inset-0 z-40 bg-black/50 bg-opacity-50 hidden"></div>
-</div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

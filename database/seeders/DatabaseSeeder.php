@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
       CurrencySeeder::class,
       CountryStatesSeeder::class,
       Roles::class,
-      TagFactorySeeder::class,
+      StatusesTableSeeder::class,
+      // TagFactorySeeder::class,
     ]);
 
   }

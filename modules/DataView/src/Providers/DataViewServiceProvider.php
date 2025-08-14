@@ -12,6 +12,7 @@ use Modules\DataView\View\Components\DataView\Partials\Sidebar;
 use Modules\DataView\View\Components\DataView\Partials\BackButton;
 use Modules\DataView\View\Components\DataView\Partials\Pagination;
 use Modules\DataView\View\Components\DataView\Partials\TopControls;
+use Modules\DataView\View\Components\Modal\Modal;
 
 class DataViewServiceProvider extends ServiceProvider
 {
@@ -137,5 +138,6 @@ class DataViewServiceProvider extends ServiceProvider
         Blade::component('pagination', Pagination::class);
         Blade::component('sidebar', Sidebar::class);
         Blade::component('back', BackButton::class);
+        Blade::component('modal', Modal::class);
     }
 }

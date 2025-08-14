@@ -15,9 +15,9 @@
                     [
                         'title' => 'General Settings',
                         'description' => 'Configure store name, contact information, and basic preferences.',
-                        'route' => '#',
+                        'route' => route('admin.settings.general.leads.index'),
                         'icon' => 'settings',
-                        'permission' => ''
+                        'permission' => 'admin.settings.general.leads.index'
                     ],
                     [
                         'title' => 'Payment Methods',
@@ -50,27 +50,26 @@
                         'icon' => 'flag',
                         'permission' => 'admin.settings.statuses.leads.index'
                     ],
-                    
                     [
                         'title' => 'Currencies',
                         'description' => 'Configure accepted currencies and exchange rates.',
-                        'route' => '#',
+                        'route' => route('admin.settings.currencies.leads.index'),
                         'icon' => 'currency_exchange',
-                        'permission' => ''
+                        'permission' => 'admin.settings.currencies.leads.index'
                     ],
                     [
                         'title' => 'Countries',
                         'description' => 'Manage countries where you operate and ship to.',
-                        'route' => '#',
+                        'route' => route('admin.settings.countries.leads.index'),
                         'icon' => 'public',
-                        'permission' => ''
+                        'permission' => 'admin.settings.countries.leads.index'
                     ],
                     [
                         'title' => 'States',
                         'description' => 'Manage states/regions for tax and shipping calculations.',
-                        'route' => '#',
+                        'route' => route('admin.settings.states.leads.index'),
                         'icon' => 'map',
-                        'permission' => ''
+                        'permission' => 'admin.settings.states.leads.index'
                     ],
                     [
                         'title' => 'Roles & Permissions',
@@ -91,11 +90,11 @@
 
             @foreach ($settings as $setting)
                 @if (!isset($setting['permission']) || bouncer()->hasPermission($setting['permission']))
-                    <div class="bg-[var(--color-white)] rounded-xl shadow-sm border border-[var(--color-border)] overflow-hidden transition-all hover:shadow-md hover:border-[var(--color-primary)] group">
+                    <div class="bg-[var(--color-white)] rounded-xl shadow-sm border border-blue-100 overflow-hidden transition-all hover:shadow-md hover:border-blue-600 group">
                         <a href="{{ $setting['route'] }}" class="block h-full">
                             <div class="p-5 h-full flex flex-col">
                                 <div class="flex items-center mb-4">
-                                    <div class="p-3 rounded-lg bg-[var(--color-primary-100)] text-[var(--color-primary)]">
+                                    <div class="p-3 rounded-lg bg-[var(--color-primary-100)] text-blue-600">
                                         <span class="material-icons-outlined">{{ $setting['icon'] }}</span>
                                     </div>
                                     <h3 class="ml-3 text-lg font-semibold text-[var(--color-text-primary)]">
@@ -105,7 +104,7 @@
                                 <p class="text-sm text-[var(--color-text-secondary)] mb-4 flex-grow">
                                     {{ $setting['description'] }}
                                 </p>
-                                <div class="flex items-center text-[var(--color-primary)] group-hover:text-[var(--color-primary-dark)] transition-colors">
+                                <div class="flex items-center text-blue-600 group-hover:text-300 transition-colors">
                                     <span class="text-sm font-medium">Configure</span>
                                     <span class="material-icons-outlined ml-1 text-base">chevron_right</span>
                                 </div>

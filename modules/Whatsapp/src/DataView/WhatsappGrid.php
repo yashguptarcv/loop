@@ -103,7 +103,7 @@ class WhatsappGrid extends DataGrid
     {
         if (bouncer()->hasPermission('admin.whatsapp.templates.show')) {
             $this->addAction([
-                'icon' => 'eye',
+                'icon' => 'edit',
                 'title' => 'Edit',
                 'method' => 'GET',
                 'url' => function ($row) {
@@ -114,7 +114,7 @@ class WhatsappGrid extends DataGrid
 
         if (bouncer()->hasPermission('admin.whatsapp.templates.destroy')) {
             $this->addAction([
-                'icon' => 'icon-delete',
+                'icon' => 'delete',
                 'title' => 'Delete',
                 'method' => 'DELETE',
                 'url' => function ($row) {
@@ -133,40 +133,40 @@ class WhatsappGrid extends DataGrid
     {
         if (bouncer()->hasPermission('admin.whatsapp.templates.bulk-delete')) {
             $this->addMassAction([
-                'icon' => 'trash',
+                'icon' => 'delete',
                 'title' => 'Bulk Delete',
                 'method' => 'POST',
-                'action' => 'text-white bg-red-600',
+                'action' => 'text-red-600 bg-red-100',
                 'url' => 'admin.whatsapp.templates.bulk-delete',
             ]);
         }
 
         if (bouncer()->hasPermission('admin.whatsapp.templates.sync')) {
             $this->addMassAction([
-                'icon' => 'icon-cached',
+                'icon' => 'rotate_left',
                 'title' => 'Sync',
                 'method' => 'GET',
-                'action' => 'text-white bg-gray-500',
+                'action' => 'text-blue-600 bg-blue-100',
                 'url' => 'admin.whatsapp.templates.sync',
             ]);
         }
         
         if (bouncer()->hasPermission('admin.whatsapp.index')) {
             $this->addMassAction([
-                'icon' => 'icon-plane',
+                'icon' => 'share',
                 'title' => 'Send Message',
                 'method' => 'GET',
-                'action' => 'text-white bg-gray-500',
+                'action' => 'text-blue-600 bg-blue-100',
                 'url' => 'admin.whatsapp.index',
             ]);
         }
 
         if (bouncer()->hasPermission('admin.whatsapp.templates.create')) {
             $this->addMassAction([
-                'icon' => 'plus',
+                'icon' => 'add',
                 'title' => 'Create Template',
                 'method' => 'GET',
-                'action' => 'text-white bg-blue-500',
+                'action' => 'text-blue-600 bg-blue-100',
                 'url' => 'admin.whatsapp.templates.create',
             ]);
         }

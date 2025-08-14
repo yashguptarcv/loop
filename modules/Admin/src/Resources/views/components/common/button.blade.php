@@ -4,18 +4,24 @@
         ->implode(' ');
 @endphp
 
+@php
+    $class = "inline-flex items-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 hover:text-$class-300 text-$class-600 bg-$class-100";
+    if(empty($class) && !empty($custom_class)) {
+        $class = $custom_class;
+    } 
+@endphp
 @if ($as === 'a')
     <a href="{{ $href }}"
        id="{{ $id }}"
        name="{{ $name }}"
        {!! $dynamicAttributes !!}
-       class="inline-flex items-center gap-2 px-4 py-2 rounded bg-[var(--color-hover)] text-[var(--color-text-inverted)]-600 text-white hover:bg-[var(--color-hover)] text-[var(--color-text-inverted)]-700 {{ $class }}">
+       class="{{ $class }}">
         @if ($icon)
             {!! $icon !!}
         @endif
-        {{ $label }}
+        {!! $label !!}
         @if ($badge)
-            <span class="ml-2 inline-block bg-red-500 text-white text-xs px-2 rounded-full">{{ $badge }}</span>
+            <span class="ml-2 inline-block bg-{{$class ?? 'blue'}}-100 text-{{$class ?? 'blue'}}-600 text-xs px-2 rounded-full">{{ $badge }}</span>
         @endif
     </a>
 @else
@@ -23,13 +29,13 @@
             id="{{ $id }}"
             name="{{ $name }}"
             {!! $dynamicAttributes !!}
-            class="inline-flex items-center gap-2 px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700 {{ $class }}">
+            class="{{ $class }}">
         @if ($icon)
             {!! $icon !!}
         @endif
-        {{ $label }}
+        {!! $label !!}
         @if ($badge)
-            <span class="ml-2 inline-block bg-red-500 text-white text-xs px-2 rounded-full">{{ $badge }}</span>
+            <span class="ml-2 inline-block bg-{{$class ?? 'blue'}}-100 text-{{$class ?? 'blue'}}-600 text-xs px-2 rounded-full">{{ $badge }}</span>
         @endif
     </button>
 @endif

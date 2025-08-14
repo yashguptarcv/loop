@@ -19,7 +19,8 @@ class LeadActivityModel extends Model
         'description',
         'activity_date',
         'duration_minutes',
-        'outcome'
+        'outcome',
+        'schedule_meeting'
     ];
 
     protected $casts = [

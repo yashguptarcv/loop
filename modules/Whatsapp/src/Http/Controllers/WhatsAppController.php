@@ -220,7 +220,7 @@ class WhatsAppController extends Controller
     {
         // Handle verification request from Meta
         if ($request->has('hub_mode') && $request->input('hub_mode') === 'subscribe') {
-            $verifyToken = env('WHATSAPP_VERIFY_TOKEN');
+            $verifyToken = fn_get_setting('general.settings.whatsapp.access_token');
 
             if ($request->input('hub_verify_token') === $verifyToken) {
                 return response()->json($request->input('hub_challenge'));

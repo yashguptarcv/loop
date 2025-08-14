@@ -173,7 +173,6 @@ class WhatsAppTemplateController extends Controller
      */
     public function sync()
     {
-        die('asd');
         $result = $this->whatsAppService->syncTemplates();
 
         if (!empty($result['success']) && $result['success']) {

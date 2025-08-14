@@ -13,4 +13,8 @@ class HomeController extends Controller
             'message' => 'Welcome to the DataView module!'
         ]);
     }
+
+    public function export() {
+         return view('dataview::components.dataView.partials.export');
+    }
 } 

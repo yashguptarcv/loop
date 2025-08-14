@@ -21,11 +21,11 @@ class WhatsAppService
 
     public function __construct()
     {
-        $this->client = new Client();
-        $this->apiUrl = 'https://graph.facebook.com/v23.0/';
-        $this->accessToken = env('WHATSAPP_ACCESS_TOKEN');
-        $this->phoneNumberId = env('WHATSAPP_PHONE_NUMBER_ID');
-        $this->businessAccountId = env('WHATSAPP_BUSINESS_ACCOUNT_ID');
+        $this->client            = new Client();
+        $this->apiUrl            = 'https://graph.facebook.com/v23.0/';
+        $this->accessToken       = fn_get_setting('general.settings.whatsapp.access_token');
+        $this->phoneNumberId     = fn_get_setting('general.settings.whatsapp.phone_number');
+        $this->businessAccountId = fn_get_setting('general.settings.whatsapp.business_account_id');
     }
 
     /**
@@ -36,7 +36,6 @@ class WhatsAppService
         try {
             // Validate file exists and is readable
 
-            // dd("Hello");
             if (!$file->isValid()) {
                 throw new \Exception('Invalid file upload: ' . $file->getErrorMessage());
             }

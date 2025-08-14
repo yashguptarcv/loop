@@ -1,11 +1,11 @@
 <aside
-    class="w-64 bg-[var(--color-sidebar-bg)] text-[var(--color-text-inverted)] flex flex-col justify-between h-full border-r border-[var(--color-border)] transform transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 fixed lg:static z-20">
+    class="w-64 bg-blue-100 text-blue-600 flex flex-col justify-between h-full border-r border-blue-100 transform transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 fixed lg:static z-20">
     <!-- Logo/Brand -->
-    <div class="p-6 pb-4 text-2xl font-bold border-b border-[var(--color-border)] flex items-center space-x-2">
+    <div class="p-6 pb-4 text-2xl font-bold border-b border-blue-100 flex items-center space-x-2">
         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
         </svg>
-        <span>MyApp</span>
+        <span>{{fn_get_setting('general.settings.store_name')}}</span>
     </div>
 
     <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto" id="sidebarMenu">
@@ -16,10 +16,12 @@
                     <div class="sidebar-parent-group">
                         <button
                             type="button"
-                            class="flex items-center w-full text-sm font-medium px-4 py-3 rounded-lg transition-colors text-left hover:bg-[var(--color-hover)] text-[var(--color-text-inverted)] sidebar-toggle-btn"
+                            class="flex items-center w-full text-sm font-medium px-4 py-3 rounded-lg transition-colors text-left hover:bg-blue-100 text-white-600 sidebar-toggle-btn"
                             data-target="submenu-{{ Str::slug($item['label']) }}"
                         >
+                            @if(!empty($item['icon']))
                             <span class="material-icons-outlined mr-2 text-base">{{ $item['icon'] ?? 'folder' }}</span>
+                            @endif
                             <span class="flex-1">{{ $item['label'] }}</span>
                             <span class="material-icons-outlined transition-transform duration-200 toggle-icon">chevron_right</span>
                         </button>
@@ -51,20 +53,20 @@
     </nav>
 
     <!-- User & Logout -->
-    <div class="p-4 border-t border-[var(--color-border)] flex items-center justify-between">
+    <div class="p-4 border-t border-blue-100 flex items-center justify-between">
         <div class="flex items-center ">
             <img src="https://ui-avatars.com/api/?name={{ urlencode(Auth::guard('admin')->user()->name ?? 'User') }}&background=ffffff&color=014732"
-                alt="Avatar" class="w-10 h-10 rounded-full mr-3 border-2 border-[var(--color-primary)]">
+                alt="Avatar" class="w-10 h-10 rounded-full mr-3 border-2 border-blue-600">
             <div>
                
                 <p class="font-medium">  {{ Str::limit(Auth::guard('admin')->user()->name ?? 'User', 15) }}</p>
-                <p class="text-xs text-[var(--color-primary-300)]">{{ Auth::guard('admin')->user()->role->name ?? 'Admin' }}</p>
+                <p class="text-xs text-blue-600">{{ Auth::guard('admin')->user()->role->name ?? 'Admin' }}</p>
             </div>
         </div>
         <form method="POST" class="form-ajax" action="{{ route('admin.logout') }}">
             @csrf
             <button type="submit" name="button"
-                class="w-full flex items-center justify-start px-4 py-2 rounded-lg hover:bg-[var(--color-hover)] transition-colors duration-200 text-[var(--color-primary-300)] hover:text-[var(--color-text-inverted)]">
+                class="w-full flex items-center justify-start px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors duration-200 text-blue-600 hover:text-white">
                 <span class="material-icons-outlined mr-2">logout</span>
                 
             </button>

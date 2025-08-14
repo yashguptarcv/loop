@@ -8,10 +8,12 @@ class TopControls extends Component
 {
     public $title;
     public $data;
-    public function __construct(array $data = [], $title = '')
+    public $is_export;
+    public function __construct(array $data = [], $title = '', $is_export = false)
     {
         $this->title = $title;
         $this->data = $data;
+        $this->is_export = $is_export;
     }
 
     public function render()

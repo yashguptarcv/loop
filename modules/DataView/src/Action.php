@@ -15,6 +15,7 @@ class Action
         public string $icon,
         public string $title,
         public string $method,
+        public string $modal,
         public mixed $url,
     ) {}
 
@@ -28,6 +29,7 @@ class Action
             'icon'   => $this->icon,
             'title'  => $this->title,
             'method' => $this->method,
+            'modal' => $this->modal,
             'url'    => $this->url,
         ];
     }

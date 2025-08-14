@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Dashboard')</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="@yield('favicon', asset('favicon.ico'))" type="image/x-icon">
+    <link rel="shortcut icon" href="@yield('favicon', asset('favicon.ico'))" type="image/x-icon">
+
+
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{ asset('css/toast.css') }}">
@@ -12,11 +18,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <!-- meta -->
     @yield('meta')
+    <!-- styles -->
     @yield('styles')
 </head>
 
-<body class="bg-[var(--color-white)] text-[var(--color-text-primary)] font-sans">
+<body class="bg-white text-black-300 font-sans">
     <div id="toast-container" class="toast-container"></div>
 
     <div class="flex h-screen overflow-hidden">
@@ -29,15 +37,17 @@
             @include('admin::layouts.topbar')
 
             <!-- Main Content -->
-            <main class="flex-1 overflow-y-auto p-6 bg-[var(--color-bg)]">
-                @yield('content')
+            <main class="flex-1 overflow-y-auto p-6 bg-white-100">
+                <div class="container mx-auto px-4 py-6">
+                    @yield('content')
+                </div>
             </main>
         </div>
     </div>
     <x-delete-modal />
     <x-status-modal />
     <script src="{{ asset('js/toast.js') }}"></script>
-
+    <script src="https://cdn.tiny.cloud/1/{{fn_get_setting('general.settings.editor.tiny_api_key')}}/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
     @yield('scripts')
 
     {{-- notification toggle --}}

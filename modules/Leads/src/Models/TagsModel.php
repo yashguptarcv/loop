@@ -14,7 +14,6 @@ class TagsModel extends Model
 
     protected $fillable = [
         'name',
-        'slug',
         'color',
     ];
 

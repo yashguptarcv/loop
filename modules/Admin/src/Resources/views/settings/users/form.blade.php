@@ -3,11 +3,10 @@
 @section('title', isset($user) ? 'Edit User' : 'Create User')
 
 @section('content')
-<div class="container mx-auto px-4 py-6">
     
     @include('admin::components.common.back-button', ['route' => route('admin.settings.users.index'), 'name' => isset($user) ? 'Edit User' : 'Create User'])
 
-    <div class="bg-[var(--color-white)] rounded-xl shadow-sm border border-[var(--color-border)] p-6">
+    <div class="bg-[var(--color-white)] rounded-xl shadow-sm border border-blue-100 p-6">
         <form id="userForm" class="form-ajax" method="POST" 
               action="@isset($user) {{ route('admin.settings.users.update', $user->id) }} @else {{ route('admin.settings.users.store') }} @endisset">
             @csrf
@@ -56,16 +55,9 @@
             </div>
 
             <div class="mt-8 flex justify-end space-x-3">
-                <a href="{{ route('admin.settings.users.index') }}" 
-                   class="btn btn-secondary px-4 py-2">
-                   Cancel
-                </a>
-                <button type="submit" name="button"
-                        class="btn btn-primary px-4 py-2">
-                    @isset($user) Update User @else Create User @endisset
-                </button>
+                
+                <x-button type="submit"  class="blue" label="Save" icon='' name='button'/> 
             </div>
         </form>
     </div>
-</div>
 @endsection

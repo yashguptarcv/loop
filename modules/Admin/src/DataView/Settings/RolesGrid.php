@@ -99,7 +99,7 @@ class RolesGrid extends DataGrid
     {
         if (bouncer()->hasPermission('admin.settings.roles.edit')) {
             $this->addAction([
-                'icon' => 'icon-edit',
+                'icon' => 'edit',
                 'title' => 'Edit',
                 'method' => 'GET',
                 'url' => function ($row) {
@@ -110,7 +110,7 @@ class RolesGrid extends DataGrid
 
         if (bouncer()->hasPermission('admin.settings.roles.destroy')) {
             $this->addAction([
-                'icon' => 'icon-delete',
+                'icon' => 'delete',
                 'title' => 'Delete',
                 'method' => 'DELETE',
                 'url' => function ($row) {
@@ -129,20 +129,20 @@ class RolesGrid extends DataGrid
     {
         if (bouncer()->hasPermission('admin.settings.roles.bulk-delete')) {
             $this->addMassAction([
-                'icon' => 'icon-delete',
+                'icon' => 'delete',
                 'title' => 'Bulk Delete',
                 'method' => 'POST',
-                'action' => 'text-white bg-red-600',
+                'action' => 'text-red-600 bg-red-100',
                 'url' => 'admin.settings.roles.bulk-delete',
             ]);
         }
 
         if (bouncer()->hasPermission('admin.settings.roles.create')) {
             $this->addMassAction([
-                'icon' => 'icon-add',
+                'icon' => 'add',
                 'title' => 'Create Role',
                 'method' => 'GET',
-                'action' => 'text-white bg-blue-500',
+                'action' => 'text-blue-600 bg-blue-100',
                 'url' => 'admin.settings.roles.create',
             ]);
         }

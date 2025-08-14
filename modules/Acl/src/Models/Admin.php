@@ -5,6 +5,8 @@ namespace Modules\Acl\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Modules\Meetings\Models\Meeting;
+
 class Admin extends Authenticatable
 {
     use HasFactory;
@@ -20,7 +22,12 @@ class Admin extends Authenticatable
         'password',
         'status',
         'role_id',
-        'image'
+        'image',
+        'google_access_token',
+        'google_refresh_token',
+        'google_expires_in',
+        'google_token_type',
+        'google_token_created_at'
     ];
 
     /**
@@ -60,4 +67,33 @@ class Admin extends Authenticatable
         return in_array($permission, $this->role->permissions ?? []);
     }
 
+    public function meetings()
+    {
+        return $this->hasMany(Meeting::class);
+    }
+
+    public function hasGoogleAuth()
+    {
+        return !empty($this->google_access_token);
+    }
+
+    public function isGoogleTokenExpired()
+    {
+        if (!$this->google_token_created_at || !$this->google_expires_in) {
+            return true;
+        }
+
+        return now()->gte($this->google_token_created_at->addSeconds($this->google_expires_in));
+    }
+
+    public function setGoogleToken(array $tokenData)
+    {
+        $this->update([
+            'google_access_token'       => $tokenData['access_token'],
+            'google_refresh_token'      => $tokenData['refresh_token'] ?? $this->google_refresh_token,
+            'google_expires_in'         => $tokenData['expires_in'],
+            'google_token_type'         => $tokenData['token_type'],
+            'google_token_created_at'   => $tokenData['timestamp'],
+        ]);
+    }
 }

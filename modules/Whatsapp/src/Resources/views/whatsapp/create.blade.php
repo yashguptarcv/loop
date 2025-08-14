@@ -1,12 +1,11 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Create Template')
+@section('title', !empty($template) ? 'Edit Template' : 'Create New Template')
 
 @section('content')
-<div class="p-6 bg-gray-50 min-h-screen">
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-800" id="form-title">Create Template</h2>
-    </div>
+
+    
+@include('admin::components.common.back-button', ['route' => route('admin.whatsapp.index'), 'name' => !empty($template) ? 'Edit Template' : 'Create New Template'])
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
     <!-- Template Form -->
@@ -18,7 +17,7 @@
 
                 <!-- Basic Information -->
                 <div class="mb-8">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Basic Information</h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white-200 mb-4">Basic Information</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -73,7 +72,7 @@
 
                 <!-- Header Section -->
                 <div class="mb-8">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Header (Optional)</h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white-200 mb-4">Header (Optional)</h3>
                     <div class="mb-6">
                         <label for="header_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Header Type
@@ -142,7 +141,7 @@
 
                 <!-- Body Section -->
                 <div class="mb-8">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Body *</h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white-200 mb-4">Body *</h3>
                     <div class="space-y-2">
                         <label for="body_text" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Body Text
@@ -171,7 +170,7 @@
 
                 <!-- Footer Section -->
                 <div class="mb-8">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Footer (Optional)</h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white-200 mb-4">Footer (Optional)</h3>
                     <div class="space-y-2">
                         <label for="footer_text" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Footer Text
@@ -185,13 +184,13 @@
 
                 <!-- Buttons Section -->
                 <div class="mb-6">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Buttons (Optional)</h3>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white-200 mb-4">Buttons (Optional)</h3>
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-6">
                         Add up to 3 buttons to your template. You can mix button types.
                     </p>
 
                     <div id="buttons_container">
-                        <div class="button-row mb-4 p-4 border border-gray-200 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-800">
+                        <div class="button-row mb-4 p-4 border border-blue-200 dark:border-blue-700 rounded-md bg-gray-50 dark:bg-gray-800">
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Button Type</label>
@@ -228,9 +227,8 @@
                     </div>
                 </div>
 
-                <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
-                   <x-button type="submit" label="Save Template" icon='' name='button'
-                        class="bg-green-500 hover:bg-green-600" />
+                <div class="border-t border-blue-200 dark:border-blue-700 pt-6">
+                   <x-button type="submit" class="blue" label="Save" icon='' name='button'/>
                 </div>
             </form>
         </div>
@@ -238,7 +236,7 @@
 
     <!-- Sidebar -->
     @include('whatsapp::whatsapp.components.info')
-</div>
+
 
 @endsection
 @section('scripts')

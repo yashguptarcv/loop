@@ -12,11 +12,13 @@ class AdminPermissionMiddleware
         $user = auth()->guard('admin')->user();
 
         if (!$user) {
+            session()->flash('error', 'No account found with this email.');
             return redirect()->route('admin.login.form');
         }
 
         if (!$user->status) {
             auth('admin')->logout();
+            session()->flash('error', 'Your account has been not active.');
             return redirect()->route('admin.login.form');
         }
 
@@ -24,8 +26,7 @@ class AdminPermissionMiddleware
 
         if (!$role || ($role->permission_type !== 'all' && empty($role->permissions))) {
             auth('admin')->logout();
-            session()->flash('error', 'Your account has no permissions assigned.');
-            return redirect()->route('admin.login.form');
+            abort(401, 'Unauthorized route access');
         }
 
         $routeName = Route::currentRouteName();

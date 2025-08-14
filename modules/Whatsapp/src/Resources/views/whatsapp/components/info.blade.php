@@ -1,6 +1,6 @@
 <div class="space-y-6">
     <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Template Guidelines</h3>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white-200 mb-4">Template Guidelines</h3>
         <ul class="space-y-3 text-sm text-gray-600 dark:text-gray-400">
             <li class="flex items-start">
                 <svg class="h-4 w-4 text-blue-500 mr-2 mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -42,7 +42,7 @@
     </div>
 
     <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Header Types</h3>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white-200 mb-4">Header Types</h3>
         <div class="space-y-4">
             <div>
                 <h4 class="font-medium text-gray-900 dark:text-gray-200 mb-1">Text</h4>
@@ -64,7 +64,7 @@
     </div>
 
     <div class="bg-white dark:bg-gray-900 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Template Categories</h3>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white-200 mb-4">Template Categories</h3>
         <div class="space-y-4">
             <div>
                 <h4 class="font-medium text-gray-900 dark:text-gray-200 mb-1">Utility</h4>

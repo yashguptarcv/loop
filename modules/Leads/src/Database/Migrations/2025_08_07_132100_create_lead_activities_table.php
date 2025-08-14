@@ -17,6 +17,7 @@ return new class extends Migration
             $table->dateTime('activity_date');
             $table->integer('duration_minutes')->nullable(); // for calls/meetings
             $table->string('outcome')->nullable();
+            $table->string('schedule_meeting')->nullable();
             $table->timestamps();
             
             // Indexes

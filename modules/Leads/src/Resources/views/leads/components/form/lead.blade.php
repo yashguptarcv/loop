@@ -1,5 +1,5 @@
  <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 pb-2 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white-200 mb-6 pb-2 border-b border-blue-200 dark:border-blue-700">
                 Lead Details
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

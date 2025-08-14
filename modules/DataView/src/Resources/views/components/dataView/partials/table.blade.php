@@ -1,6 +1,6 @@
 <div class="bg-[var(--color-white)] shadow overflow-hidden sm:rounded-lg">
     <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-[var(--color-border)]">
+        <table class="min-w-full divide-y divide-green-100">
             <thead class="bg-[var(--color-gray-50)]">
                 <tr>
                     <th scope="col"
@@ -49,12 +49,14 @@
                     </th>
                 </tr>
             </thead>
-            <tbody class="bg-[var(--color-white)] divide-y divide-[var(--color-border)]">
+            <tbody class="bg-white-600 divide-y divide-green-100">
                 @foreach($data['records'] as $record)
                     <tr>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <input type="checkbox" class="row-checkbox" value="{{ $record->id }}"
+                            @if(!empty($record->{$data['meta']['primary_column']}))
+                            <input type="checkbox" class="row-checkbox" value="{{ $record->{$data['meta']['primary_column']} }}"
                                 onclick="updateMassActionsVisibility()">
+                            @endif
                         </td>
 
                         @foreach($data['columns'] as $column)
@@ -64,29 +66,34 @@
                                 </td>
                             @endif
                         @endforeach
+                        
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-[var(--color-text-primary)]">
-                            @foreach($record->actions as $action)
-                                @if(strtolower($action['title']) === 'edit')
-                                    <a href="{{ $action['url'] }}" class="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] mr-3"
-                                        title="{{ $action['title'] }}">
-                                        <span class="material-icons-outlined">edit</span>
-                                    </a>
-                                @elseif(strtolower($action['title']) === 'delete')
+                            @foreach($record->actions as $action) 
+                            
+                                @if($action['method'] === 'DELETE')
                                     <button onclick="openDeleteModal('{{ $action['url'] }}')"
-                                        class="text-[var(--color-danger)] hover:text-[var(--color-danger-dark)] mr-3"
-                                        title="{{ $action['title'] }}">
-                                        <span class="material-icons-outlined">delete</span>
+                                        class="text-red-600 hover:text-red-300 mr-3 cursor-pointer">
+                                        
+                                        <span class="material-icons-outlined">{{$action['icon']}}</span>
                                     </button>
                                 @else
-                                    @if($action['method'] === 'DELETE')
-                                        <button onclick="openDeleteModal('{{ $action['url'] }}')"
-                                            class="btn btn-sm cursor-pointer btn-danger">
-                                            {{$action['title']}}
-                                        </button>
+                                    @if(!empty($action['modal'])) 
+                                        <x-modal 
+                                            buttonText="{{ $action['title'] }}"
+                                            modalTitle="{{ $action['title'] }}"
+                                            id="{{$action['index']}}"
+                                            ajaxUrl="{{ $action['url'] }}"
+                                            color="blue"
+                                            modalSize="sm"
+                                        />
                                     @else
-                                        <a href="{{ $action['url'] }}" class="text-[var(--color-primary)] hover:text-[var(--color-primary-dark)] mr-3"
+                                        <a href="{{ $action['url'] }}" class="text-blue-600 hover:text-blue-300 mr-3"
                                             title="{{ $action['title'] }}">
-                                            <i class="{{ $action['icon'] }}"></i>
+                                            @if($action['icon'])
+                                                <span class="material-icons-outlined">{{ $action['icon'] }}</span>
+                                            @else
+                                                {{ $action['title'] }}
+                                            @endif
                                         </a>
                                     @endif
                                 @endif

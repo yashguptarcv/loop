@@ -3,7 +3,8 @@
 @section('title', 'Lead Statuses')
 
 @section('content')
-<x-data-view :data="$lists" title="Lead Statuses" url="" />
+@include('admin::components.common.back-button', ['route' => route('admin.settings.index'), 'name' => 'Lead Statuses'])
+<x-data-view :data="$lists" title="" url="" />
    
 @endsection
 

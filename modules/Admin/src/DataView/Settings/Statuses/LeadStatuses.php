@@ -13,7 +13,7 @@ class LeadStatuses extends DataGrid
 
     /**
      * Prepare query builder.
-     *
+     *v c 
      * @return \Illuminate\Database\Query\Builder
      */
     public function prepareQueryBuilder()
@@ -108,7 +108,7 @@ class LeadStatuses extends DataGrid
     {
         if (bouncer()->hasPermission('admin.settings.statuses.leads.edit')) {
             $this->addAction([
-                'icon' => 'icon-edit',
+                'icon' => 'edit',
                 'title' => 'Edit',
                 'method' => 'GET',
                 'url' => function ($row) {
@@ -119,7 +119,7 @@ class LeadStatuses extends DataGrid
 
         if (bouncer()->hasPermission('admin.settings.statuses.leads.destroy')) {
             $this->addAction([
-                'icon' => 'icon-delete',
+                'icon' => 'delete',
                 'title' => 'Delete',
                 'method' => 'DELETE',
                 'url' => function ($row) {
@@ -139,11 +139,53 @@ class LeadStatuses extends DataGrid
 
         if (bouncer()->hasPermission('admin.settings.statuses.leads.create')) {
             $this->addMassAction([
-                'icon' => 'icon-add',
+                'icon' => 'add',
                 'title' => 'Create Status',
                 'method' => 'GET',
-                'action' => 'text-white bg-blue-500',
+                'action' => 'text-blue-600 bg-blue-100',
                 'url' => 'admin.settings.statuses.leads.create',
+            ]);
+        }
+
+        if (bouncer()->hasPermission('admin.settings.statuses.leads.bulk-delete')) {
+            $this->addMassAction([
+                'icon' => 'delete',
+                'title' => 'Bulk Delete',
+                'method' => 'POST',
+                'action' => 'text-red-600 bg-red-100',
+                'url' => 'admin.settings.statuses.leads.bulk-delete',
+            ]);
+        }
+        $options = [];
+        if (bouncer()->hasPermission('admin.settings.statuses.orders.index')) {
+            $options[] = [
+                'label' => 'Order Statuses',
+                'value' => 'admin.settings.statuses.orders.index'
+            ];
+        }
+
+        if (bouncer()->hasPermission('admin.settings.statuses.tags.index')) {
+            $options[] = [
+                'label' => 'Tags',
+                'value' => 'admin.settings.statuses.tags.index'
+            ];
+        }
+
+        if (bouncer()->hasPermission('admin.settings.statuses.source.index')) {
+            $options[] = [
+                'label' => 'Lead Source',
+                'value' => 'admin.settings.statuses.source.index'
+            ];
+        }
+
+        if(!empty($options)) {
+            $this->addMassAction([
+                'icon' => 'settings',
+                'title' => 'Settings',
+                'method' => 'GET',
+                'action' => 'text-blue-600 bg-blue-100',
+                'url' => 'admin.settings.statuses.leads.index',
+                'options' => $options
             ]);
         }
         

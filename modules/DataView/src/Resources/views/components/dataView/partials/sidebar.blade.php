@@ -1,6 +1,6 @@
 <!-- Filter Sidebar (positioned outside main flow) -->
 <div id="filterSidebar"
-    class="fixed inset-y-0 right-0 w-88 bg-[var(--color-white)] shadow-lg transform translate-x-full z-50 transition-transform duration-300 ease-in-out border-l border-[var(--color-border)]">
+    class="fixed inset-y-0 right-0 w-88 bg-[var(--color-white)] shadow-lg transform translate-x-full z-50 transition-transform duration-300 ease-in-out border-l border-blue-100">
     <form method="GET" action="{{ url()->current() }}" class="h-full p-4 overflow-y-auto" id="filterForm">
         <div class="flex justify-between items-center mb-4">
             <h3 class="text-lg font-medium text-[var(--color-text-primary)]">Filters</h3>
@@ -29,7 +29,7 @@
                                             <input id="filter-{{ $column['index'] }}-{{ $option['value'] }}"
                                                 name="filters[{{ $column['index'] }}][]" type="checkbox" value="{{ $option['value'] }}"
                                                 @if(in_array($option['value'], $selectedValues)) checked @endif
-                                                class="h-4 w-4 text-[var(--color-primary)] focus:ring-[var(--color-primary)] border-[var(--color-border)] rounded">
+                                                class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-blue-100 rounded">
                                             <label for="filter-{{ $column['index'] }}-{{ $option['value'] }}"
                                                 class="ml-3 text-sm text-[var(--color-text-secondary)]">
                                                 {{ $option['label'] }}
@@ -66,7 +66,7 @@
                             <div class="flex items-center">
                                 <input type="checkbox" name="filters[{{ $column['index'] }}]" value="1"
                                     @if(request()->input('filters.' . $column['index']) == 1) checked @endif
-                                    class="h-4 w-4 text-[var(--color-primary)] focus:ring-[var(--color-primary)] border-[var(--color-border)] rounded">
+                                    class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-blue-100 rounded">
                                 <label class="ml-3 text-sm text-[var(--color-text-secondary)]">{{ $column['label'] }}</label>
                             </div>
 
@@ -82,11 +82,11 @@
 
         <div class="mt-6 flex space-x-3">
             <a href="{{ url()->current() }}"
-                class="flex-1 inline-flex justify-center py-2 px-4 border border-[var(--color-border)] shadow-sm text-sm font-medium rounded-md text-[var(--color-text-primary)] bg-[var(--color-white)] hover:bg-[var(--color-gray-50)]">
+                class="flex-1 inline-flex justify-center py-2 px-4 border border-blue-100 shadow-sm text-sm font-medium rounded-md text-[var(--color-text-primary)] bg-[var(--color-white)] hover:bg-[var(--color-gray-50)]">
                 Reset
             </a>
             <button type="submit"
-                class="flex-1 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-[var(--color-white)] bg-[var(--color-primary)] hover:bg-[var(--color-primary-dark)]">
+                class="flex-1 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-[var(--color-white)] bg-blue-600 hover:bg-[var(--color-primary-dark)]">
                 Apply
             </button>
         </div>

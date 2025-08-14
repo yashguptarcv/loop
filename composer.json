@@ -10,9 +10,13 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "google/apiclient": "^2.12",
+        "google/apiclient-services": "^0.407.0",
+        "google/auth": "^1.47",
         "intervention/image": "^3.11",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "mpdf/mpdf": "^8.2",
         "rcv/core": "dev-main"
     },
     "require-dev": {
@@ -35,13 +39,17 @@
             "Modules\\DataView\\": "modules/DataView/src/",
             "Modules\\Leads\\": "modules/Leads/src/",
             "Modules\\Customers\\": "modules/Customers/src/",
-            "Modules\\Whatsapp\\": "modules/Whatsapp/src/"
+            "Modules\\Whatsapp\\": "modules/Whatsapp/src/",
+            "Modules\\Meetings\\": "modules/Meetings/src/",
+            "Modules\\Catalog\\": "modules/Catalog/src/",
+            "Modules\\Checkout\\": "modules/Checkout/src/",
+            "Modules\\Payments\\": "modules/Payments/src/",
+            "Modules\\Orders\\": "modules/Orders/src/"
         },
         "files": [
             "modules/Acl/src/Helpers/helpers.php",
             "modules/DataView/src/Helpers/helpers.php",
             "modules/Core/src/Helpers/settinghelpers.php"
-
         ]
     },
     "autoload-dev": {

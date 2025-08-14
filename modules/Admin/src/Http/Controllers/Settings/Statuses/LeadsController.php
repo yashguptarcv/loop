@@ -3,19 +3,16 @@
 namespace Modules\Admin\Http\Controllers\Settings\Statuses;
 
 use Illuminate\Http\Request;
+use Modules\Acl\Models\Role;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use Modules\Acl\Services\UserAdminService;
 use Modules\Admin\DataView\Settings\Statuses\LeadStatuses;
+use Modules\Admin\Models\LeadStatusesModels;
 
 class LeadsController extends Controller
 {
-    protected $userAdminService;
-
-    public function __construct(UserAdminService $userAdminService)
-    {
-        $this->userAdminService = $userAdminService;
-    }
-
     public function index(Request $request)
     {
         $lists = fn_datagrid(LeadStatuses::class)->process();
@@ -25,16 +22,15 @@ class LeadsController extends Controller
     public function create()
     {
         $roles = Role::all();
-        return view('admin::settings.users.form', compact('roles'));
+        return view('admin::settings.statuses.leads.form', compact('roles'));
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:admins,email',
-            'password' => 'required|min:8',
-            'role_id' => 'required|exists:roles,id',
+            'color' => 'required|string',
+            'sort' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
@@ -44,39 +40,40 @@ class LeadsController extends Controller
         }
 
         try {
-            $user = $this->userAdminService->create($request->all());
+            $user = LeadStatusesModels::create([
+                'name'  => $request['name'],
+                'color'  => $request['color'],
+                'sort'  => $request['sort']
+            ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Admin created successfully!',
-                'redirect_url' => route('admin.settings.users.index'),
-                'data' => $user
+                'message' => 'Lead statuses created successfully!',
+                'redirect_url' => route('admin.settings.statuses.leads.index')
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
+                'errors' => $e->getMessage()
             ], 500);
         }
     }
 
-    public function show($id)
+    public function edit($id)
     {
-        $user = $this->userAdminService->find($id); // You should already have a method like this in your service
-        if (!$user) {
-            return redirect()->route('admin.settings.users.index')->with('error', 'User not found.');
+        $lead = LeadStatusesModels::where('id', $id)->first(); // You should already have a method like this in your service
+        if (!$lead) {
+            return redirect()->route('admin.settings.statuses.leads.index')->with('error', 'Lead statuses not found.');
         }
-        $roles = Role::all();
-        return view('admin::settings.users.form', compact('user', 'roles'));
+        return view('admin::settings.statuses.leads.form', compact('lead'));
     }
 
 
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:128',
-            'email' => ['required', 'email', Rule::unique('admins')->ignore($id)],
-            'role_id' => 'required|exists:roles,id',
-            'password' => 'nullable|min:8'
+            'name' => 'required|string|max:255',
+            'color' => 'required|string',
+            'sort' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
@@ -86,32 +83,36 @@ class LeadsController extends Controller
         }
 
         try {
-            $user = $this->userAdminService->update($id, $request->all());
+            $user = LeadStatusesModels::update($id, [
+                'name'  => $request['name'],
+                'color'  => $request['color'],
+                'sort'  => $request['sort']
+            ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Admin updated successfully!',
-                'redirect_url' => route('admin.settings.users.index'),
+                'message' => 'Lead statuses updated successfully!',
+                'redirect_url' => route('admin.settings.statuses.leads.index'),
                 'data' => $user
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
+                'errors' => $e->getMessage()
             ], 500);
         }
     }
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         try {
-            $this->userAdminService->delete($id);
+            LeadStatusesModels::destroy($id);
             return response()->json([
                 'success' => true,
-                'message' => 'Admin deleted',
-                'redirect_url' => route('admin.settings.users.index'),
+                'message' => 'Lead status deleted',
+                'redirect_url' => route('admin.settings.statuses.leads.index'),
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
+                'errors' => $e->getMessage()
             ], 500);
         }
     }
@@ -120,13 +121,13 @@ class LeadsController extends Controller
     {
         $request->validate([
             'ids' => 'required|array|min:1',
-            'ids.*' => 'integer|exists:admins,id',
+            'ids.*' => 'integer|exists:lead_statuses,id',
         ]);
         try {
-            $deletedCount = $this->userAdminService->deleteMultiple($request->ids);
-            return redirect()->route('admin.settings.users.index')->with('success', 'Bulk Deleted Successfully');
+            $deletedCount = LeadStatusesModels::destroy($request->ids);
+            return redirect()->route('admin.settings.statuses.leads.index')->with('success', 'Bulk Deleted Successfully');
         } catch (\Throwable $e) {
-            return redirect()->route('admin.settings.users.index')->with('error', 'Something went wrong. Please try again.');
+            return redirect()->route('admin.settings.statuses.leads.index')->with('error', $e->getMessage());
         }
     }
 }

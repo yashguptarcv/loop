@@ -20,7 +20,7 @@
         class="min-h-full flex items-center justify-center p-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[var(--color-primary-light)] to-[var(--color-primary-lighter)]">
         <div class="w-full max-w-md space-y-8">
 
-            <div class=" bg-[var(--color-bg)] rounded-2xl shadow-xl border border-gray-100/50 p-8 sm:p-10">
+            <div class=" bg-white-100 rounded-2xl shadow-xl border border-gray-100/50 p-8 sm:p-10">
                 <form class="form-ajax space-y-6" method="POST" action="{{ route('admin.login') }}">
                     @csrf
 
@@ -30,10 +30,10 @@
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex mt-4 pointer-events-none">
-                                <i class="fas fa-envelope text-[var(--color-primary)]"></i>
+                                <i class="fas fa-envelope text-blue-600"></i>
                             </div>
-                            <input id="email" name="email" type="email" autocomplete="email" required class="block w-full pl-10 pr-3 py-3 border border-[var(--color-primary)] rounded-xl bg-white/70
-           focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)]
+                            <input id="email" name="email" type="email" autocomplete="email" required class="block w-full pl-10 pr-3 py-3 border border-blue-600 rounded-xl bg-white/70
+           focus:ring-2 focus:ring-blue-600 focus:border-blue-600
            placeholder-[var(--color-gray-400)] text-[var(--color-gray-800)] 
            transition-all duration-200 outline-none" placeholder="admin@example.com" />
 
@@ -49,17 +49,17 @@
                                 @lang('admin::app.admin.login.password')
                             </label>
                             <a href="#"
-                                class="text-xs font-medium text-[var(--color-primary)] hover:text-[var(--color-hover)]">
+                                class="text-xs font-medium text-blue-600 hover:text-[var(--color-hover)]">
                                 @lang('admin::app.admin.login.forget-password-link')
                             </a>
                         </div>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <i class="fas fa-lock text-[var(--color-primary)]"></i>
+                                <i class="fas fa-lock text-blue-600"></i>
                             </div>
                             <input id="password" name="password" type="password" autocomplete="current-password"
-                                required class="block w-full pl-10 pr-3 py-3 border border-[var(--color-primary)] rounded-xl bg-white/70 
-           focus:ring-2 focus:ring-[var(--color-primary)] focus:border-[var(--color-primary)] 
+                                required class="block w-full pl-10 pr-3 py-3 border border-blue-600 rounded-xl bg-white/70 
+           focus:ring-2 focus:ring-blue-600 focus:border-blue-600 
            placeholder-[var(--color-gray-400)] text-[var(--color-gray-800)] 
            transition-all duration-200 outline-none" placeholder="••••••••" />
 
@@ -71,14 +71,14 @@
 
                     <div class="flex items-center">
                         <input id="remember-me" name="remember-me" type="checkbox"
-                            class="h-4 w-4 text-[var(--color-primary)] focus:ring-[var(--color-primary)] border-[var(--color-primary)] rounded">
+                            class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-blue-600 rounded">
                         <label for="remember-me" class="ml-2 block text-sm text-[var(--color-primary-dark)]">
                             @lang('admin::app.admin.login.remember')
                         </label>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-full" name="button">
-
+                    <button type="submit" class="items-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 hover:text-blue-300 text-blue-600 bg-blue-100 w-full" name="button">
+                
                         @lang('admin::app.admin.login.submit-btn')
                     </button>
                 </form>

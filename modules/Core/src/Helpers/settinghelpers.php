@@ -1,10 +1,50 @@
 <?php
 
+use Modules\Acl\Models\Role;
+use Modules\Admin\Models\Status;
 use Modules\Core\Models\Setting;
 use Illuminate\Support\Facades\DB;
-use Modules\Catalog\Models\Category;
+use Modules\Leads\Models\LeadStatusModel;
 use Intervention\Image\Facades\Image as InterventionImage;
-use Modules\Catalog\Models\Product;
+use Modules\Admin\Models\Country;
+use Modules\Admin\Models\Currency;
+use Modules\Admin\Models\TaxRate;
+use Modules\Tax\Models\TaxCategory;
+
+if (!function_exists('fn_get_countries')) {
+    function fn_get_countries()
+    {
+        return Country::get();
+    }
+}
+
+if (!function_exists('fn_get_order_status')) {
+    function fn_get_order_status($type = 'O')
+    {
+        return Status::where('type_code', $type)->get();
+    }
+}
+
+if (!function_exists('fn_get_taxes')) {
+    function fn_get_taxes()
+    {
+        return TaxCategory::where('status', true)->get();
+    }
+}
+
+if (!function_exists('fn_get_currencies')) {
+    function fn_get_currencies()
+    {
+        return Currency::get();
+    }
+}
+
+if (!function_exists('fn_get_lead_statuses')) {
+    function fn_get_lead_statuses()
+    {
+        return LeadStatusModel::get();
+    }
+}
 
 if (!function_exists('fn_get_settings')) {
 
@@ -27,7 +67,7 @@ if (!function_exists('fn_get_setting')) {
 }
 
 
-if (!function_exists('fn_set_setting')) {
+if (!function_exists('fn_update_setting')) {
     function fn_update_setting(string $key, $value): void
     {
         Setting::updateOrCreate(
@@ -42,49 +82,6 @@ if (!function_exists('fn_delete_setting')) {
     {
         return Setting::where('key', $key)
             ->delete();
-    }
-}
-
-if (!function_exists('fn_convert_currency_rate')) {
-    function fn_convert_currency_rate(
-        float $amount,
-        string $toCurrencyCode,
-    ): float {
-        $fromCurrencyCode = fn_get_setting('general.settings.default_currency');
-        // Validate input
-        if ($amount < 0) {
-            throw new InvalidArgumentException("Amount must be positive");
-        }
-
-        // Check if same currency
-        if ($fromCurrencyCode === $toCurrencyCode) {
-            return $amount;
-        }
-
-        // Get currency IDs
-        $fromCurrency = DB::table('currencies')->where('code',)->first();
-        $toCurrency = DB::table('currencies')->where('code', $toCurrencyCode)->first();
-
-        if (!$fromCurrency || !$toCurrency) {
-            throw new InvalidArgumentException("Invalid currency code");
-        }
-
-        // Convert from base currency to target currency
-        if ($toCurrencyCode !== $fromCurrencyCode) {
-            $toRate = DB::table('currency_exchange_rates')
-                ->where('target_currency', $toCurrency->id)
-                ->first();
-
-            if (!$toRate) {
-                throw new InvalidArgumentException("Exchange rate not found for {$toCurrencyCode}");
-            }
-
-            $amount = $amount * $toRate->rate;
-        }
-
-        // Round to target currency's decimal places
-        $decimalPlaces = $toCurrency->decimal ?? 2;
-        return round($amount, $decimalPlaces);
     }
 }
 
@@ -103,129 +100,121 @@ if (!function_exists('fn_format_bytes')) {
     }
 }
 
+
+if (!function_exists('fn_convert_currency_rate')) {
+    function fn_convert_currency_rate(
+        float $amount,
+        string $toCurrencyCode
+    ): float {
+        $fromCurrencyCode = fn_get_setting('general.currency');
+
+        // Validate input
+        if ($amount < 0) {
+            throw new InvalidArgumentException("Amount must be positive");
+        }
+
+        // Check if same currency
+        if ($fromCurrencyCode === $toCurrencyCode) {
+            return $amount;
+        }
+
+        // Get currency records
+        $fromCurrency = DB::table('currencies')->where('code', $fromCurrencyCode)->first();
+        $toCurrency   = DB::table('currencies')->where('code', $toCurrencyCode)->first();
+
+        if (!$fromCurrency || !$toCurrency) {
+            throw new InvalidArgumentException("Invalid currency code(s)");
+        }
+
+        // Get exchange rate (assuming rates stored as base → target)
+        $rate = DB::table('currency_exchange_rates')
+            ->where('target_currency', $toCurrency->id)
+            ->value('rate');
+
+        if (!$rate) {
+            throw new InvalidArgumentException("Exchange rate not found for {$fromCurrencyCode} → {$toCurrencyCode}");
+        }
+
+        // Convert amount
+        $convertedAmount = $amount * $rate;
+
+        // Round based on target currency decimal places
+        $decimalPlaces = $toCurrency->decimal ?? 2;
+
+        return round($convertedAmount, $decimalPlaces);
+    }
+}
+
 if (!function_exists('fn_convert_currency')) {
     function fn_convert_currency(
         float $amount,
-        string $toCurrencyCode,
-
+        string $toCurrencyCode = ''
     ): string {
-        $convertedAmount = fn_convert_currency_rate($amount, $toCurrencyCode);
+        try {
+            $convertedAmount = fn_convert_currency_rate($amount, $toCurrencyCode);
 
-        $currency = DB::table('currencies')
-            ->where('code', $toCurrencyCode)
-            ->first();
+            $currency = DB::table('currencies')
+                ->where('code', $toCurrencyCode)
+                ->first();
 
-        $decimalPlaces = $currency->decimal ?? 2;
-        $formattedAmount = number_format($convertedAmount, $decimalPlaces);
+            $decimalPlaces = $currency->decimal ?? 2;
+            $formattedAmount = number_format($convertedAmount, $decimalPlaces);
 
-        if ($currency->symbol) {
-            return $currency->symbol . $formattedAmount;
+            // Add symbol if exists, else append code
+            return $currency->symbol 
+                ? $currency->symbol . $formattedAmount 
+                : $formattedAmount . ' ' . $toCurrencyCode;
+
+        } catch(Exception $e) {
+            
+            return $e->getMessage();
         }
-
-        return $formattedAmount . ' ' . $toCurrencyCode;
     }
 }
 
-if (!function_exists('fn_get_image')) {
-    /**
-     * Get image URL with optional resizing
-     * 
-     * @param string|null $image Image path (relative to storage)
-     * @param string $path Base storage path (e.g., 'categories/')
-     * @param array $options Resize options ['width' => int, 'height' => int, 'quality' => int]
-     * @return string Image URL
-     */
-    function fn_get_image(?string $image, string $path = '', array $options = []): string
-    {
-        if (empty($image)) {
-            return asset('images/default-image.png'); // Fallback image
+if (!function_exists('fn_get_currency')) {
+    function fn_get_currency(
+        float $amount,
+    ): string {
+        try {
+            $toCurrencyCode = fn_get_setting('general.currency');
+
+            $currency = DB::table('currencies')
+                ->where('code', $toCurrencyCode)
+                ->first();
+
+            $decimalPlaces = $currency->decimal ?? 2;
+            $formattedAmount = number_format($amount, $decimalPlaces);
+
+            // Add symbol if exists, else append code
+            return $currency->symbol 
+                ? $currency->symbol . $formattedAmount 
+                : $formattedAmount . ' ' . $toCurrencyCode;
+
+        } catch(Exception $e) {
+            
+            return $e->getMessage();
         }
-
-        $fullPath = $path . $image;
-
-        // If no resize options, return direct asset URL
-        if (empty($options)) {
-            return asset('storage/' . $fullPath);
-        }
-
-        // Handle resizing using Intervention Image
-        // try {
-        //     $width = $options['width'] ?? null;
-        //     $height = $options['height'] ?? null;
-        //     $quality = $options['quality'] ?? 80;
-
-        //     $resizedPath = 'cache/' . $width . 'x' . $height . '/' . $fullPath;
-        //     $resizedFullPath = storage_path('app/public/' . $resizedPath);
-
-        //     // Return cached resized image if exists
-        //     if (file_exists($resizedFullPath)) {
-        //         return asset('storage/' . $resizedPath);
-        //     }
-
-        //     // Create resized image
-        //     $img = InterventionImage::make(storage_path('app/public/' . $fullPath));
-
-        //     // Resize with aspect ratio maintained
-        //     $img->resize($width, $height, function ($constraint) {
-        //         $constraint->aspectRatio();
-        //         $constraint->upsize();
-        //     });
-
-        //     // Ensure directory exists
-        //     if (!file_exists(dirname($resizedFullPath))) {
-        //         mkdir(dirname($resizedFullPath), 0755, true);
-        //     }
-
-        //     $img->save($resizedFullPath, $quality);
-
-        //     return asset('storage/' . $resizedPath);
-        // } catch (Exception $e) {
-            // Fallback to original if resizing fails
-            return asset('storage/' . $fullPath);
-        // }
     }
 }
 
-if (!function_exists('fn_get_category_data')) {
-    function fn_get_category_data(int $id): mixed
+if (!function_exists('fn_get_name_placeholder')) {
+    function fn_get_name_placeholder($name)
     {
-        return Category::where('id', $id)->first();
-    }
-}
+        $nameHash = crc32($name);
+        $colors = [
+            'bg-red-100 text-red-600',
+            'bg-blue-100 text-blue-600',
+            'bg-green-100 text-green-600',
+            'bg-yellow-100 text-yellow-600',
+            'bg-purple-100 text-purple-600',
+            'bg-pink-100 text-pink-600',
+            'bg-indigo-100 text-indigo-600'
+        ];
+        $colorIndex = abs($nameHash) % count($colors);
+        $colorClass = $colors[$colorIndex];
+        $initials = strtoupper(substr($name, 0, 2));
 
-if (!function_exists('fn_get_category_name')) {
-    function fn_get_category_name(int $id = 0): mixed
-    {
-        return Category::where('id', $id)->value('name');
-    }
-}
-
-if (!function_exists('fn_get_categories')) {
-    function fn_get_categories(int $id = 0): mixed
-    {
-        return Category::get();
-    }
-}
-
-// products
-
-if (!function_exists('fn_get_product_data')) {
-    function fn_get_product_data(int $id): mixed
-    {
-        return Product::where('id', $id)->first();
-    }
-}
-
-if (!function_exists('fn_get_product_name')) {
-    function fn_get_product_name(int $id = 0): mixed
-    {
-        return Product::where('id', $id)->value('name');
-    }
-}
-
-if (!function_exists('fn_get_products')) {
-    function fn_get_products(int $id = 0): mixed
-    {
-        return Product::get();
+        return [$initials, $colorClass];
     }
 }

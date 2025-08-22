@@ -26,23 +26,34 @@
                     <label for="industry" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Industry
                     </label>
-                    <select id="industry" name="industry"
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 @error('industry') border-red-500 dark:border-red-400 @enderror">
-                        <option value="">Select Industry</option>
-                        <option value="technology" {{ old('industry', $lead->industry ?? '') == 'technology' ? 'selected' : '' }}>Technology</option>
-                        <option value="finance" {{ old('industry', $lead->industry ?? '') == 'finance' ? 'selected' : '' }}>Finance</option>
-                        <option value="healthcare" {{ old('industry', $lead->industry ?? '') == 'healthcare' ? 'selected' : '' }}>Healthcare</option>
-                        <option value="manufacturing" {{ old('industry', $lead->industry ?? '') == 'manufacturing' ? 'selected' : '' }}>Manufacturing</option>
-                        <option value="retail" {{ old('industry', $lead->industry ?? '') == 'retail' ? 'selected' : '' }}>Retail</option>
-                        <option value="education" {{ old('industry', $lead->industry ?? '') == 'education' ? 'selected' : '' }}>Education</option>
-                        <option value="other" {{ old('industry', $lead->industry ?? '') == 'other' ? 'selected' : '' }}>Other</option>
-                    </select>
+                    <div id="auto-complete">
+                        <input
+                            type="text"
+                            autocomplete="dropdown"
+                            name="industry_name"
+                            value="{{!empty($lead->industries) ? fn_get_category_name((int)$lead->industries) : ''}}"
+                            placeholder="Autocomplete"
+                            id="input-industry"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 @error('industry') border-red-500 dark:border-red-400 @enderror"
+                            data-table="categories"
+                            data-select_columns="id, name"
+                            data-search_column="name"
+                            data-target="industry"
+                            data-original-value="" />
+                        <input
+                            type="hidden"
+                            name="industry"
+                            id="industry"
+                            value="{{$lead->industries ?? 0}}"
+                            class="mt-1"
+                            data-original-value="" />
+                    </div>
                     @error('industry')
                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- <div>
+                <div>
                     <label for="status_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Lead Status <span class="text-red-500">*</span>
                     </label>
@@ -60,6 +71,6 @@
                     @error('status_id')
                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                     @enderror
-                </div> -->
+                </div>
             </div>
         </div>

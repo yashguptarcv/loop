@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Catalog\Http\Controllers\Api\HomeController;
+use Modules\Catalog\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +14,9 @@ use Modules\Catalog\Http\Controllers\Api\HomeController;
 |
 */
 
-Route::prefix('api/catalog')->name('api.catalog.')->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::prefix('api/admin')->name('api.admin.')->group(function () {
+    Route::get('/products/search', [HomeController::class, 'searchProducts'])->name('products.search');
+    Route::get('/categories/search', [HomeController::class, 'searchCategories'])->name('categories.search');
 });
 
 // Api\HomeController will be generated automatically by the module generator 

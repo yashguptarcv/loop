@@ -1,6 +1,6 @@
 @extends('admin::layouts.app')
 
-@section('title', 'Lead Detail')
+@section('title', 'Lead Detail | '. $lead->name)
 @section('styles')
 <style>
     .tab-content.lead-details.active {
@@ -15,13 +15,19 @@
 @section('content')
 
     <!-- Header with back button -->
-    <div class="flex justify-between items-center mb-8">
-        @include('admin::components.common.back-button', ['route' => route('admin.leads.index'), 'name' => 'Lead Detail / '.$lead->name.' / '.$lead->created_at . ' / ' . fn_convert_currency($lead->value ?? 0, 'USD') ])
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        @include('admin::components.common.back-button', ['route' => route('admin.leads.index'), 'name' => 'Lead Detail / '.$lead->name.' / '.$lead->created_at . ' / ' . fn_get_currency($lead->value ?? 0) ])
         <div class="ml-auto flex space-x-3 mb-2">
             @if(bouncer()->hasPermission('admin.leads.edit'))
-            <a href="{{ route('admin.leads.edit', $lead) }}" class="text-small px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100">
-                Edit
-            </a>
+            
+            <x-button type="button"    
+                as="a"
+                href="{{ route('admin.leads.edit', $lead) }}"
+                class="blue" 
+                label="<span class='material-icons-outlined mr-1'>edit</span>" 
+                icon=''
+                name="button" 
+            />
             @endif
             @if(bouncer()->hasPermission('admin.application.send_application'))
             <x-modal
@@ -29,8 +35,8 @@
                 modalTitle="Send Application"
                 id='send_application'
                 ajaxUrl="{{route('admin.application.send_application', $lead)}}"
-                color="purple"
-                modalSize="lg" />
+                color="blue"
+                modalSize="3xl" />
             @endif
         </div>
     </div>
@@ -46,31 +52,49 @@
             @include('leads::leads.components.details-right')
         </div>
     </div>
-    @endsection
+@endsection
 
-    @section('scripts')
-    <script>
-        // Tab switching functionality
-        function switchTab(tabName) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
+@section('scripts')
+<script>
+    // Tab switching functionality
+    function switchTab(tabName) {
+        loadTabs(tabName);
+    }
 
-            // Show selected tab content
-            document.getElementById(`${tabName}-tab`).classList.add('active');
+    function loadTabs(tabName) {        
+        ceAjax('get', '{{ route("admin.leads.show", $lead->id) }}', {
+            loader:true,
+            data: {
+                tab: tabName
+            },
+            result_ids: 'leads_tab', // This will update the calendar container directly
+            caching: false,
+            callback: function(data) {
+                const tabContent = document.getElementById(`${tabName}-tab`);
+                if (tabContent) {
+                    tabContent.classList.add('active');
+                }
+                
+                // Update tab button styles
+                const allTabButtons = document.querySelectorAll('.tab-button');
+                allTabButtons.forEach(button => {
+                    
+                    button.classList.remove('border-blue-500', 'text-blue-600');
+                    button.classList.add('border-transparent', 'text-gray-500');
+                    
+                    if (button.dataset.tab === tabName) {
+                        button.classList.add('border-blue-500', 'text-blue-600');
+                        button.classList.remove('border-transparent', 'text-gray-500');
+                    }
+                });
+            },
+            errorCallback: function(xhr) {
+                showToast('Unable to load '+tabName+' tab', 'error', 'Error');
+            }
+        });
+    }
 
-            // Update tab button styles
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('border-blue-500', 'text-blue-600');
-                button.classList.add('border-transparent', 'text-gray-500');
-            });
-
-            // Highlight active tab button
-            event.currentTarget.classList.add('border-blue-500', 'text-blue-600');
-            event.currentTarget.classList.remove('border-transparent', 'text-gray-500');
-        }
-        @if(bouncer()->hasPermission('admin.leads.update-assignment'))
+    @if(bouncer()->hasPermission('admin.leads.update-assignment'))
         const nameInput = document.getElementById('input-assign_id');
         const idInput = document.getElementById('assign_id');
         const updateBtn = document.getElementById('update-assign-btn');
@@ -97,49 +121,6 @@
 
         @endif
 
-        @if(bouncer()->hasPermission('admin.leads.activities.store'))
-        // Initialize TinyMCE with mentions plugin
-        tinymce.init({
-            selector: '#message-editor',
-            plugins: 'link lists mentions',
-            toolbar: 'undo redo | bold italic | bullist numlist | link | mentions',
-            menubar: false,
-            statusbar: false,
-            height: 200,
-            source: function(query, success, failure) {
-                if (query.term.length < 3) {
-                    success([]);
-                    return;
-                }
-
-                fetch(`/admin/leads/users/search?q=${encodeURIComponent(query.term)}`, {
-                        headers: {
-                            'Accept': 'application/json',
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Network response was not ok');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Mention data received:', data); // Debug log
-                        success(data);
-                    })
-                    .catch(error => {
-                        console.error('Mention fetch error:', error); // Debug log
-                        failure(error);
-                    });
-            },
-            setup: function(editor) {
-                editor.on('change', function() {
-                    const content = editor.getContent();
-                    document.getElementById('activity-description').value = content;
-                });
-            }
-        });
-        @endif
-    </script>
-    @endsection
+   
+</script>
+@endsection

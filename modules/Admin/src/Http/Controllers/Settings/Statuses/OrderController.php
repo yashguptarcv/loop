@@ -54,7 +54,7 @@ class OrderController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'errors' => $e->getMessage()
-            ], 500);
+            ]);
         }
     }
 
@@ -98,7 +98,7 @@ class OrderController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'errors' => $e->getMessage()
-            ], 500);
+            ]);
         }
     }
     public function destroy(Request $request, $id)
@@ -113,7 +113,7 @@ class OrderController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'errors' => $e->getMessage()
-            ], 500);
+            ]);
         }
     }
 

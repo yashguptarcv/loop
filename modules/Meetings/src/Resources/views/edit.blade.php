@@ -1,19 +1,6 @@
-@extends('admin::layouts.app')
 
-@section('title', 'Edit Meeting')
 
-@section('content')
-
-    <div class="bg-white rounded-lg shadow-lg p-6 max-w-3xl mx-auto">
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Edit Meeting</h1>
-            <a href="{{ route('admin.meetings.show', $meeting) }}" 
-               class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition">
-                <i class="fas fa-arrow-left mr-1"></i> Back
-            </a>
-        </div>
-
-        <form action="{{ route('admin.meetings.update', $meeting) }}" method="POST">
+        <form class="form-ajax" action="{{ route('admin.meetings.update', $meeting) }}" method="POST">
             @csrf
             @method('PUT')
             
@@ -40,17 +27,16 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Start Time *</label>
                         <input type="datetime-local" name="start_time" 
-                               value="{{ old('start_time', $meeting->start_time->format('Y-m-d\TH:i')) }}" 
+                               value="{{ old('start_time', \Carbon\Carbon::parse($meeting->start_time)->format('Y-m-d\TH:i')) }}"
                                class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
                         @error('start_time')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">End Time *</label>
-                        <input type="datetime-local" name="end_time" 
-                               value="{{ old('end_time', $meeting->end_time->format('Y-m-d\TH:i')) }}" 
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Slots</label>
+                            <input type="text" name="end_time" class="w-full px-3 py-2 border border-gray-300 rounded-md" placeholder="{{$meeting->end_time}}">
+                            <small class="text-blue-600">Example: 10, 30, 50 Minutes.</small>
                         @error('end_time')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -67,13 +53,13 @@
                 </div>
                 
                 <div class="flex justify-end">
-                    <button type="submit" 
-                            class="px-4 py-2 bg-blue-600 text-white-200 rounded-md hover:bg-blue-700 transition">
-                        <i class="fas fa-save mr-1"></i> Update Meeting
-                    </button>
+                    <x-button type="submit"                     
+                        class="blue" 
+                        label="Save" 
+                        icon=''
+                        name="button" 
+                    />
                 </div>
             </div>
         </form>
-    </div>
-
-@endsection
+    

@@ -24,6 +24,34 @@
             <span class="ml-2 inline-block bg-{{$class ?? 'blue'}}-100 text-{{$class ?? 'blue'}}-600 text-xs px-2 rounded-full">{{ $badge }}</span>
         @endif
     </a>
+@elseif($as === 'link') 
+    <a href="{{ $href }}"
+       id="{{ $id }}"
+       name="{{ $name }}"
+       {!! $dynamicAttributes !!}
+       class="{{ $class }}">
+        @if ($icon)
+            {!! $icon !!}
+        @endif
+        {!! $label !!}
+        @if ($badge)
+            <span class="ml-2 inline-block bg-{{$class ?? 'blue'}}-100 text-{{$class ?? 'blue'}}-600 text-xs px-2 rounded-full">{{ $badge }}</span>
+        @endif
+    </a>
+@elseif($as === 'general') 
+    <button type="{{ $type }}"
+            id="{{ $id }}"
+            name="{{ $name }}"
+            {!! $dynamicAttributes !!}
+            class="{{ $class }}">
+        @if ($icon)
+            {!! $icon !!}
+        @endif
+        {!! $label !!}
+        @if ($badge)
+            <span class="ml-2 inline-block text-{{$class ?? 'blue'}}-600 text-xs px-2">{{ $badge }}</span>
+        @endif
+    </button>
 @else
     <button type="{{ $type }}"
             id="{{ $id }}"

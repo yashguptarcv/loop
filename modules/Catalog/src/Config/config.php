@@ -55,6 +55,10 @@ return [
     | Here you may define all of the permissions for the Catalog module.
     |
     */
+    'category_status' => [
+        'A' => 'Active',
+        'D' => 'Inactive'
+    ],
 
     'permissions' => [
         'view' => 'View Catalog',

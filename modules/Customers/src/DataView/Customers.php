@@ -64,29 +64,6 @@ class Customers extends DataGrid
             'sortable' => true,
         ]);
 
-    
-        // $this->addColumn([
-        //     'index' => 'email',
-        //     'label' => 'Email',
-        //     'type' => 'string',
-        //     'searchable' => false,
-        //     'filterable' => true,
-        //     'filterable_type' => 'dropdown',
-        //     'allow_multiple_values' => false,
-        //     'filterable_options' => [
-        //         [
-        //             'label' => 'All',
-        //             'value' => 'all',
-        //         ],
-        //         [
-        //             'label' => 'Custom',
-        //             'value' => 'custom',
-        //         ],
-        //     ],
-        //     'sortable' => true,
-           
-        // ]);
-
         $this->addColumn([
             'index' => 'created_at',
             'label' => 'Created At',
@@ -105,13 +82,13 @@ class Customers extends DataGrid
      */
     public function prepareActions()
     {
-        if (bouncer()->hasPermission('admin.customers.edit')) {
+        if (bouncer()->hasPermission('admin.customers.show')) {
             $this->addAction([
-                'icon' => 'edit',
-                'title' => 'Edit',
+                'icon' => 'open_in_new',
+                'title' => 'View Customer',
                 'method' => 'GET',
                 'url' => function ($row) {
-                    return route('admin.customers.edit', $row->id);
+                    return route('admin.customers.show', $row->id);
                 },
             ]);
         }

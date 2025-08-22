@@ -41,7 +41,7 @@ class LeadStatuses extends DataGrid
             'label' => 'ID',
             'type' => 'integer',
             'searchable' => true,
-            'filterable' => true,
+            'filterable' => false,
             'sortable' => true,
         ]);
 
@@ -111,6 +111,7 @@ class LeadStatuses extends DataGrid
                 'icon' => 'edit',
                 'title' => 'Edit',
                 'method' => 'GET',
+                'is_popup' => true,
                 'url' => function ($row) {
                     return route('admin.settings.statuses.leads.edit', $row->id);
                 },
@@ -142,6 +143,7 @@ class LeadStatuses extends DataGrid
                 'icon' => 'add',
                 'title' => 'Create Status',
                 'method' => 'GET',
+                'is_popup' => true,
                 'action' => 'text-blue-600 bg-blue-100',
                 'url' => 'admin.settings.statuses.leads.create',
             ]);
@@ -156,36 +158,26 @@ class LeadStatuses extends DataGrid
                 'url' => 'admin.settings.statuses.leads.bulk-delete',
             ]);
         }
-        $options = [];
-        if (bouncer()->hasPermission('admin.settings.statuses.orders.index')) {
-            $options[] = [
-                'label' => 'Order Statuses',
-                'value' => 'admin.settings.statuses.orders.index'
-            ];
-        }
 
         if (bouncer()->hasPermission('admin.settings.statuses.tags.index')) {
-            $options[] = [
-                'label' => 'Tags',
-                'value' => 'admin.settings.statuses.tags.index'
-            ];
+            $this->addMassAction([
+                'icon' => 'tag',
+                'title' => 'Tags',
+                'method' => 'GET',
+                'is_popup'  => true,
+                'action' => 'text-blue-600 bg-blue-100',
+                'url' => 'admin.settings.statuses.tags.index',
+            ]);
         }
 
         if (bouncer()->hasPermission('admin.settings.statuses.source.index')) {
-            $options[] = [
-                'label' => 'Lead Source',
-                'value' => 'admin.settings.statuses.source.index'
-            ];
-        }
-
-        if(!empty($options)) {
             $this->addMassAction([
-                'icon' => 'settings',
-                'title' => 'Settings',
+                'icon' => 'source',
+                'title' => 'Source',
                 'method' => 'GET',
+                'is_popup'  => true,
                 'action' => 'text-blue-600 bg-blue-100',
-                'url' => 'admin.settings.statuses.leads.index',
-                'options' => $options
+                'url' => 'admin.settings.statuses.source.index',
             ]);
         }
         

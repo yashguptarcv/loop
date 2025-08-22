@@ -39,12 +39,12 @@ class MeetingsController extends Controller
                 return response()->json([
                     'success' => true,
                     'meetings_calendar' => '<p class="py-3 px-2 text-center">Oops! unable to fetch events</p>',
-                    'monthDisplay' => $startDate->format('F Y')
+                    'monthDisplay' => $startDate->format('M, Y')
                 ]);
             }
 
             // Fetch meetings for the current admin within the date range
-            if (fn_get_setting('general.settings.lead_assigned_user') == auth('admin')->id()) {
+            if (fn_get_setting('general.lead.user_group') == auth('admin')->id()) {
                 $meetings = Meeting::query()
                     ->whereBetween('start_time', [$startDate, $endDate])
                     ->orderBy('start_time')
@@ -73,14 +73,14 @@ class MeetingsController extends Controller
             return response()->json([
                 'success' => true,
                 'meetings_calendar' => $html,
-                'monthDisplay' => $startDate->format('F Y')
+                'monthDisplay' => $startDate->format('M, Y')
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to load calendar data',
                 'error' => $e->getMessage()
-            ], 500);
+            ]);
         }
     }
 
@@ -110,7 +110,7 @@ class MeetingsController extends Controller
 
         try {
             $startTime = Carbon::parse($request->start_time);
-            $endTime = $startTime->copy()->addMinute($request->end_time ?? fn_get_setting('general.settings.default_meeting_gap'));
+            $endTime = $startTime->copy()->addMinute($request->end_time ?? fn_get_setting('general.google.meeting_gap'));
 
             $meeting = Meeting::create([
                 'title' => $request->title,
@@ -118,7 +118,7 @@ class MeetingsController extends Controller
                 'start_time' => $startTime,
                 'end_time' => $endTime,
                 'location' => $request->location,
-                'color' => $request->color ?? fn_get_setting('general.settings.default_meeting_color'),
+                'color' => $request->color ?? fn_get_setting('general.google.meeting_color'),
                 'admin_id' => auth('admin')->id(),
             ]);
 
@@ -160,7 +160,7 @@ class MeetingsController extends Controller
 
         try {
             $startTime = Carbon::parse($request->start_time);
-            $endTime = $startTime->copy()->addMinute($request->end_time ?? fn_get_setting('general.settings.default_meeting_gap'));
+            $endTime = $startTime->copy()->addMinute($request->end_time ?? fn_get_setting('general.google.meeting_gap'));
 
             $meeting->update([
                 'title' => $request->title,
@@ -168,7 +168,7 @@ class MeetingsController extends Controller
                 'start_time' => $startTime,
                 'end_time' => $endTime,
                 'location' => $request->location,
-                'color' => $request->color ?? fn_get_setting('general.settings.default_meeting_color'),
+                'color' => $request->color ?? fn_get_setting('general.google.meeting_color'),
             ]);
 
             // Update Google Calendar event if exists

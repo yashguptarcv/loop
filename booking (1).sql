@@ -1,116 +1,214 @@
--- Adminer 5.3.0 MySQL 8.0.42-0ubuntu0.22.04.2 dump
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1:3306
+-- Generation Time: Aug 18, 2025 at 01:49 AM
+-- Server version: 9.1.0
+-- PHP Version: 8.3.14
 
-SET NAMES utf8;
-SET time_zone = '+00:00';
-SET foreign_key_checks = 0;
-SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
 
-SET NAMES utf8mb4;
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `booking`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admins`
+--
 
 DROP TABLE IF EXISTS `admins`;
-CREATE TABLE `admins` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `admins` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
-  `role_id` int unsigned NOT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `google_access_token` text COLLATE utf8mb4_unicode_ci,
-  `google_refresh_token` text COLLATE utf8mb4_unicode_ci,
+  `role_id` int UNSIGNED NOT NULL,
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_access_token` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `google_refresh_token` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `google_expires_in` int DEFAULT NULL,
-  `google_token_type` varchar(50) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_token_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `google_token_created_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `admins_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `admins`;
+--
+-- Dumping data for table `admins`
+--
+
 INSERT INTO `admins` (`id`, `name`, `email`, `email_verified_at`, `password`, `status`, `role_id`, `image`, `remember_token`, `google_access_token`, `google_refresh_token`, `google_expires_in`, `google_token_type`, `google_token_created_at`, `created_at`, `updated_at`) VALUES
-(1,	'Yash Gupta',	'yash.gupta@rcvtechnologies.com',	NULL,	'$2y$12$7UQBYx/H5nmjXyuoG7FxbOMXTsGsVrlseCGcoiEMupVpWb4NmvbLK',	1,	4,	NULL,	NULL,	'ya29.a0AS3H6NyLzpQCS8bukeav5zcErYih_wTjlsS9EB0N2F6vhr_kTLg5DA0sq5aqbjhRWsKXPh9oxcgiQHCXExF-V2U1XfO6gzKOfbCKVucjACuYpbFkUYMsX-C1p9jCuP4NdaIl5eu6repD71ustVlqAymR2feU23E_TGi8jPP_qQaCgYKAaUSARYSFQHGX2Mi4fqxAprIDk_lPjrU811M0w0177',	'1//0gAE5JuFrN1yoCgYIARAAGBASNwF-L9IrhvJrYof30RUe7jHcRlBpTdscmiaxoDwYF88GtCvS6l96u-EdBCCEF_IZ2onmzyVleRM',	3599,	'Bearer',	'2025-08-13 08:21:39',	'2025-08-10 22:48:55',	'2025-08-13 07:21:40'),
-(2,	'Administrator',	'yas122@gmail.com',	NULL,	'$2y$12$4PaobLJjrI5.p.9ra/66f.CdrBlHHk4JhRsO2HpwQ89bmJ3BGlnZ2',	1,	13,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'2025-08-11 01:44:29',	'2025-08-11 01:44:29'),
-(3,	'Yash',	'yash.78@rcvtechnologies.com',	NULL,	'$2y$12$epBYYKohVAog6qWLLrRNuu6q1s5yDFs2ZCfKdfNKyZsDH6hxj.K56',	1,	4,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'2025-08-11 01:44:39',	'2025-08-11 01:44:39');
+(1, 'Yash Gupta', 'yash.gupta@rcvtechnologies.com', NULL, '$2y$12$7UQBYx/H5nmjXyuoG7FxbOMXTsGsVrlseCGcoiEMupVpWb4NmvbLK', 1, 4, NULL, NULL, 'ya29.a0AS3H6NyLzpQCS8bukeav5zcErYih_wTjlsS9EB0N2F6vhr_kTLg5DA0sq5aqbjhRWsKXPh9oxcgiQHCXExF-V2U1XfO6gzKOfbCKVucjACuYpbFkUYMsX-C1p9jCuP4NdaIl5eu6repD71ustVlqAymR2feU23E_TGi8jPP_qQaCgYKAaUSARYSFQHGX2Mi4fqxAprIDk_lPjrU811M0w0177', '1//0gAE5JuFrN1yoCgYIARAAGBASNwF-L9IrhvJrYof30RUe7jHcRlBpTdscmiaxoDwYF88GtCvS6l96u-EdBCCEF_IZ2onmzyVleRM', 3599, 'Bearer', '2025-08-13 08:21:39', '2025-08-10 22:48:55', '2025-08-13 07:21:40'),
+(2, 'Administrator', 'yash122@gmail.com', NULL, '$2y$12$4PaobLJjrI5.p.9ra/66f.CdrBlHHk4JhRsO2HpwQ89bmJ3BGlnZ2', 1, 13, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-11 01:44:29', '2025-08-11 01:44:29'),
+(3, 'Yash', 'yash.78@rcvtechnologies.com', NULL, '$2y$12$epBYYKohVAog6qWLLrRNuu6q1s5yDFs2ZCfKdfNKyZsDH6hxj.K56', 1, 4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2025-08-11 01:44:39', '2025-08-11 01:44:39');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `applications`
+--
 
 DROP TABLE IF EXISTS `applications`;
-CREATE TABLE `applications` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `applications` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `full_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `mobile` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `alternate_contact` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `admin_id` bigint unsigned NOT NULL,
-  `lead_id` bigint unsigned NOT NULL,
-  `organization` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `designation` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `admin_id` bigint UNSIGNED NOT NULL,
+  `lead_id` bigint UNSIGNED NOT NULL,
+  `organization` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `order_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `designation` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `billing_address` json DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `applications_user_id_foreign` (`admin_id`),
-  KEY `applications_lead_id_foreign` (`lead_id`),
-  CONSTRAINT `applications_lead_id_foreign` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `applications_user_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `applications_admin_id_foreign` (`admin_id`),
+  KEY `applications_lead_id_foreign` (`lead_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `applications`;
-INSERT INTO `applications` (`id`, `full_name`, `mobile`, `email`, `alternate_contact`, `admin_id`, `lead_id`, `organization`, `designation`, `billing_address`, `created_at`, `updated_at`) VALUES
-(1,	'Administrator',	'8447441246',	'yash.gupta@rcvtechnologies.com',	NULL,	1,	2,	NULL,	NULL,	'{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}',	'2025-08-14 06:02:05',	'2025-08-14 06:02:05'),
-(2,	'Administrator',	'8447441246',	'yash.gupta@rcvtechnologies.com',	NULL,	1,	2,	NULL,	NULL,	'{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}',	'2025-08-14 06:02:45',	'2025-08-14 06:02:45'),
-(3,	'Administrator',	'8447441246',	'yash.gupta@rcvtechnologies.com',	NULL,	1,	2,	NULL,	NULL,	'{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}',	'2025-08-14 06:36:50',	'2025-08-14 06:36:50'),
-(4,	'Administrator',	'8447441246',	'yash.gupta@rcvtechnologies.com',	NULL,	1,	2,	NULL,	NULL,	'{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}',	'2025-08-14 06:36:53',	'2025-08-14 06:36:53'),
-(5,	'Administrator',	'8447441246',	'yash.gupta@rcvtechnologies.com',	NULL,	1,	2,	NULL,	NULL,	'{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}',	'2025-08-14 06:37:18',	'2025-08-14 06:37:18');
+--
+-- Dumping data for table `applications`
+--
+
+INSERT INTO `applications` (`id`, `full_name`, `mobile`, `email`, `alternate_contact`, `admin_id`, `lead_id`, `organization`, `order_id`, `designation`, `billing_address`, `created_at`, `updated_at`) VALUES
+(1, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:05:54', '2025-08-16 06:05:54'),
+(2, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:06:05', '2025-08-16 06:06:05'),
+(3, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:06:15', '2025-08-16 06:06:15'),
+(4, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:06:49', '2025-08-16 06:06:49'),
+(5, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:07:18', '2025-08-16 06:07:18'),
+(6, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:08:10', '2025-08-16 06:08:10'),
+(7, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:08:30', '2025-08-16 06:08:30'),
+(8, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:09:33', '2025-08-16 06:09:33'),
+(9, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:09:44', '2025-08-16 06:09:44'),
+(10, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:10:53', '2025-08-16 06:10:53'),
+(11, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:11:42', '2025-08-16 06:11:42'),
+(12, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:11:52', '2025-08-16 06:11:52'),
+(13, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:12:17', '2025-08-16 06:12:17'),
+(14, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:12:39', '2025-08-16 06:12:39'),
+(15, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:16:38', '2025-08-16 06:16:38'),
+(16, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:16:49', '2025-08-16 06:16:49'),
+(17, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:18:31', '2025-08-16 06:18:31'),
+(18, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:19:05', '2025-08-16 06:19:05'),
+(19, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:20:09', '2025-08-16 06:20:09'),
+(20, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:20:46', '2025-08-16 06:20:46'),
+(21, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:27:43', '2025-08-16 06:27:43'),
+(22, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:29:01', '2025-08-16 06:29:01'),
+(23, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:30:17', '2025-08-16 06:30:17'),
+(24, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:31:19', '2025-08-16 06:31:19'),
+(25, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:31:41', '2025-08-16 06:31:41'),
+(26, 'Sagar', '8665555555', 'harshit@gmail.com', NULL, 2, 5, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:43:16', '2025-08-16 06:43:16'),
+(27, 'Sagar', '8665555555', 'harshit@gmail.com', NULL, 2, 5, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:43:50', '2025-08-16 06:43:50'),
+(28, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:44:09', '2025-08-16 06:44:09'),
+(29, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:44:22', '2025-08-16 06:44:22'),
+(30, 'Hero Test', '8447441246', 'yash121999@gmail.com', NULL, 2, 4, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-16 06:44:34', '2025-08-16 06:44:34'),
+(31, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 11:50:13', '2025-08-17 11:50:13'),
+(32, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 11:54:11', '2025-08-17 11:54:11'),
+(33, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 11:54:40', '2025-08-17 11:54:40'),
+(34, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 11:54:58', '2025-08-17 11:54:58'),
+(35, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 11:55:04', '2025-08-17 11:55:04'),
+(36, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 11:55:25', '2025-08-17 11:55:25'),
+(37, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 11:55:43', '2025-08-17 11:55:43'),
+(38, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 11:55:58', '2025-08-17 11:55:58'),
+(39, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 11:58:26', '2025-08-17 11:58:26'),
+(40, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 11:58:35', '2025-08-17 11:58:35'),
+(41, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 11:58:50', '2025-08-17 11:58:50'),
+(42, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 11:59:00', '2025-08-17 11:59:00'),
+(43, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 11:59:23', '2025-08-17 11:59:23'),
+(44, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 12:00:45', '2025-08-17 12:00:45'),
+(45, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 12:00:56', '2025-08-17 12:00:56'),
+(46, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 12:01:13', '2025-08-17 12:01:13'),
+(47, 'Administrator', '8665555555', 'yash.gupta@rcvtechnologies.com', NULL, 2, 2, NULL, NULL, NULL, '{\"city\": null, \"state\": null, \"postal_code\": null, \"address_line1\": null, \"address_line2\": null}', '2025-08-17 12:01:52', '2025-08-17 12:01:52');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `award_categories`
+--
 
 DROP TABLE IF EXISTS `award_categories`;
-CREATE TABLE `award_categories` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `country_id` bigint unsigned NOT NULL,
-  `main_category_id` bigint unsigned NOT NULL,
-  `sub_category_id` bigint unsigned NOT NULL,
+CREATE TABLE IF NOT EXISTS `award_categories` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country_id` bigint UNSIGNED NOT NULL,
+  `main_category_id` bigint UNSIGNED NOT NULL,
+  `sub_category_id` bigint UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `award_categories`;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cache`
+--
 
 DROP TABLE IF EXISTS `cache`;
-CREATE TABLE `cache` (
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `cache` (
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `cache`;
+--
+-- Dumping data for table `cache`
+--
+
+INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
+('laravel-cache-tax_rates____', 'O:39:\"Illuminate\\Database\\Eloquent\\Collection\":2:{s:8:\"\0*\0items\";a:0:{}s:28:\"\0*\0escapeWhenCastingToString\";b:0;}', 1755537613);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cache_locks`
+--
 
 DROP TABLE IF EXISTS `cache_locks`;
-CREATE TABLE `cache_locks` (
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `owner` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `cache_locks` (
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `owner` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `expiration` int NOT NULL,
   PRIMARY KEY (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `cache_locks`;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categories`
+--
 
 DROP TABLE IF EXISTS `categories`;
-CREATE TABLE `categories` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `parent_id` bigint unsigned DEFAULT NULL COMMENT 'Parent category for subcategories',
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'SEO-friendly URL key',
-  `description` text COLLATE utf8mb4_unicode_ci,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` enum('A','D') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'A' COMMENT 'A=Active, D=Disabled',
-  `position` int unsigned NOT NULL DEFAULT '0' COMMENT 'Sorting order within parent',
-  `meta_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `meta_description` text COLLATE utf8mb4_unicode_ci,
-  `meta_keywords` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `parent_id` bigint UNSIGNED DEFAULT NULL COMMENT 'Parent category for subcategories',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'SEO-friendly URL key',
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('A','D') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'A' COMMENT 'A=Active, D=Disabled',
+  `position` int UNSIGNED NOT NULL DEFAULT '0' COMMENT 'Sorting order within parent',
+  `meta_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `meta_description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `meta_keywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -118,959 +216,1029 @@ CREATE TABLE `categories` (
   KEY `categories_parent_id_index` (`parent_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `categories`;
+--
+-- Dumping data for table `categories`
+--
+
 INSERT INTO `categories` (`id`, `parent_id`, `name`, `slug`, `description`, `image`, `status`, `position`, `meta_title`, `meta_description`, `meta_keywords`, `created_at`, `updated_at`) VALUES
-(5,	NULL,	'sdfsdfsdf',	'sdfsdfsdf',	'<p>dsfsdf</p>',	NULL,	'A',	0,	NULL,	NULL,	NULL,	'2025-08-14 01:36:57',	'2025-08-14 01:36:57'),
-(6,	5,	'fsdfsdf',	'fsdfsdf',	'<p>sdfsdf</p>',	'categories/images/DE409xRg5MbPQEvtxqvesC4GhzxaYD2Ynql318gn.png',	'A',	0,	NULL,	NULL,	NULL,	'2025-08-14 01:37:03',	'2025-08-14 02:24:11'),
-(7,	5,	'adas',	'adas',	'<p>asdasd asd</p>',	'categories/images/5lTtoA9rEKiyRG7342mG6oPxSVxQYZQnxRQg18Kt.png',	'D',	0,	NULL,	NULL,	NULL,	'2025-08-14 02:30:26',	'2025-08-14 03:34:51');
+(6, 5, 'fsdfsdf', 'fsdfsdf', '<p>sdfsdf</p>', 'categories/images/DE409xRg5MbPQEvtxqvesC4GhzxaYD2Ynql318gn.png', 'A', 0, NULL, NULL, NULL, '2025-08-14 01:37:03', '2025-08-14 02:24:11');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `category_product`
+--
 
 DROP TABLE IF EXISTS `category_product`;
-CREATE TABLE `category_product` (
-  `category_id` bigint unsigned NOT NULL,
-  `product_id` bigint unsigned NOT NULL,
+CREATE TABLE IF NOT EXISTS `category_product` (
+  `category_id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
   PRIMARY KEY (`category_id`,`product_id`),
-  KEY `category_product_product_id_foreign` (`product_id`),
-  CONSTRAINT `category_product_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `category_product_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
+  KEY `category_product_product_id_foreign` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `category_product`;
+--
+-- Dumping data for table `category_product`
+--
+
 INSERT INTO `category_product` (`category_id`, `product_id`) VALUES
-(5,	1),
-(6,	1),
-(7,	1),
-(5,	2),
-(6,	2),
-(7,	2);
+(6, 1),
+(6, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `countries`
+--
 
 DROP TABLE IF EXISTS `countries`;
-CREATE TABLE `countries` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `countries` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=256 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `countries`;
+--
+-- Dumping data for table `countries`
+--
+
 INSERT INTO `countries` (`id`, `code`, `name`) VALUES
-(1,	'AF',	'Afghanistan'),
-(2,	'AX',	'Åland Islands'),
-(3,	'AL',	'Albania'),
-(4,	'DZ',	'Algeria'),
-(5,	'AS',	'American Samoa'),
-(6,	'AD',	'Andorra'),
-(7,	'AO',	'Angola'),
-(8,	'AI',	'Anguilla'),
-(9,	'AQ',	'Antarctica'),
-(10,	'AG',	'Antigua & Barbuda'),
-(11,	'AR',	'Argentina'),
-(12,	'AM',	'Armenia'),
-(13,	'AW',	'Aruba'),
-(14,	'AC',	'Ascension Island'),
-(15,	'AU',	'Australia'),
-(16,	'AT',	'Austria'),
-(17,	'AZ',	'Azerbaijan'),
-(18,	'BS',	'Bahamas'),
-(19,	'BH',	'Bahrain'),
-(20,	'BD',	'Bangladesh'),
-(21,	'BB',	'Barbados'),
-(22,	'BY',	'Belarus'),
-(23,	'BE',	'Belgium'),
-(24,	'BZ',	'Belize'),
-(25,	'BJ',	'Benin'),
-(26,	'BM',	'Bermuda'),
-(27,	'BT',	'Bhutan'),
-(28,	'BO',	'Bolivia'),
-(29,	'BA',	'Bosnia & Herzegovina'),
-(30,	'BW',	'Botswana'),
-(31,	'BR',	'Brazil'),
-(32,	'IO',	'British Indian Ocean Territory'),
-(33,	'VG',	'British Virgin Islands'),
-(34,	'BN',	'Brunei'),
-(35,	'BG',	'Bulgaria'),
-(36,	'BF',	'Burkina Faso'),
-(37,	'BI',	'Burundi'),
-(38,	'KH',	'Cambodia'),
-(39,	'CM',	'Cameroon'),
-(40,	'CA',	'Canada'),
-(41,	'IC',	'Canary Islands'),
-(42,	'CV',	'Cape Verde'),
-(43,	'BQ',	'Caribbean Netherlands'),
-(44,	'KY',	'Cayman Islands'),
-(45,	'CF',	'Central African Republic'),
-(46,	'EA',	'Ceuta & Melilla'),
-(47,	'TD',	'Chad'),
-(48,	'CL',	'Chile'),
-(49,	'CN',	'China'),
-(50,	'CX',	'Christmas Island'),
-(51,	'CC',	'Cocos (Keeling) Islands'),
-(52,	'CO',	'Colombia'),
-(53,	'KM',	'Comoros'),
-(54,	'CG',	'Congo - Brazzaville'),
-(55,	'CD',	'Congo - Kinshasa'),
-(56,	'CK',	'Cook Islands'),
-(57,	'CR',	'Costa Rica'),
-(58,	'CI',	'Côte d’Ivoire'),
-(59,	'HR',	'Croatia'),
-(60,	'CU',	'Cuba'),
-(61,	'CW',	'Curaçao'),
-(62,	'CY',	'Cyprus'),
-(63,	'CZ',	'Czechia'),
-(64,	'DK',	'Denmark'),
-(65,	'DG',	'Diego Garcia'),
-(66,	'DJ',	'Djibouti'),
-(67,	'DM',	'Dominica'),
-(68,	'DO',	'Dominican Republic'),
-(69,	'EC',	'Ecuador'),
-(70,	'EG',	'Egypt'),
-(71,	'SV',	'El Salvador'),
-(72,	'GQ',	'Equatorial Guinea'),
-(73,	'ER',	'Eritrea'),
-(74,	'EE',	'Estonia'),
-(75,	'ET',	'Ethiopia'),
-(76,	'EZ',	'Eurozone'),
-(77,	'FK',	'Falkland Islands'),
-(78,	'FO',	'Faroe Islands'),
-(79,	'FJ',	'Fiji'),
-(80,	'FI',	'Finland'),
-(81,	'FR',	'France'),
-(82,	'GF',	'French Guiana'),
-(83,	'PF',	'French Polynesia'),
-(84,	'TF',	'French Southern Territories'),
-(85,	'GA',	'Gabon'),
-(86,	'GM',	'Gambia'),
-(87,	'GE',	'Georgia'),
-(88,	'DE',	'Germany'),
-(89,	'GH',	'Ghana'),
-(90,	'GI',	'Gibraltar'),
-(91,	'GR',	'Greece'),
-(92,	'GL',	'Greenland'),
-(93,	'GD',	'Grenada'),
-(94,	'GP',	'Guadeloupe'),
-(95,	'GU',	'Guam'),
-(96,	'GT',	'Guatemala'),
-(97,	'GG',	'Guernsey'),
-(98,	'GN',	'Guinea'),
-(99,	'GW',	'Guinea-Bissau'),
-(100,	'GY',	'Guyana'),
-(101,	'HT',	'Haiti'),
-(102,	'HN',	'Honduras'),
-(103,	'HK',	'Hong Kong SAR China'),
-(104,	'HU',	'Hungary'),
-(105,	'IS',	'Iceland'),
-(106,	'IN',	'India'),
-(107,	'ID',	'Indonesia'),
-(108,	'IR',	'Iran'),
-(109,	'IQ',	'Iraq'),
-(110,	'IE',	'Ireland'),
-(111,	'IM',	'Isle of Man'),
-(112,	'IL',	'Israel'),
-(113,	'IT',	'Italy'),
-(114,	'JM',	'Jamaica'),
-(115,	'JP',	'Japan'),
-(116,	'JE',	'Jersey'),
-(117,	'JO',	'Jordan'),
-(118,	'KZ',	'Kazakhstan'),
-(119,	'KE',	'Kenya'),
-(120,	'KI',	'Kiribati'),
-(121,	'XK',	'Kosovo'),
-(122,	'KW',	'Kuwait'),
-(123,	'KG',	'Kyrgyzstan'),
-(124,	'LA',	'Laos'),
-(125,	'LV',	'Latvia'),
-(126,	'LB',	'Lebanon'),
-(127,	'LS',	'Lesotho'),
-(128,	'LR',	'Liberia'),
-(129,	'LY',	'Libya'),
-(130,	'LI',	'Liechtenstein'),
-(131,	'LT',	'Lithuania'),
-(132,	'LU',	'Luxembourg'),
-(133,	'MO',	'Macau SAR China'),
-(134,	'MK',	'Macedonia'),
-(135,	'MG',	'Madagascar'),
-(136,	'MW',	'Malawi'),
-(137,	'MY',	'Malaysia'),
-(138,	'MV',	'Maldives'),
-(139,	'ML',	'Mali'),
-(140,	'MT',	'Malta'),
-(141,	'MH',	'Marshall Islands'),
-(142,	'MQ',	'Martinique'),
-(143,	'MR',	'Mauritania'),
-(144,	'MU',	'Mauritius'),
-(145,	'YT',	'Mayotte'),
-(146,	'MX',	'Mexico'),
-(147,	'FM',	'Micronesia'),
-(148,	'MD',	'Moldova'),
-(149,	'MC',	'Monaco'),
-(150,	'MN',	'Mongolia'),
-(151,	'ME',	'Montenegro'),
-(152,	'MS',	'Montserrat'),
-(153,	'MA',	'Morocco'),
-(154,	'MZ',	'Mozambique'),
-(155,	'MM',	'Myanmar (Burma)'),
-(156,	'NA',	'Namibia'),
-(157,	'NR',	'Nauru'),
-(158,	'NP',	'Nepal'),
-(159,	'NL',	'Netherlands'),
-(160,	'NC',	'New Caledonia'),
-(161,	'NZ',	'New Zealand'),
-(162,	'NI',	'Nicaragua'),
-(163,	'NE',	'Niger'),
-(164,	'NG',	'Nigeria'),
-(165,	'NU',	'Niue'),
-(166,	'NF',	'Norfolk Island'),
-(167,	'KP',	'North Korea'),
-(168,	'MP',	'Northern Mariana Islands'),
-(169,	'NO',	'Norway'),
-(170,	'OM',	'Oman'),
-(171,	'PK',	'Pakistan'),
-(172,	'PW',	'Palau'),
-(173,	'PS',	'Palestinian Territories'),
-(174,	'PA',	'Panama'),
-(175,	'PG',	'Papua New Guinea'),
-(176,	'PY',	'Paraguay'),
-(177,	'PE',	'Peru'),
-(178,	'PH',	'Philippines'),
-(179,	'PN',	'Pitcairn Islands'),
-(180,	'PL',	'Poland'),
-(181,	'PT',	'Portugal'),
-(182,	'PR',	'Puerto Rico'),
-(183,	'QA',	'Qatar'),
-(184,	'RE',	'Réunion'),
-(185,	'RO',	'Romania'),
-(186,	'RU',	'Russia'),
-(187,	'RW',	'Rwanda'),
-(188,	'WS',	'Samoa'),
-(189,	'SM',	'San Marino'),
-(190,	'ST',	'São Tomé & Príncipe'),
-(191,	'SA',	'Saudi Arabia'),
-(192,	'SN',	'Senegal'),
-(193,	'RS',	'Serbia'),
-(194,	'SC',	'Seychelles'),
-(195,	'SL',	'Sierra Leone'),
-(196,	'SG',	'Singapore'),
-(197,	'SX',	'Sint Maarten'),
-(198,	'SK',	'Slovakia'),
-(199,	'SI',	'Slovenia'),
-(200,	'SB',	'Solomon Islands'),
-(201,	'SO',	'Somalia'),
-(202,	'ZA',	'South Africa'),
-(203,	'GS',	'South Georgia & South Sandwich Islands'),
-(204,	'KR',	'South Korea'),
-(205,	'SS',	'South Sudan'),
-(206,	'ES',	'Spain'),
-(207,	'LK',	'Sri Lanka'),
-(208,	'BL',	'St. Barthélemy'),
-(209,	'SH',	'St. Helena'),
-(210,	'KN',	'St. Kitts & Nevis'),
-(211,	'LC',	'St. Lucia'),
-(212,	'MF',	'St. Martin'),
-(213,	'PM',	'St. Pierre & Miquelon'),
-(214,	'VC',	'St. Vincent & Grenadines'),
-(215,	'SD',	'Sudan'),
-(216,	'SR',	'Suriname'),
-(217,	'SJ',	'Svalbard & Jan Mayen'),
-(218,	'SZ',	'Swaziland'),
-(219,	'SE',	'Sweden'),
-(220,	'CH',	'Switzerland'),
-(221,	'SY',	'Syria'),
-(222,	'TW',	'Taiwan'),
-(223,	'TJ',	'Tajikistan'),
-(224,	'TZ',	'Tanzania'),
-(225,	'TH',	'Thailand'),
-(226,	'TL',	'Timor-Leste'),
-(227,	'TG',	'Togo'),
-(228,	'TK',	'Tokelau'),
-(229,	'TO',	'Tonga'),
-(230,	'TT',	'Trinidad & Tobago'),
-(231,	'TA',	'Tristan da Cunha'),
-(232,	'TN',	'Tunisia'),
-(233,	'TR',	'Turkey'),
-(234,	'TM',	'Turkmenistan'),
-(235,	'TC',	'Turks & Caicos Islands'),
-(236,	'TV',	'Tuvalu'),
-(237,	'UM',	'U.S. Outlying Islands'),
-(238,	'VI',	'U.S. Virgin Islands'),
-(239,	'UG',	'Uganda'),
-(240,	'UA',	'Ukraine'),
-(241,	'AE',	'United Arab Emirates'),
-(242,	'GB',	'United Kingdom'),
-(244,	'US',	'United States'),
-(245,	'UY',	'Uruguay'),
-(246,	'UZ',	'Uzbekistan'),
-(247,	'VU',	'Vanuatu'),
-(248,	'VA',	'Vatican City'),
-(249,	'VE',	'Venezuela'),
-(250,	'VN',	'Vietnam'),
-(251,	'WF',	'Wallis & Futuna'),
-(252,	'EH',	'Western Sahara'),
-(253,	'YE',	'Yemen'),
-(254,	'ZM',	'Zambia'),
-(255,	'ZW',	'Zimbabwe');
+(1, 'AF', 'Afghanistan'),
+(2, 'AX', 'Åland Islands'),
+(3, 'AL', 'Albania'),
+(4, 'DZ', 'Algeria'),
+(5, 'AS', 'American Samoa'),
+(6, 'AD', 'Andorra'),
+(7, 'AO', 'Angola'),
+(8, 'AI', 'Anguilla'),
+(9, 'AQ', 'Antarctica'),
+(10, 'AG', 'Antigua & Barbuda'),
+(11, 'AR', 'Argentina'),
+(12, 'AM', 'Armenia'),
+(13, 'AW', 'Aruba'),
+(14, 'AC', 'Ascension Island'),
+(15, 'AU', 'Australia'),
+(16, 'AT', 'Austria'),
+(17, 'AZ', 'Azerbaijan'),
+(18, 'BS', 'Bahamas'),
+(19, 'BH', 'Bahrain'),
+(20, 'BD', 'Bangladesh'),
+(21, 'BB', 'Barbados'),
+(22, 'BY', 'Belarus'),
+(23, 'BE', 'Belgium'),
+(24, 'BZ', 'Belize'),
+(25, 'BJ', 'Benin'),
+(26, 'BM', 'Bermuda'),
+(27, 'BT', 'Bhutan'),
+(28, 'BO', 'Bolivia'),
+(29, 'BA', 'Bosnia & Herzegovina'),
+(30, 'BW', 'Botswana'),
+(31, 'BR', 'Brazil'),
+(32, 'IO', 'British Indian Ocean Territory'),
+(33, 'VG', 'British Virgin Islands'),
+(34, 'BN', 'Brunei'),
+(35, 'BG', 'Bulgaria'),
+(36, 'BF', 'Burkina Faso'),
+(37, 'BI', 'Burundi'),
+(38, 'KH', 'Cambodia'),
+(39, 'CM', 'Cameroon'),
+(40, 'CA', 'Canada'),
+(41, 'IC', 'Canary Islands'),
+(42, 'CV', 'Cape Verde'),
+(43, 'BQ', 'Caribbean Netherlands'),
+(44, 'KY', 'Cayman Islands'),
+(45, 'CF', 'Central African Republic'),
+(46, 'EA', 'Ceuta & Melilla'),
+(47, 'TD', 'Chad'),
+(48, 'CL', 'Chile'),
+(49, 'CN', 'China'),
+(50, 'CX', 'Christmas Island'),
+(51, 'CC', 'Cocos (Keeling) Islands'),
+(52, 'CO', 'Colombia'),
+(53, 'KM', 'Comoros'),
+(54, 'CG', 'Congo - Brazzaville'),
+(55, 'CD', 'Congo - Kinshasa'),
+(56, 'CK', 'Cook Islands'),
+(57, 'CR', 'Costa Rica'),
+(58, 'CI', 'Côte d’Ivoire'),
+(59, 'HR', 'Croatia'),
+(60, 'CU', 'Cuba'),
+(61, 'CW', 'Curaçao'),
+(62, 'CY', 'Cyprus'),
+(63, 'CZ', 'Czechia'),
+(64, 'DK', 'Denmark'),
+(65, 'DG', 'Diego Garcia'),
+(66, 'DJ', 'Djibouti'),
+(67, 'DM', 'Dominica'),
+(68, 'DO', 'Dominican Republic'),
+(69, 'EC', 'Ecuador'),
+(70, 'EG', 'Egypt'),
+(71, 'SV', 'El Salvador'),
+(72, 'GQ', 'Equatorial Guinea'),
+(73, 'ER', 'Eritrea'),
+(74, 'EE', 'Estonia'),
+(75, 'ET', 'Ethiopia'),
+(76, 'EZ', 'Eurozone'),
+(77, 'FK', 'Falkland Islands'),
+(78, 'FO', 'Faroe Islands'),
+(79, 'FJ', 'Fiji'),
+(80, 'FI', 'Finland'),
+(81, 'FR', 'France'),
+(82, 'GF', 'French Guiana'),
+(83, 'PF', 'French Polynesia'),
+(84, 'TF', 'French Southern Territories'),
+(85, 'GA', 'Gabon'),
+(86, 'GM', 'Gambia'),
+(87, 'GE', 'Georgia'),
+(88, 'DE', 'Germany'),
+(89, 'GH', 'Ghana'),
+(90, 'GI', 'Gibraltar'),
+(91, 'GR', 'Greece'),
+(92, 'GL', 'Greenland'),
+(93, 'GD', 'Grenada'),
+(94, 'GP', 'Guadeloupe'),
+(95, 'GU', 'Guam'),
+(96, 'GT', 'Guatemala'),
+(97, 'GG', 'Guernsey'),
+(98, 'GN', 'Guinea'),
+(99, 'GW', 'Guinea-Bissau'),
+(100, 'GY', 'Guyana'),
+(101, 'HT', 'Haiti'),
+(102, 'HN', 'Honduras'),
+(103, 'HK', 'Hong Kong SAR China'),
+(104, 'HU', 'Hungary'),
+(105, 'IS', 'Iceland'),
+(106, 'IN', 'India'),
+(107, 'ID', 'Indonesia'),
+(108, 'IR', 'Iran'),
+(109, 'IQ', 'Iraq'),
+(110, 'IE', 'Ireland'),
+(111, 'IM', 'Isle of Man'),
+(112, 'IL', 'Israel'),
+(113, 'IT', 'Italy'),
+(114, 'JM', 'Jamaica'),
+(115, 'JP', 'Japan'),
+(116, 'JE', 'Jersey'),
+(117, 'JO', 'Jordan'),
+(118, 'KZ', 'Kazakhstan'),
+(119, 'KE', 'Kenya'),
+(120, 'KI', 'Kiribati'),
+(121, 'XK', 'Kosovo'),
+(122, 'KW', 'Kuwait'),
+(123, 'KG', 'Kyrgyzstan'),
+(124, 'LA', 'Laos'),
+(125, 'LV', 'Latvia'),
+(126, 'LB', 'Lebanon'),
+(127, 'LS', 'Lesotho'),
+(128, 'LR', 'Liberia'),
+(129, 'LY', 'Libya'),
+(130, 'LI', 'Liechtenstein'),
+(131, 'LT', 'Lithuania'),
+(132, 'LU', 'Luxembourg'),
+(133, 'MO', 'Macau SAR China'),
+(134, 'MK', 'Macedonia'),
+(135, 'MG', 'Madagascar'),
+(136, 'MW', 'Malawi'),
+(137, 'MY', 'Malaysia'),
+(138, 'MV', 'Maldives'),
+(139, 'ML', 'Mali'),
+(140, 'MT', 'Malta'),
+(141, 'MH', 'Marshall Islands'),
+(142, 'MQ', 'Martinique'),
+(143, 'MR', 'Mauritania'),
+(144, 'MU', 'Mauritius'),
+(145, 'YT', 'Mayotte'),
+(146, 'MX', 'Mexico'),
+(147, 'FM', 'Micronesia'),
+(148, 'MD', 'Moldova'),
+(149, 'MC', 'Monaco'),
+(150, 'MN', 'Mongolia'),
+(151, 'ME', 'Montenegro'),
+(152, 'MS', 'Montserrat'),
+(153, 'MA', 'Morocco'),
+(154, 'MZ', 'Mozambique'),
+(155, 'MM', 'Myanmar (Burma)'),
+(156, 'NA', 'Namibia'),
+(157, 'NR', 'Nauru'),
+(158, 'NP', 'Nepal'),
+(159, 'NL', 'Netherlands'),
+(160, 'NC', 'New Caledonia'),
+(161, 'NZ', 'New Zealand'),
+(162, 'NI', 'Nicaragua'),
+(163, 'NE', 'Niger'),
+(164, 'NG', 'Nigeria'),
+(165, 'NU', 'Niue'),
+(166, 'NF', 'Norfolk Island'),
+(167, 'KP', 'North Korea'),
+(168, 'MP', 'Northern Mariana Islands'),
+(169, 'NO', 'Norway'),
+(170, 'OM', 'Oman'),
+(171, 'PK', 'Pakistan'),
+(172, 'PW', 'Palau'),
+(173, 'PS', 'Palestinian Territories'),
+(174, 'PA', 'Panama'),
+(175, 'PG', 'Papua New Guinea'),
+(176, 'PY', 'Paraguay'),
+(177, 'PE', 'Peru'),
+(178, 'PH', 'Philippines'),
+(179, 'PN', 'Pitcairn Islands'),
+(180, 'PL', 'Poland'),
+(181, 'PT', 'Portugal'),
+(182, 'PR', 'Puerto Rico'),
+(183, 'QA', 'Qatar'),
+(184, 'RE', 'Réunion'),
+(185, 'RO', 'Romania'),
+(186, 'RU', 'Russia'),
+(187, 'RW', 'Rwanda'),
+(188, 'WS', 'Samoa'),
+(189, 'SM', 'San Marino'),
+(190, 'ST', 'São Tomé & Príncipe'),
+(191, 'SA', 'Saudi Arabia'),
+(192, 'SN', 'Senegal'),
+(193, 'RS', 'Serbia'),
+(194, 'SC', 'Seychelles'),
+(195, 'SL', 'Sierra Leone'),
+(196, 'SG', 'Singapore'),
+(197, 'SX', 'Sint Maarten'),
+(198, 'SK', 'Slovakia'),
+(199, 'SI', 'Slovenia'),
+(200, 'SB', 'Solomon Islands'),
+(201, 'SO', 'Somalia'),
+(202, 'ZA', 'South Africa'),
+(203, 'GS', 'South Georgia & South Sandwich Islands'),
+(204, 'KR', 'South Korea'),
+(205, 'SS', 'South Sudan'),
+(206, 'ES', 'Spain'),
+(207, 'LK', 'Sri Lanka'),
+(208, 'BL', 'St. Barthélemy'),
+(209, 'SH', 'St. Helena'),
+(210, 'KN', 'St. Kitts & Nevis'),
+(211, 'LC', 'St. Lucia'),
+(212, 'MF', 'St. Martin'),
+(213, 'PM', 'St. Pierre & Miquelon'),
+(214, 'VC', 'St. Vincent & Grenadines'),
+(215, 'SD', 'Sudan'),
+(216, 'SR', 'Suriname'),
+(217, 'SJ', 'Svalbard & Jan Mayen'),
+(218, 'SZ', 'Swaziland'),
+(219, 'SE', 'Sweden'),
+(220, 'CH', 'Switzerland'),
+(221, 'SY', 'Syria'),
+(222, 'TW', 'Taiwan'),
+(223, 'TJ', 'Tajikistan'),
+(224, 'TZ', 'Tanzania'),
+(225, 'TH', 'Thailand'),
+(226, 'TL', 'Timor-Leste'),
+(227, 'TG', 'Togo'),
+(228, 'TK', 'Tokelau'),
+(229, 'TO', 'Tonga'),
+(230, 'TT', 'Trinidad & Tobago'),
+(231, 'TA', 'Tristan da Cunha'),
+(232, 'TN', 'Tunisia'),
+(233, 'TR', 'Turkey'),
+(234, 'TM', 'Turkmenistan'),
+(235, 'TC', 'Turks & Caicos Islands'),
+(236, 'TV', 'Tuvalu'),
+(237, 'UM', 'U.S. Outlying Islands'),
+(238, 'VI', 'U.S. Virgin Islands'),
+(239, 'UG', 'Uganda'),
+(240, 'UA', 'Ukraine'),
+(241, 'AE', 'United Arab Emirates'),
+(242, 'GB', 'United Kingdom'),
+(244, 'US', 'United States'),
+(245, 'UY', 'Uruguay'),
+(246, 'UZ', 'Uzbekistan'),
+(247, 'VU', 'Vanuatu'),
+(248, 'VA', 'Vatican City'),
+(249, 'VE', 'Venezuela'),
+(250, 'VN', 'Vietnam'),
+(251, 'WF', 'Wallis & Futuna'),
+(252, 'EH', 'Western Sahara'),
+(253, 'YE', 'Yemen'),
+(254, 'ZM', 'Zambia'),
+(255, 'ZW', 'Zimbabwe');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `country_states`
+--
 
 DROP TABLE IF EXISTS `country_states`;
-CREATE TABLE `country_states` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `country_id` int unsigned DEFAULT NULL,
-  `country_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `default_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE IF NOT EXISTS `country_states` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `country_id` int UNSIGNED DEFAULT NULL,
+  `country_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `default_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `country_states_country_id_foreign` (`country_id`),
-  CONSTRAINT `country_states_country_id_foreign` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=587 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `country_states_country_id_foreign` (`country_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=589 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `country_states`;
+--
+-- Dumping data for table `country_states`
+--
+
 INSERT INTO `country_states` (`id`, `country_id`, `country_code`, `code`, `default_name`) VALUES
-(1,	244,	'US',	'AL',	'Alabama'),
-(2,	244,	'US',	'AK',	'Alaska'),
-(3,	244,	'US',	'AS',	'American Samoa'),
-(4,	244,	'US',	'AZ',	'Arizona'),
-(5,	244,	'US',	'AR',	'Arkansas'),
-(6,	244,	'US',	'AE',	'Armed Forces Africa'),
-(7,	244,	'US',	'AA',	'Armed Forces Americas'),
-(8,	244,	'US',	'AE',	'Armed Forces Canada'),
-(9,	244,	'US',	'AE',	'Armed Forces Europe'),
-(10,	244,	'US',	'AE',	'Armed Forces Middle East'),
-(11,	244,	'US',	'AP',	'Armed Forces Pacific'),
-(12,	244,	'US',	'CA',	'California'),
-(13,	244,	'US',	'CO',	'Colorado'),
-(14,	244,	'US',	'CT',	'Connecticut'),
-(15,	244,	'US',	'DE',	'Delaware'),
-(16,	244,	'US',	'DC',	'District of Columbia'),
-(17,	244,	'US',	'FM',	'Federated States Of Micronesia'),
-(18,	244,	'US',	'FL',	'Florida'),
-(19,	244,	'US',	'GA',	'Georgia'),
-(20,	244,	'US',	'GU',	'Guam'),
-(21,	244,	'US',	'HI',	'Hawaii'),
-(22,	244,	'US',	'ID',	'Idaho'),
-(23,	244,	'US',	'IL',	'Illinois'),
-(24,	244,	'US',	'IN',	'Indiana'),
-(25,	244,	'US',	'IA',	'Iowa'),
-(26,	244,	'US',	'KS',	'Kansas'),
-(27,	244,	'US',	'KY',	'Kentucky'),
-(28,	244,	'US',	'LA',	'Louisiana'),
-(29,	244,	'US',	'ME',	'Maine'),
-(30,	244,	'US',	'MH',	'Marshall Islands'),
-(31,	244,	'US',	'MD',	'Maryland'),
-(32,	244,	'US',	'MA',	'Massachusetts'),
-(33,	244,	'US',	'MI',	'Michigan'),
-(34,	244,	'US',	'MN',	'Minnesota'),
-(35,	244,	'US',	'MS',	'Mississippi'),
-(36,	244,	'US',	'MO',	'Missouri'),
-(37,	244,	'US',	'MT',	'Montana'),
-(38,	244,	'US',	'NE',	'Nebraska'),
-(39,	244,	'US',	'NV',	'Nevada'),
-(40,	244,	'US',	'NH',	'New Hampshire'),
-(41,	244,	'US',	'NJ',	'New Jersey'),
-(42,	244,	'US',	'NM',	'New Mexico'),
-(43,	244,	'US',	'NY',	'New York'),
-(44,	244,	'US',	'NC',	'North Carolina'),
-(45,	244,	'US',	'ND',	'North Dakota'),
-(46,	244,	'US',	'MP',	'Northern Mariana Islands'),
-(47,	244,	'US',	'OH',	'Ohio'),
-(48,	244,	'US',	'OK',	'Oklahoma'),
-(49,	244,	'US',	'OR',	'Oregon'),
-(50,	244,	'US',	'PW',	'Palau'),
-(51,	244,	'US',	'PA',	'Pennsylvania'),
-(52,	244,	'US',	'PR',	'Puerto Rico'),
-(53,	244,	'US',	'RI',	'Rhode Island'),
-(54,	244,	'US',	'SC',	'South Carolina'),
-(55,	244,	'US',	'SD',	'South Dakota'),
-(56,	244,	'US',	'TN',	'Tennessee'),
-(57,	244,	'US',	'TX',	'Texas'),
-(58,	244,	'US',	'UT',	'Utah'),
-(59,	244,	'US',	'VT',	'Vermont'),
-(60,	244,	'US',	'VI',	'Virgin Islands'),
-(61,	244,	'US',	'VA',	'Virginia'),
-(62,	244,	'US',	'WA',	'Washington'),
-(63,	244,	'US',	'WV',	'West Virginia'),
-(64,	244,	'US',	'WI',	'Wisconsin'),
-(65,	244,	'US',	'WY',	'Wyoming'),
-(66,	40,	'CA',	'AB',	'Alberta'),
-(67,	40,	'CA',	'BC',	'British Columbia'),
-(68,	40,	'CA',	'MB',	'Manitoba'),
-(69,	40,	'CA',	'NL',	'Newfoundland and Labrador'),
-(70,	40,	'CA',	'NB',	'New Brunswick'),
-(71,	40,	'CA',	'NS',	'Nova Scotia'),
-(72,	40,	'CA',	'NT',	'Northwest Territories'),
-(73,	40,	'CA',	'NU',	'Nunavut'),
-(74,	40,	'CA',	'ON',	'Ontario'),
-(75,	40,	'CA',	'PE',	'Prince Edward Island'),
-(76,	40,	'CA',	'QC',	'Quebec'),
-(77,	40,	'CA',	'SK',	'Saskatchewan'),
-(78,	40,	'CA',	'YT',	'Yukon Territory'),
-(79,	88,	'DE',	'NDS',	'Niedersachsen'),
-(80,	88,	'DE',	'BAW',	'Baden-Württemberg'),
-(81,	88,	'DE',	'BAY',	'Bayern'),
-(82,	88,	'DE',	'BER',	'Berlin'),
-(83,	88,	'DE',	'BRG',	'Brandenburg'),
-(84,	88,	'DE',	'BRE',	'Bremen'),
-(85,	88,	'DE',	'HAM',	'Hamburg'),
-(86,	88,	'DE',	'HES',	'Hessen'),
-(87,	88,	'DE',	'MEC',	'Mecklenburg-Vorpommern'),
-(88,	88,	'DE',	'NRW',	'Nordrhein-Westfalen'),
-(89,	88,	'DE',	'RHE',	'Rheinland-Pfalz'),
-(90,	88,	'DE',	'SAR',	'Saarland'),
-(91,	88,	'DE',	'SAS',	'Sachsen'),
-(92,	88,	'DE',	'SAC',	'Sachsen-Anhalt'),
-(93,	88,	'DE',	'SCN',	'Schleswig-Holstein'),
-(94,	88,	'DE',	'THE',	'Thüringen'),
-(95,	16,	'AT',	'WI',	'Wien'),
-(96,	16,	'AT',	'NO',	'Niederösterreich'),
-(97,	16,	'AT',	'OO',	'Oberösterreich'),
-(98,	16,	'AT',	'SB',	'Salzburg'),
-(99,	16,	'AT',	'KN',	'Kärnten'),
-(100,	16,	'AT',	'ST',	'Steiermark'),
-(101,	16,	'AT',	'TI',	'Tirol'),
-(102,	16,	'AT',	'BL',	'Burgenland'),
-(103,	16,	'AT',	'VB',	'Vorarlberg'),
-(104,	220,	'CH',	'AG',	'Aargau'),
-(105,	220,	'CH',	'AI',	'Appenzell Innerrhoden'),
-(106,	220,	'CH',	'AR',	'Appenzell Ausserrhoden'),
-(107,	220,	'CH',	'BE',	'Bern'),
-(108,	220,	'CH',	'BL',	'Basel-Landschaft'),
-(109,	220,	'CH',	'BS',	'Basel-Stadt'),
-(110,	220,	'CH',	'FR',	'Freiburg'),
-(111,	220,	'CH',	'GE',	'Genf'),
-(112,	220,	'CH',	'GL',	'Glarus'),
-(113,	220,	'CH',	'GR',	'Graubünden'),
-(114,	220,	'CH',	'JU',	'Jura'),
-(115,	220,	'CH',	'LU',	'Luzern'),
-(116,	220,	'CH',	'NE',	'Neuenburg'),
-(117,	220,	'CH',	'NW',	'Nidwalden'),
-(118,	220,	'CH',	'OW',	'Obwalden'),
-(119,	220,	'CH',	'SG',	'St. Gallen'),
-(120,	220,	'CH',	'SH',	'Schaffhausen'),
-(121,	220,	'CH',	'SO',	'Solothurn'),
-(122,	220,	'CH',	'SZ',	'Schwyz'),
-(123,	220,	'CH',	'TG',	'Thurgau'),
-(124,	220,	'CH',	'TI',	'Tessin'),
-(125,	220,	'CH',	'UR',	'Uri'),
-(126,	220,	'CH',	'VD',	'Waadt'),
-(127,	220,	'CH',	'VS',	'Wallis'),
-(128,	220,	'CH',	'ZG',	'Zug'),
-(129,	220,	'CH',	'ZH',	'Zürich'),
-(130,	206,	'ES',	'A Coruсa',	'A Coruña'),
-(131,	206,	'ES',	'Alava',	'Alava'),
-(132,	206,	'ES',	'Albacete',	'Albacete'),
-(133,	206,	'ES',	'Alicante',	'Alicante'),
-(134,	206,	'ES',	'Almeria',	'Almeria'),
-(135,	206,	'ES',	'Asturias',	'Asturias'),
-(136,	206,	'ES',	'Avila',	'Avila'),
-(137,	206,	'ES',	'Badajoz',	'Badajoz'),
-(138,	206,	'ES',	'Baleares',	'Baleares'),
-(139,	206,	'ES',	'Barcelona',	'Barcelona'),
-(140,	206,	'ES',	'Burgos',	'Burgos'),
-(141,	206,	'ES',	'Caceres',	'Caceres'),
-(142,	206,	'ES',	'Cadiz',	'Cadiz'),
-(143,	206,	'ES',	'Cantabria',	'Cantabria'),
-(144,	206,	'ES',	'Castellon',	'Castellon'),
-(145,	206,	'ES',	'Ceuta',	'Ceuta'),
-(146,	206,	'ES',	'Ciudad Real',	'Ciudad Real'),
-(147,	206,	'ES',	'Cordoba',	'Cordoba'),
-(148,	206,	'ES',	'Cuenca',	'Cuenca'),
-(149,	206,	'ES',	'Girona',	'Girona'),
-(150,	206,	'ES',	'Granada',	'Granada'),
-(151,	206,	'ES',	'Guadalajara',	'Guadalajara'),
-(152,	206,	'ES',	'Guipuzcoa',	'Guipuzcoa'),
-(153,	206,	'ES',	'Huelva',	'Huelva'),
-(154,	206,	'ES',	'Huesca',	'Huesca'),
-(155,	206,	'ES',	'Jaen',	'Jaen'),
-(156,	206,	'ES',	'La Rioja',	'La Rioja'),
-(157,	206,	'ES',	'Las Palmas',	'Las Palmas'),
-(158,	206,	'ES',	'Leon',	'Leon'),
-(159,	206,	'ES',	'Lleida',	'Lleida'),
-(160,	206,	'ES',	'Lugo',	'Lugo'),
-(161,	206,	'ES',	'Madrid',	'Madrid'),
-(162,	206,	'ES',	'Malaga',	'Malaga'),
-(163,	206,	'ES',	'Melilla',	'Melilla'),
-(164,	206,	'ES',	'Murcia',	'Murcia'),
-(165,	206,	'ES',	'Navarra',	'Navarra'),
-(166,	206,	'ES',	'Ourense',	'Ourense'),
-(167,	206,	'ES',	'Palencia',	'Palencia'),
-(168,	206,	'ES',	'Pontevedra',	'Pontevedra'),
-(169,	206,	'ES',	'Salamanca',	'Salamanca'),
-(170,	206,	'ES',	'Santa Cruz de Tenerife',	'Santa Cruz de Tenerife'),
-(171,	206,	'ES',	'Segovia',	'Segovia'),
-(172,	206,	'ES',	'Sevilla',	'Sevilla'),
-(173,	206,	'ES',	'Soria',	'Soria'),
-(174,	206,	'ES',	'Tarragona',	'Tarragona'),
-(175,	206,	'ES',	'Teruel',	'Teruel'),
-(176,	206,	'ES',	'Toledo',	'Toledo'),
-(177,	206,	'ES',	'Valencia',	'Valencia'),
-(178,	206,	'ES',	'Valladolid',	'Valladolid'),
-(179,	206,	'ES',	'Vizcaya',	'Vizcaya'),
-(180,	206,	'ES',	'Zamora',	'Zamora'),
-(181,	206,	'ES',	'Zaragoza',	'Zaragoza'),
-(182,	81,	'FR',	'1',	'Ain'),
-(183,	81,	'FR',	'2',	'Aisne'),
-(184,	81,	'FR',	'3',	'Allier'),
-(185,	81,	'FR',	'4',	'Alpes-de-Haute-Provence'),
-(186,	81,	'FR',	'5',	'Hautes-Alpes'),
-(187,	81,	'FR',	'6',	'Alpes-Maritimes'),
-(188,	81,	'FR',	'7',	'Ardèche'),
-(189,	81,	'FR',	'8',	'Ardennes'),
-(190,	81,	'FR',	'9',	'Ariège'),
-(191,	81,	'FR',	'10',	'Aube'),
-(192,	81,	'FR',	'11',	'Aude'),
-(193,	81,	'FR',	'12',	'Aveyron'),
-(194,	81,	'FR',	'13',	'Bouches-du-Rhône'),
-(195,	81,	'FR',	'14',	'Calvados'),
-(196,	81,	'FR',	'15',	'Cantal'),
-(197,	81,	'FR',	'16',	'Charente'),
-(198,	81,	'FR',	'17',	'Charente-Maritime'),
-(199,	81,	'FR',	'18',	'Cher'),
-(200,	81,	'FR',	'19',	'Corrèze'),
-(201,	81,	'FR',	'2A',	'Corse-du-Sud'),
-(202,	81,	'FR',	'2B',	'Haute-Corse'),
-(203,	81,	'FR',	'21',	'Côte-d\'Or'),
-(204,	81,	'FR',	'22',	'Côtes-d\'Armor'),
-(205,	81,	'FR',	'23',	'Creuse'),
-(206,	81,	'FR',	'24',	'Dordogne'),
-(207,	81,	'FR',	'25',	'Doubs'),
-(208,	81,	'FR',	'26',	'Drôme'),
-(209,	81,	'FR',	'27',	'Eure'),
-(210,	81,	'FR',	'28',	'Eure-et-Loir'),
-(211,	81,	'FR',	'29',	'Finistère'),
-(212,	81,	'FR',	'30',	'Gard'),
-(213,	81,	'FR',	'31',	'Haute-Garonne'),
-(214,	81,	'FR',	'32',	'Gers'),
-(215,	81,	'FR',	'33',	'Gironde'),
-(216,	81,	'FR',	'34',	'Hérault'),
-(217,	81,	'FR',	'35',	'Ille-et-Vilaine'),
-(218,	81,	'FR',	'36',	'Indre'),
-(219,	81,	'FR',	'37',	'Indre-et-Loire'),
-(220,	81,	'FR',	'38',	'Isère'),
-(221,	81,	'FR',	'39',	'Jura'),
-(222,	81,	'FR',	'40',	'Landes'),
-(223,	81,	'FR',	'41',	'Loir-et-Cher'),
-(224,	81,	'FR',	'42',	'Loire'),
-(225,	81,	'FR',	'43',	'Haute-Loire'),
-(226,	81,	'FR',	'44',	'Loire-Atlantique'),
-(227,	81,	'FR',	'45',	'Loiret'),
-(228,	81,	'FR',	'46',	'Lot'),
-(229,	81,	'FR',	'47',	'Lot-et-Garonne'),
-(230,	81,	'FR',	'48',	'Lozère'),
-(231,	81,	'FR',	'49',	'Maine-et-Loire'),
-(232,	81,	'FR',	'50',	'Manche'),
-(233,	81,	'FR',	'51',	'Marne'),
-(234,	81,	'FR',	'52',	'Haute-Marne'),
-(235,	81,	'FR',	'53',	'Mayenne'),
-(236,	81,	'FR',	'54',	'Meurthe-et-Moselle'),
-(237,	81,	'FR',	'55',	'Meuse'),
-(238,	81,	'FR',	'56',	'Morbihan'),
-(239,	81,	'FR',	'57',	'Moselle'),
-(240,	81,	'FR',	'58',	'Nièvre'),
-(241,	81,	'FR',	'59',	'Nord'),
-(242,	81,	'FR',	'60',	'Oise'),
-(243,	81,	'FR',	'61',	'Orne'),
-(244,	81,	'FR',	'62',	'Pas-de-Calais'),
-(245,	81,	'FR',	'63',	'Puy-de-Dôme'),
-(246,	81,	'FR',	'64',	'Pyrénées-Atlantiques'),
-(247,	81,	'FR',	'65',	'Hautes-Pyrénées'),
-(248,	81,	'FR',	'66',	'Pyrénées-Orientales'),
-(249,	81,	'FR',	'67',	'Bas-Rhin'),
-(250,	81,	'FR',	'68',	'Haut-Rhin'),
-(251,	81,	'FR',	'69',	'Rhône'),
-(252,	81,	'FR',	'70',	'Haute-Saône'),
-(253,	81,	'FR',	'71',	'Saône-et-Loire'),
-(254,	81,	'FR',	'72',	'Sarthe'),
-(255,	81,	'FR',	'73',	'Savoie'),
-(256,	81,	'FR',	'74',	'Haute-Savoie'),
-(257,	81,	'FR',	'75',	'Paris'),
-(258,	81,	'FR',	'76',	'Seine-Maritime'),
-(259,	81,	'FR',	'77',	'Seine-et-Marne'),
-(260,	81,	'FR',	'78',	'Yvelines'),
-(261,	81,	'FR',	'79',	'Deux-Sèvres'),
-(262,	81,	'FR',	'80',	'Somme'),
-(263,	81,	'FR',	'81',	'Tarn'),
-(264,	81,	'FR',	'82',	'Tarn-et-Garonne'),
-(265,	81,	'FR',	'83',	'Var'),
-(266,	81,	'FR',	'84',	'Vaucluse'),
-(267,	81,	'FR',	'85',	'Vendée'),
-(268,	81,	'FR',	'86',	'Vienne'),
-(269,	81,	'FR',	'87',	'Haute-Vienne'),
-(270,	81,	'FR',	'88',	'Vosges'),
-(271,	81,	'FR',	'89',	'Yonne'),
-(272,	81,	'FR',	'90',	'Territoire-de-Belfort'),
-(273,	81,	'FR',	'91',	'Essonne'),
-(274,	81,	'FR',	'92',	'Hauts-de-Seine'),
-(275,	81,	'FR',	'93',	'Seine-Saint-Denis'),
-(276,	81,	'FR',	'94',	'Val-de-Marne'),
-(277,	81,	'FR',	'95',	'Val-d\'Oise'),
-(278,	185,	'RO',	'AB',	'Alba'),
-(279,	185,	'RO',	'AR',	'Arad'),
-(280,	185,	'RO',	'AG',	'Argeş'),
-(281,	185,	'RO',	'BC',	'Bacău'),
-(282,	185,	'RO',	'BH',	'Bihor'),
-(283,	185,	'RO',	'BN',	'Bistriţa-Năsăud'),
-(284,	185,	'RO',	'BT',	'Botoşani'),
-(285,	185,	'RO',	'BV',	'Braşov'),
-(286,	185,	'RO',	'BR',	'Brăila'),
-(287,	185,	'RO',	'B',	'Bucureşti'),
-(288,	185,	'RO',	'BZ',	'Buzău'),
-(289,	185,	'RO',	'CS',	'Caraş-Severin'),
-(290,	185,	'RO',	'CL',	'Călăraşi'),
-(291,	185,	'RO',	'CJ',	'Cluj'),
-(292,	185,	'RO',	'CT',	'Constanţa'),
-(293,	185,	'RO',	'CV',	'Covasna'),
-(294,	185,	'RO',	'DB',	'Dâmboviţa'),
-(295,	185,	'RO',	'DJ',	'Dolj'),
-(296,	185,	'RO',	'GL',	'Galaţi'),
-(297,	185,	'RO',	'GR',	'Giurgiu'),
-(298,	185,	'RO',	'GJ',	'Gorj'),
-(299,	185,	'RO',	'HR',	'Harghita'),
-(300,	185,	'RO',	'HD',	'Hunedoara'),
-(301,	185,	'RO',	'IL',	'Ialomiţa'),
-(302,	185,	'RO',	'IS',	'Iaşi'),
-(303,	185,	'RO',	'IF',	'Ilfov'),
-(304,	185,	'RO',	'MM',	'Maramureş'),
-(305,	185,	'RO',	'MH',	'Mehedinţi'),
-(306,	185,	'RO',	'MS',	'Mureş'),
-(307,	185,	'RO',	'NT',	'Neamţ'),
-(308,	185,	'RO',	'OT',	'Olt'),
-(309,	185,	'RO',	'PH',	'Prahova'),
-(310,	185,	'RO',	'SM',	'Satu-Mare'),
-(311,	185,	'RO',	'SJ',	'Sălaj'),
-(312,	185,	'RO',	'SB',	'Sibiu'),
-(313,	185,	'RO',	'SV',	'Suceava'),
-(314,	185,	'RO',	'TR',	'Teleorman'),
-(315,	185,	'RO',	'TM',	'Timiş'),
-(316,	185,	'RO',	'TL',	'Tulcea'),
-(317,	185,	'RO',	'VS',	'Vaslui'),
-(318,	185,	'RO',	'VL',	'Vâlcea'),
-(319,	185,	'RO',	'VN',	'Vrancea'),
-(320,	80,	'FI',	'Lappi',	'Lappi'),
-(321,	80,	'FI',	'Pohjois-Pohjanmaa',	'Pohjois-Pohjanmaa'),
-(322,	80,	'FI',	'Kainuu',	'Kainuu'),
-(323,	80,	'FI',	'Pohjois-Karjala',	'Pohjois-Karjala'),
-(324,	80,	'FI',	'Pohjois-Savo',	'Pohjois-Savo'),
-(325,	80,	'FI',	'Etelä-Savo',	'Etelä-Savo'),
-(326,	80,	'FI',	'Etelä-Pohjanmaa',	'Etelä-Pohjanmaa'),
-(327,	80,	'FI',	'Pohjanmaa',	'Pohjanmaa'),
-(328,	80,	'FI',	'Pirkanmaa',	'Pirkanmaa'),
-(329,	80,	'FI',	'Satakunta',	'Satakunta'),
-(330,	80,	'FI',	'Keski-Pohjanmaa',	'Keski-Pohjanmaa'),
-(331,	80,	'FI',	'Keski-Suomi',	'Keski-Suomi'),
-(332,	80,	'FI',	'Varsinais-Suomi',	'Varsinais-Suomi'),
-(333,	80,	'FI',	'Etelä-Karjala',	'Etelä-Karjala'),
-(334,	80,	'FI',	'Päijät-Häme',	'Päijät-Häme'),
-(335,	80,	'FI',	'Kanta-Häme',	'Kanta-Häme'),
-(336,	80,	'FI',	'Uusimaa',	'Uusimaa'),
-(337,	80,	'FI',	'Itä-Uusimaa',	'Itä-Uusimaa'),
-(338,	80,	'FI',	'Kymenlaakso',	'Kymenlaakso'),
-(339,	80,	'FI',	'Ahvenanmaa',	'Ahvenanmaa'),
-(340,	74,	'EE',	'EE-37',	'Harjumaa'),
-(341,	74,	'EE',	'EE-39',	'Hiiumaa'),
-(342,	74,	'EE',	'EE-44',	'Ida-Virumaa'),
-(343,	74,	'EE',	'EE-49',	'Jõgevamaa'),
-(344,	74,	'EE',	'EE-51',	'Järvamaa'),
-(345,	74,	'EE',	'EE-57',	'Läänemaa'),
-(346,	74,	'EE',	'EE-59',	'Lääne-Virumaa'),
-(347,	74,	'EE',	'EE-65',	'Põlvamaa'),
-(348,	74,	'EE',	'EE-67',	'Pärnumaa'),
-(349,	74,	'EE',	'EE-70',	'Raplamaa'),
-(350,	74,	'EE',	'EE-74',	'Saaremaa'),
-(351,	74,	'EE',	'EE-78',	'Tartumaa'),
-(352,	74,	'EE',	'EE-82',	'Valgamaa'),
-(353,	74,	'EE',	'EE-84',	'Viljandimaa'),
-(354,	74,	'EE',	'EE-86',	'Võrumaa'),
-(355,	125,	'LV',	'LV-DGV',	'Daugavpils'),
-(356,	125,	'LV',	'LV-JEL',	'Jelgava'),
-(357,	125,	'LV',	'Jēkabpils',	'Jēkabpils'),
-(358,	125,	'LV',	'LV-JUR',	'Jūrmala'),
-(359,	125,	'LV',	'LV-LPX',	'Liepāja'),
-(360,	125,	'LV',	'LV-LE',	'Liepājas novads'),
-(361,	125,	'LV',	'LV-REZ',	'Rēzekne'),
-(362,	125,	'LV',	'LV-RIX',	'Rīga'),
-(363,	125,	'LV',	'LV-RI',	'Rīgas novads'),
-(364,	125,	'LV',	'Valmiera',	'Valmiera'),
-(365,	125,	'LV',	'LV-VEN',	'Ventspils'),
-(366,	125,	'LV',	'Aglonas novads',	'Aglonas novads'),
-(367,	125,	'LV',	'LV-AI',	'Aizkraukles novads'),
-(368,	125,	'LV',	'Aizputes novads',	'Aizputes novads'),
-(369,	125,	'LV',	'Aknīstes novads',	'Aknīstes novads'),
-(370,	125,	'LV',	'Alojas novads',	'Alojas novads'),
-(371,	125,	'LV',	'Alsungas novads',	'Alsungas novads'),
-(372,	125,	'LV',	'LV-AL',	'Alūksnes novads'),
-(373,	125,	'LV',	'Amatas novads',	'Amatas novads'),
-(374,	125,	'LV',	'Apes novads',	'Apes novads'),
-(375,	125,	'LV',	'Auces novads',	'Auces novads'),
-(376,	125,	'LV',	'Babītes novads',	'Babītes novads'),
-(377,	125,	'LV',	'Baldones novads',	'Baldones novads'),
-(378,	125,	'LV',	'Baltinavas novads',	'Baltinavas novads'),
-(379,	125,	'LV',	'LV-BL',	'Balvu novads'),
-(380,	125,	'LV',	'LV-BU',	'Bauskas novads'),
-(381,	125,	'LV',	'Beverīnas novads',	'Beverīnas novads'),
-(382,	125,	'LV',	'Brocēnu novads',	'Brocēnu novads'),
-(383,	125,	'LV',	'Burtnieku novads',	'Burtnieku novads'),
-(384,	125,	'LV',	'Carnikavas novads',	'Carnikavas novads'),
-(385,	125,	'LV',	'Cesvaines novads',	'Cesvaines novads'),
-(386,	125,	'LV',	'Ciblas novads',	'Ciblas novads'),
-(387,	125,	'LV',	'LV-CE',	'Cēsu novads'),
-(388,	125,	'LV',	'Dagdas novads',	'Dagdas novads'),
-(389,	125,	'LV',	'LV-DA',	'Daugavpils novads'),
-(390,	125,	'LV',	'LV-DO',	'Dobeles novads'),
-(391,	125,	'LV',	'Dundagas novads',	'Dundagas novads'),
-(392,	125,	'LV',	'Durbes novads',	'Durbes novads'),
-(393,	125,	'LV',	'Engures novads',	'Engures novads'),
-(394,	125,	'LV',	'Garkalnes novads',	'Garkalnes novads'),
-(395,	125,	'LV',	'Grobiņas novads',	'Grobiņas novads'),
-(396,	125,	'LV',	'LV-GU',	'Gulbenes novads'),
-(397,	125,	'LV',	'Iecavas novads',	'Iecavas novads'),
-(398,	125,	'LV',	'Ikšķiles novads',	'Ikšķiles novads'),
-(399,	125,	'LV',	'Ilūkstes novads',	'Ilūkstes novads'),
-(400,	125,	'LV',	'Inčukalna novads',	'Inčukalna novads'),
-(401,	125,	'LV',	'Jaunjelgavas novads',	'Jaunjelgavas novads'),
-(402,	125,	'LV',	'Jaunpiebalgas novads',	'Jaunpiebalgas novads'),
-(403,	125,	'LV',	'Jaunpils novads',	'Jaunpils novads'),
-(404,	125,	'LV',	'LV-JL',	'Jelgavas novads'),
-(405,	125,	'LV',	'LV-JK',	'Jēkabpils novads'),
-(406,	125,	'LV',	'Kandavas novads',	'Kandavas novads'),
-(407,	125,	'LV',	'Kokneses novads',	'Kokneses novads'),
-(408,	125,	'LV',	'Krimuldas novads',	'Krimuldas novads'),
-(409,	125,	'LV',	'Krustpils novads',	'Krustpils novads'),
-(410,	125,	'LV',	'LV-KR',	'Krāslavas novads'),
-(411,	125,	'LV',	'LV-KU',	'Kuldīgas novads'),
-(412,	125,	'LV',	'Kārsavas novads',	'Kārsavas novads'),
-(413,	125,	'LV',	'Lielvārdes novads',	'Lielvārdes novads'),
-(414,	125,	'LV',	'LV-LM',	'Limbažu novads'),
-(415,	125,	'LV',	'Lubānas novads',	'Lubānas novads'),
-(416,	125,	'LV',	'LV-LU',	'Ludzas novads'),
-(417,	125,	'LV',	'Līgatnes novads',	'Līgatnes novads'),
-(418,	125,	'LV',	'Līvānu novads',	'Līvānu novads'),
-(419,	125,	'LV',	'LV-MA',	'Madonas novads'),
-(420,	125,	'LV',	'Mazsalacas novads',	'Mazsalacas novads'),
-(421,	125,	'LV',	'Mālpils novads',	'Mālpils novads'),
-(422,	125,	'LV',	'Mārupes novads',	'Mārupes novads'),
-(423,	125,	'LV',	'Naukšēnu novads',	'Naukšēnu novads'),
-(424,	125,	'LV',	'Neretas novads',	'Neretas novads'),
-(425,	125,	'LV',	'Nīcas novads',	'Nīcas novads'),
-(426,	125,	'LV',	'LV-OG',	'Ogres novads'),
-(427,	125,	'LV',	'Olaines novads',	'Olaines novads'),
-(428,	125,	'LV',	'Ozolnieku novads',	'Ozolnieku novads'),
-(429,	125,	'LV',	'LV-PR',	'Preiļu novads'),
-(430,	125,	'LV',	'Priekules novads',	'Priekules novads'),
-(431,	125,	'LV',	'Priekuļu novads',	'Priekuļu novads'),
-(432,	125,	'LV',	'Pārgaujas novads',	'Pārgaujas novads'),
-(433,	125,	'LV',	'Pāvilostas novads',	'Pāvilostas novads'),
-(434,	125,	'LV',	'Pļaviņu novads',	'Pļaviņu novads'),
-(435,	125,	'LV',	'Raunas novads',	'Raunas novads'),
-(436,	125,	'LV',	'Riebiņu novads',	'Riebiņu novads'),
-(437,	125,	'LV',	'Rojas novads',	'Rojas novads'),
-(438,	125,	'LV',	'Ropažu novads',	'Ropažu novads'),
-(439,	125,	'LV',	'Rucavas novads',	'Rucavas novads'),
-(440,	125,	'LV',	'Rugāju novads',	'Rugāju novads'),
-(441,	125,	'LV',	'Rundāles novads',	'Rundāles novads'),
-(442,	125,	'LV',	'LV-RE',	'Rēzeknes novads'),
-(443,	125,	'LV',	'Rūjienas novads',	'Rūjienas novads'),
-(444,	125,	'LV',	'Salacgrīvas novads',	'Salacgrīvas novads'),
-(445,	125,	'LV',	'Salas novads',	'Salas novads'),
-(446,	125,	'LV',	'Salaspils novads',	'Salaspils novads'),
-(447,	125,	'LV',	'LV-SA',	'Saldus novads'),
-(448,	125,	'LV',	'Saulkrastu novads',	'Saulkrastu novads'),
-(449,	125,	'LV',	'Siguldas novads',	'Siguldas novads'),
-(450,	125,	'LV',	'Skrundas novads',	'Skrundas novads'),
-(451,	125,	'LV',	'Skrīveru novads',	'Skrīveru novads'),
-(452,	125,	'LV',	'Smiltenes novads',	'Smiltenes novads'),
-(453,	125,	'LV',	'Stopiņu novads',	'Stopiņu novads'),
-(454,	125,	'LV',	'Strenču novads',	'Strenču novads'),
-(455,	125,	'LV',	'Sējas novads',	'Sējas novads'),
-(456,	125,	'LV',	'LV-TA',	'Talsu novads'),
-(457,	125,	'LV',	'LV-TU',	'Tukuma novads'),
-(458,	125,	'LV',	'Tērvetes novads',	'Tērvetes novads'),
-(459,	125,	'LV',	'Vaiņodes novads',	'Vaiņodes novads'),
-(460,	125,	'LV',	'LV-VK',	'Valkas novads'),
-(461,	125,	'LV',	'LV-VM',	'Valmieras novads'),
-(462,	125,	'LV',	'Varakļānu novads',	'Varakļānu novads'),
-(463,	125,	'LV',	'Vecpiebalgas novads',	'Vecpiebalgas novads'),
-(464,	125,	'LV',	'Vecumnieku novads',	'Vecumnieku novads'),
-(465,	125,	'LV',	'LV-VE',	'Ventspils novads'),
-(466,	125,	'LV',	'Viesītes novads',	'Viesītes novads'),
-(467,	125,	'LV',	'Viļakas novads',	'Viļakas novads'),
-(468,	125,	'LV',	'Viļānu novads',	'Viļānu novads'),
-(469,	125,	'LV',	'Vārkavas novads',	'Vārkavas novads'),
-(470,	125,	'LV',	'Zilupes novads',	'Zilupes novads'),
-(471,	125,	'LV',	'Ādažu novads',	'Ādažu novads'),
-(472,	125,	'LV',	'Ērgļu novads',	'Ērgļu novads'),
-(473,	125,	'LV',	'Ķeguma novads',	'Ķeguma novads'),
-(474,	125,	'LV',	'Ķekavas novads',	'Ķekavas novads'),
-(475,	131,	'LT',	'LT-AL',	'Alytaus Apskritis'),
-(476,	131,	'LT',	'LT-KU',	'Kauno Apskritis'),
-(477,	131,	'LT',	'LT-KL',	'Klaipėdos Apskritis'),
-(478,	131,	'LT',	'LT-MR',	'Marijampolės Apskritis'),
-(479,	131,	'LT',	'LT-PN',	'Panevėžio Apskritis'),
-(480,	131,	'LT',	'LT-SA',	'Šiaulių Apskritis'),
-(481,	131,	'LT',	'LT-TA',	'Tauragės Apskritis'),
-(482,	131,	'LT',	'LT-TE',	'Telšių Apskritis'),
-(483,	131,	'LT',	'LT-UT',	'Utenos Apskritis'),
-(484,	131,	'LT',	'LT-VL',	'Vilniaus Apskritis'),
-(485,	31,	'BR',	'AC',	'Acre'),
-(486,	31,	'BR',	'AL',	'Alagoas'),
-(487,	31,	'BR',	'AP',	'Amapá'),
-(488,	31,	'BR',	'AM',	'Amazonas'),
-(489,	31,	'BR',	'BA',	'Bahia'),
-(490,	31,	'BR',	'CE',	'Ceará'),
-(491,	31,	'BR',	'ES',	'Espírito Santo'),
-(492,	31,	'BR',	'GO',	'Goiás'),
-(493,	31,	'BR',	'MA',	'Maranhão'),
-(494,	31,	'BR',	'MT',	'Mato Grosso'),
-(495,	31,	'BR',	'MS',	'Mato Grosso do Sul'),
-(496,	31,	'BR',	'MG',	'Minas Gerais'),
-(497,	31,	'BR',	'PA',	'Pará'),
-(498,	31,	'BR',	'PB',	'Paraíba'),
-(499,	31,	'BR',	'PR',	'Paraná'),
-(500,	31,	'BR',	'PE',	'Pernambuco'),
-(501,	31,	'BR',	'PI',	'Piauí'),
-(502,	31,	'BR',	'RJ',	'Rio de Janeiro'),
-(503,	31,	'BR',	'RN',	'Rio Grande do Norte'),
-(504,	31,	'BR',	'RS',	'Rio Grande do Sul'),
-(505,	31,	'BR',	'RO',	'Rondônia'),
-(506,	31,	'BR',	'RR',	'Roraima'),
-(507,	31,	'BR',	'SC',	'Santa Catarina'),
-(508,	31,	'BR',	'SP',	'São Paulo'),
-(509,	31,	'BR',	'SE',	'Sergipe'),
-(510,	31,	'BR',	'TO',	'Tocantins'),
-(511,	31,	'BR',	'DF',	'Distrito Federal'),
-(512,	59,	'HR',	'HR-01',	'Zagrebačka županija'),
-(513,	59,	'HR',	'HR-02',	'Krapinsko-zagorska županija'),
-(514,	59,	'HR',	'HR-03',	'Sisačko-moslavačka županija'),
-(515,	59,	'HR',	'HR-04',	'Karlovačka županija'),
-(516,	59,	'HR',	'HR-05',	'Varaždinska županija'),
-(517,	59,	'HR',	'HR-06',	'Koprivničko-križevačka županija'),
-(518,	59,	'HR',	'HR-07',	'Bjelovarsko-bilogorska županija'),
-(519,	59,	'HR',	'HR-08',	'Primorsko-goranska županija'),
-(520,	59,	'HR',	'HR-09',	'Ličko-senjska županija'),
-(521,	59,	'HR',	'HR-10',	'Virovitičko-podravska županija'),
-(522,	59,	'HR',	'HR-11',	'Požeško-slavonska županija'),
-(523,	59,	'HR',	'HR-12',	'Brodsko-posavska županija'),
-(524,	59,	'HR',	'HR-13',	'Zadarska županija'),
-(525,	59,	'HR',	'HR-14',	'Osječko-baranjska županija'),
-(526,	59,	'HR',	'HR-15',	'Šibensko-kninska županija'),
-(527,	59,	'HR',	'HR-16',	'Vukovarsko-srijemska županija'),
-(528,	59,	'HR',	'HR-17',	'Splitsko-dalmatinska županija'),
-(529,	59,	'HR',	'HR-18',	'Istarska županija'),
-(530,	59,	'HR',	'HR-19',	'Dubrovačko-neretvanska županija'),
-(531,	59,	'HR',	'HR-20',	'Međimurska županija'),
-(532,	59,	'HR',	'HR-21',	'Grad Zagreb'),
-(533,	106,	'IN',	'AN',	'Andaman and Nicobar Islands'),
-(534,	106,	'IN',	'AP',	'Andhra Pradesh'),
-(535,	106,	'IN',	'AR',	'Arunachal Pradesh'),
-(536,	106,	'IN',	'AS',	'Assam'),
-(537,	106,	'IN',	'BR',	'Bihar'),
-(538,	106,	'IN',	'CH',	'Chandigarh'),
-(539,	106,	'IN',	'CT',	'Chhattisgarh'),
-(540,	106,	'IN',	'DN',	'Dadra and Nagar Haveli'),
-(541,	106,	'IN',	'DD',	'Daman and Diu'),
-(542,	106,	'IN',	'DL',	'Delhi'),
-(543,	106,	'IN',	'GA',	'Goa'),
-(544,	106,	'IN',	'GJ',	'Gujarat'),
-(545,	106,	'IN',	'HR',	'Haryana'),
-(546,	106,	'IN',	'HP',	'Himachal Pradesh'),
-(547,	106,	'IN',	'JK',	'Jammu and Kashmir'),
-(548,	106,	'IN',	'JH',	'Jharkhand'),
-(549,	106,	'IN',	'KA',	'Karnataka'),
-(550,	106,	'IN',	'KL',	'Kerala'),
-(551,	106,	'IN',	'LD',	'Lakshadweep'),
-(552,	106,	'IN',	'MP',	'Madhya Pradesh'),
-(553,	106,	'IN',	'MH',	'Maharashtra'),
-(554,	106,	'IN',	'MN',	'Manipur'),
-(555,	106,	'IN',	'ML',	'Meghalaya'),
-(556,	106,	'IN',	'MZ',	'Mizoram'),
-(557,	106,	'IN',	'NL',	'Nagaland'),
-(558,	106,	'IN',	'OR',	'Odisha'),
-(559,	106,	'IN',	'PY',	'Puducherry'),
-(560,	106,	'IN',	'PB',	'Punjab'),
-(561,	106,	'IN',	'RJ',	'Rajasthan'),
-(562,	106,	'IN',	'SK',	'Sikkim'),
-(563,	106,	'IN',	'TN',	'Tamil Nadu'),
-(564,	106,	'IN',	'TG',	'Telangana'),
-(565,	106,	'IN',	'TR',	'Tripura'),
-(566,	106,	'IN',	'UP',	'Uttar Pradesh'),
-(567,	106,	'IN',	'UT',	'Uttarakhand'),
-(568,	106,	'IN',	'WB',	'West Bengal'),
-(569,	176,	'PY',	'PY-16',	'Alto Paraguay'),
-(570,	176,	'PY',	'PY-10',	'Alto Paraná'),
-(571,	176,	'PY',	'PY-13',	'Amambay'),
-(572,	176,	'PY',	'PY-ASU',	'Asunción'),
-(573,	176,	'PY',	'PY-19',	'Boquerón'),
-(574,	176,	'PY',	'PY-5',	'Caaguazú'),
-(575,	176,	'PY',	'PY-6',	'Caazapá'),
-(576,	176,	'PY',	'PY-14',	'Canindeyú'),
-(577,	176,	'PY',	'PY-11',	'Central'),
-(578,	176,	'PY',	'PY-1',	'Concepción'),
-(579,	176,	'PY',	'PY-3',	'Cordillera'),
-(580,	176,	'PY',	'PY-4',	'Guairá'),
-(581,	176,	'PY',	'PY-7',	'Itapúa'),
-(582,	176,	'PY',	'PY-8',	'Misiones'),
-(583,	176,	'PY',	'PY-9',	'Paraguarí'),
-(584,	176,	'PY',	'PY-15',	'Presidente Hayes'),
-(585,	176,	'PY',	'PY-2',	'San Pedro'),
-(586,	176,	'PY',	'PY-12',	'Ñeembucú');
+(1, 244, 'US', 'AL', 'Alabama'),
+(2, 244, 'US', 'AK', 'Alaska'),
+(3, 244, 'US', 'AS', 'American Samoa'),
+(4, 244, 'US', 'AZ', 'Arizona'),
+(5, 244, 'US', 'AR', 'Arkansas'),
+(6, 244, 'US', 'AE', 'Armed Forces Africa'),
+(7, 244, 'US', 'AA', 'Armed Forces Americas'),
+(8, 244, 'US', 'AE', 'Armed Forces Canada'),
+(9, 244, 'US', 'AE', 'Armed Forces Europe'),
+(10, 244, 'US', 'AE', 'Armed Forces Middle East'),
+(11, 244, 'US', 'AP', 'Armed Forces Pacific'),
+(12, 244, 'US', 'CA', 'California'),
+(13, 244, 'US', 'CO', 'Colorado'),
+(14, 244, 'US', 'CT', 'Connecticut'),
+(15, 244, 'US', 'DE', 'Delaware'),
+(16, 244, 'US', 'DC', 'District of Columbia'),
+(17, 244, 'US', 'FM', 'Federated States Of Micronesia'),
+(18, 244, 'US', 'FL', 'Florida'),
+(19, 244, 'US', 'GA', 'Georgia'),
+(20, 244, 'US', 'GU', 'Guam'),
+(21, 244, 'US', 'HI', 'Hawaii'),
+(22, 244, 'US', 'ID', 'Idaho'),
+(23, 244, 'US', 'IL', 'Illinois'),
+(24, 244, 'US', 'IN', 'Indiana'),
+(25, 244, 'US', 'IA', 'Iowa'),
+(26, 244, 'US', 'KS', 'Kansas'),
+(27, 244, 'US', 'KY', 'Kentucky'),
+(28, 244, 'US', 'LA', 'Louisiana'),
+(29, 244, 'US', 'ME', 'Maine'),
+(30, 244, 'US', 'MH', 'Marshall Islands'),
+(31, 244, 'US', 'MD', 'Maryland'),
+(32, 244, 'US', 'MA', 'Massachusetts'),
+(33, 244, 'US', 'MI', 'Michigan'),
+(34, 244, 'US', 'MN', 'Minnesota'),
+(35, 244, 'US', 'MS', 'Mississippi'),
+(36, 244, 'US', 'MO', 'Missouri'),
+(37, 244, 'US', 'MT', 'Montana'),
+(38, 244, 'US', 'NE', 'Nebraska'),
+(39, 244, 'US', 'NV', 'Nevada'),
+(40, 244, 'US', 'NH', 'New Hampshire'),
+(41, 244, 'US', 'NJ', 'New Jersey'),
+(42, 244, 'US', 'NM', 'New Mexico'),
+(43, 244, 'US', 'NY', 'New York'),
+(44, 244, 'US', 'NC', 'North Carolina'),
+(45, 244, 'US', 'ND', 'North Dakota'),
+(46, 244, 'US', 'MP', 'Northern Mariana Islands'),
+(47, 244, 'US', 'OH', 'Ohio'),
+(48, 244, 'US', 'OK', 'Oklahoma'),
+(49, 244, 'US', 'OR', 'Oregon'),
+(50, 244, 'US', 'PW', 'Palau'),
+(51, 244, 'US', 'PA', 'Pennsylvania'),
+(52, 244, 'US', 'PR', 'Puerto Rico'),
+(53, 244, 'US', 'RI', 'Rhode Island'),
+(54, 244, 'US', 'SC', 'South Carolina'),
+(55, 244, 'US', 'SD', 'South Dakota'),
+(56, 244, 'US', 'TN', 'Tennessee'),
+(57, 244, 'US', 'TX', 'Texas'),
+(58, 244, 'US', 'UT', 'Utah'),
+(59, 244, 'US', 'VT', 'Vermont'),
+(60, 244, 'US', 'VI', 'Virgin Islands'),
+(61, 244, 'US', 'VA', 'Virginia'),
+(62, 244, 'US', 'WA', 'Washington'),
+(63, 244, 'US', 'WV', 'West Virginia'),
+(64, 244, 'US', 'WI', 'Wisconsin'),
+(65, 244, 'US', 'WY', 'Wyoming'),
+(66, 40, 'CA', 'AB', 'Alberta'),
+(67, 40, 'CA', 'BC', 'British Columbia'),
+(68, 40, 'CA', 'MB', 'Manitoba'),
+(69, 40, 'CA', 'NL', 'Newfoundland and Labrador'),
+(70, 40, 'CA', 'NB', 'New Brunswick'),
+(71, 40, 'CA', 'NS', 'Nova Scotia'),
+(72, 40, 'CA', 'NT', 'Northwest Territories'),
+(73, 40, 'CA', 'NU', 'Nunavut'),
+(74, 40, 'CA', 'ON', 'Ontario'),
+(75, 40, 'CA', 'PE', 'Prince Edward Island'),
+(76, 40, 'CA', 'QC', 'Quebec'),
+(77, 40, 'CA', 'SK', 'Saskatchewan'),
+(78, 40, 'CA', 'YT', 'Yukon Territory'),
+(79, 88, 'DE', 'NDS', 'Niedersachsen'),
+(80, 88, 'DE', 'BAW', 'Baden-Württemberg'),
+(81, 88, 'DE', 'BAY', 'Bayern'),
+(82, 88, 'DE', 'BER', 'Berlin'),
+(83, 88, 'DE', 'BRG', 'Brandenburg'),
+(84, 88, 'DE', 'BRE', 'Bremen'),
+(85, 88, 'DE', 'HAM', 'Hamburg'),
+(86, 88, 'DE', 'HES', 'Hessen'),
+(87, 88, 'DE', 'MEC', 'Mecklenburg-Vorpommern'),
+(88, 88, 'DE', 'NRW', 'Nordrhein-Westfalen'),
+(89, 88, 'DE', 'RHE', 'Rheinland-Pfalz'),
+(90, 88, 'DE', 'SAR', 'Saarland'),
+(91, 88, 'DE', 'SAS', 'Sachsen'),
+(92, 88, 'DE', 'SAC', 'Sachsen-Anhalt'),
+(93, 88, 'DE', 'SCN', 'Schleswig-Holstein'),
+(94, 88, 'DE', 'THE', 'Thüringen'),
+(95, 16, 'AT', 'WI', 'Wien'),
+(96, 16, 'AT', 'NO', 'Niederösterreich'),
+(97, 16, 'AT', 'OO', 'Oberösterreich'),
+(98, 16, 'AT', 'SB', 'Salzburg'),
+(99, 16, 'AT', 'KN', 'Kärnten'),
+(100, 16, 'AT', 'ST', 'Steiermark'),
+(101, 16, 'AT', 'TI', 'Tirol'),
+(102, 16, 'AT', 'BL', 'Burgenland'),
+(103, 16, 'AT', 'VB', 'Vorarlberg'),
+(104, 220, 'CH', 'AG', 'Aargau'),
+(105, 220, 'CH', 'AI', 'Appenzell Innerrhoden'),
+(106, 220, 'CH', 'AR', 'Appenzell Ausserrhoden'),
+(107, 220, 'CH', 'BE', 'Bern'),
+(108, 220, 'CH', 'BL', 'Basel-Landschaft'),
+(109, 220, 'CH', 'BS', 'Basel-Stadt'),
+(110, 220, 'CH', 'FR', 'Freiburg'),
+(111, 220, 'CH', 'GE', 'Genf'),
+(112, 220, 'CH', 'GL', 'Glarus'),
+(113, 220, 'CH', 'GR', 'Graubünden'),
+(114, 220, 'CH', 'JU', 'Jura'),
+(115, 220, 'CH', 'LU', 'Luzern'),
+(116, 220, 'CH', 'NE', 'Neuenburg'),
+(117, 220, 'CH', 'NW', 'Nidwalden'),
+(118, 220, 'CH', 'OW', 'Obwalden'),
+(119, 220, 'CH', 'SG', 'St. Gallen'),
+(120, 220, 'CH', 'SH', 'Schaffhausen'),
+(121, 220, 'CH', 'SO', 'Solothurn'),
+(122, 220, 'CH', 'SZ', 'Schwyz'),
+(123, 220, 'CH', 'TG', 'Thurgau'),
+(124, 220, 'CH', 'TI', 'Tessin'),
+(125, 220, 'CH', 'UR', 'Uri'),
+(126, 220, 'CH', 'VD', 'Waadt'),
+(127, 220, 'CH', 'VS', 'Wallis'),
+(128, 220, 'CH', 'ZG', 'Zug'),
+(129, 220, 'CH', 'ZH', 'Zürich'),
+(130, 206, 'ES', 'A Coruсa', 'A Coruña'),
+(131, 206, 'ES', 'Alava', 'Alava'),
+(132, 206, 'ES', 'Albacete', 'Albacete'),
+(133, 206, 'ES', 'Alicante', 'Alicante'),
+(134, 206, 'ES', 'Almeria', 'Almeria'),
+(135, 206, 'ES', 'Asturias', 'Asturias'),
+(136, 206, 'ES', 'Avila', 'Avila'),
+(137, 206, 'ES', 'Badajoz', 'Badajoz'),
+(138, 206, 'ES', 'Baleares', 'Baleares'),
+(139, 206, 'ES', 'Barcelona', 'Barcelona'),
+(140, 206, 'ES', 'Burgos', 'Burgos'),
+(141, 206, 'ES', 'Caceres', 'Caceres'),
+(142, 206, 'ES', 'Cadiz', 'Cadiz'),
+(143, 206, 'ES', 'Cantabria', 'Cantabria'),
+(144, 206, 'ES', 'Castellon', 'Castellon'),
+(145, 206, 'ES', 'Ceuta', 'Ceuta'),
+(146, 206, 'ES', 'Ciudad Real', 'Ciudad Real'),
+(147, 206, 'ES', 'Cordoba', 'Cordoba'),
+(148, 206, 'ES', 'Cuenca', 'Cuenca'),
+(149, 206, 'ES', 'Girona', 'Girona'),
+(150, 206, 'ES', 'Granada', 'Granada'),
+(151, 206, 'ES', 'Guadalajara', 'Guadalajara'),
+(152, 206, 'ES', 'Guipuzcoa', 'Guipuzcoa'),
+(153, 206, 'ES', 'Huelva', 'Huelva'),
+(154, 206, 'ES', 'Huesca', 'Huesca'),
+(155, 206, 'ES', 'Jaen', 'Jaen'),
+(156, 206, 'ES', 'La Rioja', 'La Rioja'),
+(157, 206, 'ES', 'Las Palmas', 'Las Palmas'),
+(158, 206, 'ES', 'Leon', 'Leon'),
+(159, 206, 'ES', 'Lleida', 'Lleida'),
+(160, 206, 'ES', 'Lugo', 'Lugo'),
+(161, 206, 'ES', 'Madrid', 'Madrid'),
+(162, 206, 'ES', 'Malaga', 'Malaga'),
+(163, 206, 'ES', 'Melilla', 'Melilla'),
+(164, 206, 'ES', 'Murcia', 'Murcia'),
+(165, 206, 'ES', 'Navarra', 'Navarra'),
+(166, 206, 'ES', 'Ourense', 'Ourense'),
+(167, 206, 'ES', 'Palencia', 'Palencia'),
+(168, 206, 'ES', 'Pontevedra', 'Pontevedra'),
+(169, 206, 'ES', 'Salamanca', 'Salamanca'),
+(170, 206, 'ES', 'Santa Cruz de Tenerife', 'Santa Cruz de Tenerife'),
+(171, 206, 'ES', 'Segovia', 'Segovia'),
+(172, 206, 'ES', 'Sevilla', 'Sevilla'),
+(173, 206, 'ES', 'Soria', 'Soria'),
+(174, 206, 'ES', 'Tarragona', 'Tarragona'),
+(175, 206, 'ES', 'Teruel', 'Teruel'),
+(176, 206, 'ES', 'Toledo', 'Toledo'),
+(177, 206, 'ES', 'Valencia', 'Valencia'),
+(178, 206, 'ES', 'Valladolid', 'Valladolid'),
+(179, 206, 'ES', 'Vizcaya', 'Vizcaya'),
+(180, 206, 'ES', 'Zamora', 'Zamora'),
+(181, 206, 'ES', 'Zaragoza', 'Zaragoza'),
+(182, 81, 'FR', '1', 'Ain'),
+(183, 81, 'FR', '2', 'Aisne'),
+(184, 81, 'FR', '3', 'Allier'),
+(185, 81, 'FR', '4', 'Alpes-de-Haute-Provence'),
+(186, 81, 'FR', '5', 'Hautes-Alpes'),
+(187, 81, 'FR', '6', 'Alpes-Maritimes'),
+(188, 81, 'FR', '7', 'Ardèche'),
+(189, 81, 'FR', '8', 'Ardennes'),
+(190, 81, 'FR', '9', 'Ariège'),
+(191, 81, 'FR', '10', 'Aube'),
+(192, 81, 'FR', '11', 'Aude'),
+(193, 81, 'FR', '12', 'Aveyron'),
+(194, 81, 'FR', '13', 'Bouches-du-Rhône'),
+(195, 81, 'FR', '14', 'Calvados'),
+(196, 81, 'FR', '15', 'Cantal'),
+(197, 81, 'FR', '16', 'Charente'),
+(198, 81, 'FR', '17', 'Charente-Maritime'),
+(199, 81, 'FR', '18', 'Cher'),
+(200, 81, 'FR', '19', 'Corrèze'),
+(201, 81, 'FR', '2A', 'Corse-du-Sud'),
+(202, 81, 'FR', '2B', 'Haute-Corse'),
+(203, 81, 'FR', '21', 'Côte-d\'Or'),
+(204, 81, 'FR', '22', 'Côtes-d\'Armor'),
+(205, 81, 'FR', '23', 'Creuse'),
+(206, 81, 'FR', '24', 'Dordogne'),
+(207, 81, 'FR', '25', 'Doubs'),
+(208, 81, 'FR', '26', 'Drôme'),
+(209, 81, 'FR', '27', 'Eure'),
+(210, 81, 'FR', '28', 'Eure-et-Loir'),
+(211, 81, 'FR', '29', 'Finistère'),
+(212, 81, 'FR', '30', 'Gard'),
+(213, 81, 'FR', '31', 'Haute-Garonne'),
+(214, 81, 'FR', '32', 'Gers'),
+(215, 81, 'FR', '33', 'Gironde'),
+(216, 81, 'FR', '34', 'Hérault'),
+(217, 81, 'FR', '35', 'Ille-et-Vilaine'),
+(218, 81, 'FR', '36', 'Indre'),
+(219, 81, 'FR', '37', 'Indre-et-Loire'),
+(220, 81, 'FR', '38', 'Isère'),
+(221, 81, 'FR', '39', 'Jura'),
+(222, 81, 'FR', '40', 'Landes'),
+(223, 81, 'FR', '41', 'Loir-et-Cher'),
+(224, 81, 'FR', '42', 'Loire'),
+(225, 81, 'FR', '43', 'Haute-Loire'),
+(226, 81, 'FR', '44', 'Loire-Atlantique'),
+(227, 81, 'FR', '45', 'Loiret'),
+(228, 81, 'FR', '46', 'Lot'),
+(229, 81, 'FR', '47', 'Lot-et-Garonne'),
+(230, 81, 'FR', '48', 'Lozère'),
+(231, 81, 'FR', '49', 'Maine-et-Loire'),
+(232, 81, 'FR', '50', 'Manche'),
+(233, 81, 'FR', '51', 'Marne'),
+(234, 81, 'FR', '52', 'Haute-Marne'),
+(235, 81, 'FR', '53', 'Mayenne'),
+(236, 81, 'FR', '54', 'Meurthe-et-Moselle'),
+(237, 81, 'FR', '55', 'Meuse'),
+(238, 81, 'FR', '56', 'Morbihan'),
+(239, 81, 'FR', '57', 'Moselle'),
+(240, 81, 'FR', '58', 'Nièvre'),
+(241, 81, 'FR', '59', 'Nord'),
+(242, 81, 'FR', '60', 'Oise'),
+(243, 81, 'FR', '61', 'Orne'),
+(244, 81, 'FR', '62', 'Pas-de-Calais'),
+(245, 81, 'FR', '63', 'Puy-de-Dôme'),
+(246, 81, 'FR', '64', 'Pyrénées-Atlantiques'),
+(247, 81, 'FR', '65', 'Hautes-Pyrénées'),
+(248, 81, 'FR', '66', 'Pyrénées-Orientales'),
+(249, 81, 'FR', '67', 'Bas-Rhin'),
+(250, 81, 'FR', '68', 'Haut-Rhin'),
+(251, 81, 'FR', '69', 'Rhône'),
+(252, 81, 'FR', '70', 'Haute-Saône'),
+(253, 81, 'FR', '71', 'Saône-et-Loire'),
+(254, 81, 'FR', '72', 'Sarthe'),
+(255, 81, 'FR', '73', 'Savoie'),
+(256, 81, 'FR', '74', 'Haute-Savoie'),
+(257, 81, 'FR', '75', 'Paris'),
+(258, 81, 'FR', '76', 'Seine-Maritime'),
+(259, 81, 'FR', '77', 'Seine-et-Marne'),
+(260, 81, 'FR', '78', 'Yvelines'),
+(261, 81, 'FR', '79', 'Deux-Sèvres'),
+(262, 81, 'FR', '80', 'Somme'),
+(263, 81, 'FR', '81', 'Tarn'),
+(264, 81, 'FR', '82', 'Tarn-et-Garonne'),
+(265, 81, 'FR', '83', 'Var'),
+(266, 81, 'FR', '84', 'Vaucluse'),
+(267, 81, 'FR', '85', 'Vendée'),
+(268, 81, 'FR', '86', 'Vienne'),
+(269, 81, 'FR', '87', 'Haute-Vienne'),
+(270, 81, 'FR', '88', 'Vosges'),
+(271, 81, 'FR', '89', 'Yonne'),
+(272, 81, 'FR', '90', 'Territoire-de-Belfort'),
+(273, 81, 'FR', '91', 'Essonne'),
+(274, 81, 'FR', '92', 'Hauts-de-Seine'),
+(275, 81, 'FR', '93', 'Seine-Saint-Denis'),
+(276, 81, 'FR', '94', 'Val-de-Marne'),
+(277, 81, 'FR', '95', 'Val-d\'Oise'),
+(278, 185, 'RO', 'AB', 'Alba'),
+(279, 185, 'RO', 'AR', 'Arad'),
+(280, 185, 'RO', 'AG', 'Argeş'),
+(281, 185, 'RO', 'BC', 'Bacău'),
+(282, 185, 'RO', 'BH', 'Bihor'),
+(283, 185, 'RO', 'BN', 'Bistriţa-Năsăud'),
+(284, 185, 'RO', 'BT', 'Botoşani'),
+(285, 185, 'RO', 'BV', 'Braşov'),
+(286, 185, 'RO', 'BR', 'Brăila'),
+(287, 185, 'RO', 'B', 'Bucureşti'),
+(288, 185, 'RO', 'BZ', 'Buzău'),
+(289, 185, 'RO', 'CS', 'Caraş-Severin'),
+(290, 185, 'RO', 'CL', 'Călăraşi'),
+(291, 185, 'RO', 'CJ', 'Cluj'),
+(292, 185, 'RO', 'CT', 'Constanţa'),
+(293, 185, 'RO', 'CV', 'Covasna'),
+(294, 185, 'RO', 'DB', 'Dâmboviţa'),
+(295, 185, 'RO', 'DJ', 'Dolj'),
+(296, 185, 'RO', 'GL', 'Galaţi'),
+(297, 185, 'RO', 'GR', 'Giurgiu'),
+(298, 185, 'RO', 'GJ', 'Gorj'),
+(299, 185, 'RO', 'HR', 'Harghita'),
+(300, 185, 'RO', 'HD', 'Hunedoara'),
+(301, 185, 'RO', 'IL', 'Ialomiţa'),
+(302, 185, 'RO', 'IS', 'Iaşi'),
+(303, 185, 'RO', 'IF', 'Ilfov'),
+(304, 185, 'RO', 'MM', 'Maramureş'),
+(305, 185, 'RO', 'MH', 'Mehedinţi'),
+(306, 185, 'RO', 'MS', 'Mureş'),
+(307, 185, 'RO', 'NT', 'Neamţ'),
+(308, 185, 'RO', 'OT', 'Olt'),
+(309, 185, 'RO', 'PH', 'Prahova'),
+(310, 185, 'RO', 'SM', 'Satu-Mare'),
+(311, 185, 'RO', 'SJ', 'Sălaj'),
+(312, 185, 'RO', 'SB', 'Sibiu'),
+(313, 185, 'RO', 'SV', 'Suceava'),
+(314, 185, 'RO', 'TR', 'Teleorman'),
+(315, 185, 'RO', 'TM', 'Timiş'),
+(316, 185, 'RO', 'TL', 'Tulcea'),
+(317, 185, 'RO', 'VS', 'Vaslui'),
+(318, 185, 'RO', 'VL', 'Vâlcea'),
+(319, 185, 'RO', 'VN', 'Vrancea'),
+(320, 80, 'FI', 'Lappi', 'Lappi'),
+(321, 80, 'FI', 'Pohjois-Pohjanmaa', 'Pohjois-Pohjanmaa'),
+(322, 80, 'FI', 'Kainuu', 'Kainuu'),
+(323, 80, 'FI', 'Pohjois-Karjala', 'Pohjois-Karjala'),
+(324, 80, 'FI', 'Pohjois-Savo', 'Pohjois-Savo'),
+(325, 80, 'FI', 'Etelä-Savo', 'Etelä-Savo'),
+(326, 80, 'FI', 'Etelä-Pohjanmaa', 'Etelä-Pohjanmaa'),
+(327, 80, 'FI', 'Pohjanmaa', 'Pohjanmaa'),
+(328, 80, 'FI', 'Pirkanmaa', 'Pirkanmaa'),
+(329, 80, 'FI', 'Satakunta', 'Satakunta'),
+(330, 80, 'FI', 'Keski-Pohjanmaa', 'Keski-Pohjanmaa'),
+(331, 80, 'FI', 'Keski-Suomi', 'Keski-Suomi'),
+(332, 80, 'FI', 'Varsinais-Suomi', 'Varsinais-Suomi'),
+(333, 80, 'FI', 'Etelä-Karjala', 'Etelä-Karjala'),
+(334, 80, 'FI', 'Päijät-Häme', 'Päijät-Häme'),
+(335, 80, 'FI', 'Kanta-Häme', 'Kanta-Häme'),
+(336, 80, 'FI', 'Uusimaa', 'Uusimaa'),
+(337, 80, 'FI', 'Itä-Uusimaa', 'Itä-Uusimaa'),
+(338, 80, 'FI', 'Kymenlaakso', 'Kymenlaakso'),
+(339, 80, 'FI', 'Ahvenanmaa', 'Ahvenanmaa'),
+(340, 74, 'EE', 'EE-37', 'Harjumaa'),
+(341, 74, 'EE', 'EE-39', 'Hiiumaa'),
+(342, 74, 'EE', 'EE-44', 'Ida-Virumaa'),
+(343, 74, 'EE', 'EE-49', 'Jõgevamaa'),
+(344, 74, 'EE', 'EE-51', 'Järvamaa'),
+(345, 74, 'EE', 'EE-57', 'Läänemaa'),
+(346, 74, 'EE', 'EE-59', 'Lääne-Virumaa'),
+(347, 74, 'EE', 'EE-65', 'Põlvamaa'),
+(348, 74, 'EE', 'EE-67', 'Pärnumaa'),
+(349, 74, 'EE', 'EE-70', 'Raplamaa'),
+(350, 74, 'EE', 'EE-74', 'Saaremaa'),
+(351, 74, 'EE', 'EE-78', 'Tartumaa'),
+(352, 74, 'EE', 'EE-82', 'Valgamaa'),
+(353, 74, 'EE', 'EE-84', 'Viljandimaa'),
+(354, 74, 'EE', 'EE-86', 'Võrumaa'),
+(355, 125, 'LV', 'LV-DGV', 'Daugavpils'),
+(356, 125, 'LV', 'LV-JEL', 'Jelgava'),
+(357, 125, 'LV', 'Jēkabpils', 'Jēkabpils'),
+(358, 125, 'LV', 'LV-JUR', 'Jūrmala'),
+(359, 125, 'LV', 'LV-LPX', 'Liepāja'),
+(360, 125, 'LV', 'LV-LE', 'Liepājas novads'),
+(361, 125, 'LV', 'LV-REZ', 'Rēzekne'),
+(362, 125, 'LV', 'LV-RIX', 'Rīga'),
+(363, 125, 'LV', 'LV-RI', 'Rīgas novads'),
+(364, 125, 'LV', 'Valmiera', 'Valmiera'),
+(365, 125, 'LV', 'LV-VEN', 'Ventspils'),
+(366, 125, 'LV', 'Aglonas novads', 'Aglonas novads'),
+(367, 125, 'LV', 'LV-AI', 'Aizkraukles novads'),
+(368, 125, 'LV', 'Aizputes novads', 'Aizputes novads'),
+(369, 125, 'LV', 'Aknīstes novads', 'Aknīstes novads'),
+(370, 125, 'LV', 'Alojas novads', 'Alojas novads'),
+(371, 125, 'LV', 'Alsungas novads', 'Alsungas novads'),
+(372, 125, 'LV', 'LV-AL', 'Alūksnes novads'),
+(373, 125, 'LV', 'Amatas novads', 'Amatas novads'),
+(374, 125, 'LV', 'Apes novads', 'Apes novads'),
+(375, 125, 'LV', 'Auces novads', 'Auces novads'),
+(376, 125, 'LV', 'Babītes novads', 'Babītes novads'),
+(377, 125, 'LV', 'Baldones novads', 'Baldones novads'),
+(378, 125, 'LV', 'Baltinavas novads', 'Baltinavas novads'),
+(379, 125, 'LV', 'LV-BL', 'Balvu novads'),
+(380, 125, 'LV', 'LV-BU', 'Bauskas novads'),
+(381, 125, 'LV', 'Beverīnas novads', 'Beverīnas novads'),
+(382, 125, 'LV', 'Brocēnu novads', 'Brocēnu novads'),
+(383, 125, 'LV', 'Burtnieku novads', 'Burtnieku novads'),
+(384, 125, 'LV', 'Carnikavas novads', 'Carnikavas novads'),
+(385, 125, 'LV', 'Cesvaines novads', 'Cesvaines novads'),
+(386, 125, 'LV', 'Ciblas novads', 'Ciblas novads'),
+(387, 125, 'LV', 'LV-CE', 'Cēsu novads'),
+(388, 125, 'LV', 'Dagdas novads', 'Dagdas novads'),
+(389, 125, 'LV', 'LV-DA', 'Daugavpils novads'),
+(390, 125, 'LV', 'LV-DO', 'Dobeles novads'),
+(391, 125, 'LV', 'Dundagas novads', 'Dundagas novads'),
+(392, 125, 'LV', 'Durbes novads', 'Durbes novads'),
+(393, 125, 'LV', 'Engures novads', 'Engures novads'),
+(394, 125, 'LV', 'Garkalnes novads', 'Garkalnes novads'),
+(395, 125, 'LV', 'Grobiņas novads', 'Grobiņas novads'),
+(396, 125, 'LV', 'LV-GU', 'Gulbenes novads'),
+(397, 125, 'LV', 'Iecavas novads', 'Iecavas novads'),
+(398, 125, 'LV', 'Ikšķiles novads', 'Ikšķiles novads'),
+(399, 125, 'LV', 'Ilūkstes novads', 'Ilūkstes novads'),
+(400, 125, 'LV', 'Inčukalna novads', 'Inčukalna novads'),
+(401, 125, 'LV', 'Jaunjelgavas novads', 'Jaunjelgavas novads'),
+(402, 125, 'LV', 'Jaunpiebalgas novads', 'Jaunpiebalgas novads'),
+(403, 125, 'LV', 'Jaunpils novads', 'Jaunpils novads'),
+(404, 125, 'LV', 'LV-JL', 'Jelgavas novads'),
+(405, 125, 'LV', 'LV-JK', 'Jēkabpils novads'),
+(406, 125, 'LV', 'Kandavas novads', 'Kandavas novads'),
+(407, 125, 'LV', 'Kokneses novads', 'Kokneses novads'),
+(408, 125, 'LV', 'Krimuldas novads', 'Krimuldas novads'),
+(409, 125, 'LV', 'Krustpils novads', 'Krustpils novads'),
+(410, 125, 'LV', 'LV-KR', 'Krāslavas novads'),
+(411, 125, 'LV', 'LV-KU', 'Kuldīgas novads'),
+(412, 125, 'LV', 'Kārsavas novads', 'Kārsavas novads'),
+(413, 125, 'LV', 'Lielvārdes novads', 'Lielvārdes novads'),
+(414, 125, 'LV', 'LV-LM', 'Limbažu novads'),
+(415, 125, 'LV', 'Lubānas novads', 'Lubānas novads'),
+(416, 125, 'LV', 'LV-LU', 'Ludzas novads'),
+(417, 125, 'LV', 'Līgatnes novads', 'Līgatnes novads'),
+(418, 125, 'LV', 'Līvānu novads', 'Līvānu novads'),
+(419, 125, 'LV', 'LV-MA', 'Madonas novads'),
+(420, 125, 'LV', 'Mazsalacas novads', 'Mazsalacas novads'),
+(421, 125, 'LV', 'Mālpils novads', 'Mālpils novads'),
+(422, 125, 'LV', 'Mārupes novads', 'Mārupes novads'),
+(423, 125, 'LV', 'Naukšēnu novads', 'Naukšēnu novads'),
+(424, 125, 'LV', 'Neretas novads', 'Neretas novads'),
+(425, 125, 'LV', 'Nīcas novads', 'Nīcas novads'),
+(426, 125, 'LV', 'LV-OG', 'Ogres novads'),
+(427, 125, 'LV', 'Olaines novads', 'Olaines novads'),
+(428, 125, 'LV', 'Ozolnieku novads', 'Ozolnieku novads'),
+(429, 125, 'LV', 'LV-PR', 'Preiļu novads'),
+(430, 125, 'LV', 'Priekules novads', 'Priekules novads'),
+(431, 125, 'LV', 'Priekuļu novads', 'Priekuļu novads'),
+(432, 125, 'LV', 'Pārgaujas novads', 'Pārgaujas novads'),
+(433, 125, 'LV', 'Pāvilostas novads', 'Pāvilostas novads'),
+(434, 125, 'LV', 'Pļaviņu novads', 'Pļaviņu novads'),
+(435, 125, 'LV', 'Raunas novads', 'Raunas novads'),
+(436, 125, 'LV', 'Riebiņu novads', 'Riebiņu novads'),
+(437, 125, 'LV', 'Rojas novads', 'Rojas novads'),
+(438, 125, 'LV', 'Ropažu novads', 'Ropažu novads'),
+(439, 125, 'LV', 'Rucavas novads', 'Rucavas novads'),
+(440, 125, 'LV', 'Rugāju novads', 'Rugāju novads'),
+(441, 125, 'LV', 'Rundāles novads', 'Rundāles novads'),
+(442, 125, 'LV', 'LV-RE', 'Rēzeknes novads'),
+(443, 125, 'LV', 'Rūjienas novads', 'Rūjienas novads'),
+(444, 125, 'LV', 'Salacgrīvas novads', 'Salacgrīvas novads'),
+(445, 125, 'LV', 'Salas novads', 'Salas novads'),
+(446, 125, 'LV', 'Salaspils novads', 'Salaspils novads'),
+(447, 125, 'LV', 'LV-SA', 'Saldus novads'),
+(448, 125, 'LV', 'Saulkrastu novads', 'Saulkrastu novads'),
+(449, 125, 'LV', 'Siguldas novads', 'Siguldas novads'),
+(450, 125, 'LV', 'Skrundas novads', 'Skrundas novads'),
+(451, 125, 'LV', 'Skrīveru novads', 'Skrīveru novads'),
+(452, 125, 'LV', 'Smiltenes novads', 'Smiltenes novads'),
+(453, 125, 'LV', 'Stopiņu novads', 'Stopiņu novads'),
+(454, 125, 'LV', 'Strenču novads', 'Strenču novads'),
+(455, 125, 'LV', 'Sējas novads', 'Sējas novads'),
+(456, 125, 'LV', 'LV-TA', 'Talsu novads'),
+(457, 125, 'LV', 'LV-TU', 'Tukuma novads'),
+(458, 125, 'LV', 'Tērvetes novads', 'Tērvetes novads'),
+(459, 125, 'LV', 'Vaiņodes novads', 'Vaiņodes novads'),
+(460, 125, 'LV', 'LV-VK', 'Valkas novads'),
+(461, 125, 'LV', 'LV-VM', 'Valmieras novads'),
+(462, 125, 'LV', 'Varakļānu novads', 'Varakļānu novads'),
+(463, 125, 'LV', 'Vecpiebalgas novads', 'Vecpiebalgas novads'),
+(464, 125, 'LV', 'Vecumnieku novads', 'Vecumnieku novads'),
+(465, 125, 'LV', 'LV-VE', 'Ventspils novads'),
+(466, 125, 'LV', 'Viesītes novads', 'Viesītes novads'),
+(467, 125, 'LV', 'Viļakas novads', 'Viļakas novads'),
+(468, 125, 'LV', 'Viļānu novads', 'Viļānu novads'),
+(469, 125, 'LV', 'Vārkavas novads', 'Vārkavas novads'),
+(470, 125, 'LV', 'Zilupes novads', 'Zilupes novads'),
+(471, 125, 'LV', 'Ādažu novads', 'Ādažu novads'),
+(472, 125, 'LV', 'Ērgļu novads', 'Ērgļu novads'),
+(473, 125, 'LV', 'Ķeguma novads', 'Ķeguma novads'),
+(474, 125, 'LV', 'Ķekavas novads', 'Ķekavas novads'),
+(475, 131, 'LT', 'LT-AL', 'Alytaus Apskritis'),
+(476, 131, 'LT', 'LT-KU', 'Kauno Apskritis'),
+(477, 131, 'LT', 'LT-KL', 'Klaipėdos Apskritis'),
+(478, 131, 'LT', 'LT-MR', 'Marijampolės Apskritis'),
+(479, 131, 'LT', 'LT-PN', 'Panevėžio Apskritis'),
+(480, 131, 'LT', 'LT-SA', 'Šiaulių Apskritis'),
+(481, 131, 'LT', 'LT-TA', 'Tauragės Apskritis'),
+(482, 131, 'LT', 'LT-TE', 'Telšių Apskritis'),
+(483, 131, 'LT', 'LT-UT', 'Utenos Apskritis'),
+(484, 131, 'LT', 'LT-VL', 'Vilniaus Apskritis'),
+(485, 31, 'BR', 'AC', 'Acre'),
+(486, 31, 'BR', 'AL', 'Alagoas'),
+(487, 31, 'BR', 'AP', 'Amapá'),
+(488, 31, 'BR', 'AM', 'Amazonas'),
+(489, 31, 'BR', 'BA', 'Bahia'),
+(490, 31, 'BR', 'CE', 'Ceará'),
+(491, 31, 'BR', 'ES', 'Espírito Santo'),
+(492, 31, 'BR', 'GO', 'Goiás'),
+(493, 31, 'BR', 'MA', 'Maranhão'),
+(494, 31, 'BR', 'MT', 'Mato Grosso'),
+(495, 31, 'BR', 'MS', 'Mato Grosso do Sul'),
+(496, 31, 'BR', 'MG', 'Minas Gerais'),
+(497, 31, 'BR', 'PA', 'Pará'),
+(498, 31, 'BR', 'PB', 'Paraíba'),
+(499, 31, 'BR', 'PR', 'Paraná'),
+(500, 31, 'BR', 'PE', 'Pernambuco'),
+(501, 31, 'BR', 'PI', 'Piauí'),
+(502, 31, 'BR', 'RJ', 'Rio de Janeiro'),
+(503, 31, 'BR', 'RN', 'Rio Grande do Norte'),
+(504, 31, 'BR', 'RS', 'Rio Grande do Sul'),
+(505, 31, 'BR', 'RO', 'Rondônia'),
+(506, 31, 'BR', 'RR', 'Roraima'),
+(507, 31, 'BR', 'SC', 'Santa Catarina'),
+(508, 31, 'BR', 'SP', 'São Paulo'),
+(509, 31, 'BR', 'SE', 'Sergipe'),
+(510, 31, 'BR', 'TO', 'Tocantins'),
+(511, 31, 'BR', 'DF', 'Distrito Federal'),
+(512, 59, 'HR', 'HR-01', 'Zagrebačka županija'),
+(513, 59, 'HR', 'HR-02', 'Krapinsko-zagorska županija'),
+(514, 59, 'HR', 'HR-03', 'Sisačko-moslavačka županija'),
+(515, 59, 'HR', 'HR-04', 'Karlovačka županija'),
+(516, 59, 'HR', 'HR-05', 'Varaždinska županija'),
+(517, 59, 'HR', 'HR-06', 'Koprivničko-križevačka županija'),
+(518, 59, 'HR', 'HR-07', 'Bjelovarsko-bilogorska županija'),
+(519, 59, 'HR', 'HR-08', 'Primorsko-goranska županija'),
+(520, 59, 'HR', 'HR-09', 'Ličko-senjska županija'),
+(521, 59, 'HR', 'HR-10', 'Virovitičko-podravska županija'),
+(522, 59, 'HR', 'HR-11', 'Požeško-slavonska županija'),
+(523, 59, 'HR', 'HR-12', 'Brodsko-posavska županija'),
+(524, 59, 'HR', 'HR-13', 'Zadarska županija'),
+(525, 59, 'HR', 'HR-14', 'Osječko-baranjska županija'),
+(526, 59, 'HR', 'HR-15', 'Šibensko-kninska županija'),
+(527, 59, 'HR', 'HR-16', 'Vukovarsko-srijemska županija'),
+(528, 59, 'HR', 'HR-17', 'Splitsko-dalmatinska županija'),
+(529, 59, 'HR', 'HR-18', 'Istarska županija'),
+(530, 59, 'HR', 'HR-19', 'Dubrovačko-neretvanska županija'),
+(531, 59, 'HR', 'HR-20', 'Međimurska županija'),
+(532, 59, 'HR', 'HR-21', 'Grad Zagreb'),
+(533, 106, 'IN', 'AN', 'Andaman and Nicobar Islands'),
+(534, 106, 'IN', 'AP', 'Andhra Pradesh'),
+(535, 106, 'IN', 'AR', 'Arunachal Pradesh'),
+(536, 106, 'IN', 'AS', 'Assam'),
+(537, 106, 'IN', 'BR', 'Bihar'),
+(538, 106, 'IN', 'CH', 'Chandigarh'),
+(539, 106, 'IN', 'CT', 'Chhattisgarh'),
+(540, 106, 'IN', 'DN', 'Dadra and Nagar Haveli'),
+(541, 106, 'IN', 'DD', 'Daman and Diu'),
+(542, 106, 'IN', 'DL', 'Delhi'),
+(543, 106, 'IN', 'GA', 'Goa'),
+(544, 106, 'IN', 'GJ', 'Gujarat'),
+(545, 106, 'IN', 'HR', 'Haryana'),
+(546, 106, 'IN', 'HP', 'Himachal Pradesh'),
+(547, 106, 'IN', 'JK', 'Jammu and Kashmir'),
+(548, 106, 'IN', 'JH', 'Jharkhand'),
+(549, 106, 'IN', 'KA', 'Karnataka'),
+(550, 106, 'IN', 'KL', 'Kerala'),
+(551, 106, 'IN', 'LD', 'Lakshadweep'),
+(552, 106, 'IN', 'MP', 'Madhya Pradesh'),
+(553, 106, 'IN', 'MH', 'Maharashtra'),
+(554, 106, 'IN', 'MN', 'Manipur'),
+(555, 106, 'IN', 'ML', 'Meghalaya'),
+(556, 106, 'IN', 'MZ', 'Mizoram'),
+(557, 106, 'IN', 'NL', 'Nagaland'),
+(558, 106, 'IN', 'OR', 'Odisha'),
+(559, 106, 'IN', 'PY', 'Puducherry'),
+(560, 106, 'IN', 'PB', 'Punjab'),
+(561, 106, 'IN', 'RJ', 'Rajasthan'),
+(562, 106, 'IN', 'SK', 'Sikkim'),
+(563, 106, 'IN', 'TN', 'Tamil Nadu'),
+(564, 106, 'IN', 'TG', 'Telangana'),
+(565, 106, 'IN', 'TR', 'Tripura'),
+(566, 106, 'IN', 'UP', 'Uttar Pradesh'),
+(567, 106, 'IN', 'UT', 'Uttarakhand'),
+(568, 106, 'IN', 'WB', 'West Bengal'),
+(569, 176, 'PY', 'PY-16', 'Alto Paraguay'),
+(570, 176, 'PY', 'PY-10', 'Alto Paraná'),
+(571, 176, 'PY', 'PY-13', 'Amambay'),
+(572, 176, 'PY', 'PY-ASU', 'Asunción'),
+(573, 176, 'PY', 'PY-19', 'Boquerón'),
+(574, 176, 'PY', 'PY-5', 'Caaguazú'),
+(575, 176, 'PY', 'PY-6', 'Caazapá'),
+(576, 176, 'PY', 'PY-14', 'Canindeyú'),
+(577, 176, 'PY', 'PY-11', 'Central'),
+(578, 176, 'PY', 'PY-1', 'Concepción'),
+(579, 176, 'PY', 'PY-3', 'Cordillera'),
+(580, 176, 'PY', 'PY-4', 'Guairá'),
+(581, 176, 'PY', 'PY-7', 'Itapúa'),
+(582, 176, 'PY', 'PY-8', 'Misiones'),
+(583, 176, 'PY', 'PY-9', 'Paraguarí'),
+(584, 176, 'PY', 'PY-15', 'Presidente Hayes'),
+(585, 176, 'PY', 'PY-2', 'San Pedro'),
+(586, 176, 'PY', 'PY-12', 'Ñeembucú'),
+(587, 14, 'as', 'sa', 'a'),
+(588, 14, 'as', 'sa', 'a');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `coupons`
+--
 
 DROP TABLE IF EXISTS `coupons`;
-CREATE TABLE `coupons` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `admin_id` bigint unsigned DEFAULT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `coupon_code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
-  `coupon_per_user` int DEFAULT NULL,
-  `coupon_used_count` int DEFAULT NULL,
-  `coupon_type` enum('F','P') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'F',
-  `coupon_value` int NOT NULL,
-  `coupon_status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
-  `coupon_message` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `coupons` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `discount_id` bigint UNSIGNED NOT NULL,
+  `code` varchar(40) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `starts_at` datetime DEFAULT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  `usage_limit` int DEFAULT NULL,
+  `usage_limit_per_user` int DEFAULT NULL,
+  `min_order_amount` decimal(10,2) DEFAULT NULL,
+  `times_used` int NOT NULL DEFAULT '0',
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `coupons_admin_id_foreign` (`admin_id`),
-  CONSTRAINT `coupons_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  UNIQUE KEY `coupons_code_unique` (`code`),
+  KEY `coupons_discount_id_foreign` (`discount_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `coupons`;
-INSERT INTO `coupons` (`id`, `admin_id`, `name`, `coupon_code`, `start_date`, `end_date`, `coupon_per_user`, `coupon_used_count`, `coupon_type`, `coupon_value`, `coupon_status`, `coupon_message`, `created_at`, `updated_at`) VALUES
-(1,	2,	'DELHI 100',	'DEL100',	'2025-08-14',	'2025-08-15',	NULL,	NULL,	'P',	50,	'0',	'<p>asdasd</p>',	'2025-08-14 06:50:00',	'2025-08-14 06:50:00'),
-(2,	2,	'NOIDA 50',	'SALE50',	'2025-08-14',	'2025-08-15',	1,	10,	'F',	50,	'0',	'<p>SALE50</p>',	'2025-08-14 06:59:13',	'2025-08-14 06:59:13');
+--
+-- Dumping data for table `coupons`
+--
+
+INSERT INTO `coupons` (`id`, `discount_id`, `code`, `description`, `starts_at`, `expires_at`, `usage_limit`, `usage_limit_per_user`, `min_order_amount`, `times_used`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 1, 'CMXW5ADQ', 'Auto-generated coupon for discount: asd', NULL, NULL, NULL, NULL, NULL, 0, 0, '2025-08-16 03:20:07', '2025-08-16 03:20:07'),
+(2, 2, 'SPQR3AMO', 'Auto-generated coupon for discount: asd', NULL, NULL, NULL, NULL, NULL, 0, 0, '2025-08-16 03:20:11', '2025-08-16 03:20:11'),
+(3, 3, 'SALE1', 'Auto-generated coupon for discount: asd', NULL, NULL, NULL, NULL, NULL, 0, 1, '2025-08-16 03:21:47', '2025-08-16 03:55:37');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `coupon_user`
+--
+
+DROP TABLE IF EXISTS `coupon_user`;
+CREATE TABLE IF NOT EXISTS `coupon_user` (
+  `coupon_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `order_id` bigint UNSIGNED NOT NULL,
+  `discount_amount` decimal(10,2) NOT NULL,
+  `used_at` datetime NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`coupon_id`,`user_id`,`order_id`),
+  KEY `coupon_user_user_id_foreign` (`user_id`),
+  KEY `coupon_user_order_id_foreign` (`order_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `currencies`
+--
 
 DROP TABLE IF EXISTS `currencies`;
-CREATE TABLE `currencies` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `code` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `symbol` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `decimal` int unsigned NOT NULL DEFAULT '2',
+CREATE TABLE IF NOT EXISTS `currencies` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `symbol` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `decimal` int UNSIGNED NOT NULL DEFAULT '2',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `currencies`;
+--
+-- Dumping data for table `currencies`
+--
+
 INSERT INTO `currencies` (`id`, `code`, `name`, `symbol`, `decimal`, `created_at`, `updated_at`) VALUES
-(1,	'USD',	'US Dollar',	'$',	2,	NULL,	NULL);
+(1, 'USD', 'US Dollar', '$', 2, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `currency_exchange_rates`
+--
 
 DROP TABLE IF EXISTS `currency_exchange_rates`;
-CREATE TABLE `currency_exchange_rates` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `currency_exchange_rates` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
   `rate` decimal(24,12) NOT NULL,
-  `target_currency` int unsigned NOT NULL,
+  `target_currency` int UNSIGNED NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `currency_exchange_rates_target_currency_unique` (`target_currency`),
-  CONSTRAINT `currency_exchange_rates_target_currency_foreign` FOREIGN KEY (`target_currency`) REFERENCES `currencies` (`id`) ON DELETE CASCADE
+  UNIQUE KEY `currency_exchange_rates_target_currency_unique` (`target_currency`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `currency_exchange_rates`;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `datagrid_saved_filters`
+--
 
 DROP TABLE IF EXISTS `datagrid_saved_filters`;
-CREATE TABLE `datagrid_saved_filters` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int unsigned NOT NULL,
-  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `src` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `datagrid_saved_filters` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` int UNSIGNED NOT NULL,
+  `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `src` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `applied` json NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -1078,259 +1246,191 @@ CREATE TABLE `datagrid_saved_filters` (
   UNIQUE KEY `datagrid_saved_filters_user_id_name_src_unique` (`user_id`,`name`,`src`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `datagrid_saved_filters`;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `discounts`
+--
+
+DROP TABLE IF EXISTS `discounts`;
+CREATE TABLE IF NOT EXISTS `discounts` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `admin_id` bigint UNSIGNED NOT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `apply_to` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'subtotal',
+  `user_groups` json DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `starts_at` datetime DEFAULT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `discounts_admin_id_foreign` (`admin_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `discounts`
+--
+
+INSERT INTO `discounts` (`id`, `name`, `admin_id`, `description`, `type`, `amount`, `apply_to`, `user_groups`, `is_active`, `starts_at`, `expires_at`, `created_at`, `updated_at`) VALUES
+(1, 'asd', 2, '<p>da</p>', 'F', 10.00, 'subtotal', NULL, 0, NULL, NULL, '2025-08-16 03:20:07', '2025-08-16 03:20:07'),
+(2, 'asd', 2, '<p>da</p>', 'F', 10.00, 'subtotal', NULL, 0, NULL, NULL, '2025-08-16 03:20:11', '2025-08-16 03:20:11'),
+(3, 'asd', 2, '<p>da</p>', 'F', 10.00, 'subtotal', NULL, 1, NULL, NULL, '2025-08-16 03:21:47', '2025-08-16 03:23:04');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `discount_rules`
+--
+
+DROP TABLE IF EXISTS `discount_rules`;
+CREATE TABLE IF NOT EXISTS `discount_rules` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `discount_id` bigint UNSIGNED NOT NULL,
+  `rule_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rule_id` bigint UNSIGNED NOT NULL,
+  `rule_value` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `discount_rules_discount_id_foreign` (`discount_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `discount_rules`
+--
+
+INSERT INTO `discount_rules` (`id`, `discount_id`, `rule_type`, `rule_id`, `rule_value`, `created_at`, `updated_at`) VALUES
+(1, 3, 'product', 2, NULL, '2025-08-16 03:55:37', '2025-08-16 03:55:37');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `email_templates`
+--
+
+DROP TABLE IF EXISTS `email_templates`;
+CREATE TABLE IF NOT EXISTS `email_templates` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `locale` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'en',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `failed_jobs`
+--
 
 DROP TABLE IF EXISTS `failed_jobs`;
-CREATE TABLE `failed_jobs` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `failed_jobs` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `failed_jobs`;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `images`
+--
+
+DROP TABLE IF EXISTS `images`;
+CREATE TABLE IF NOT EXISTS `images` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `filename` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `original_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mime_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `size` int UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `jobs`
+--
+
+DROP TABLE IF EXISTS `jobs`;
+CREATE TABLE IF NOT EXISTS `jobs` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `queue` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attempts` tinyint UNSIGNED NOT NULL,
+  `reserved_at` int UNSIGNED DEFAULT NULL,
+  `available_at` int UNSIGNED NOT NULL,
+  `created_at` int UNSIGNED NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `jobs_queue_index` (`queue`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `job_batches`
+--
 
 DROP TABLE IF EXISTS `job_batches`;
-CREATE TABLE `job_batches` (
-  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `job_batches` (
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `total_jobs` int NOT NULL,
   `pending_jobs` int NOT NULL,
   `failed_jobs` int NOT NULL,
-  `failed_job_ids` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `options` mediumtext COLLATE utf8mb4_unicode_ci,
+  `failed_job_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `cancelled_at` int DEFAULT NULL,
   `created_at` int NOT NULL,
   `finished_at` int DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `job_batches`;
+-- --------------------------------------------------------
 
-DROP TABLE IF EXISTS `jobs`;
-CREATE TABLE `jobs` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `queue` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `attempts` tinyint unsigned NOT NULL,
-  `reserved_at` int unsigned DEFAULT NULL,
-  `available_at` int unsigned NOT NULL,
-  `created_at` int unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `jobs_queue_index` (`queue`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-TRUNCATE `jobs`;
-
-DROP TABLE IF EXISTS `lead_activities`;
-CREATE TABLE `lead_activities` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `lead_id` bigint unsigned NOT NULL,
-  `admin_id` bigint unsigned NOT NULL,
-  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `activity_date` datetime NOT NULL,
-  `duration_minutes` int DEFAULT NULL,
-  `outcome` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `schedule_meeting` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `lead_activities_lead_id_index` (`lead_id`),
-  KEY `lead_activities_admin_id_index` (`admin_id`),
-  KEY `lead_activities_activity_date_index` (`activity_date`),
-  CONSTRAINT `lead_activities_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `lead_activities_lead_id_foreign` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-TRUNCATE `lead_activities`;
-INSERT INTO `lead_activities` (`id`, `lead_id`, `admin_id`, `type`, `description`, `activity_date`, `duration_minutes`, `outcome`, `schedule_meeting`, `created_at`, `updated_at`) VALUES
-(1,	2,	1,	'note',	'<p>asdsad&nbsp;</p>\n',	'2025-08-11 06:12:03',	20,	'neutral',	NULL,	'2025-08-11 00:42:03',	'2025-08-11 00:42:03'),
-(2,	2,	1,	'note',	'<p>asdsad&nbsp;</p>\n',	'2025-08-11 06:12:16',	20,	'neutral',	NULL,	'2025-08-11 00:42:16',	'2025-08-11 00:42:16'),
-(3,	2,	1,	'general',	'<p>@yash</p>\n',	'2025-08-11 06:16:09',	0,	'positive',	NULL,	'2025-08-11 00:46:09',	'2025-08-11 00:46:09'),
-(4,	2,	1,	'general',	'<p>asdasd asd asdasdasd</p>\n',	'2025-08-11 06:17:57',	0,	'neutral',	NULL,	'2025-08-11 00:47:57',	'2025-08-11 00:47:57'),
-(5,	2,	1,	'general',	'<p>asdasdasdasd</p>\n',	'2025-08-11 06:23:20',	0,	'positive',	NULL,	'2025-08-11 00:53:20',	'2025-08-11 00:53:20'),
-(6,	2,	1,	'general',	'<p>sadasdf fdfdsf dsf&nbsp;<p>f</p><p>&nbsp;sdfs</p><p>df</p><p>&nbsp;sdf</p><p>sdfs fas a faf</p></p>\n',	'2025-08-11 06:28:03',	0,	'positive',	NULL,	'2025-08-11 00:58:03',	'2025-08-11 00:58:03'),
-(7,	2,	1,	'general',	'<p>sd asd asda sd<p>&nbsp;asd</p><p>&nbsp;asd</p><p>&nbsp;a</p><p>sd asd</p><p>&nbsp;ad</p><p>&nbsp;ad</p><p>&nbsp;</p><p>ad</p><p>&nbsp;asf</p><p>&nbsp;</p><p>s df</p><p>&nbsp;sdf</p><p>&nbsp;</p><p>sdf</p><p>&nbsp;dfs</p><p>&nbsp;sd</p><p>f&nbsp;</p><p>sg</p><p>&nbsp;fg</p><p>fgfgdfgfdg dh dgd fg g</p></p>\n',	'2025-08-11 06:28:13',	0,	'positive',	NULL,	'2025-08-11 00:58:13',	'2025-08-11 00:58:13'),
-(8,	2,	1,	'general',	'<p>asd ad asda sdasd asd asd asd</p>\n',	'2025-08-11 06:28:19',	0,	'positive',	NULL,	'2025-08-11 00:58:19',	'2025-08-11 00:58:19'),
-(9,	2,	1,	'call',	'<p>asdasd asd asd asdasd</p>\n',	'2025-08-11 07:31:25',	40,	'negative',	NULL,	'2025-08-11 02:01:25',	'2025-08-11 02:01:25'),
-(10,	4,	1,	'call',	'<p>xcdadsd as dasdasd</p>\n',	'2025-08-11 08:42:26',	120,	'follow_up',	NULL,	'2025-08-11 03:12:26',	'2025-08-11 03:12:26'),
-(11,	4,	1,	'general',	'<p>asdasdasdas</p>\n',	'2025-08-11 09:05:55',	0,	'positive',	'',	'2025-08-11 03:35:55',	'2025-08-11 03:35:55'),
-(12,	4,	1,	'schedule_meeting',	'<p>asd asd asd asd asd asdad</p>\n',	'2025-08-11 09:09:53',	0,	'positive',	'2025-08-14T14:40',	'2025-08-11 03:39:53',	'2025-08-11 03:39:53'),
-(13,	4,	1,	'schedule_meeting',	'<p>Meeting link</p>\n',	'2025-08-11 10:40:15',	0,	'positive',	'2025-08-12T16:11',	'2025-08-11 05:10:15',	'2025-08-11 05:10:15'),
-(14,	4,	1,	'schedule_meeting',	'<p>Meeting link</p>\n',	'2025-08-11 10:41:30',	0,	'positive',	'2025-08-12T16:11',	'2025-08-11 05:11:30',	'2025-08-11 05:11:30'),
-(15,	4,	1,	'schedule_meeting',	'<p>asdas da das dasd asd asd asd asdasd</p>\n',	'2025-08-11 10:47:01',	0,	'positive',	'2025-08-15T16:18',	'2025-08-11 05:17:01',	'2025-08-11 05:17:01'),
-(16,	4,	1,	'schedule_meeting',	'<p><em>asd asd asd asd asd sd sd</em></p>\n',	'2025-08-11 11:06:22',	0,	'positive',	'2025-08-21T16:38',	'2025-08-11 05:36:22',	'2025-08-11 05:36:22'),
-(17,	4,	1,	'schedule_meeting',	'<p>asd asd asdasd</p>\n',	'2025-08-11 11:07:06',	0,	'positive',	'2025-08-12T16:41',	'2025-08-11 05:37:06',	'2025-08-11 05:37:06'),
-(18,	4,	1,	'general',	'<p>asd asd ad asdas</p>\n',	'2025-08-11 11:29:35',	0,	'positive',	'',	'2025-08-11 05:59:35',	'2025-08-11 05:59:35'),
-(19,	4,	1,	'schedule_meeting',	'<p><strong>asasd asdasd</strong></p>\n',	'2025-08-11 13:22:59',	0,	'positive',	'2025-08-14T18:53',	'2025-08-11 07:52:59',	'2025-08-11 07:52:59'),
-(20,	4,	1,	'schedule_meeting',	'<p><strong>asd asd asd asd asdasd</strong></p>\n',	'2025-08-11 13:25:36',	0,	'positive',	'2025-08-12T18:57',	'2025-08-11 07:55:36',	'2025-08-11 07:55:36'),
-(21,	4,	1,	'schedule_meeting',	'<p>asdasdasdasd</p>\n',	'2025-08-11 13:26:33',	0,	'positive',	'2025-08-14T18:58',	'2025-08-11 07:56:33',	'2025-08-11 07:56:33'),
-(22,	4,	1,	'schedule_meeting',	'<p>sdf sdfsdfsdfsadf</p>\n',	'2025-08-11 13:26:46',	0,	'positive',	'2025-08-19T18:59',	'2025-08-11 07:56:46',	'2025-08-11 07:56:46'),
-(23,	2,	2,	'general',	'<p>@yash what is the update</p>\n',	'2025-08-13 13:12:50',	0,	'positive',	'',	'2025-08-13 07:42:50',	'2025-08-13 07:42:50'),
-(24,	5,	2,	'general',	'<p>@Yash Gupta Check this lead ASAP<p>I\'ve added the attachment please check.</p></p>\n',	'2025-08-13 13:15:59',	0,	'positive',	'',	'2025-08-13 07:45:59',	'2025-08-13 07:45:59'),
-(25,	5,	2,	'general',	'<p>Re-Updated the attachment</p>\n',	'2025-08-13 13:21:19',	0,	'positive',	'',	'2025-08-13 07:51:19',	'2025-08-13 07:51:19'),
-(26,	5,	2,	'general',	'<p>Re-Updated the attachment</p>\n',	'2025-08-13 13:21:36',	0,	'positive',	'',	'2025-08-13 07:51:36',	'2025-08-13 07:51:36'),
-(27,	5,	2,	'general',	'<p>Re-Updated the attachment</p>\n',	'2025-08-13 13:21:51',	0,	'positive',	'',	'2025-08-13 07:51:51',	'2025-08-13 07:51:51'),
-(28,	5,	2,	'general',	'<p>Testing&nbsp;</p>\n',	'2025-08-13 13:26:09',	0,	'positive',	'',	'2025-08-13 07:56:09',	'2025-08-13 07:56:09'),
-(29,	5,	1,	'general',	'<p>Ok sir</p>\n',	'2025-08-13 13:27:56',	0,	'positive',	'',	'2025-08-13 07:57:56',	'2025-08-13 07:57:56');
-
-DROP TABLE IF EXISTS `lead_attachments`;
-CREATE TABLE `lead_attachments` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `lead_id` bigint unsigned NOT NULL,
-  `admin_id` bigint unsigned NOT NULL,
-  `filename` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `original_filename` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `mime_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `size` int unsigned NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `lead_attachments_lead_id_foreign` (`lead_id`),
-  KEY `lead_attachments_admin_id_foreign` (`admin_id`),
-  CONSTRAINT `lead_attachments_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `lead_attachments_lead_id_foreign` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-TRUNCATE `lead_attachments`;
-INSERT INTO `lead_attachments` (`id`, `lead_id`, `admin_id`, `filename`, `original_filename`, `mime_type`, `size`, `created_at`, `updated_at`) VALUES
-(1,	1,	1,	'LcjDsYBeCjv4W8nEFrEAwD5hn8OXdfhTuLLDdFeY.png',	'Screenshot from 2025-08-06 17-57-44.png',	'image/png',	171203,	'2025-08-10 22:55:26',	'2025-08-10 22:55:26'),
-(2,	1,	1,	'nde1T78ArVWltnxIvG4MrqA4iIh2rBACZYtXhva8.jpg',	'icon.jpg',	'image/png',	8729,	'2025-08-10 22:55:26',	'2025-08-10 22:55:26'),
-(3,	1,	1,	'5Ih0TCm2KumBxHXN8aeQmOEGjVtiKaB0btrpWC9B.png',	'Screenshot from 2025-07-30 13-38-25.png',	'image/png',	133694,	'2025-08-10 22:55:26',	'2025-08-10 22:55:26'),
-(4,	2,	1,	'YfQtozu4HHsYUJSN9IqOHKha2E2IsLdkdeuveiF0.jpg',	'icon.jpg',	'image/png',	8729,	'2025-08-10 22:55:47',	'2025-08-10 22:55:47'),
-(5,	3,	1,	'UIpVffPKhq6BaUzHYBkQroRuiW312Yuo8SYOqdfP.png',	'Screenshot from 2025-08-06 17-57-44.png',	'image/png',	171203,	'2025-08-10 22:56:05',	'2025-08-10 22:56:05'),
-(6,	4,	1,	'j2BJt0nHd0Y2Z1FRkrye3UkUwAHD6p502pTcbOUT.jpg',	'icon.jpg',	'image/png',	8729,	'2025-08-11 03:04:23',	'2025-08-11 03:04:23'),
-(7,	5,	2,	'Ji6fxsqM7jRJDKKj1HoQvRH2lFqS43vLZvcuueoi.avif',	'tech-logo-design_1234880-1915.avif',	'image/avif',	6309,	'2025-08-13 07:45:59',	'2025-08-13 07:45:59'),
-(8,	5,	2,	'U037XsN7IvR5I8SafRJwfwGr4P9hNwG8kjZ3dapX.png',	'Map.png',	'image/png',	185790,	'2025-08-13 07:45:59',	'2025-08-13 07:45:59'),
-(9,	5,	2,	'JEmnXqie1hGROD2ifL2eW2BE2A5oh1MH30T232mD.png',	'Map.png',	'image/png',	185790,	'2025-08-13 07:51:51',	'2025-08-13 07:51:51');
-
-DROP TABLE IF EXISTS `lead_notes`;
-CREATE TABLE `lead_notes` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `lead_id` bigint unsigned NOT NULL,
-  `admin_id` bigint unsigned NOT NULL,
-  `note` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `is_private` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `lead_notes_lead_id_index` (`lead_id`),
-  KEY `lead_notes_admin_id_index` (`admin_id`),
-  CONSTRAINT `lead_notes_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `lead_notes_lead_id_foreign` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-TRUNCATE `lead_notes`;
-INSERT INTO `lead_notes` (`id`, `lead_id`, `admin_id`, `note`, `is_private`, `created_at`, `updated_at`) VALUES
-(1,	2,	1,	'admin Lead assigned to Yash Gupta',	0,	'2025-08-11 02:31:59',	'2025-08-11 02:31:59'),
-(2,	4,	1,	'Lead created by admin',	0,	'2025-08-11 03:04:23',	'2025-08-11 03:04:23'),
-(3,	4,	1,	'admin Added message',	0,	'2025-08-11 03:12:26',	'2025-08-11 03:12:26'),
-(4,	3,	1,	'admin changed lead status to 3',	0,	'2025-08-11 03:12:52',	'2025-08-11 03:12:52'),
-(5,	3,	1,	'admin changed lead status to 5',	0,	'2025-08-11 03:12:53',	'2025-08-11 03:12:53'),
-(6,	4,	1,	'admin Assigned Lead to Administrator',	0,	'2025-08-11 03:13:13',	'2025-08-11 03:13:13'),
-(7,	4,	1,	'admin Assigned Lead to Yash',	0,	'2025-08-11 03:13:23',	'2025-08-11 03:13:23'),
-(8,	2,	1,	'admin changed lead status to 1',	0,	'2025-08-11 03:14:15',	'2025-08-11 03:14:15'),
-(9,	4,	1,	'admin Added message',	0,	'2025-08-11 03:35:55',	'2025-08-11 03:35:55'),
-(10,	4,	1,	'admin Added message',	0,	'2025-08-11 03:39:53',	'2025-08-11 03:39:53'),
-(11,	4,	1,	'admin Schedule a meeting on 2025-08-14T14:40\n, meeting added in google calender',	0,	'2025-08-11 03:39:53',	'2025-08-11 03:39:53'),
-(12,	1,	1,	'admin changed lead status to 3',	0,	'2025-08-11 04:41:39',	'2025-08-11 04:41:39'),
-(13,	1,	1,	'admin changed lead status to 3',	0,	'2025-08-11 04:41:40',	'2025-08-11 04:41:40'),
-(14,	1,	1,	'admin changed lead status to 2',	0,	'2025-08-11 04:41:41',	'2025-08-11 04:41:41'),
-(15,	4,	1,	'admin Added message',	0,	'2025-08-11 05:10:15',	'2025-08-11 05:10:15'),
-(16,	4,	1,	'admin Schedule a meeting on 2025-08-12T16:11\n, meeting added in google calender',	0,	'2025-08-11 05:10:15',	'2025-08-11 05:10:15'),
-(17,	4,	1,	'admin Added message',	0,	'2025-08-11 05:11:30',	'2025-08-11 05:11:30'),
-(18,	4,	1,	'admin Schedule a meeting on 2025-08-12T16:11\n, meeting added in google calender',	0,	'2025-08-11 05:11:30',	'2025-08-11 05:11:30'),
-(19,	4,	1,	'admin Added message',	0,	'2025-08-11 05:17:01',	'2025-08-11 05:17:01'),
-(20,	4,	1,	'admin Schedule a meeting on 2025-08-15T16:18\n, Google meeting ID: dhmbaf9hq3v2c3m2t7bjdr1jag',	0,	'2025-08-11 05:17:01',	'2025-08-11 05:17:01'),
-(21,	3,	1,	'admin changed lead status to 4',	0,	'2025-08-11 05:29:11',	'2025-08-11 05:29:11'),
-(22,	1,	1,	'admin changed lead status to 3',	0,	'2025-08-11 05:29:12',	'2025-08-11 05:29:12'),
-(23,	2,	1,	'admin changed lead status to 2',	0,	'2025-08-11 05:29:14',	'2025-08-11 05:29:14'),
-(24,	4,	1,	'admin changed lead status to 1',	0,	'2025-08-11 05:32:20',	'2025-08-11 05:32:20'),
-(25,	4,	1,	'admin Added message',	0,	'2025-08-11 05:36:22',	'2025-08-11 05:36:22'),
-(26,	4,	1,	'admin Added message',	0,	'2025-08-11 05:37:06',	'2025-08-11 05:37:06'),
-(27,	4,	1,	'admin Added message',	0,	'2025-08-11 05:59:35',	'2025-08-11 05:59:35'),
-(28,	5,	1,	'Lead created by admin',	0,	'2025-08-12 08:18:15',	'2025-08-12 08:18:15'),
-(29,	2,	1,	'admin changed lead status to 2',	0,	'2025-08-12 22:33:45',	'2025-08-12 22:33:45'),
-(30,	2,	1,	'admin changed lead status to 1',	0,	'2025-08-12 22:33:46',	'2025-08-12 22:33:46'),
-(31,	2,	2,	'admin changed lead status to 2',	0,	'2025-08-13 05:39:43',	'2025-08-13 05:39:43'),
-(32,	2,	2,	'admin changed lead status to 1',	0,	'2025-08-13 05:39:47',	'2025-08-13 05:39:47'),
-(33,	4,	2,	'admin changed lead status to 2',	0,	'2025-08-13 05:39:49',	'2025-08-13 05:39:49'),
-(34,	2,	1,	'admin changed lead status to 2',	0,	'2025-08-13 07:32:23',	'2025-08-13 07:32:23'),
-(35,	2,	1,	'admin changed lead status to 1',	0,	'2025-08-13 07:32:24',	'2025-08-13 07:32:24'),
-(36,	5,	1,	'admin changed lead status to 2',	0,	'2025-08-13 07:58:48',	'2025-08-13 07:58:48');
-
-DROP TABLE IF EXISTS `lead_sources`;
-CREATE TABLE `lead_sources` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
-  `is_active` tinyint(1) NOT NULL DEFAULT '1',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `lead_sources_slug_unique` (`slug`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-TRUNCATE `lead_sources`;
-INSERT INTO `lead_sources` (`id`, `name`, `slug`, `description`, `is_active`, `created_at`, `updated_at`) VALUES
-(1,	'Website',	'website',	'Lead came from website form',	1,	NULL,	NULL),
-(2,	'Referral',	'referral',	'Lead was referred by someone',	1,	NULL,	NULL),
-(3,	'Social Media',	'social-media',	'Lead came from social media',	1,	NULL,	NULL),
-(4,	'Email Campaign',	'email-campaign',	'Lead came from email marketing',	1,	NULL,	NULL),
-(5,	'Cold Call',	'cold-call',	'Lead from outbound calling',	1,	NULL,	NULL);
-
-DROP TABLE IF EXISTS `lead_statuses`;
-CREATE TABLE `lead_statuses` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `color` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'gray',
-  `sort` int NOT NULL DEFAULT '0',
-  `is_default` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-TRUNCATE `lead_statuses`;
-INSERT INTO `lead_statuses` (`id`, `name`, `color`, `sort`, `is_default`, `created_at`, `updated_at`) VALUES
-(1,	'New',	'blue',	1,	1,	NULL,	NULL),
-(2,	'Contacted',	'purple',	2,	0,	NULL,	NULL),
-(3,	'Qualified',	'green',	3,	0,	NULL,	NULL),
-(4,	'Proposal Sent',	'yellow',	4,	0,	NULL,	NULL),
-(5,	'Negotiation',	'orange',	5,	0,	NULL,	NULL),
-(6,	'Closed Won',	'green',	6,	0,	NULL,	NULL),
-(7,	'Closed Lost',	'red',	7,	0,	NULL,	NULL);
+--
+-- Table structure for table `leads`
+--
 
 DROP TABLE IF EXISTS `leads`;
-CREATE TABLE `leads` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `phone` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `company` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
+CREATE TABLE IF NOT EXISTS `leads` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `company` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `value` decimal(10,2) DEFAULT NULL,
-  `industries` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `industries` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `website` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `address_2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `country` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `state` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `postal_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `custom_fields` text COLLATE utf8mb4_unicode_ci,
-  `status_id` bigint unsigned NOT NULL,
-  `source_id` bigint unsigned DEFAULT NULL,
-  `assigned_to` bigint unsigned DEFAULT NULL,
-  `created_by` bigint unsigned NOT NULL,
-  `source` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `address_2` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `country` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `postal_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `custom_fields` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `status_id` bigint UNSIGNED NOT NULL,
+  `source_id` bigint UNSIGNED DEFAULT NULL,
+  `assigned_to` bigint UNSIGNED DEFAULT NULL,
+  `created_by` bigint UNSIGNED NOT NULL,
+  `user_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `deleted_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -1338,116 +1438,372 @@ CREATE TABLE `leads` (
   KEY `leads_status_id_index` (`status_id`),
   KEY `leads_assigned_to_index` (`assigned_to`),
   KEY `leads_created_by_index` (`created_by`),
-  KEY `leads_source_id_foreign` (`source_id`),
-  CONSTRAINT `leads_assigned_to_foreign` FOREIGN KEY (`assigned_to`) REFERENCES `admins` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `leads_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `admins` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `leads_source_id_foreign` FOREIGN KEY (`source_id`) REFERENCES `lead_sources` (`id`) ON DELETE SET NULL,
-  CONSTRAINT `leads_status_id_foreign` FOREIGN KEY (`status_id`) REFERENCES `lead_statuses` (`id`) ON DELETE CASCADE
+  KEY `leads_source_id_foreign` (`source_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `leads`;
-INSERT INTO `leads` (`id`, `name`, `email`, `phone`, `company`, `description`, `value`, `industries`, `website`, `address`, `address_2`, `country`, `state`, `city`, `postal_code`, `custom_fields`, `status_id`, `source_id`, `assigned_to`, `created_by`, `source`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1,	'Yash',	'harshit@gmail.com',	'8447441246',	'Test',	NULL,	NULL,	NULL,	'https://rcvtechnologies.com',	'H 28 ARV Park',	'',	'IN',	'Uttar pradesh',	'Noida',	'201301',	'',	3,	1,	1,	1,	NULL,	NULL,	'2025-08-10 22:55:26',	'2025-08-11 05:29:12'),
-(2,	'Administrator',	'yash.gupta@rcvtechnologies.com',	NULL,	'Test',	NULL,	NULL,	NULL,	'https://rcvtechnologies.com',	NULL,	'',	NULL,	NULL,	NULL,	NULL,	'',	1,	3,	1,	1,	NULL,	NULL,	'2025-08-10 22:55:47',	'2025-08-13 07:32:23'),
-(3,	'cscart_iml_size_template',	'yash.gupta@rcvtechnologies.com',	NULL,	'asdasd',	NULL,	NULL,	NULL,	'https://rcvtechnologies.com',	NULL,	'',	NULL,	NULL,	NULL,	NULL,	'',	4,	1,	1,	1,	NULL,	NULL,	'2025-08-10 22:56:05',	'2025-08-11 05:29:11'),
-(4,	'Hero Test',	'yash121999@gmail.com',	'8447441246',	'Hero Test',	'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English',	NULL,	'Technology',	'https://rcvtechnologies.com',	'H 28 ARV Park',	'',	'US',	'Uttar pradesh',	'Noida',	'201301',	'',	2,	1,	3,	1,	NULL,	NULL,	'2025-08-11 03:04:23',	'2025-08-13 05:39:49'),
-(5,	'Sagar',	'harshit@gmail.com',	NULL,	'Webkul Software PVT LTD',	NULL,	NULL,	'manufacturing',	NULL,	'H 28 ARV Park',	'',	'9',	'Uttar pradesh',	'Noida',	'201301',	'',	2,	1,	1,	1,	NULL,	NULL,	'2025-08-12 08:18:15',	'2025-08-13 07:58:48');
+--
+-- Dumping data for table `leads`
+--
+
+INSERT INTO `leads` (`id`, `name`, `email`, `phone`, `company`, `description`, `value`, `industries`, `website`, `address`, `address_2`, `country`, `state`, `city`, `postal_code`, `custom_fields`, `status_id`, `source_id`, `assigned_to`, `created_by`, `user_id`, `deleted_at`, `created_at`, `updated_at`) VALUES
+(1, 'Yash', 'harshit@gmail.com', '8447441246', 'Test', NULL, NULL, '6', 'https://rcvtechnologies.com', 'H 28 ARV Park', '', 'IN', 'Uttar pradesh', 'Noida', '201301', '', 5, 1, 1, 1, NULL, NULL, '2025-08-10 22:55:26', '2025-08-15 12:48:43'),
+(2, 'Administrator', 'yash.gupta@rcvtechnologies.com', NULL, 'Test', NULL, NULL, '5', 'https://rcvtechnologies.com', NULL, '', NULL, NULL, NULL, NULL, '', 1, 3, 1, 1, NULL, NULL, '2025-08-10 22:55:47', '2025-08-15 12:48:29'),
+(3, 'cscart_iml_size_template', 'yash.gupta@rcvtechnologies.com', NULL, 'asdasd', NULL, NULL, '7', 'https://rcvtechnologies.com', NULL, '', NULL, NULL, NULL, NULL, '', 6, 1, 1, 1, NULL, NULL, '2025-08-10 22:56:05', '2025-08-15 10:24:07'),
+(4, 'Hero Test', 'yash121999@gmail.com', '8447441246', 'Hero Test', 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using \'Content here, content here\', making it look like readable English', NULL, '5', 'https://rcvtechnologies.com', 'H 28 ARV Park', '', 'US', 'Uttar pradesh', 'Noida', '201301', '', 2, 1, 3, 1, NULL, NULL, '2025-08-11 03:04:23', '2025-08-13 05:39:49'),
+(5, 'Sagar', 'harshit@gmail.com', NULL, 'Webkul Software PVT LTD', '<p>dsdsadsf</p>', NULL, '5', NULL, 'H 28 ARV Park', '', '9', 'Uttar pradesh', 'Noida', '201301', '', 3, 1, 1, 1, NULL, NULL, '2025-08-12 08:18:15', '2025-08-17 00:22:02');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lead_activities`
+--
+
+DROP TABLE IF EXISTS `lead_activities`;
+CREATE TABLE IF NOT EXISTS `lead_activities` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `lead_id` bigint UNSIGNED NOT NULL,
+  `admin_id` bigint UNSIGNED NOT NULL,
+  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `activity_date` datetime NOT NULL,
+  `duration_minutes` int DEFAULT NULL,
+  `outcome` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `schedule_meeting` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `lead_activities_lead_id_index` (`lead_id`),
+  KEY `lead_activities_admin_id_index` (`admin_id`),
+  KEY `lead_activities_activity_date_index` (`activity_date`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `lead_activities`
+--
+
+INSERT INTO `lead_activities` (`id`, `lead_id`, `admin_id`, `type`, `description`, `activity_date`, `duration_minutes`, `outcome`, `schedule_meeting`, `created_at`, `updated_at`) VALUES
+(1, 2, 1, 'note', '<p>asdsad&nbsp;</p>\n', '2025-08-11 06:12:03', 20, 'neutral', NULL, '2025-08-11 00:42:03', '2025-08-11 00:42:03'),
+(2, 2, 1, 'note', '<p>asdsad&nbsp;</p>\n', '2025-08-11 06:12:16', 20, 'neutral', NULL, '2025-08-11 00:42:16', '2025-08-11 00:42:16'),
+(3, 2, 1, 'general', '<p>@yash</p>\n', '2025-08-11 06:16:09', 0, 'positive', NULL, '2025-08-11 00:46:09', '2025-08-11 00:46:09'),
+(4, 2, 1, 'general', '<p>asdasd asd asdasdasd</p>\n', '2025-08-11 06:17:57', 0, 'neutral', NULL, '2025-08-11 00:47:57', '2025-08-11 00:47:57'),
+(5, 2, 1, 'general', '<p>asdasdasdasd</p>\n', '2025-08-11 06:23:20', 0, 'positive', NULL, '2025-08-11 00:53:20', '2025-08-11 00:53:20'),
+(6, 2, 1, 'general', '<p>sadasdf fdfdsf dsf&nbsp;<p>f</p><p>&nbsp;sdfs</p><p>df</p><p>&nbsp;sdf</p><p>sdfs fas a faf</p></p>\n', '2025-08-11 06:28:03', 0, 'positive', NULL, '2025-08-11 00:58:03', '2025-08-11 00:58:03'),
+(7, 2, 1, 'general', '<p>sd asd asda sd<p>&nbsp;asd</p><p>&nbsp;asd</p><p>&nbsp;a</p><p>sd asd</p><p>&nbsp;ad</p><p>&nbsp;ad</p><p>&nbsp;</p><p>ad</p><p>&nbsp;asf</p><p>&nbsp;</p><p>s df</p><p>&nbsp;sdf</p><p>&nbsp;</p><p>sdf</p><p>&nbsp;dfs</p><p>&nbsp;sd</p><p>f&nbsp;</p><p>sg</p><p>&nbsp;fg</p><p>fgfgdfgfdg dh dgd fg g</p></p>\n', '2025-08-11 06:28:13', 0, 'positive', NULL, '2025-08-11 00:58:13', '2025-08-11 00:58:13'),
+(8, 2, 1, 'general', '<p>asd ad asda sdasd asd asd asd</p>\n', '2025-08-11 06:28:19', 0, 'positive', NULL, '2025-08-11 00:58:19', '2025-08-11 00:58:19'),
+(9, 2, 1, 'call', '<p>asdasd asd asd asdasd</p>\n', '2025-08-11 07:31:25', 40, 'negative', NULL, '2025-08-11 02:01:25', '2025-08-11 02:01:25'),
+(10, 4, 1, 'call', '<p>xcdadsd as dasdasd</p>\n', '2025-08-11 08:42:26', 120, 'follow_up', NULL, '2025-08-11 03:12:26', '2025-08-11 03:12:26'),
+(11, 4, 1, 'general', '<p>asdasdasdas</p>\n', '2025-08-11 09:05:55', 0, 'positive', '', '2025-08-11 03:35:55', '2025-08-11 03:35:55'),
+(12, 4, 1, 'schedule_meeting', '<p>asd asd asd asd asd asdad</p>\n', '2025-08-11 09:09:53', 0, 'positive', '2025-08-14T14:40', '2025-08-11 03:39:53', '2025-08-11 03:39:53'),
+(13, 4, 1, 'schedule_meeting', '<p>Meeting link</p>\n', '2025-08-11 10:40:15', 0, 'positive', '2025-08-12T16:11', '2025-08-11 05:10:15', '2025-08-11 05:10:15'),
+(14, 4, 1, 'schedule_meeting', '<p>Meeting link</p>\n', '2025-08-11 10:41:30', 0, 'positive', '2025-08-12T16:11', '2025-08-11 05:11:30', '2025-08-11 05:11:30'),
+(15, 4, 1, 'schedule_meeting', '<p>asdas da das dasd asd asd asd asdasd</p>\n', '2025-08-11 10:47:01', 0, 'positive', '2025-08-15T16:18', '2025-08-11 05:17:01', '2025-08-11 05:17:01'),
+(16, 4, 1, 'schedule_meeting', '<p><em>asd asd asd asd asd sd sd</em></p>\n', '2025-08-11 11:06:22', 0, 'positive', '2025-08-21T16:38', '2025-08-11 05:36:22', '2025-08-11 05:36:22'),
+(17, 4, 1, 'schedule_meeting', '<p>asd asd asdasd</p>\n', '2025-08-11 11:07:06', 0, 'positive', '2025-08-12T16:41', '2025-08-11 05:37:06', '2025-08-11 05:37:06'),
+(18, 4, 1, 'general', '<p>asd asd ad asdas</p>\n', '2025-08-11 11:29:35', 0, 'positive', '', '2025-08-11 05:59:35', '2025-08-11 05:59:35'),
+(19, 4, 1, 'schedule_meeting', '<p><strong>asasd asdasd</strong></p>\n', '2025-08-11 13:22:59', 0, 'positive', '2025-08-14T18:53', '2025-08-11 07:52:59', '2025-08-11 07:52:59'),
+(20, 4, 1, 'schedule_meeting', '<p><strong>asd asd asd asd asdasd</strong></p>\n', '2025-08-11 13:25:36', 0, 'positive', '2025-08-12T18:57', '2025-08-11 07:55:36', '2025-08-11 07:55:36'),
+(21, 4, 1, 'schedule_meeting', '<p>asdasdasdasd</p>\n', '2025-08-11 13:26:33', 0, 'positive', '2025-08-14T18:58', '2025-08-11 07:56:33', '2025-08-11 07:56:33'),
+(22, 4, 1, 'schedule_meeting', '<p>sdf sdfsdfsdfsadf</p>\n', '2025-08-11 13:26:46', 0, 'positive', '2025-08-19T18:59', '2025-08-11 07:56:46', '2025-08-11 07:56:46'),
+(23, 2, 2, 'general', '<p>@yash what is the update</p>\n', '2025-08-13 13:12:50', 0, 'positive', '', '2025-08-13 07:42:50', '2025-08-13 07:42:50'),
+(24, 5, 2, 'general', '<p>@Yash Gupta Check this lead ASAP<p>I\'ve added the attachment please check.</p></p>\n', '2025-08-13 13:15:59', 0, 'positive', '', '2025-08-13 07:45:59', '2025-08-13 07:45:59'),
+(25, 5, 2, 'general', '<p>Re-Updated the attachment</p>\n', '2025-08-13 13:21:19', 0, 'positive', '', '2025-08-13 07:51:19', '2025-08-13 07:51:19'),
+(26, 5, 2, 'general', '<p>Re-Updated the attachment</p>\n', '2025-08-13 13:21:36', 0, 'positive', '', '2025-08-13 07:51:36', '2025-08-13 07:51:36'),
+(27, 5, 2, 'general', '<p>Re-Updated the attachment</p>\n', '2025-08-13 13:21:51', 0, 'positive', '', '2025-08-13 07:51:51', '2025-08-13 07:51:51'),
+(28, 5, 2, 'general', '<p>Testing&nbsp;</p>\n', '2025-08-13 13:26:09', 0, 'positive', '', '2025-08-13 07:56:09', '2025-08-13 07:56:09'),
+(29, 5, 1, 'general', '<p>Ok sir</p>\n', '2025-08-13 13:27:56', 0, 'positive', '', '2025-08-13 07:57:56', '2025-08-13 07:57:56');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lead_attachments`
+--
+
+DROP TABLE IF EXISTS `lead_attachments`;
+CREATE TABLE IF NOT EXISTS `lead_attachments` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `lead_id` bigint UNSIGNED NOT NULL,
+  `admin_id` bigint UNSIGNED NOT NULL,
+  `filename` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `original_filename` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mime_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `size` int UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `lead_attachments_lead_id_foreign` (`lead_id`),
+  KEY `lead_attachments_admin_id_foreign` (`admin_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `lead_attachments`
+--
+
+INSERT INTO `lead_attachments` (`id`, `lead_id`, `admin_id`, `filename`, `original_filename`, `mime_type`, `size`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 'LcjDsYBeCjv4W8nEFrEAwD5hn8OXdfhTuLLDdFeY.png', 'Screenshot from 2025-08-06 17-57-44.png', 'image/png', 171203, '2025-08-10 22:55:26', '2025-08-10 22:55:26'),
+(2, 1, 1, 'nde1T78ArVWltnxIvG4MrqA4iIh2rBACZYtXhva8.jpg', 'icon.jpg', 'image/png', 8729, '2025-08-10 22:55:26', '2025-08-10 22:55:26'),
+(3, 1, 1, '5Ih0TCm2KumBxHXN8aeQmOEGjVtiKaB0btrpWC9B.png', 'Screenshot from 2025-07-30 13-38-25.png', 'image/png', 133694, '2025-08-10 22:55:26', '2025-08-10 22:55:26'),
+(5, 3, 1, 'UIpVffPKhq6BaUzHYBkQroRuiW312Yuo8SYOqdfP.png', 'Screenshot from 2025-08-06 17-57-44.png', 'image/png', 171203, '2025-08-10 22:56:05', '2025-08-10 22:56:05'),
+(7, 5, 2, 'Ji6fxsqM7jRJDKKj1HoQvRH2lFqS43vLZvcuueoi.avif', 'tech-logo-design_1234880-1915.avif', 'image/avif', 6309, '2025-08-13 07:45:59', '2025-08-13 07:45:59'),
+(8, 5, 2, 'U037XsN7IvR5I8SafRJwfwGr4P9hNwG8kjZ3dapX.png', 'Map.png', 'image/png', 185790, '2025-08-13 07:45:59', '2025-08-13 07:45:59'),
+(9, 5, 2, 'JEmnXqie1hGROD2ifL2eW2BE2A5oh1MH30T232mD.png', 'Map.png', 'image/png', 185790, '2025-08-13 07:51:51', '2025-08-13 07:51:51');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lead_notes`
+--
+
+DROP TABLE IF EXISTS `lead_notes`;
+CREATE TABLE IF NOT EXISTS `lead_notes` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `lead_id` bigint UNSIGNED NOT NULL,
+  `admin_id` bigint UNSIGNED NOT NULL,
+  `note` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `is_private` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `lead_notes_lead_id_index` (`lead_id`),
+  KEY `lead_notes_admin_id_index` (`admin_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `lead_notes`
+--
+
+INSERT INTO `lead_notes` (`id`, `lead_id`, `admin_id`, `note`, `is_private`, `created_at`, `updated_at`) VALUES
+(1, 2, 1, 'admin Lead assigned to Yash Gupta', 0, '2025-08-11 02:31:59', '2025-08-11 02:31:59'),
+(2, 4, 1, 'Lead created by admin', 0, '2025-08-11 03:04:23', '2025-08-11 03:04:23'),
+(3, 4, 1, 'admin Added message', 0, '2025-08-11 03:12:26', '2025-08-11 03:12:26'),
+(4, 3, 1, 'admin changed lead status to 3', 0, '2025-08-11 03:12:52', '2025-08-11 03:12:52'),
+(5, 3, 1, 'admin changed lead status to 5', 0, '2025-08-11 03:12:53', '2025-08-11 03:12:53'),
+(6, 4, 1, 'admin Assigned Lead to Administrator', 0, '2025-08-11 03:13:13', '2025-08-11 03:13:13'),
+(7, 4, 1, 'admin Assigned Lead to Yash', 0, '2025-08-11 03:13:23', '2025-08-11 03:13:23'),
+(8, 2, 1, 'admin changed lead status to 1', 0, '2025-08-11 03:14:15', '2025-08-11 03:14:15'),
+(9, 4, 1, 'admin Added message', 0, '2025-08-11 03:35:55', '2025-08-11 03:35:55'),
+(10, 4, 1, 'admin Added message', 0, '2025-08-11 03:39:53', '2025-08-11 03:39:53'),
+(11, 4, 1, 'admin Schedule a meeting on 2025-08-14T14:40\n, meeting added in google calender', 0, '2025-08-11 03:39:53', '2025-08-11 03:39:53'),
+(12, 1, 1, 'admin changed lead status to 3', 0, '2025-08-11 04:41:39', '2025-08-11 04:41:39'),
+(13, 1, 1, 'admin changed lead status to 3', 0, '2025-08-11 04:41:40', '2025-08-11 04:41:40'),
+(14, 1, 1, 'admin changed lead status to 2', 0, '2025-08-11 04:41:41', '2025-08-11 04:41:41'),
+(15, 4, 1, 'admin Added message', 0, '2025-08-11 05:10:15', '2025-08-11 05:10:15'),
+(16, 4, 1, 'admin Schedule a meeting on 2025-08-12T16:11\n, meeting added in google calender', 0, '2025-08-11 05:10:15', '2025-08-11 05:10:15'),
+(17, 4, 1, 'admin Added message', 0, '2025-08-11 05:11:30', '2025-08-11 05:11:30'),
+(18, 4, 1, 'admin Schedule a meeting on 2025-08-12T16:11\n, meeting added in google calender', 0, '2025-08-11 05:11:30', '2025-08-11 05:11:30'),
+(19, 4, 1, 'admin Added message', 0, '2025-08-11 05:17:01', '2025-08-11 05:17:01'),
+(20, 4, 1, 'admin Schedule a meeting on 2025-08-15T16:18\n, Google meeting ID: dhmbaf9hq3v2c3m2t7bjdr1jag', 0, '2025-08-11 05:17:01', '2025-08-11 05:17:01'),
+(21, 3, 1, 'admin changed lead status to 4', 0, '2025-08-11 05:29:11', '2025-08-11 05:29:11'),
+(22, 1, 1, 'admin changed lead status to 3', 0, '2025-08-11 05:29:12', '2025-08-11 05:29:12'),
+(23, 2, 1, 'admin changed lead status to 2', 0, '2025-08-11 05:29:14', '2025-08-11 05:29:14'),
+(24, 4, 1, 'admin changed lead status to 1', 0, '2025-08-11 05:32:20', '2025-08-11 05:32:20'),
+(25, 4, 1, 'admin Added message', 0, '2025-08-11 05:36:22', '2025-08-11 05:36:22'),
+(26, 4, 1, 'admin Added message', 0, '2025-08-11 05:37:06', '2025-08-11 05:37:06'),
+(27, 4, 1, 'admin Added message', 0, '2025-08-11 05:59:35', '2025-08-11 05:59:35'),
+(28, 5, 1, 'Lead created by admin', 0, '2025-08-12 08:18:15', '2025-08-12 08:18:15'),
+(29, 2, 1, 'admin changed lead status to 2', 0, '2025-08-12 22:33:45', '2025-08-12 22:33:45'),
+(30, 2, 1, 'admin changed lead status to 1', 0, '2025-08-12 22:33:46', '2025-08-12 22:33:46'),
+(31, 2, 2, 'admin changed lead status to 2', 0, '2025-08-13 05:39:43', '2025-08-13 05:39:43'),
+(32, 2, 2, 'admin changed lead status to 1', 0, '2025-08-13 05:39:47', '2025-08-13 05:39:47'),
+(33, 4, 2, 'admin changed lead status to 2', 0, '2025-08-13 05:39:49', '2025-08-13 05:39:49'),
+(34, 2, 1, 'admin changed lead status to 2', 0, '2025-08-13 07:32:23', '2025-08-13 07:32:23'),
+(35, 2, 1, 'admin changed lead status to 1', 0, '2025-08-13 07:32:24', '2025-08-13 07:32:24'),
+(36, 5, 1, 'admin changed lead status to 2', 0, '2025-08-13 07:58:48', '2025-08-13 07:58:48'),
+(37, 4, 2, 'admin deleted attachment: icon.jpg', 0, '2025-08-15 09:37:43', '2025-08-15 09:37:43'),
+(62, 2, 2, 'Application sended to customer Email', 0, '2025-08-16 06:31:41', '2025-08-16 06:31:41'),
+(66, 5, 2, 'Customer created Email: harshit@gmail.com, Password: NMcXPm0POmId', 0, '2025-08-16 06:43:16', '2025-08-16 06:43:16'),
+(67, 5, 2, 'Application sended to customer Email', 0, '2025-08-16 06:43:16', '2025-08-16 06:43:16'),
+(68, 5, 2, 'Application sended to customer Email', 0, '2025-08-16 06:43:50', '2025-08-16 06:43:50'),
+(69, 2, 2, 'Application sended to customer Email', 0, '2025-08-16 06:44:09', '2025-08-16 06:44:09'),
+(70, 2, 2, 'Application sended to customer Email', 0, '2025-08-16 06:44:22', '2025-08-16 06:44:22'),
+(71, 4, 2, 'Customer created Email: yash121999@gmail.com, Password: v7ECNYvzFE9v', 0, '2025-08-16 06:44:34', '2025-08-16 06:44:34'),
+(72, 4, 2, 'Application sended to customer Email', 0, '2025-08-16 06:44:34', '2025-08-16 06:44:34'),
+(73, 2, 2, 'admin deleted attachment: icon.jpg', 0, '2025-08-17 11:44:57', '2025-08-17 11:44:57'),
+(74, 2, 2, 'Application sended to customer Email', 0, '2025-08-17 11:50:13', '2025-08-17 11:50:13');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lead_sources`
+--
+
+DROP TABLE IF EXISTS `lead_sources`;
+CREATE TABLE IF NOT EXISTS `lead_sources` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `lead_sources_slug_unique` (`slug`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `lead_sources`
+--
+
+INSERT INTO `lead_sources` (`id`, `name`, `slug`, `description`, `is_active`, `created_at`, `updated_at`) VALUES
+(1, 'Website', 'website', 'Lead came from website form', 1, NULL, NULL),
+(2, 'Referral', 'referral', 'Lead was referred by someone', 1, NULL, NULL),
+(3, 'Social Media', 'social-media', 'Lead came from social media', 1, NULL, NULL),
+(4, 'Email Campaign', 'email-campaign', 'Lead came from email marketing', 1, NULL, NULL),
+(5, 'Cold Call', 'cold-call', 'Lead from outbound calling', 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `lead_statuses`
+--
+
+DROP TABLE IF EXISTS `lead_statuses`;
+CREATE TABLE IF NOT EXISTS `lead_statuses` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'gray',
+  `sort` int NOT NULL DEFAULT '0',
+  `is_default` tinyint(1) NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `lead_statuses`
+--
+
+INSERT INTO `lead_statuses` (`id`, `name`, `color`, `sort`, `is_default`, `created_at`, `updated_at`) VALUES
+(1, 'New', 'blue', 1, 1, NULL, NULL),
+(2, 'Contacted', 'purple', 2, 0, NULL, NULL),
+(3, 'Qualified', 'green', 3, 0, NULL, NULL),
+(4, 'Proposal Sent', 'yellow', 4, 0, NULL, NULL),
+(5, 'Negotiation', 'orange', 5, 0, NULL, NULL),
+(6, 'Closed Won', 'green', 6, 0, NULL, NULL),
+(7, 'Closed Lost', 'red', 7, 0, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `meetings`
+--
 
 DROP TABLE IF EXISTS `meetings`;
-CREATE TABLE `meetings` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
+CREATE TABLE IF NOT EXISTS `meetings` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `start_time` datetime NOT NULL,
   `end_time` datetime NOT NULL,
-  `location` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `google_calendar_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `google_event_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `admin_id` bigint unsigned NOT NULL,
+  `location` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_calendar_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `google_event_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `admin_id` bigint UNSIGNED NOT NULL,
   `color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `meetings_admin_id_foreign` (`admin_id`),
-  CONSTRAINT `meetings_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`)
+  KEY `meetings_admin_id_foreign` (`admin_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `meetings`;
+--
+-- Dumping data for table `meetings`
+--
+
 INSERT INTO `meetings` (`id`, `title`, `description`, `start_time`, `end_time`, `location`, `google_calendar_id`, `google_event_id`, `admin_id`, `color`, `created_at`, `updated_at`) VALUES
-(7,	'asd',	'asdasd',	'2025-08-11 15:49:00',	'2025-08-11 16:19:00',	NULL,	'primary',	'bhihf67o2s61u4omk0b0kqei5s',	1,	'red',	'2025-08-11 04:52:00',	'2025-08-11 04:52:01'),
-(8,	'asdasas ad asd asdasd asdasd',	'das dasdasd',	'2025-08-11 16:04:00',	'2025-08-11 16:34:00',	NULL,	'primary',	'mr9fk5b8h41o24nb8f025sgfm4',	1,	'green',	'2025-08-11 05:04:38',	'2025-08-11 05:04:39'),
-(9,	'admin Schedule a meeting with Hero Test',	'<p>Meeting link</p>\n',	'2025-08-12 16:11:00',	'2025-08-12 18:11:00',	'',	'primary',	'1slqnfa8qblsbq70cl80f3vo7o',	1,	'blue',	'2025-08-11 05:11:30',	'2025-08-11 05:11:31'),
-(10,	'admin Schedule a meeting with Hero Test',	'<p>asdas da das dasd asd asd asd asdasd</p>\n',	'2025-08-15 16:18:00',	'2025-08-15 18:18:00',	'',	'primary',	'dhmbaf9hq3v2c3m2t7bjdr1jag',	1,	'blue',	'2025-08-11 05:17:01',	'2025-08-11 05:17:01'),
-(11,	'admin Schedule a meeting with Hero Test',	'<p><em>asd asd asd asd asd sd sd</em></p>\n',	'2025-08-21 16:38:00',	'2025-08-21 18:38:00',	'',	NULL,	NULL,	1,	'yellow',	'2025-08-11 05:36:22',	'2025-08-11 05:36:22'),
-(12,	'admin Schedule a meeting with Hero Test',	'<p>asd asd asdasd</p>\n',	'2025-08-12 16:41:00',	'2025-08-12 18:41:00',	'',	NULL,	NULL,	1,	'yellow',	'2025-08-11 05:37:06',	'2025-08-11 05:37:06'),
-(13,	'asd as',	'dasdasdasdasd',	'2025-08-11 17:43:00',	'2025-08-11 18:13:00',	NULL,	'primary',	'11q7empgf5qssnu3g072e12s44',	1,	'yellow',	'2025-08-11 06:44:05',	'2025-08-11 06:44:06'),
-(14,	'asd a',	'sd asd asdasd',	'2025-08-11 17:49:00',	'2025-08-11 18:19:00',	NULL,	'primary',	'84qin9ijqr2ufhd90tug3pv6e8',	1,	'yellow',	'2025-08-11 06:52:25',	'2025-08-11 06:52:26'),
-(15,	'd',	'asd asd asd asd',	'2025-08-11 17:52:00',	'2025-08-11 18:22:00',	NULL,	'primary',	'hi6dchbdq64fagbbg7jhsnbckg',	1,	'yellow',	'2025-08-11 06:52:33',	'2025-08-11 06:52:34'),
-(16,	'sd',	'as dasd asd asd',	'2025-08-11 17:52:00',	'2025-08-11 18:22:00',	NULL,	'primary',	'7i6hu9qk5vdd81ecokkc7rkup0',	1,	'green',	'2025-08-11 06:52:46',	'2025-08-11 06:52:47'),
-(17,	'asd',	'ad asd asd',	'2025-08-12 17:57:00',	'2025-08-14 17:57:00',	'fsdfsd',	'primary',	'3f9h1tqb0hqe8rbc1bepvg4e58',	1,	'blue',	'2025-08-11 06:57:34',	'2025-08-11 06:57:35'),
-(18,	'admin Schedule a meeting with Hero Test',	'<p><strong>asasd asdasd</strong></p>\n',	'2025-08-14 18:53:00',	'2025-08-14 20:53:00',	'',	NULL,	NULL,	1,	'yellow',	'2025-08-11 07:52:59',	'2025-08-11 07:52:59'),
-(19,	'admin Schedule a meeting with Hero Test',	'<p><strong>asd asd asd asd asdasd</strong></p>\n',	'2025-08-12 18:57:00',	'2025-08-12 20:57:00',	'',	NULL,	NULL,	1,	'red',	'2025-08-11 07:55:36',	'2025-08-11 07:55:36'),
-(20,	'admin Schedule a meeting with Hero Test',	'<p>asdasdasdasd</p>\n',	'2025-08-14 18:58:00',	'2025-08-14 20:58:00',	'',	NULL,	NULL,	1,	'yellow',	'2025-08-11 07:56:33',	'2025-08-11 07:56:33'),
-(21,	'admin Schedule a meeting with Hero Test',	'<p>sdf sdfsdfsdfsadf</p>\n',	'2025-08-19 18:59:00',	'2025-08-19 20:59:00',	'',	NULL,	NULL,	1,	'green',	'2025-08-11 07:56:46',	'2025-08-11 07:56:46'),
-(22,	'asdas',	'dasdasd',	'2025-08-14 09:50:00',	'2025-08-15 09:50:00',	NULL,	NULL,	NULL,	1,	'blue',	'2025-08-11 22:50:12',	'2025-08-11 22:50:12'),
-(23,	'asdasd',	'sadasdasd',	'2025-08-13 18:59:00',	'2025-08-13 18:59:00',	'asd',	'primary',	'krcliuaqs2j0n60etuig0bdm1o',	1,	NULL,	'2025-08-13 07:59:38',	'2025-08-13 07:59:38');
+(7, 'asd', 'asdasd', '2025-08-11 15:49:00', '2025-08-11 16:19:00', NULL, 'primary', 'bhihf67o2s61u4omk0b0kqei5s', 1, 'red', '2025-08-11 04:52:00', '2025-08-11 04:52:01'),
+(8, 'asdasas ad asd asdasd asdasd', 'das dasdasd', '2025-08-11 16:04:00', '2025-08-11 16:34:00', NULL, 'primary', 'mr9fk5b8h41o24nb8f025sgfm4', 1, 'green', '2025-08-11 05:04:38', '2025-08-11 05:04:39'),
+(9, 'admin Schedule a meeting with Hero Test', '<p>Meeting link</p>\n', '2025-08-12 16:11:00', '2025-08-12 18:11:00', '', 'primary', '1slqnfa8qblsbq70cl80f3vo7o', 1, 'blue', '2025-08-11 05:11:30', '2025-08-11 05:11:31'),
+(10, 'admin Schedule a meeting with Hero Test', '<p>asdas da das dasd asd asd asd asdasd</p>\n', '2025-08-15 16:18:00', '2025-08-15 18:18:00', '', 'primary', 'dhmbaf9hq3v2c3m2t7bjdr1jag', 1, 'blue', '2025-08-11 05:17:01', '2025-08-11 05:17:01'),
+(11, 'admin Schedule a meeting with Hero Test', '<p><em>asd asd asd asd asd sd sd</em></p>\n', '2025-08-21 16:38:00', '2025-08-21 18:38:00', '', NULL, NULL, 1, 'yellow', '2025-08-11 05:36:22', '2025-08-11 05:36:22'),
+(12, 'admin Schedule a meeting with Hero Test', '<p>asd asd asdasd</p>\n', '2025-08-12 16:41:00', '2025-08-12 18:41:00', '', NULL, NULL, 1, 'yellow', '2025-08-11 05:37:06', '2025-08-11 05:37:06'),
+(13, 'asd as', 'dasdasdasdasd', '2025-08-11 17:43:00', '2025-08-11 18:13:00', NULL, 'primary', '11q7empgf5qssnu3g072e12s44', 1, 'yellow', '2025-08-11 06:44:05', '2025-08-11 06:44:06'),
+(14, 'asd a', 'sd asd asdasd', '2025-08-11 17:49:00', '2025-08-11 18:19:00', NULL, 'primary', '84qin9ijqr2ufhd90tug3pv6e8', 1, 'yellow', '2025-08-11 06:52:25', '2025-08-11 06:52:26'),
+(15, 'd', 'asd asd asd asd', '2025-08-11 17:52:00', '2025-08-11 18:22:00', NULL, 'primary', 'hi6dchbdq64fagbbg7jhsnbckg', 1, 'yellow', '2025-08-11 06:52:33', '2025-08-11 06:52:34'),
+(16, 'sd', 'as dasd asd asd', '2025-08-11 17:52:00', '2025-08-11 18:22:00', NULL, 'primary', '7i6hu9qk5vdd81ecokkc7rkup0', 1, 'green', '2025-08-11 06:52:46', '2025-08-11 06:52:47'),
+(17, 'asd', 'ad asd asd', '2025-08-12 17:57:00', '2025-08-14 17:57:00', 'fsdfsd', 'primary', '3f9h1tqb0hqe8rbc1bepvg4e58', 1, 'blue', '2025-08-11 06:57:34', '2025-08-11 06:57:35'),
+(19, 'admin Schedule a meeting with Hero Test', '<p><strong>asd asd asd asd asdasd</strong></p>\n', '2025-08-12 18:57:00', '2025-08-12 20:57:00', '', NULL, NULL, 1, 'red', '2025-08-11 07:55:36', '2025-08-11 07:55:36'),
+(20, 'admin Schedule a meeting with Hero Test', '<p>asdasdasdasd</p>\n', '2025-08-14 18:58:00', '2025-08-14 20:58:00', '', NULL, NULL, 1, 'yellow', '2025-08-11 07:56:33', '2025-08-11 07:56:33'),
+(21, 'admin Schedule a meeting with Hero Test', '<p>sdf sdfsdfsdfsadf</p>\n', '2025-08-19 18:59:00', '2025-08-19 20:59:00', '', NULL, NULL, 1, 'green', '2025-08-11 07:56:46', '2025-08-11 07:56:46'),
+(22, 'asdas', 'dasdasd', '2025-08-14 09:50:00', '2025-08-15 09:50:00', NULL, NULL, NULL, 1, 'blue', '2025-08-11 22:50:12', '2025-08-11 22:50:12'),
+(23, 'asdasd', 'sadasdasd', '2025-08-13 18:59:00', '2025-08-13 18:59:00', 'asd', 'primary', 'krcliuaqs2j0n60etuig0bdm1o', 1, NULL, '2025-08-13 07:59:38', '2025-08-13 07:59:38');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `migrations`
+--
 
 DROP TABLE IF EXISTS `migrations`;
-CREATE TABLE `migrations` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `migrations` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `migrations`;
+--
+-- Dumping data for table `migrations`
+--
+
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(1,	'0001_01_01_000000_create_users_table',	1),
-(2,	'0001_01_01_000001_create_cache_table',	1),
-(3,	'0001_01_01_000002_create_jobs_table',	1),
-(4,	'2024_03_21_000000_create_module_states_table',	1),
-(5,	'2024_05_06_000001_add_enabled_column_to_module_states_table',	1),
-(6,	'2024_05_07_123206_add_description_to_module_states_table',	1),
-(7,	'2024_05_10_152848_create_saved_filters_table',	1),
-(8,	'2024_08_055341_create_roles_table',	1),
-(9,	'2025_06_06_174540_create_whatsapp_messages_table',	1),
-(10,	'2025_06_06_174550_create_whatsapp_templates_table',	1),
-(11,	'2025_07_25_121858_create_whatsapp_event_templates_table',	1),
-(12,	'2025_08_01_051926_create_admins_table',	1),
-(13,	'2025_08_04_054426_create_countries_table',	1),
-(14,	'2025_08_04_054502_create_currencies_table',	1),
-(15,	'2025_08_04_054542_create_currency_exchange_rates_table',	1),
-(16,	'2025_08_04_101913_create_country_states_table',	1),
-(17,	'2025_08_07_121142_create_settings_table',	1),
-(18,	'2025_08_07_131835_create_lead_statuses_table',	1),
-(19,	'2025_08_07_131836_create_leads_table',	1),
-(20,	'2025_08_07_132100_create_lead_activities_table',	1),
-(21,	'2025_08_07_132154_create_lead_notes_table',	1),
-(22,	'2025_08_07_132217_create_lead_attachments_table',	1),
-(23,	'2025_08_07_132217_create_lead_sources_table',	1),
-(24,	'2025_08_07_132217_create_tags_table',	1),
-(25,	'2025_08_07_132252_add_source_id_to_leads_table',	1),
-(27,	'2025_11_07_131835_create_meetings_table',	2),
-(28,	'2025_11_07_131835_add_google_oauth_fields_to_admins_table',	3),
-(29,	'2025_08_07_131835_create_categories_table',	4),
-(31,	'2025_08_07_131835_create_award_categories_table',	5),
-(35,	'2025_08_07_131835_create_products_table',	7),
-(36,	'2025_08_07_131836_create_category_product_table',	7),
-(37,	'2025_08_07_131835_create_applications_table',	8),
-(38,	'2025_08_13_095100_create_coupons_table',	9),
-(39,	'2025_08_14_111721_create_tax_categories_table',	9),
-(40,	'2025_08_14_113851_create_tax_rates_table',	9),
-(41,	'2025_08_14_123638_create_orders_table',	10),
-(42,	'2025_08_14_123639_create_order_items_table',	10),
-(43,	'2025_08_14_123639_create_statuses_table',	10);
+(1, '0001_01_01_000000_create_users_table', 1),
+(2, '0001_01_01_000001_create_cache_table', 1),
+(3, '0001_01_01_000002_create_jobs_table', 1),
+(4, '2024_03_21_000000_create_module_states_table', 1),
+(5, '2024_05_06_000001_add_enabled_column_to_module_states_table', 1),
+(6, '2024_05_07_123206_add_description_to_module_states_table', 1),
+(7, '2024_05_10_152848_create_saved_filters_table', 1),
+(8, '2024_08_055341_create_roles_table', 1),
+(9, '2025_06_06_174540_create_whatsapp_messages_table', 1),
+(10, '2025_06_06_174550_create_whatsapp_templates_table', 1),
+(11, '2025_07_25_121858_create_whatsapp_event_templates_table', 1),
+(12, '2025_08_01_051926_create_admins_table', 1),
+(13, '2025_08_04_054426_create_countries_table', 1),
+(14, '2025_08_04_054502_create_currencies_table', 1),
+(15, '2025_08_04_054542_create_currency_exchange_rates_table', 1),
+(16, '2025_08_04_101913_create_country_states_table', 1),
+(17, '2025_08_07_121142_create_settings_table', 1),
+(18, '2025_08_07_131835_create_lead_statuses_table', 1),
+(19, '2025_08_07_131836_create_leads_table', 1),
+(20, '2025_08_07_132100_create_lead_activities_table', 1),
+(21, '2025_08_07_132154_create_lead_notes_table', 1),
+(22, '2025_08_07_132217_create_lead_attachments_table', 1),
+(23, '2025_08_07_132217_create_lead_sources_table', 1),
+(24, '2025_08_07_132217_create_tags_table', 1),
+(25, '2025_08_07_132252_add_source_id_to_leads_table', 1),
+(27, '2025_11_07_131835_create_meetings_table', 2),
+(28, '2025_11_07_131835_add_google_oauth_fields_to_admins_table', 3),
+(29, '2025_08_07_131835_create_categories_table', 4),
+(31, '2025_08_07_131835_create_award_categories_table', 5),
+(35, '2025_08_07_131835_create_products_table', 7),
+(36, '2025_08_07_131836_create_category_product_table', 7),
+(38, '2025_08_13_095100_create_coupons_table', 9),
+(41, '2025_08_14_123638_create_orders_table', 10),
+(42, '2025_08_14_123639_create_order_items_table', 10),
+(43, '2025_08_14_123639_create_statuses_table', 10),
+(44, '2025_08_04_054426_create_images_table', 11),
+(45, '2025_08_14_123639_create_transactions_table', 12),
+(46, '2025_08_13_095100_create_discounts_table', 13),
+(47, '2025_08_14_111721_create_tax_categories_table', 14),
+(48, '2025_08_07_131835_create_applications_table', 15),
+(49, '2025_08_17_160116_notification_channels', 16),
+(50, '2025_08_17_160129_email_templates', 16),
+(51, '2025_08_17_160140_notification_events', 17),
+(52, '2025_08_17_160151_notification_mappings', 17);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `module_states`
+--
 
 DROP TABLE IF EXISTS `module_states`;
-CREATE TABLE `module_states` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `version` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1.0.0',
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'disabled',
+CREATE TABLE IF NOT EXISTS `module_states` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `version` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1.0.0',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'disabled',
   `enabled` tinyint(1) NOT NULL DEFAULT '0',
   `applied_migrations` json DEFAULT NULL,
   `failed_migrations` json DEFAULT NULL,
@@ -1457,86 +1813,232 @@ CREATE TABLE `module_states` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `module_states_name_unique` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `module_states`;
+--
+-- Dumping data for table `module_states`
+--
+
 INSERT INTO `module_states` (`id`, `name`, `version`, `description`, `status`, `enabled`, `applied_migrations`, `failed_migrations`, `last_enabled_at`, `last_disabled_at`, `created_at`, `updated_at`) VALUES
-(1,	'Meetings',	'1.0.0',	'Meetings module for the application',	'enabled',	1,	NULL,	NULL,	'2025-08-10 23:01:19',	NULL,	'2025-08-10 23:01:19',	'2025-08-10 23:01:19'),
-(2,	'Catalog',	'1.0.0',	'Catalog module for the application',	'enabled',	1,	NULL,	NULL,	'2025-08-12 05:15:49',	NULL,	'2025-08-12 05:15:49',	'2025-08-12 05:15:49'),
-(3,	'Checkout',	'1.0.0',	'Checkout module for the application',	'enabled',	1,	NULL,	NULL,	'2025-08-14 03:40:03',	NULL,	'2025-08-14 03:40:03',	'2025-08-14 03:40:03'),
-(4,	'Payment',	'1.0.0',	'Payment module for the application',	'enabled',	1,	NULL,	NULL,	'2025-08-14 03:40:23',	NULL,	'2025-08-14 03:40:23',	'2025-08-14 03:40:23'),
-(5,	'Orders',	'1.0.0',	'Orders module for the application',	'enabled',	1,	NULL,	NULL,	'2025-08-14 03:40:47',	NULL,	'2025-08-14 03:40:47',	'2025-08-14 03:40:47');
+(1, 'Meetings', '1.0.0', 'Meetings module for the application', 'enabled', 1, NULL, NULL, '2025-08-10 23:01:19', NULL, '2025-08-10 23:01:19', '2025-08-10 23:01:19'),
+(2, 'Catalog', '1.0.0', 'Catalog module for the application', 'enabled', 1, NULL, NULL, '2025-08-12 05:15:49', NULL, '2025-08-12 05:15:49', '2025-08-12 05:15:49'),
+(3, 'Checkout', '1.0.0', 'Checkout module for the application', 'enabled', 1, NULL, NULL, '2025-08-14 03:40:03', NULL, '2025-08-14 03:40:03', '2025-08-14 03:40:03'),
+(4, 'Payment', '1.0.0', 'Payment module for the application', 'enabled', 1, NULL, NULL, '2025-08-14 03:40:23', NULL, '2025-08-14 03:40:23', '2025-08-14 03:40:23'),
+(5, 'Orders', '1.0.0', 'Orders module for the application', 'enabled', 1, NULL, NULL, '2025-08-14 03:40:47', NULL, '2025-08-14 03:40:47', '2025-08-14 03:40:47'),
+(6, 'Notifications', '1.0.0', 'Notifications module for the application', 'enabled', 1, NULL, NULL, '2025-08-15 07:38:32', NULL, '2025-08-15 07:38:32', '2025-08-15 07:38:32'),
+(7, 'Shop', '1.0.0', 'Shop module for the application', 'enabled', 1, NULL, NULL, '2025-08-15 10:56:48', NULL, '2025-08-15 10:56:48', '2025-08-15 10:56:48'),
+(8, 'Tax', '1.0.0', 'Tax module for the application', 'enabled', 1, NULL, NULL, '2025-08-16 00:55:25', NULL, '2025-08-16 00:55:25', '2025-08-16 00:55:25'),
+(9, 'Discounts', '1.0.0', 'Discounts module for the application', 'enabled', 1, NULL, NULL, '2025-08-16 01:04:08', NULL, '2025-08-16 01:04:08', '2025-08-16 01:04:08'),
+(10, 'EmailNotification', '1.0.0', 'EmailNotification module for the application', 'enabled', 1, NULL, NULL, '2025-08-17 11:21:19', NULL, '2025-08-17 11:21:19', '2025-08-17 11:21:19');
 
-DROP TABLE IF EXISTS `order_items`;
-CREATE TABLE `order_items` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `order_id` bigint unsigned NOT NULL,
-  `product_id` bigint unsigned NOT NULL,
-  `product_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `sku` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `quantity` int NOT NULL,
-  `options` json DEFAULT NULL,
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications_log`
+--
+
+DROP TABLE IF EXISTS `notifications_log`;
+CREATE TABLE IF NOT EXISTS `notifications_log` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `event_id` bigint UNSIGNED NOT NULL,
+  `channel_id` bigint UNSIGNED NOT NULL,
+  `notifiable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notifiable_id` bigint UNSIGNED NOT NULL,
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `error_message` text COLLATE utf8mb4_unicode_ci,
+  `sent_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `order_items_order_id_foreign` (`order_id`),
-  KEY `order_items_product_id_foreign` (`product_id`),
-  CONSTRAINT `order_items_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `order_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `notifications_log_event_id_foreign` (`event_id`),
+  KEY `notifications_log_channel_id_foreign` (`channel_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `order_items`;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notification_channels`
+--
+
+DROP TABLE IF EXISTS `notification_channels`;
+CREATE TABLE IF NOT EXISTS `notification_channels` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `channel_class` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT '1',
+  `config` json DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notification_events`
+--
+
+DROP TABLE IF EXISTS `notification_events`;
+CREATE TABLE IF NOT EXISTS `notification_events` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `event_code` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `event_name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `event_description` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `notification_events_event_code_unique` (`event_code`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `notification_events`
+--
+
+INSERT INTO `notification_events` (`id`, `event_code`, `event_name`, `event_description`, `created_at`, `updated_at`) VALUES
+(1, 'order_created', 'Order Create', 'Order Create notification', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notification_mappings`
+--
+
+DROP TABLE IF EXISTS `notification_mappings`;
+CREATE TABLE IF NOT EXISTS `notification_mappings` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `event_id` bigint UNSIGNED NOT NULL,
+  `channel_id` bigint UNSIGNED NOT NULL,
+  `notify_admin` tinyint(1) NOT NULL DEFAULT '0',
+  `notify_customer` tinyint(1) NOT NULL DEFAULT '0',
+  `email_template_id` bigint UNSIGNED DEFAULT NULL,
+  `custom_config` json DEFAULT NULL,
+  `priority` int NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `notification_mappings_event_id_channel_id_unique` (`event_id`,`channel_id`),
+  KEY `notification_mappings_channel_id_foreign` (`channel_id`),
+  KEY `notification_mappings_email_template_id_foreign` (`email_template_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
 
 DROP TABLE IF EXISTS `orders`;
-CREATE TABLE `orders` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` bigint unsigned NOT NULL,
-  `order_number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `status` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `orders` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `order_number` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `subtotal` decimal(10,2) NOT NULL,
+  `discount` double(10,2) DEFAULT NULL,
   `tax` decimal(10,2) NOT NULL DEFAULT '0.00',
   `shipping` decimal(10,2) NOT NULL DEFAULT '0.00',
   `total` decimal(10,2) NOT NULL,
-  `notes` text COLLATE utf8mb4_unicode_ci,
-  `payment_method` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payment_status` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'unpaid',
-  `shipping_address` json NOT NULL,
-  `billing_address` json NOT NULL,
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `currency` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `coupon_code` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `payment_method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `payment_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT 'unpaid',
+  `shipping_address` json DEFAULT NULL,
+  `billing_address` json DEFAULT NULL,
+  `ip_address` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_agent` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `orders_order_number_unique` (`order_number`),
-  KEY `orders_user_id_foreign` (`user_id`),
-  CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  KEY `orders_user_id_foreign` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `orders`;
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `user_id`, `order_number`, `status`, `subtotal`, `discount`, `tax`, `shipping`, `total`, `notes`, `currency`, `coupon_code`, `payment_method`, `payment_status`, `shipping_address`, `billing_address`, `ip_address`, `user_agent`, `created_at`, `updated_at`) VALUES
+(5, 1, 'LPL20250816-LXRUZ2', 'O', 200.00, 0.00, 0.00, 0.00, 200.00, 'Application submission for lead #2', 'USD', NULL, NULL, 'unpaid', '{\"city\": \"\", \"name\": \"Administrator\", \"email\": \"yash.gupta@rcvtechnologies.com\", \"phone\": \"N/A\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '{\"city\": \"\", \"name\": \"Administrator\", \"email\": \"yash.gupta@rcvtechnologies.com\", \"phone\": \"N/A\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '2025-08-16 06:31:41', '2025-08-16 06:31:41'),
+(6, 5, 'LPL20250816-QGSULG', 'O', 200.00, 0.00, 0.00, 0.00, 200.00, 'Application submission for lead #5', 'USD', NULL, NULL, 'unpaid', '{\"city\": \"\", \"name\": \"Sagar\", \"email\": \"harshit@gmail.com\", \"phone\": \"N/A\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '{\"city\": \"\", \"name\": \"Sagar\", \"email\": \"harshit@gmail.com\", \"phone\": \"N/A\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '2025-08-16 06:43:16', '2025-08-16 06:43:16'),
+(7, 5, 'LPL20250816-EXMFDD', 'O', 200.00, 0.00, 0.00, 0.00, 200.00, 'Application submission for lead #5', 'USD', NULL, NULL, 'unpaid', '{\"city\": \"\", \"name\": \"Sagar\", \"email\": \"harshit@gmail.com\", \"phone\": \"N/A\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '{\"city\": \"\", \"name\": \"Sagar\", \"email\": \"harshit@gmail.com\", \"phone\": \"N/A\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '2025-08-16 06:43:50', '2025-08-16 06:43:50'),
+(8, 1, 'LPL20250816-TDCRWQ', 'O', 200.00, 0.00, 0.00, 0.00, 200.00, 'Application submission for lead #2', 'USD', NULL, NULL, 'unpaid', '{\"city\": \"\", \"name\": \"Administrator\", \"email\": \"yash.gupta@rcvtechnologies.com\", \"phone\": \"N/A\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '{\"city\": \"\", \"name\": \"Administrator\", \"email\": \"yash.gupta@rcvtechnologies.com\", \"phone\": \"N/A\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '2025-08-16 06:44:09', '2025-08-16 06:44:09'),
+(9, 1, 'LPL20250816-VAX8E9', 'O', 200.00, 0.00, 0.00, 0.00, 200.00, 'Application submission for lead #2', 'USD', NULL, NULL, 'unpaid', '{\"city\": \"\", \"name\": \"Administrator\", \"email\": \"yash.gupta@rcvtechnologies.com\", \"phone\": \"N/A\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '{\"city\": \"\", \"name\": \"Administrator\", \"email\": \"yash.gupta@rcvtechnologies.com\", \"phone\": \"N/A\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '2025-08-16 06:44:22', '2025-08-16 06:44:22'),
+(10, 6, 'LPL20250816-BEBEKD', 'O', 200.00, 0.00, 0.00, 0.00, 200.00, 'Application submission for lead #4', 'USD', NULL, NULL, 'unpaid', '{\"city\": \"\", \"name\": \"Hero Test\", \"email\": \"yash121999@gmail.com\", \"phone\": \"8447441246\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '{\"city\": \"\", \"name\": \"Hero Test\", \"email\": \"yash121999@gmail.com\", \"phone\": \"8447441246\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '2025-08-16 06:44:34', '2025-08-16 06:44:34'),
+(11, 1, 'LPL20250817-YTMRRM', 'O', 200.00, 0.00, 0.00, 0.00, 200.00, 'Application submission for lead #2', 'USD', NULL, NULL, 'unpaid', '{\"city\": \"\", \"name\": \"Administrator\", \"email\": \"yash.gupta@rcvtechnologies.com\", \"phone\": \"N/A\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '{\"city\": \"\", \"name\": \"Administrator\", \"email\": \"yash.gupta@rcvtechnologies.com\", \"phone\": \"N/A\", \"state\": \"\", \"country\": \"\", \"postcode\": \"\", \"address_1\": \"\"}', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '2025-08-17 11:50:13', '2025-08-17 11:50:13');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_items`
+--
+
+DROP TABLE IF EXISTS `order_items`;
+CREATE TABLE IF NOT EXISTS `order_items` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `order_id` bigint UNSIGNED NOT NULL,
+  `product_id` bigint UNSIGNED NOT NULL,
+  `product_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sku` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `quantity` int NOT NULL,
+  `options` json DEFAULT NULL,
+  `tax_rate` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `order_items_order_id_foreign` (`order_id`),
+  KEY `order_items_product_id_foreign` (`product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `product_name`, `sku`, `price`, `quantity`, `options`, `tax_rate`, `created_at`, `updated_at`) VALUES
+(4, 5, 1, 'sadsadsadasd', NULL, 200.00, 1, '[]', '0', '2025-08-16 06:31:41', '2025-08-16 06:31:41'),
+(5, 6, 1, 'sadsadsadasd', NULL, 200.00, 1, '[]', '0', '2025-08-16 06:43:16', '2025-08-16 06:43:16'),
+(6, 7, 1, 'sadsadsadasd', NULL, 200.00, 1, '[]', '0', '2025-08-16 06:43:50', '2025-08-16 06:43:50'),
+(7, 8, 1, 'sadsadsadasd', NULL, 200.00, 1, '[]', '0', '2025-08-16 06:44:09', '2025-08-16 06:44:09'),
+(8, 9, 1, 'sadsadsadasd', NULL, 200.00, 1, '[]', '0', '2025-08-16 06:44:22', '2025-08-16 06:44:22'),
+(9, 10, 1, 'sadsadsadasd', NULL, 200.00, 1, '[]', '0', '2025-08-16 06:44:34', '2025-08-16 06:44:34'),
+(10, 11, 1, 'sadsadsadasd', NULL, 200.00, 1, '[]', '0', '2025-08-17 11:50:13', '2025-08-17 11:50:13');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `password_reset_tokens`
+--
 
 DROP TABLE IF EXISTS `password_reset_tokens`;
-CREATE TABLE `password_reset_tokens` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `password_reset_tokens`;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `products`
+--
 
 DROP TABLE IF EXISTS `products`;
-CREATE TABLE `products` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `slug` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci,
+CREATE TABLE IF NOT EXISTS `products` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `price` decimal(10,2) NOT NULL,
   `sale_price` decimal(10,2) DEFAULT NULL,
-  `sku` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `track_stock` varchar(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N',
+  `sku` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `track_stock` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'N',
   `stock_quantity` int NOT NULL DEFAULT '0',
-  `stock_status` enum('in_stock','out_of_stock','backorder') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'in_stock',
-  `status` enum('draft','hidden','active') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
+  `stock_status` enum('in_stock','out_of_stock','backorder') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'in_stock',
+  `status` enum('draft','hidden','active') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'draft',
   `is_featured` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -1545,224 +2047,411 @@ CREATE TABLE `products` (
   UNIQUE KEY `products_sku_unique` (`sku`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `products`;
+--
+-- Dumping data for table `products`
+--
+
 INSERT INTO `products` (`id`, `name`, `slug`, `description`, `price`, `sale_price`, `sku`, `image`, `track_stock`, `stock_quantity`, `stock_status`, `status`, `is_featured`, `created_at`, `updated_at`) VALUES
-(1,	'sadsadsadasd',	'sadsadsadasd',	'<p>asdasd</p>',	200.00,	100.00,	NULL,	NULL,	'1',	0,	'in_stock',	'draft',	0,	'2025-08-14 04:23:18',	'2025-08-14 04:23:18'),
-(2,	'asdasdasdasda',	'asdasdasdasda',	'<p>sadasd</p>',	500.00,	100.00,	'asdas',	'products/NYsh5ICGlKNo6hb8rfVeeIKvilkpEhwyhSMnfZ7U.png',	'N',	0,	'in_stock',	'draft',	0,	'2025-08-14 04:33:36',	'2025-08-14 04:34:37');
+(1, 'sadsadsadasd', 'sadsadsadasd', '<p>asdasd</p>', 200.00, 100.00, NULL, NULL, 'N', 0, 'in_stock', 'hidden', 0, '2025-08-14 04:23:18', '2025-08-16 06:17:54'),
+(2, 'asdasdasdasda', 'asdasdasdasda', '<p>sadasd</p>', 500.00, 100.00, 'asdas', 'products/NYsh5ICGlKNo6hb8rfVeeIKvilkpEhwyhSMnfZ7U.png', 'N', 0, 'in_stock', 'hidden', 0, '2025-08-14 04:33:36', '2025-08-15 11:32:52');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `roles`
+--
 
 DROP TABLE IF EXISTS `roles`;
-CREATE TABLE `roles` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `permission_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `roles` (
+  `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `permission_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `permissions` json DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `roles`;
+--
+-- Dumping data for table `roles`
+--
+
 INSERT INTO `roles` (`id`, `name`, `description`, `permission_type`, `permissions`, `created_at`, `updated_at`) VALUES
-(2,	'Manager',	'Manager access',	'all',	NULL,	'2025-08-10 22:45:54',	'2025-08-10 22:45:54'),
-(3,	'E-Mail Markiting',	'E-Mail Markiting access',	'all',	NULL,	'2025-08-10 22:45:54',	'2025-08-10 22:45:54'),
-(4,	'Staff',	'Staff access',	'custom',	'[\"admin.index\", \"admin.customers.index\", \"admin.meetings.index\", \"admin.meetings.show\", \"admin.meetings.list\", \"admin.meetings.create\", \"admin.meetings.store\", \"admin.meetings.new-meeting\", \"admin.meetings.google.oauth\", \"admin.meetings.google.callback\", \"admin.meetings.sync\", \"admin.meetings.share-calander\", \"admin.meetings.my-meeting\", \"admin.leads.index\", \"admin.leads.show\", \"admin.leads.details\", \"admin.leads.update-status\", \"admin.leads.activities.store\", \"admin.leads.attachments.store\", \"admin.leads.attachments.download\", \"admin.leads.notes.store\", \"admin.application.index\", \"admin.application.show\", \"admin.application.create\", \"admin.application.store\", \"admin.application.edit\", \"admin.application.update\", \"admin.application.destroy\", \"admin.application.send_application\", \"admin.whatsapp.index\", \"admin.whatsapp.templates.sync\"]',	'2025-08-10 22:45:54',	'2025-08-14 04:38:34'),
-(12,	'Sales',	'Sales access',	'all',	NULL,	'2025-08-10 22:46:09',	'2025-08-12 22:31:51'),
-(13,	'Administrator',	'Administrator access',	'all',	NULL,	'2025-08-10 22:47:16',	'2025-08-10 22:47:16');
+(2, 'Manager', 'Manager access', 'all', NULL, '2025-08-10 22:45:54', '2025-08-10 22:45:54'),
+(3, 'E-Mail Markiting', 'E-Mail Markiting access', 'all', NULL, '2025-08-10 22:45:54', '2025-08-10 22:45:54'),
+(4, 'Staff', 'Staff access', 'custom', '[\"admin.index\", \"admin.customers.index\", \"admin.meetings.index\", \"admin.meetings.show\", \"admin.meetings.list\", \"admin.meetings.create\", \"admin.meetings.store\", \"admin.meetings.new-meeting\", \"admin.meetings.google.oauth\", \"admin.meetings.google.callback\", \"admin.meetings.sync\", \"admin.meetings.share-calander\", \"admin.meetings.my-meeting\", \"admin.leads.index\", \"admin.leads.show\", \"admin.leads.details\", \"admin.leads.update-status\", \"admin.leads.activities.store\", \"admin.leads.attachments.store\", \"admin.leads.attachments.download\", \"admin.leads.notes.store\", \"admin.application.index\", \"admin.application.show\", \"admin.application.create\", \"admin.application.store\", \"admin.application.edit\", \"admin.application.update\", \"admin.application.destroy\", \"admin.application.send_application\", \"admin.whatsapp.index\", \"admin.whatsapp.templates.sync\"]', '2025-08-10 22:45:54', '2025-08-14 04:38:34'),
+(12, 'Sales', 'Sales access', 'all', NULL, '2025-08-10 22:46:09', '2025-08-12 22:31:51'),
+(13, 'Administrator', 'Administrator access', 'all', NULL, '2025-08-10 22:47:16', '2025-08-10 22:47:16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sessions`
+--
 
 DROP TABLE IF EXISTS `sessions`;
-CREATE TABLE `sessions` (
-  `id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_id` bigint unsigned DEFAULT NULL,
-  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `user_agent` text COLLATE utf8mb4_unicode_ci,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `sessions` (
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` bigint UNSIGNED DEFAULT NULL,
+  `ip_address` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `user_agent` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `last_activity` int NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sessions_user_id_index` (`user_id`),
   KEY `sessions_last_activity_index` (`last_activity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `sessions`;
+--
+-- Dumping data for table `sessions`
+--
+
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('aDEzEgGpTKVb4DLzaOhB8FJJLXNt6HuNgnWXtIZP',	NULL,	'127.0.0.1',	'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:141.0) Gecko/20100101 Firefox/141.0',	'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiM1lBNGRLazJLUlNtR2VObkxoUjk3aXNWaHFYMHQxcmpxQkNJZlNzWiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMS9hZG1pbi9zZXR0aW5ncy9zdGF0dXNlcy9sZWFkcyI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTI6ImxvZ2luX2FkbWluXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6Mjt9',	1755176291),
-('E0If8C4ZVqbETU2IYkEVU3d72XRf0PVLgTu61p5o',	NULL,	'127.0.0.1',	'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',	'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiVzg2S0lDd2ZaODY2TzRwRExuVUZwV3pDVEdaclZ3NVI0d1dMN3NnMiI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMS9hZG1pbi9kZXRhaWxzLzIiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUyOiJsb2dpbl9hZG1pbl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjE7fQ==',	1755176282);
+('CrQ43mQeh1S1px0hcY14DTnlEg5Kui2Nsa8kdvde', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiNVZNTXNLcG9McUhxSFVvT2dacWl2dlAyTDJuUWlJMHc4Z3BNalpZTSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NTg6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMC9hZG1pbi9hcHBsaWNhdGlvbi9zZW5kX2FwcGxpY2F0aW9uLzIiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUyOiJsb2dpbl9hZG1pbl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjI7fQ==', 1755451416);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `settings`
+--
 
 DROP TABLE IF EXISTS `settings`;
-CREATE TABLE `settings` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `value` longtext COLLATE utf8mb4_unicode_ci,
+CREATE TABLE IF NOT EXISTS `settings` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `settings_key_unique` (`key`),
   KEY `settings_key_index` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `settings`;
+--
+-- Dumping data for table `settings`
+--
+
 INSERT INTO `settings` (`id`, `key`, `value`, `created_at`, `updated_at`) VALUES
-(1,	'general.settings.default_lead_status',	'1',	NULL,	NULL),
-(2,	'general.settings.lead_assigned_user',	'2',	NULL,	NULL),
-(3,	'general.settings.default_currency',	'USD',	NULL,	NULL),
-(4,	'general.settings.whatsapp.access_token',	'EAANFZAOdPIK0BO6fZBOT7qD5tVx4GGDvKInFmeUaZAIP2GwRh4QgxJGDpPmkZCZAjGsUckBtJP0ehWmUDZCH976jso3TQYkp1ZCq5PUGoABwZBMrzdVuEI6dcP9lvf7BdSd1P8mBTyQAkbAMD6udjMpJMfsodZCWnDcfqWeAygzYpftdwdbzRmBGi1VA6tm22ZCmBmq1Q8MSoZD',	NULL,	NULL),
-(5,	'general.settings.whatsapp.phone_number',	'620724541133590',	NULL,	NULL),
-(6,	'general.settings.whatsapp.business_account_id',	'3587803424690704',	NULL,	NULL),
-(7,	'general.settings.editor.tiny_api_key',	'g6r56tncmnbo4haibzen0nvnz6bsu6ruxxa328uan6ld24c2',	NULL,	NULL),
-(8,	'general.settings.google.app_name',	'LoopLynks',	NULL,	NULL),
-(9,	'general.settings.google.client_id',	'715585719224-uus60a67n1a5nuk02bnpfsshijkf4k68.apps.googleusercontent.com',	NULL,	NULL),
-(10,	'general.settings.google.client_secret',	'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',	NULL,	NULL),
-(11,	'general.settings.google.redirect',	'http://127.0.0.1:8001/admin/meetings/google/callback',	NULL,	NULL),
-(12,	'general.settings.google.access_token',	'ya29.a0AS3H6NzkZTGVLHcjV0LQo65cSkNXfrh1ddtg2V4vv3EfcKmxNKrXobR3TCylCT6xdH8Da7S81roBbcxLltN9dehZ0AEU0w1SRJHY4-tZAhqZrDnYogXstbv_HSeqGZUly9c0rcoLpM3Gl6NJxPCi5KzCAddRaUjomY3wJeMq1AaCgYKAW8SARYSFQHGX2MiEjnVmLsDtEWdZUlpPm3SbQ0177',	'2025-08-11 04:23:26',	'2025-08-11 22:29:06'),
-(13,	'general.settings.google.refresh_token',	'1//0gfoH9Vs5ytxICgYIARAAGBASNwF-L9IrEaOLTpJrYKT9gTFv7_CXUQm1HUEp-Thvyzwo_CemWzf11rChjCNlOKdkLZPYI8HGmaI',	'2025-08-11 04:23:26',	'2025-08-11 04:23:26'),
-(14,	'general.settings.google.expires_in',	'3599',	'2025-08-11 04:23:26',	'2025-08-11 04:23:26'),
-(15,	'general.settings.google.token_type',	'Bearer',	'2025-08-11 04:23:26',	'2025-08-11 04:23:26'),
-(16,	'general.settings.google.timestamp',	'2025-08-12 04:59:05',	'2025-08-11 04:23:26',	'2025-08-11 22:29:06'),
-(17,	'general.settings.timezone',	'UTC',	'2025-08-11 04:23:26',	'2025-08-11 04:23:26'),
-(18,	'general.settings.store_name',	'LoopLynks',	NULL,	NULL),
-(19,	'general.settings.default_meeting_gap',	'10',	NULL,	NULL),
-(20,	'general.settings.default_meeting_color',	'blue',	NULL,	NULL),
-(21,	'general.settings.default_application_product',	'1',	NULL,	NULL);
+(1, 'general.settings.default_lead_status', '1', NULL, NULL),
+(2, 'general.settings.lead_assigned_user', '2', NULL, NULL),
+(3, 'general.settings.default_currency', 'USD', NULL, NULL),
+(4, 'general.settings.whatsapp.access_token', 'EAANFZAOdPIK0BO6fZBOT7qD5tVx4GGDvKInFmeUaZAIP2GwRh4QgxJGDpPmkZCZAjGsUckBtJP0ehWmUDZCH976jso3TQYkp1ZCq5PUGoABwZBMrzdVuEI6dcP9lvf7BdSd1P8mBTyQAkbAMD6udjMpJMfsodZCWnDcfqWeAygzYpftdwdbzRmBGi1VA6tm22ZCmBmq1Q8MSoZD', NULL, NULL),
+(5, 'general.settings.whatsapp.phone_number', '620724541133590', NULL, NULL),
+(6, 'general.settings.whatsapp.business_account_id', '3587803424690704', NULL, NULL),
+(7, 'general.settings.editor.tiny_api_key', 'g6r56tncmnbo4haibzen0nvnz6bsu6ruxxa328uan6ld24c2', NULL, NULL),
+(8, 'general.settings.google.app_name', 'LoopLynks', NULL, NULL),
+(9, 'general.settings.google.client_id', '715585719224-uus60a67n1a5nuk02bnpfsshijkf4k68.apps.googleusercontent.com', NULL, NULL),
+(10, 'general.settings.google.client_secret', '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', NULL, NULL),
+(11, 'general.settings.google.redirect', 'http://127.0.0.1:8001/admin/meetings/google/callback', NULL, NULL),
+(12, 'general.settings.google.access_token', 'ya29.a0AS3H6NzkZTGVLHcjV0LQo65cSkNXfrh1ddtg2V4vv3EfcKmxNKrXobR3TCylCT6xdH8Da7S81roBbcxLltN9dehZ0AEU0w1SRJHY4-tZAhqZrDnYogXstbv_HSeqGZUly9c0rcoLpM3Gl6NJxPCi5KzCAddRaUjomY3wJeMq1AaCgYKAW8SARYSFQHGX2MiEjnVmLsDtEWdZUlpPm3SbQ0177', '2025-08-11 04:23:26', '2025-08-11 22:29:06'),
+(13, 'general.settings.google.refresh_token', '1//0gfoH9Vs5ytxICgYIARAAGBASNwF-L9IrEaOLTpJrYKT9gTFv7_CXUQm1HUEp-Thvyzwo_CemWzf11rChjCNlOKdkLZPYI8HGmaI', '2025-08-11 04:23:26', '2025-08-11 04:23:26'),
+(14, 'general.settings.google.expires_in', '3599', '2025-08-11 04:23:26', '2025-08-11 04:23:26'),
+(15, 'general.settings.google.token_type', 'Bearer', '2025-08-11 04:23:26', '2025-08-11 04:23:26'),
+(16, 'general.settings.google.timestamp', '2025-08-12 04:59:05', '2025-08-11 04:23:26', '2025-08-11 22:29:06'),
+(17, 'general.settings.timezone', 'UTC', '2025-08-11 04:23:26', '2025-08-11 04:23:26'),
+(18, 'general.settings.store_name', 'LoopLynks', NULL, NULL),
+(19, 'general.settings.default_meeting_gap', '10', NULL, NULL),
+(20, 'general.settings.default_meeting_color', 'blue', NULL, NULL),
+(21, 'general.settings.default_application_product', '1', NULL, NULL),
+(22, 'general.settings.default_admin_pagination_per_page', '10', NULL, NULL),
+(23, 'general.orders.order_number_prefix', 'LPL', NULL, NULL),
+(24, 'general.orders.order_number_suffix', '', NULL, NULL),
+(25, 'general.tax.tax_shipping', '', NULL, NULL),
+(26, 'general.tax.shipping_tax_class', '', NULL, NULL),
+(27, 'general.tax.use_shipping_address_for_tax', 'N', NULL, NULL),
+(28, 'general.checkout.is_required_shipping_address', 'N', NULL, NULL),
+(29, 'general.checkout.default_order_status', 'O', NULL, NULL),
+(30, 'general.checkout.default_complete_order_status', 'J', NULL, NULL),
+(31, 'general.checkout.default_cancelled_order_status', 'N', NULL, NULL),
+(32, 'general.checkout.default_failed_order_status', 'L', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `statuses`
+--
 
 DROP TABLE IF EXISTS `statuses`;
-CREATE TABLE `statuses` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `type_code` char(1) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'O = Order, S = Shipping',
-  `status_code` char(1) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'P = Pending/Picked, C = Completed',
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `statuses` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `type_code` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'O = Order, S = Shipping',
+  `status_code` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'P = Pending/Picked, C = Completed',
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `statuses`;
+--
+-- Dumping data for table `statuses`
+--
+
 INSERT INTO `statuses` (`id`, `type_code`, `status_code`, `name`, `created_at`, `updated_at`) VALUES
-(1,	'O',	'O',	'New',	NULL,	NULL),
-(2,	'O',	'P',	'Pending',	NULL,	NULL),
-(3,	'O',	'A',	'Processing',	NULL,	NULL),
-(4,	'O',	'J',	'Completed',	NULL,	NULL),
-(5,	'O',	'N',	'Cancelled',	NULL,	NULL),
-(6,	'O',	'R',	'Returned',	NULL,	NULL),
-(7,	'S',	'P',	'Picked',	NULL,	NULL),
-(8,	'S',	'K',	'Packed',	NULL,	NULL),
-(9,	'S',	'S',	'Shipped',	NULL,	NULL),
-(10,	'S',	'D',	'Delivered',	NULL,	NULL),
-(11,	'S',	'R',	'Returned to Sender',	NULL,	NULL);
+(1, 'O', 'O', 'New', NULL, NULL),
+(2, 'O', 'P', 'Pending', NULL, NULL),
+(3, 'O', 'A', 'Processing', NULL, NULL),
+(4, 'O', 'J', 'Completed', NULL, NULL),
+(5, 'O', 'N', 'Cancelled', NULL, NULL),
+(6, 'O', 'R', 'Returned', NULL, NULL),
+(7, 'S', 'P', 'Picked', NULL, NULL),
+(8, 'S', 'K', 'Packed', NULL, NULL),
+(9, 'S', 'S', 'Shipped', NULL, NULL),
+(10, 'S', 'D', 'Delivered', NULL, NULL),
+(11, 'S', 'R', 'Returned to Sender', NULL, NULL),
+(12, 'O', 'N', 'Incomplete', NULL, NULL),
+(13, 'O', 'L', 'Failed', NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `taggables`
+--
 
 DROP TABLE IF EXISTS `taggables`;
-CREATE TABLE `taggables` (
-  `tag_id` bigint unsigned NOT NULL,
-  `taggable_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `taggable_id` bigint unsigned NOT NULL,
+CREATE TABLE IF NOT EXISTS `taggables` (
+  `tag_id` bigint UNSIGNED NOT NULL,
+  `taggable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `taggable_id` bigint UNSIGNED NOT NULL,
   UNIQUE KEY `taggables_tag_id_taggable_id_taggable_type_unique` (`tag_id`,`taggable_id`,`taggable_type`),
-  KEY `taggables_taggable_type_taggable_id_index` (`taggable_type`,`taggable_id`),
-  CONSTRAINT `taggables_tag_id_foreign` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE
+  KEY `taggables_taggable_type_taggable_id_index` (`taggable_type`,`taggable_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `taggables`;
+--
+-- Dumping data for table `taggables`
+--
+
 INSERT INTO `taggables` (`tag_id`, `taggable_type`, `taggable_id`) VALUES
-(1,	'Modules\\Leads\\Models\\LeadModel',	1),
-(1,	'Modules\\Leads\\Models\\LeadModel',	2),
-(2,	'Modules\\Leads\\Models\\LeadModel',	2),
-(3,	'Modules\\Leads\\Models\\LeadModel',	2),
-(4,	'Modules\\Leads\\Models\\LeadModel',	2),
-(5,	'Modules\\Leads\\Models\\LeadModel',	2),
-(1,	'Modules\\Leads\\Models\\LeadModel',	4),
-(2,	'Modules\\Leads\\Models\\LeadModel',	4),
-(3,	'Modules\\Leads\\Models\\LeadModel',	4),
-(4,	'Modules\\Leads\\Models\\LeadModel',	4),
-(5,	'Modules\\Leads\\Models\\LeadModel',	4);
+(1, 'Modules\\Leads\\Models\\LeadModel', 1),
+(1, 'Modules\\Leads\\Models\\LeadModel', 2),
+(2, 'Modules\\Leads\\Models\\LeadModel', 2),
+(3, 'Modules\\Leads\\Models\\LeadModel', 2),
+(4, 'Modules\\Leads\\Models\\LeadModel', 2),
+(5, 'Modules\\Leads\\Models\\LeadModel', 2),
+(1, 'Modules\\Leads\\Models\\LeadModel', 4),
+(2, 'Modules\\Leads\\Models\\LeadModel', 4),
+(3, 'Modules\\Leads\\Models\\LeadModel', 4),
+(4, 'Modules\\Leads\\Models\\LeadModel', 4),
+(5, 'Modules\\Leads\\Models\\LeadModel', 4),
+(3, 'Modules\\Leads\\Models\\LeadModel', 5);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tags`
+--
 
 DROP TABLE IF EXISTS `tags`;
-CREATE TABLE `tags` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `color` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE IF NOT EXISTS `tags` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `color` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `tags`;
+--
+-- Dumping data for table `tags`
+--
+
 INSERT INTO `tags` (`id`, `name`, `color`, `created_at`, `updated_at`) VALUES
-(1,	'Hot',	'yellow',	'2025-08-10 22:55:26',	'2025-08-10 22:55:26'),
-(2,	'New',	'blue',	'2025-08-10 22:55:47',	'2025-08-10 22:55:47'),
-(3,	'Important',	'orange',	'2025-08-10 22:55:47',	'2025-08-10 22:55:47'),
-(4,	'Premniure',	'purple',	'2025-08-10 22:55:47',	'2025-08-10 22:55:47'),
-(5,	'Urgent',	'red',	'2025-08-10 22:55:47',	'2025-08-10 22:55:47');
+(1, 'Hot', 'yellow', '2025-08-10 22:55:26', '2025-08-10 22:55:26'),
+(2, 'New', 'blue', '2025-08-10 22:55:47', '2025-08-10 22:55:47'),
+(3, 'Important', 'orange', '2025-08-10 22:55:47', '2025-08-10 22:55:47'),
+(4, 'Premniure', 'purple', '2025-08-10 22:55:47', '2025-08-10 22:55:47'),
+(5, 'Urgent', 'red', '2025-08-10 22:55:47', '2025-08-10 22:55:47');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tax_categories`
+--
 
 DROP TABLE IF EXISTS `tax_categories`;
-CREATE TABLE `tax_categories` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS `tax_categories` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `priority` int NOT NULL,
-  `status` tinyint(1) NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `priority` int NOT NULL DEFAULT '0',
+  `status` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `tax_categories`;
+--
+-- Dumping data for table `tax_categories`
+--
+
+INSERT INTO `tax_categories` (`id`, `name`, `description`, `priority`, `status`, `created_at`, `updated_at`) VALUES
+(2, 'Reduced', NULL, 2, 1, '2025-08-16 04:54:36', '2025-08-16 04:54:36'),
+(3, 'asdasdsad as', NULL, 0, 1, '2025-08-17 00:05:00', '2025-08-17 00:05:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tax_rates`
+--
 
 DROP TABLE IF EXISTS `tax_rates`;
-CREATE TABLE `tax_rates` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `rate_value` int NOT NULL,
-  `type` int NOT NULL,
-  `country_id` int NOT NULL,
+CREATE TABLE IF NOT EXISTS `tax_rates` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `rate_value` decimal(10,4) NOT NULL,
+  `type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country_id` bigint UNSIGNED NOT NULL,
+  `state` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `postcode` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `city` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
+  `priority` int NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  PRIMARY KEY (`id`),
+  KEY `tax_rates_country_id_foreign` (`country_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `tax_rates`;
+--
+-- Dumping data for table `tax_rates`
+--
+
+INSERT INTO `tax_rates` (`id`, `name`, `rate_value`, `type`, `country_id`, `state`, `postcode`, `city`, `is_active`, `priority`, `created_at`, `updated_at`) VALUES
+(1, 'US Standard Rate', 7.2500, 'P', 244, NULL, NULL, NULL, 1, 1, '2025-08-16 04:54:36', '2025-08-16 04:54:36'),
+(2, 'California Rate', 7.2500, 'P', 244, 'CA', NULL, NULL, 1, 2, '2025-08-16 04:54:36', '2025-08-16 04:54:36'),
+(3, 'UK VAT Standard', 20.0000, 'P', 242, NULL, NULL, NULL, 1, 1, '2025-08-16 04:54:36', '2025-08-16 04:54:36'),
+(4, 'UK VAT Reduced', 5.0000, 'P', 242, NULL, NULL, NULL, 1, 2, '2025-08-16 04:54:36', '2025-08-16 04:54:36');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tax_rules`
+--
+
+DROP TABLE IF EXISTS `tax_rules`;
+CREATE TABLE IF NOT EXISTS `tax_rules` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `tax_category_id` bigint UNSIGNED NOT NULL,
+  `tax_rate_id` bigint UNSIGNED NOT NULL,
+  `priority` int NOT NULL DEFAULT '0',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tax_rules_tax_category_id_foreign` (`tax_category_id`),
+  KEY `tax_rules_tax_rate_id_foreign` (`tax_rate_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tax_rules`
+--
+
+INSERT INTO `tax_rules` (`id`, `tax_category_id`, `tax_rate_id`, `priority`, `created_at`, `updated_at`) VALUES
+(1, 1, 1, 1, NULL, NULL),
+(2, 1, 2, 2, NULL, NULL),
+(3, 1, 3, 1, NULL, NULL),
+(4, 2, 4, 1, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transactions`
+--
+
+DROP TABLE IF EXISTS `transactions`;
+CREATE TABLE IF NOT EXISTS `transactions` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `order_id` bigint UNSIGNED NOT NULL,
+  `payment_id` bigint UNSIGNED DEFAULT NULL,
+  `transaction_number` varchar(109) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `balance` decimal(10,2) NOT NULL COMMENT 'Running balance after this transaction',
+  `currency` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `processed_at` datetime DEFAULT NULL,
+  `processed_by` bigint UNSIGNED DEFAULT NULL,
+  `gateway_reference` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'Gateway transaction ID',
+  `metadata` json DEFAULT NULL,
+  `notes` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `deleted_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `transactions_transaction_number_unique` (`transaction_number`),
+  KEY `transactions_order_id_foreign` (`order_id`),
+  KEY `transactions_payment_id_foreign` (`payment_id`),
+  KEY `transactions_transaction_number_index` (`transaction_number`),
+  KEY `transactions_type_index` (`type`),
+  KEY `transactions_status_index` (`status`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
 
 DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `users`;
+--
+-- Dumping data for table `users`
+--
+
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1,	'Administrator',	'yash.gupta@rcvtechnologies.com',	NULL,	'$2y$12$BOBCU93a1tq6WGafdGTeXuVHZrlymaLPa/0K3P/Bo9ootW3aq8XYO',	NULL,	'2025-08-14 05:26:29',	'2025-08-14 05:27:49');
+(1, 'Administrator', 'yash.gupta@rcvtechnologies.com', NULL, '$2y$12$BOBCU93a1tq6WGafdGTeXuVHZrlymaLPa/0K3P/Bo9ootW3aq8XYO', NULL, '2025-08-14 05:26:29', '2025-08-14 05:27:49'),
+(5, 'Sagar', 'harshit@gmail.com', NULL, '$2y$12$NBNVLjS04DvwxZ5tvtfRuOTbvke18u3SvApp1pxMN4gvEHc43pcsC', NULL, '2025-08-16 06:43:16', '2025-08-16 06:43:16'),
+(6, 'Hero Test', 'yash121999@gmail.com', NULL, '$2y$12$jsdQji4TWa/3Kx3PMvZ9gOgbw4pVLsb85//9duCq6Ateol8CgXKxS', NULL, '2025-08-16 06:44:34', '2025-08-16 06:44:34');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `whatsapp_event_templates`
+--
 
 DROP TABLE IF EXISTS `whatsapp_event_templates`;
-CREATE TABLE `whatsapp_event_templates` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `event_key` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Unique key representing an application event (e.g., user_created, agency_logged_in)',
-  `template_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'The name of the WhatsApp template to use for this event',
+CREATE TABLE IF NOT EXISTS `whatsapp_event_templates` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `event_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Unique key representing an application event (e.g., user_created, agency_logged_in)',
+  `template_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'The name of the WhatsApp template to use for this event',
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `whatsapp_event_templates_event_key_unique` (`event_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `whatsapp_event_templates`;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `whatsapp_messages`
+--
 
 DROP TABLE IF EXISTS `whatsapp_messages`;
-CREATE TABLE `whatsapp_messages` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `recipient_phone` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `recipient_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `message_type` enum('text','template','image','document') COLLATE utf8mb4_unicode_ci NOT NULL,
-  `message_content` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `template_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE IF NOT EXISTS `whatsapp_messages` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `recipient_phone` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `recipient_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `message_type` enum('text','template','image','document') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `template_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `template_parameters` json DEFAULT NULL,
-  `media_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `media_caption` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` enum('pending','sent','delivered','read','failed') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
-  `whatsapp_message_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `media_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `media_caption` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('pending','sent','delivered','read','failed') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `whatsapp_message_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `api_response` json DEFAULT NULL,
-  `error_message` text COLLATE utf8mb4_unicode_ci,
+  `error_message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `sent_at` timestamp NULL DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
@@ -1771,51 +2460,139 @@ CREATE TABLE `whatsapp_messages` (
   KEY `whatsapp_messages_status_index` (`status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `whatsapp_messages`;
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `whatsapp_templates`
+--
 
 DROP TABLE IF EXISTS `whatsapp_templates`;
-CREATE TABLE `whatsapp_templates` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `category` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `language` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `header_text` text COLLATE utf8mb4_unicode_ci,
-  `header_type` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `body_text` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `footer_text` text COLLATE utf8mb4_unicode_ci,
-  `header_image_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `header_video_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `header_document_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+CREATE TABLE IF NOT EXISTS `whatsapp_templates` (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `language` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `header_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `header_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `body_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `footer_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `header_image_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `header_video_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `header_document_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `body_examples` json DEFAULT NULL,
   `buttons` json DEFAULT NULL,
-  `status` enum('pending','approved','rejected','in_appeal') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
-  `template_id` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` enum('pending','approved','rejected','in_appeal') CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'pending',
+  `template_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `api_response` json DEFAULT NULL,
-  `rejection_reason` text COLLATE utf8mb4_unicode_ci,
+  `rejection_reason` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `whatsapp_templates_name_unique` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-TRUNCATE `whatsapp_templates`;
-INSERT INTO `whatsapp_templates` (`id`, `name`, `category`, `language`, `header_text`, `header_type`, `body_text`, `footer_text`, `header_image_url`, `header_video_url`, `header_document_url`, `body_examples`, `buttons`, `status`, `template_id`, `api_response`, `rejection_reason`, `created_at`, `updated_at`) VALUES
-(1,	'test',	'marketing',	'en_US',	'Test HI',	'text',	'rreregreae',	'eweaaearegrge',	NULL,	NULL,	NULL,	NULL,	'[{\"url\": \"https://www.rcvtechnologies.com/\", \"text\": \"Visit Website\", \"type\": \"url\"}]',	'approved',	'1090004146009330',	'{\"id\": \"1090004146009330\", \"name\": \"test\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"Test HI\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"rreregreae\", \"type\": \"BODY\"}, {\"text\": \"eweaaearegrge\", \"type\": \"FOOTER\"}, {\"type\": \"BUTTONS\", \"buttons\": [{\"url\": \"https://www.rcvtechnologies.com/\", \"text\": \"Visit Website\", \"type\": \"URL\"}]}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}',	NULL,	'2025-08-10 23:17:25',	'2025-08-14 00:33:01'),
-(2,	'vvq_12',	'marketing',	'en_US',	'HI',	'text',	'rgreetretrwre',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'682081568197579',	'{\"id\": \"682081568197579\", \"name\": \"vvq_12\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"HI\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"rgreetretrwre\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}',	NULL,	'2025-08-10 23:17:26',	'2025-08-14 00:33:02'),
-(3,	'post',	'marketing',	'en_US',	'Posting',	'text',	'User created Post',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'1052389567048149',	'{\"id\": \"1052389567048149\", \"name\": \"post\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"Posting\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"User created Post\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}',	NULL,	'2025-08-10 23:17:26',	'2025-08-14 00:33:03'),
-(4,	'xyz',	'marketing',	'en_US',	'umtnjrgn',	'text',	'kfgfhfgdfgfdfd',	'ytjmghte',	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'4240371762862271',	'{\"id\": \"4240371762862271\", \"name\": \"xyz\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"umtnjrgn\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"kfgfhfgdfgfdfd\", \"type\": \"BODY\"}, {\"text\": \"ytjmghte\", \"type\": \"FOOTER\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}',	NULL,	'2025-08-10 23:17:26',	'2025-08-14 00:33:03'),
-(5,	'sadik',	'marketing',	'en_US',	'dfdfdfd',	'text',	'ewgwrswg',	'rgsffse',	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'24051621111125917',	'{\"id\": \"24051621111125917\", \"name\": \"sadik\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"dfdfdfd\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"ewgwrswg\", \"type\": \"BODY\"}, {\"text\": \"rgsffse\", \"type\": \"FOOTER\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}',	NULL,	'2025-08-10 23:17:27',	'2025-08-14 00:33:04'),
-(6,	'vv_444',	'marketing',	'en_US',	'sfdsgdsfe',	'text',	'fdvgdvdse',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'3614549795519122',	'{\"id\": \"3614549795519122\", \"name\": \"vv_444\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"sfdsgdsfe\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"fdvgdvdse\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}',	NULL,	'2025-08-10 23:17:27',	'2025-08-14 00:33:04'),
-(7,	'hack_12',	'utility',	'en_US',	'Your Whatsapp Account has been Hacked',	'text',	'You are sitting on Seat No-68 at RCV Technologies\r\nif you want to Continue with your Account Please Reply Hi',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'1056434386690797',	'{\"id\": \"1056434386690797\", \"name\": \"hack_12\", \"status\": \"APPROVED\", \"category\": \"UTILITY\", \"language\": \"en_US\", \"components\": [{\"text\": \"Your Whatsapp Account has been Hacked\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"You are sitting on Seat No-68 at RCV Technologies\\r\\nif you want to Continue with your Account Please Reply Hi\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\"}',	NULL,	'2025-08-10 23:17:28',	'2025-08-14 00:33:05'),
-(8,	'temp_9982',	'marketing',	'en_US',	'dfdfswre',	'text',	'effefswewf',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'1254426632849468',	'{\"id\": \"1254426632849468\", \"name\": \"temp_9982\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"dfdfswre\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"effefswewf\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}',	NULL,	'2025-08-10 23:17:28',	'2025-08-14 00:33:06'),
-(9,	'temp_12',	'marketing',	'en_US',	'fvfdfdrdeew',	'text',	'ewefwewfeswewew',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'4434041213478376',	'{\"id\": \"4434041213478376\", \"name\": \"temp_12\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"fvfdfdrdeew\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"ewefwewfeswewew\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}',	NULL,	'2025-08-10 23:17:28',	'2025-08-14 00:33:06'),
-(10,	'subscription',	'utility',	'en_US',	'Subscription Purchased',	'text',	'User has purchased subscription',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'1147186847233196',	'{\"id\": \"1147186847233196\", \"name\": \"subscription\", \"status\": \"APPROVED\", \"category\": \"UTILITY\", \"language\": \"en_US\", \"components\": [{\"text\": \"Subscription Purchased\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"User has purchased subscription\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\"}',	NULL,	'2025-08-10 23:17:29',	'2025-08-14 00:33:07'),
-(11,	'post_schedule',	'marketing',	'en_US',	'Post Schedulling',	'text',	'User Schedulled Post\r\n\r\nThankyou.',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'713033354835416',	'{\"id\": \"713033354835416\", \"name\": \"post_schedule\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"Post Schedulling\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"User Schedulled Post\\r\\n\\r\\nThankyou.\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}',	NULL,	'2025-08-10 23:17:29',	'2025-08-14 00:33:08'),
-(12,	'login',	'marketing',	'en_US',	'Logged In User',	'text',	'User has been Logging\r\n\r\nThankyou',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'1968249450578166',	'{\"id\": \"1968249450578166\", \"name\": \"login\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"Logged In User\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"User has been Logging\\r\\n\\r\\nThankyou\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}',	NULL,	'2025-08-10 23:17:30',	'2025-08-14 00:33:08'),
-(13,	'register',	'marketing',	'en_US',	'Welcome to Social Ant',	'text',	'User has been registered\r\n\r\nThankyou.',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'650938144672898',	'{\"id\": \"650938144672898\", \"name\": \"register\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"Welcome to Social Ant\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"User has been registered\\r\\n\\r\\nThankyou.\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}',	NULL,	'2025-08-10 23:17:31',	'2025-08-14 00:33:09'),
-(14,	'hello_world',	'utility',	'en_US',	'Hello World',	'text',	'Welcome and congratulations!! This message demonstrates your ability to send a WhatsApp message notification from the Cloud API, hosted by Meta. Thank you for taking the time to test with us.',	'WhatsApp Business Platform sample message',	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'1736059160328795',	'{\"id\": \"1736059160328795\", \"name\": \"hello_world\", \"status\": \"APPROVED\", \"category\": \"UTILITY\", \"language\": \"en_US\", \"components\": [{\"text\": \"Hello World\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"Welcome and congratulations!! This message demonstrates your ability to send a WhatsApp message notification from the Cloud API, hosted by Meta. Thank you for taking the time to test with us.\", \"type\": \"BODY\"}, {\"text\": \"WhatsApp Business Platform sample message\", \"type\": \"FOOTER\"}], \"parameter_format\": \"POSITIONAL\"}',	NULL,	'2025-08-10 23:17:31',	'2025-08-14 00:33:09'),
-(15,	'img_1',	'marketing',	'en_US',	NULL,	'image',	'Hello We Won',	'Best Award',	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'2163276134085086',	'{\"id\": \"2163276134085086\", \"name\": \"img_1\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"type\": \"HEADER\", \"format\": \"IMAGE\", \"example\": {\"header_handle\": [\"https://scontent.whatsapp.net/v/t61.29466-34/491873484_2163276137418419_8259353057868756570_n.jpg?ccb=1-7&_nc_sid=8b1bef&_nc_ohc=CVYbon1g4CkQ7kNvwFVvUJc&_nc_oc=AdntQS0j1cgQZSoot9IyIydFOFqXlHOmMLbQ9THRz6fWtj3t3YWfUThZ5BC-oadKm9s&_nc_zt=3&_nc_ht=scontent.whatsapp.net&edm=AIJs65cEAAAA&_nc_gid=s3sOGKk2aPgDyjjoMGgaZw&oh=01_Q5Aa2QGlhtF5LatmV-gRvLUorv-tpoJFVtFjpe9iPgkPZ0Xfaw&oe=68C4F7D7\"]}}, {\"text\": \"Hello We Won\", \"type\": \"BODY\"}, {\"text\": \"Best Award\", \"type\": \"FOOTER\"}], \"sub_category\": \"CUSTOM\", \"parameter_format\": \"NAMED\"}',	NULL,	'2025-08-10 23:17:32',	'2025-08-14 00:33:10'),
-(16,	'test_yash',	'marketing',	'en_US',	NULL,	NULL,	'asdasdasd',	'asdasd',	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'24156088717352924',	'{\"id\": \"24156088717352924\", \"name\": \"test_yash\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"asdasdasd\", \"type\": \"BODY\"}, {\"text\": \"asdasd\", \"type\": \"FOOTER\"}], \"parameter_format\": \"POSITIONAL\"}',	NULL,	'2025-08-10 23:31:55',	'2025-08-14 00:33:01'),
-(18,	'asdasd',	'marketing',	'en_US',	NULL,	NULL,	'sadasd',	NULL,	NULL,	NULL,	NULL,	NULL,	NULL,	'approved',	'704109535963160',	'{\"id\": \"704109535963160\", \"name\": \"asdasd\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"sadasd\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}',	NULL,	'2025-08-13 23:09:49',	'2025-08-14 00:33:00');
+--
+-- Dumping data for table `whatsapp_templates`
+--
 
--- 2025-08-14 14:07:47 UTC
+INSERT INTO `whatsapp_templates` (`id`, `name`, `category`, `language`, `header_text`, `header_type`, `body_text`, `footer_text`, `header_image_url`, `header_video_url`, `header_document_url`, `body_examples`, `buttons`, `status`, `template_id`, `api_response`, `rejection_reason`, `created_at`, `updated_at`) VALUES
+(1, 'test', 'marketing', 'en_US', 'Test HI', 'text', 'rreregreae', 'eweaaearegrge', NULL, NULL, NULL, NULL, '[{\"url\": \"https://www.rcvtechnologies.com/\", \"text\": \"Visit Website\", \"type\": \"url\"}]', 'approved', '1090004146009330', '{\"id\": \"1090004146009330\", \"name\": \"test\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"Test HI\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"rreregreae\", \"type\": \"BODY\"}, {\"text\": \"eweaaearegrge\", \"type\": \"FOOTER\"}, {\"type\": \"BUTTONS\", \"buttons\": [{\"url\": \"https://www.rcvtechnologies.com/\", \"text\": \"Visit Website\", \"type\": \"URL\"}]}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}', NULL, '2025-08-10 23:17:25', '2025-08-14 00:33:01'),
+(2, 'vvq_12', 'marketing', 'en_US', 'HI', 'text', 'rgreetretrwre', NULL, NULL, NULL, NULL, NULL, NULL, 'approved', '682081568197579', '{\"id\": \"682081568197579\", \"name\": \"vvq_12\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"HI\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"rgreetretrwre\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}', NULL, '2025-08-10 23:17:26', '2025-08-14 00:33:02'),
+(3, 'post', 'marketing', 'en_US', 'Posting', 'text', 'User created Post', NULL, NULL, NULL, NULL, NULL, NULL, 'approved', '1052389567048149', '{\"id\": \"1052389567048149\", \"name\": \"post\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"Posting\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"User created Post\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}', NULL, '2025-08-10 23:17:26', '2025-08-14 00:33:03'),
+(4, 'xyz', 'marketing', 'en_US', 'umtnjrgn', 'text', 'kfgfhfgdfgfdfd', 'ytjmghte', NULL, NULL, NULL, NULL, NULL, 'approved', '4240371762862271', '{\"id\": \"4240371762862271\", \"name\": \"xyz\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"umtnjrgn\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"kfgfhfgdfgfdfd\", \"type\": \"BODY\"}, {\"text\": \"ytjmghte\", \"type\": \"FOOTER\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}', NULL, '2025-08-10 23:17:26', '2025-08-14 00:33:03'),
+(5, 'sadik', 'marketing', 'en_US', 'dfdfdfd', 'text', 'ewgwrswg', 'rgsffse', NULL, NULL, NULL, NULL, NULL, 'approved', '24051621111125917', '{\"id\": \"24051621111125917\", \"name\": \"sadik\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"dfdfdfd\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"ewgwrswg\", \"type\": \"BODY\"}, {\"text\": \"rgsffse\", \"type\": \"FOOTER\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}', NULL, '2025-08-10 23:17:27', '2025-08-14 00:33:04'),
+(6, 'vv_444', 'marketing', 'en_US', 'sfdsgdsfe', 'text', 'fdvgdvdse', NULL, NULL, NULL, NULL, NULL, NULL, 'approved', '3614549795519122', '{\"id\": \"3614549795519122\", \"name\": \"vv_444\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"sfdsgdsfe\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"fdvgdvdse\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}', NULL, '2025-08-10 23:17:27', '2025-08-14 00:33:04'),
+(7, 'hack_12', 'utility', 'en_US', 'Your Whatsapp Account has been Hacked', 'text', 'You are sitting on Seat No-68 at RCV Technologies\r\nif you want to Continue with your Account Please Reply Hi', NULL, NULL, NULL, NULL, NULL, NULL, 'approved', '1056434386690797', '{\"id\": \"1056434386690797\", \"name\": \"hack_12\", \"status\": \"APPROVED\", \"category\": \"UTILITY\", \"language\": \"en_US\", \"components\": [{\"text\": \"Your Whatsapp Account has been Hacked\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"You are sitting on Seat No-68 at RCV Technologies\\r\\nif you want to Continue with your Account Please Reply Hi\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\"}', NULL, '2025-08-10 23:17:28', '2025-08-14 00:33:05'),
+(8, 'temp_9982', 'marketing', 'en_US', 'dfdfswre', 'text', 'effefswewf', NULL, NULL, NULL, NULL, NULL, NULL, 'approved', '1254426632849468', '{\"id\": \"1254426632849468\", \"name\": \"temp_9982\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"dfdfswre\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"effefswewf\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}', NULL, '2025-08-10 23:17:28', '2025-08-14 00:33:06'),
+(9, 'temp_12', 'marketing', 'en_US', 'fvfdfdrdeew', 'text', 'ewefwewfeswewew', NULL, NULL, NULL, NULL, NULL, NULL, 'approved', '4434041213478376', '{\"id\": \"4434041213478376\", \"name\": \"temp_12\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"fvfdfdrdeew\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"ewefwewfeswewew\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}', NULL, '2025-08-10 23:17:28', '2025-08-14 00:33:06'),
+(10, 'subscription', 'utility', 'en_US', 'Subscription Purchased', 'text', 'User has purchased subscription', NULL, NULL, NULL, NULL, NULL, NULL, 'approved', '1147186847233196', '{\"id\": \"1147186847233196\", \"name\": \"subscription\", \"status\": \"APPROVED\", \"category\": \"UTILITY\", \"language\": \"en_US\", \"components\": [{\"text\": \"Subscription Purchased\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"User has purchased subscription\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\"}', NULL, '2025-08-10 23:17:29', '2025-08-14 00:33:07'),
+(11, 'post_schedule', 'marketing', 'en_US', 'Post Schedulling', 'text', 'User Schedulled Post\r\n\r\nThankyou.', NULL, NULL, NULL, NULL, NULL, NULL, 'approved', '713033354835416', '{\"id\": \"713033354835416\", \"name\": \"post_schedule\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"Post Schedulling\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"User Schedulled Post\\r\\n\\r\\nThankyou.\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}', NULL, '2025-08-10 23:17:29', '2025-08-14 00:33:08'),
+(12, 'login', 'marketing', 'en_US', 'Logged In User', 'text', 'User has been Logging\r\n\r\nThankyou', NULL, NULL, NULL, NULL, NULL, NULL, 'approved', '1968249450578166', '{\"id\": \"1968249450578166\", \"name\": \"login\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"Logged In User\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"User has been Logging\\r\\n\\r\\nThankyou\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}', NULL, '2025-08-10 23:17:30', '2025-08-14 00:33:08'),
+(13, 'register', 'marketing', 'en_US', 'Welcome to Social Ant', 'text', 'User has been registered\r\n\r\nThankyou.', NULL, NULL, NULL, NULL, NULL, NULL, 'approved', '650938144672898', '{\"id\": \"650938144672898\", \"name\": \"register\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"Welcome to Social Ant\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"User has been registered\\r\\n\\r\\nThankyou.\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}', NULL, '2025-08-10 23:17:31', '2025-08-14 00:33:09'),
+(14, 'hello_world', 'utility', 'en_US', 'Hello World', 'text', 'Welcome and congratulations!! This message demonstrates your ability to send a WhatsApp message notification from the Cloud API, hosted by Meta. Thank you for taking the time to test with us.', 'WhatsApp Business Platform sample message', NULL, NULL, NULL, NULL, NULL, 'approved', '1736059160328795', '{\"id\": \"1736059160328795\", \"name\": \"hello_world\", \"status\": \"APPROVED\", \"category\": \"UTILITY\", \"language\": \"en_US\", \"components\": [{\"text\": \"Hello World\", \"type\": \"HEADER\", \"format\": \"TEXT\"}, {\"text\": \"Welcome and congratulations!! This message demonstrates your ability to send a WhatsApp message notification from the Cloud API, hosted by Meta. Thank you for taking the time to test with us.\", \"type\": \"BODY\"}, {\"text\": \"WhatsApp Business Platform sample message\", \"type\": \"FOOTER\"}], \"parameter_format\": \"POSITIONAL\"}', NULL, '2025-08-10 23:17:31', '2025-08-14 00:33:09'),
+(15, 'img_1', 'marketing', 'en_US', NULL, 'image', 'Hello We Won', 'Best Award', NULL, NULL, NULL, NULL, NULL, 'approved', '2163276134085086', '{\"id\": \"2163276134085086\", \"name\": \"img_1\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"type\": \"HEADER\", \"format\": \"IMAGE\", \"example\": {\"header_handle\": [\"https://scontent.whatsapp.net/v/t61.29466-34/491873484_2163276137418419_8259353057868756570_n.jpg?ccb=1-7&_nc_sid=8b1bef&_nc_ohc=CVYbon1g4CkQ7kNvwFVvUJc&_nc_oc=AdntQS0j1cgQZSoot9IyIydFOFqXlHOmMLbQ9THRz6fWtj3t3YWfUThZ5BC-oadKm9s&_nc_zt=3&_nc_ht=scontent.whatsapp.net&edm=AIJs65cEAAAA&_nc_gid=s3sOGKk2aPgDyjjoMGgaZw&oh=01_Q5Aa2QGlhtF5LatmV-gRvLUorv-tpoJFVtFjpe9iPgkPZ0Xfaw&oe=68C4F7D7\"]}}, {\"text\": \"Hello We Won\", \"type\": \"BODY\"}, {\"text\": \"Best Award\", \"type\": \"FOOTER\"}], \"sub_category\": \"CUSTOM\", \"parameter_format\": \"NAMED\"}', NULL, '2025-08-10 23:17:32', '2025-08-14 00:33:10'),
+(16, 'test_yash', 'marketing', 'en_US', NULL, NULL, 'asdasdasd', 'asdasd', NULL, NULL, NULL, NULL, NULL, 'approved', '24156088717352924', '{\"id\": \"24156088717352924\", \"name\": \"test_yash\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"asdasdasd\", \"type\": \"BODY\"}, {\"text\": \"asdasd\", \"type\": \"FOOTER\"}], \"parameter_format\": \"POSITIONAL\"}', NULL, '2025-08-10 23:31:55', '2025-08-14 00:33:01'),
+(18, 'asdasd', 'marketing', 'en_US', NULL, NULL, 'sadasd', NULL, NULL, NULL, NULL, NULL, NULL, 'approved', '704109535963160', '{\"id\": \"704109535963160\", \"name\": \"asdasd\", \"status\": \"APPROVED\", \"category\": \"MARKETING\", \"language\": \"en_US\", \"components\": [{\"text\": \"sadasd\", \"type\": \"BODY\"}], \"parameter_format\": \"POSITIONAL\", \"previous_category\": \"UTILITY\"}', NULL, '2025-08-13 23:09:49', '2025-08-14 00:33:00');
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `category_product`
+--
+ALTER TABLE `category_product`
+  ADD CONSTRAINT `category_product_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `category_product_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `country_states`
+--
+ALTER TABLE `country_states`
+  ADD CONSTRAINT `country_states_country_id_foreign` FOREIGN KEY (`country_id`) REFERENCES `countries` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `currency_exchange_rates`
+--
+ALTER TABLE `currency_exchange_rates`
+  ADD CONSTRAINT `currency_exchange_rates_target_currency_foreign` FOREIGN KEY (`target_currency`) REFERENCES `currencies` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `leads`
+--
+ALTER TABLE `leads`
+  ADD CONSTRAINT `leads_assigned_to_foreign` FOREIGN KEY (`assigned_to`) REFERENCES `admins` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `leads_created_by_foreign` FOREIGN KEY (`created_by`) REFERENCES `admins` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `leads_source_id_foreign` FOREIGN KEY (`source_id`) REFERENCES `lead_sources` (`id`) ON DELETE SET NULL,
+  ADD CONSTRAINT `leads_status_id_foreign` FOREIGN KEY (`status_id`) REFERENCES `lead_statuses` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `lead_activities`
+--
+ALTER TABLE `lead_activities`
+  ADD CONSTRAINT `lead_activities_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `lead_activities_lead_id_foreign` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `lead_attachments`
+--
+ALTER TABLE `lead_attachments`
+  ADD CONSTRAINT `lead_attachments_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `lead_attachments_lead_id_foreign` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `lead_notes`
+--
+ALTER TABLE `lead_notes`
+  ADD CONSTRAINT `lead_notes_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `lead_notes_lead_id_foreign` FOREIGN KEY (`lead_id`) REFERENCES `leads` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `meetings`
+--
+ALTER TABLE `meetings`
+  ADD CONSTRAINT `meetings_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`);
+
+--
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `order_items_order_id_foreign` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `order_items_product_id_foreign` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `taggables`
+--
+ALTER TABLE `taggables`
+  ADD CONSTRAINT `taggables_tag_id_foreign` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`) ON DELETE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

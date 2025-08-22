@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Checkout\Http\Controllers\HomeController;
+use Modules\Checkout\Http\Controllers\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +15,15 @@ use Modules\Checkout\Http\Controllers\HomeController;
 |
 */
 
-Route::prefix('checkout')->name('checkout.')->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-});
+// routes/web.php
+// Route::middleware(['auth'])->group(function () {
+    Route::prefix('checkout')->group(function () {
+        Route::get('/', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::post('/process', [CheckoutController::class, 'process'])->name('checkout.process');
+        Route::get('/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
+        Route::post('/complete', [CheckoutController::class, 'complete'])->name('checkout.complete');
+        Route::get('/confirmation/{order}', [CheckoutController::class, 'confirmation'])->name('checkout.confirmation');
+    });
+// });
 
 // HomeController will be generated automatically by the module generator 

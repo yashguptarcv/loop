@@ -2,10 +2,14 @@
     class="w-64 bg-blue-100 text-blue-600 flex flex-col justify-between h-full border-r border-blue-100 transform transition-transform duration-300 ease-in-out -translate-x-full lg:translate-x-0 fixed lg:static z-20">
     <!-- Logo/Brand -->
     <div class="p-6 pb-4 text-2xl font-bold border-b border-blue-100 flex items-center space-x-2">
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-        </svg>
-        <span>{{fn_get_setting('general.settings.store_name')}}</span>
+        @php
+            $logo = fn_get_image('company_logo', 0)['url'] ?? '';
+        @endphp
+        @if($logo)
+            <img src="{{$logo}}" alt="{{fn_get_setting('general.company.name')}}" width="120px" height="auto">
+        @else
+            {{fn_get_setting('general.company.name')}}
+        @endif
     </div>
 
     <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto" id="sidebarMenu">

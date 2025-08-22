@@ -5,6 +5,7 @@ namespace Modules\Leads\Models;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Leads\Models\AwardCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Customers\Models\User;
 
 class Application extends Model
 {
@@ -32,6 +33,10 @@ class Application extends Model
     {
         return $this->belongsToMany(AwardCategory::class, 'application_award_category')
             ->withTimestamps();
+    }
+
+    public function user() {
+        return $this->belongsToMany(User::class, 'email');
     }
 
     public static function rules()

@@ -17,7 +17,9 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "mpdf/mpdf": "^8.2",
-        "rcv/core": "dev-main"
+        "rcv/core": "dev-main",
+        "symfony/http-client": "^7.3",
+        "symfony/mailgun-mailer": "^7.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -44,12 +46,21 @@
             "Modules\\Catalog\\": "modules/Catalog/src/",
             "Modules\\Checkout\\": "modules/Checkout/src/",
             "Modules\\Payments\\": "modules/Payments/src/",
-            "Modules\\Orders\\": "modules/Orders/src/"
+            "Modules\\Orders\\": "modules/Orders/src/",
+            "Modules\\Notifications\\": "modules/Notifications/src/",
+            "Modules\\Shop\\": "modules/Shop/src/",
+            "Modules\\Tax\\": "modules/Tax/src/",
+            "Modules\\Discounts\\": "modules/Discounts/src/",
+            "Modules\\EmailNotification\\": "modules/EmailNotification/src/",
+            "Modules\\Filemanager\\": "modules/Filemanager/src/"
         },
         "files": [
             "modules/Acl/src/Helpers/helpers.php",
             "modules/DataView/src/Helpers/helpers.php",
-            "modules/Core/src/Helpers/settinghelpers.php"
+            "modules/Core/src/Helpers/settinghelpers.php",
+            "modules/Discounts/src/Helper/DiscountRuleHelper.php",
+            "modules/Admin/src/Helpers/helper.php",
+            "modules/Filemanager/src/Helpers/helper.php"
         ]
     },
     "autoload-dev": {

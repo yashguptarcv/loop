@@ -8,7 +8,9 @@ use Illuminate\Support\Facades\DB;
 class Country extends DataGrid
 {
     protected $primaryColumn = "id";
+
     protected $itemsPerPage = 10;
+
     protected $sortOrder = 'desc';
 
     /**
@@ -35,16 +37,16 @@ class Country extends DataGrid
     {
         $this->addColumn([
             'index' => 'id',
-            'label' => 'Country_ID',
+            'label' => 'Country ID',
             'type' => 'integer',
-            'searchable' => true,
-            'filterable' => true,
+            'searchable' => false,
+            'filterable' => false,
             'sortable' => true,
         ]);
 
         $this->addColumn([
             'index' => 'code',
-            'label' => 'Country_Code',
+            'label' => 'Country Code',
             'type' => 'string',
             'searchable' => true,
             'filterable' => true,
@@ -53,7 +55,7 @@ class Country extends DataGrid
         
         $this->addColumn([
             'index' => 'name',
-            'label' => 'Country_Name',
+            'label' => 'Country Name',
             'type' => 'string',
             'searchable' => true,
             'filterable' => true,
@@ -68,24 +70,25 @@ class Country extends DataGrid
      */
     public function prepareActions()
     {
-        if (bouncer()->hasPermission('admin.settings.countries.leads.edit')) {
+        if (bouncer()->hasPermission('admin.settings.countries.edit')) {
             $this->addAction([
                 'icon' => 'edit',
                 'title' => 'Edit',
                 'method' => 'GET',
+                'is_popup'  => true,
                 'url' => function ($row) {
-                    return route('admin.settings.countries.leads.edit', $row->id);
+                    return route('admin.settings.countries.edit', $row->id);
                 },
             ]);
         }
 
-        if (bouncer()->hasPermission('admin.settings.countries.leads.destroy')) {
+        if (bouncer()->hasPermission('admin.settings.countries.destroy')) {
             $this->addAction([
                 'icon' => 'delete',
                 'title' => 'Delete',
                 'method' => 'DELETE',
                 'url' => function ($row) {
-                    return route('admin.settings.countries.leads.destroy', $row->id);
+                    return route('admin.settings.countries.destroy', $row->id);
                 },
             ]);
         }
@@ -99,13 +102,14 @@ class Country extends DataGrid
     public function prepareMassActions()
     {
 
-        if (bouncer()->hasPermission('admin.settings.countries.leads.create')) {
+        if (bouncer()->hasPermission('admin.settings.countries.create')) {
             $this->addMassAction([
                 'icon' => 'add',
                 'title' => 'Add Country',
                 'method' => 'GET',
+                'is_popup'  => true,
                 'action' => 'text-blue-600 bg-blue-100',
-                'url' => 'admin.settings.countries.leads.create',
+                'url' => 'admin.settings.countries.create',
             ]);
         }
         

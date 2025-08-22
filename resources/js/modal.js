@@ -194,6 +194,7 @@
     });
 
     function createModal(modalId, ajaxUrl, modalTitle, modalSize) {
+        
         // Check if modal already exists
         const existingModal = document.getElementById(`modal-backdrop-${modalId}`);
         if (existingModal) {
@@ -204,7 +205,7 @@
         const modalHTML = `
         <div id="modal-backdrop-${modalId}" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm modal-hidden">
             <div id="modal-container-${modalId}" role="dialog" aria-modal="true" aria-labelledby="modal-title-${modalId}"
-                class="modal-container w-full ${modalSize === 'sm' ? 'max-w-md' : 'max-w-2xl'} bg-white rounded-xl shadow-2xl overflow-hidden max-h-[90vh]">
+                class="modal-container w-full ${modalSize} bg-white rounded-xl shadow-2xl overflow-hidden max-h-[90vh]">
 
                 <div class="flex justify-between items-center p-4 border-b bg-gradient-to-r from-gray-50 to-white">
                     <h5 class="text-lg font-bold text-gray-800">${modalTitle}</h5>

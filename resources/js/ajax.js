@@ -3,14 +3,105 @@
   document.addEventListener('DOMContentLoaded', function () {
     const notifications = [];
 
+    
+    // Loader Management Functions
+    const Loader = {
+      // Create loader element with blur background
+      createLoader: function () {
+        const loader = document.createElement('div');
+        loader.id = 'ajax-loader';
+        loader.className = 'fixed inset-0 backdrop-blur-sm z-50 flex items-center justify-center';
+
+        // Semi-transparent overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'absolute inset-0 bg-white-100 bg-opacity-20';
+        loader.appendChild(overlay);
+
+        // Centered rounded box (smaller size)
+        const loaderBox = document.createElement('div');
+        loaderBox.className = 'relative bg-blue-100 bg-opacity-90 rounded-xl p-3 shadow-xl flex flex-col items-center justify-center';
+        loaderBox.style.minWidth = '80px';
+        loaderBox.style.minHeight = '80px';
+
+        // Circular loader animation (smooth and modern)
+        const spinner = document.createElement('div');
+        spinner.className = 'animate-spin rounded-full h-10 w-10 border-4 border-solid border-t-blue-500 border-r-blue-500 border-b-transparent border-l-transparent';
+
+        // // Optional loading text
+        // const loadingText = document.createElement('div');
+        // loadingText.className = 'mt-3 text-gray-600 text-sm font-medium';
+        // loadingText.textContent = 'Loading...';
+
+        loaderBox.appendChild(spinner);
+        // loaderBox.appendChild(loadingText);
+        loader.appendChild(loaderBox);
+        document.body.appendChild(loader);
+
+        return loader;
+      },
+
+      // Show loader
+      show: function () {
+        let loader = document.getElementById('ajax-loader');
+        if (!loader) {
+          loader = this.createLoader();
+        }
+        loader.style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+      },
+
+      // Hide loader
+      hide: function () {
+        const loader = document.getElementById('ajax-loader');
+        if (loader) {
+          loader.style.display = 'none';
+          document.body.style.overflow = ''; // Restore scrolling
+          // Optional: Remove loader from DOM after hiding
+          setTimeout(() => {
+            if (loader.parentNode) {
+              loader.parentNode.removeChild(loader);
+            }
+          }, 300);
+        }
+      }
+    };
+
+    // Add the required CSS dynamically
+    const loaderCSS = `
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+      .animate-spin {
+        animation: spin 0.8s linear infinite;
+      }
+      #ajax-loader {
+        display: none;
+      }
+      .backdrop-blur-sm {
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+      }
+    `;
+    const style = document.createElement('style');
+    style.type = 'text/css';
+    style.appendChild(document.createTextNode(loaderCSS));
+    document.head.appendChild(style);
     // Initialize all existing forms
     initializeAjaxForms();
+    initTinyMCEEditors();
+    initializeScriptTag();
+    initStateFormScript();
+
 
     // Set up MutationObserver to handle dynamically added forms
     const observer = new MutationObserver(function (mutations) {
       mutations.forEach(function (mutation) {
         if (mutation.addedNodes.length) {
           initializeAjaxForms();
+          initTinyMCEEditors();
+          initStateFormScript();
+          initializeScriptTag();
         }
       });
     });
@@ -19,6 +110,68 @@
       childList: true,
       subtree: true
     });
+    
+
+    function initializeScriptTag() {
+      document.querySelectorAll('#tag-remove').forEach(tag => {
+        tag.addEventListener('click', function (e) {
+          e.preventDefault();
+          console.log($(this).parent().parent().remove());
+        });
+      });
+
+      $(document).off('click', '#tag-add').on('click', '#tag-add', function (e) {
+        e.preventDefault();
+
+        const $currentRow = $(this).closest('tr');
+        const $clonedRow = $currentRow.clone();
+
+        // Change Add → Remove
+        const $button = $clonedRow.find('#tag-add');
+        $button
+          .removeClass('bg-blue-100 text-blue-600 border-blue-300 hover:border-blue-300 hover:text-blue-300')
+          .addClass('bg-red-100 text-red-600 border-red-300 hover:border-red-300 hover:text-red-300')
+          .attr('id', 'tag-remove')
+          .html("<span class='material-icons-outlined mr-1 text-xs'>delete</span>");
+
+        // Clear inputs
+        $clonedRow.find('input').val('');
+
+        // Insert before current row
+        $currentRow.before($clonedRow);
+      });
+    }
+
+
+    /**
+     * Initialize TinyMCE editors for all textareas with editor="true" attribute
+     */
+    function initTinyMCEEditors() {
+        document.querySelectorAll('textarea[editor="true"]').forEach(textarea => {
+            const editorId = textarea.id || `tinymce-editor-${Math.random().toString(36).substr(2, 9)}`;
+            textarea.id = editorId;
+            
+            tinymce.init({
+                selector: `#${editorId}`,
+                plugins: 'mentions autolink code table lists link wordcount',
+                toolbar: 'undo redo | bold italic | bullist numlist | link | alignleft aligncenter alignright alignjustify',
+                menubar: false,
+                statusbar: false,
+                height: 280,
+                setup: function(editor) {
+                    // Sync content back to textarea on change
+                    editor.on('change', function() {
+                        textarea.value = editor.getContent();
+                    });
+                    
+                    // Initialize with current textarea content
+                    editor.on('init', function() {
+                        editor.setContent(textarea.value);
+                    });
+                }
+            });
+        });
+    }
 
     function initializeAjaxForms() {
       document.querySelectorAll('.form-ajax').forEach(form => {
@@ -32,6 +185,31 @@
           handleFormSubmission(this);
         });
       });
+    }
+
+     function initStateFormScript() {
+      const form = document.getElementById('stateForm');
+      if (!form) return; // if form not present, skip
+
+      const countrySelect = form.querySelector('#country');
+      const countryCodeInput = form.querySelector('#country_code');
+      if (!countrySelect || !countryCodeInput) return;
+
+      function setCountryCodeFromSelected() {
+        const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+        const code = selectedOption.getAttribute('data-code') || '';
+        countryCodeInput.value = code;
+      }
+
+      // bind only once (prevent duplicate binding if popup reopens)
+      if (!countrySelect.dataset.bound) {
+        countrySelect.addEventListener('change', setCountryCodeFromSelected);
+        countrySelect.dataset.bound = "true";
+      }
+
+      if (!countryCodeInput.value) {
+        setCountryCodeFromSelected();
+      }
     }
 
     function handleFormSubmission(form) {
@@ -48,6 +226,8 @@
         displayError(form, 'The form action property is not set!');
         return;
       }
+
+      Loader.show();
 
       // Disable submit button and show loading state
       if (submitButton) {
@@ -84,6 +264,7 @@
         headers: headers
       })
         .then(response => {
+          Loader.hide();
           if (response.ok) {
             return response.text();
           } else {
@@ -323,16 +504,31 @@
       $container.find('.autocomplete-results').hide();
     });
 
+    // Modified ceAjax function with loader and CSRF token support
     function ceAjax(method, url, options) {
       // Default options
       const config = {
         result_ids: '',
         caching: true,
         callback: null,
+        errorCallback: null,
+        beforeSend: null,
+        complete: null,
         data: null,
         headers: {},
+        loader: false, // Default to no loader
         ...options
       };
+
+      // Show loader if enabled
+      if (config.loader) {
+        Loader.show();
+      }
+
+      // Execute beforeSend callback if provided
+      if (typeof config.beforeSend === 'function') {
+        config.beforeSend();
+      }
 
       // Create XMLHttpRequest
       const xhr = new XMLHttpRequest();
@@ -347,11 +543,31 @@
 
       // Set headers
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
+      // Add CSRF token for non-GET requests
+      if (httpMethod !== 'GET') {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
+        if (csrfToken) {
+          xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+        }
+      }
+
+      // Add custom headers
       for (const [key, value] of Object.entries(config.headers)) {
         xhr.setRequestHeader(key, value);
       }
 
       xhr.onload = function () {
+        // Hide loader if it was shown
+        if (config.loader) {
+          Loader.hide();
+        }
+
+        // Execute complete callback if provided
+        if (typeof config.complete === 'function') {
+          config.complete();
+        }
+
         if (xhr.status >= 200 && xhr.status < 300) {
           let response;
           try {
@@ -378,35 +594,145 @@
             });
           }
 
-          // Execute callback if provided
-          if (config.callback) {
+          // Execute success callback if provided
+          if (typeof config.callback === 'function') {
             config.callback(response, config.data);
           }
         } else {
           console.error('Request failed:', xhr.statusText);
+          if (typeof config.errorCallback === 'function') {
+            config.errorCallback(xhr);
+          }
         }
       };
 
       xhr.onerror = function () {
+        // Hide loader on error too
+        if (config.loader) {
+          Loader.hide();
+        }
+
+        // Execute complete callback if provided
+        if (typeof config.complete === 'function') {
+          config.complete();
+        }
+
         console.error('Network error occurred');
+        if (typeof config.errorCallback === 'function') {
+          config.errorCallback(xhr);
+        }
       };
 
-      // Send request
+      // Prepare data
+      let requestData = null;
       if (config.data) {
         if (httpMethod === 'GET') {
           const params = new URLSearchParams(config.data).toString();
           xhr.open(httpMethod, `${finalUrl}${finalUrl.includes('?') ? '&' : '?'}${params}`, true);
-          xhr.send();
         } else {
           xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          xhr.send(new URLSearchParams(config.data));
+          requestData = new URLSearchParams(config.data).toString();
         }
-      } else {
-        xhr.send();
       }
+
+      // Send request
+      xhr.send(requestData);
     }
 
-     window.ceAjax = ceAjax;
+    // Make it available globally
+    window.ceAjax = ceAjax;
+
   });
+
+    // Tags manager
+    const tagContainer = document.getElementById('tag-container');
+    const tagsInput = document.getElementById('tags-input');
+    const hiddenInput = document.getElementById('tags');
+    const datalist = document.getElementById('tagList');
+    
+    // Check if required elements exist
+    if (!tagContainer || !tagsInput || !hiddenInput || !datalist) {
+        console.error('One or more required elements for tag manager not found');
+        return;
+    }
+    
+    // Initialize with existing tags
+    const initialTags = hiddenInput.value ? hiddenInput.value.split(',').filter(tag => tag.trim()) : [];
+    initialTags.forEach(tag => addTag(tag.trim()));
+    updateHiddenInput();
+    
+    tagsInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleTagInput();
+        } else if (e.key === ',' || e.key === ';') {
+            e.preventDefault();
+            handleTagInput();
+        } else if (e.key === 'Backspace' && this.value === '') {
+            const tags = tagContainer.querySelectorAll('.tag');
+            if (tags.length > 0) {
+                const lastTag = tags[tags.length - 1];
+                removeTag(lastTag);
+                tagsInput.focus();
+            }
+        }
+    });
+    
+    tagsInput.addEventListener('blur', function() {
+        if (this.value.trim() !== '') {
+            handleTagInput();
+        }
+    });
+    
+    function handleTagInput() {
+        if (tagsInput.value.trim() !== '') {
+            addTag(tagsInput.value.trim());
+            tagsInput.value = '';
+        }
+    }
+    
+    function addTag(tagName) {
+        if (!tagName) return;
+        
+        // Check if tag already exists
+        const existingTags = Array.from(tagContainer.querySelectorAll('.tag')).map(tag => tag.dataset.tag);
+        if (existingTags.includes(tagName)) {
+            tagsInput.value = '';
+            return;
+        }
+        
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag inline-flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm';
+        tagElement.dataset.tag = tagName;
+        
+        tagElement.innerHTML = `
+            ${tagName}
+            <button type="button" class="ml-1.5 -mr-1 text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100 focus:outline-none">
+                &times;
+            </button>
+        `;
+        
+        tagElement.querySelector('button').addEventListener('click', function() {
+            removeTag(tagElement);
+            tagsInput.focus();
+        });
+        
+        // Insert before the input
+        tagContainer.insertBefore(tagElement, tagsInput);
+        updateHiddenInput();
+    }
+    
+    function removeTag(tagElement) {
+        if (tagElement && tagElement.parentNode) {
+            tagElement.remove();
+            updateHiddenInput();
+        }
+    }
+    
+    function updateHiddenInput() {
+        if (!hiddenInput) return;
+        const tags = Array.from(tagContainer.querySelectorAll('.tag')).map(tag => tag.dataset.tag);
+        hiddenInput.value = tags.join(',');
+    }
 
 })();

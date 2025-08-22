@@ -7,8 +7,8 @@
     <title>@yield('title', 'Dashboard')</title>
 
     <!-- Favicon -->
-    <link rel="icon" href="@yield('favicon', asset('favicon.ico'))" type="image/x-icon">
-    <link rel="shortcut icon" href="@yield('favicon', asset('favicon.ico'))" type="image/x-icon">
+    <link rel="icon" href="{{fn_get_image('company_favicon', 0)['url'] ?? ''}}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{fn_get_image('company_favicon', 0)['url'] ?? ''}}" type="image/x-icon">
 
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
@@ -38,7 +38,7 @@
 
             <!-- Main Content -->
             <main class="flex-1 overflow-y-auto p-6 bg-white-100">
-                <div class="container mx-auto px-4 py-6">
+                <div class="container mx-auto px-3 py-2">
                     @yield('content')
                 </div>
             </main>
@@ -47,7 +47,7 @@
     <x-delete-modal />
     <x-status-modal />
     <script src="{{ asset('js/toast.js') }}"></script>
-    <script src="https://cdn.tiny.cloud/1/{{fn_get_setting('general.settings.editor.tiny_api_key')}}/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+    <script src="https://cdn.tiny.cloud/1/{{fn_get_setting('general.editor.api_key')}}/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
     @yield('scripts')
 
     {{-- notification toggle --}}
@@ -132,7 +132,7 @@
         });
     </script>
 
-    {{-- deleet modal --}}
+    {{-- delete modal --}}
     <script>
         function openDeleteModal(actionUrl) {
             const modal = document.getElementById('global-delete-modal');

@@ -14,23 +14,15 @@
     <!-- Left Column (2/3) -->
     <div class="lg:col-span-2 bg-white rounded-lg p-6 space-y-6">        
         <!-- Description -->
-        <input type="hidden" name="description" value="{{ old('description', $product->description ?? '') }}" id="activity-description">
         <div>
             <label class="custom-label">Description</label>
-            <textarea id="message-editor" rows="8"
+            <textarea id="message-editor" editor="true" name="description" rows="8"
                 class="hidden">{{ old('description', $product->description ?? '') }}</textarea>
         </div>
 
+        @include('filemanager::components.file-uploader', ['object_type' => 'product', 'object_id' => $product->id ?? 0, 'name' => 'image'])
         <!-- Image -->
-        <div>
-            <label class="custom-label">Image</label>
-            <input type="file" name="image" id="image" class="input-field" accept="image/*">
-            @if(isset($product) && $product->image)
-                <img src="{{ asset('storage/' . $product->image) }}" 
-                    alt="Product Image"
-                    class="mt-2 h-20 rounded">
-            @endif
-        </div>
+      
 
         <!-- Pricing -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -46,6 +38,38 @@
                     value="{{ old('sale_price', $product->sale_price ?? '') }}" 
                     class="input-field">
             </div>
+        </div>
+
+        <div class="mb-6">
+            <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Tags
+            </label>
+            
+         <div class="relative">
+            <div id="tag-container" class="flex flex-wrap items-center gap-2 p-2 border rounded-md min-h-[42px] 
+                border-gray-300 dark:border-gray-600 dark:bg-gray-700 bg-white
+                @error('tags') border-red-500 dark:border-red-400 @enderror">
+                <!-- Existing tags will appear here -->
+                <input type="text" id="tags-input" 
+                    class="flex-1 min-w-[100px] px-2 py-1 bg-transparent border-0 focus:outline-none focus:ring-0
+                        dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
+                    placeholder="Type to search tags or add new ones"
+                    list="tagList" />
+            </div>
+            
+            <input type="hidden" id="tags" name="tags" 
+                value="{{ old('tags', isset($product) ? implode(',', $product->tags->pluck('name')->toArray()) : '') }}" />
+        </div>
+
+        <datalist id="tagList">
+            @foreach(\Modules\Leads\Models\TagsModel::all() as $tag)
+                <option value="{{ $tag->name }}"></option>
+            @endforeach
+        </datalist>
+
+        @error('tags')
+            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+        @enderror
         </div>
     </div>
 
@@ -193,39 +217,6 @@
             .toLowerCase()
             .replace(/\s+/g, '-')
             .replace(/[^a-z0-9\-]/g, '');
-    });
-</script>
-
-<script>
-    // TinyMCE
-    tinymce.init({
-        selector: '#message-editor',
-        plugins: 'link lists mentions',
-        toolbar: 'undo redo | bold italic | bullist numlist | link | mentions',
-        menubar: false,
-        statusbar: false,
-        height: 200,
-        setup: function(editor) {
-            editor.on('change', function() {
-                document.getElementById('activity-description').value = editor.getContent();
-            });
-        }
-    });
-
-    // Image preview
-    document.getElementById('image').addEventListener('change', function(e) {
-        const preview = document.querySelector('#image + img');
-        const file = e.target.files[0];
-        if (file) {
-            if (!preview) {
-                const img = document.createElement('img');
-                img.className = 'mt-2 h-20 rounded';
-                document.getElementById('image').insertAdjacentElement('afterend', img);
-                img.src = URL.createObjectURL(file);
-            } else {
-                preview.src = URL.createObjectURL(file);
-            }
-        }
     });
 </script>
 @endsection

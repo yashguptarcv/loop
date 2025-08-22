@@ -172,8 +172,6 @@ class WhatsAppController extends Controller
             'name' => 'nullable|string',
         ]);
 
-        // dd($request->all());
-
         $result = $this->whatsAppService->sendTextMessage(
             $request->phone,
             $request->message,
@@ -193,7 +191,7 @@ class WhatsAppController extends Controller
             'success' => false,
             'message' => 'Failed to send WhatsApp message',
             'error' => $result['error']
-        ], 500);
+        ]);
     }
 
     /**
@@ -220,7 +218,7 @@ class WhatsAppController extends Controller
     {
         // Handle verification request from Meta
         if ($request->has('hub_mode') && $request->input('hub_mode') === 'subscribe') {
-            $verifyToken = fn_get_setting('general.settings.whatsapp.access_token');
+            $verifyToken = fn_get_setting('general.whatsapp.access_token');
 
             if ($request->input('hub_verify_token') === $verifyToken) {
                 return response()->json($request->input('hub_challenge'));

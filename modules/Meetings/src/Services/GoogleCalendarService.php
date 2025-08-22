@@ -28,11 +28,11 @@ class GoogleCalendarService
     protected function getClient()
     {
         $client = new Google_Client();
-        $client->setApplicationName(config('general.settings.google.app_name'));
+        $client->setApplicationName(config('general.google.app_name'));
         $client->setScopes(Google_Service_Calendar::CALENDAR);
         $client->setAuthConfig([
-            'client_id' => fn_get_setting('general.settings.google.client_id'),
-            'client_secret' => fn_get_setting('general.settings.google.client_secret'),
+            'client_id' => fn_get_setting('general.google.client_id'),
+            'client_secret' => fn_get_setting('general.google.client_secret'),
             'redirect_uris' => [fn_get_setting('general.settings.google.redirect')],
         ]);
         $client->setAccessType('offline');
@@ -105,11 +105,11 @@ class GoogleCalendarService
             'location' => $meeting->location,
             'start' => new Google_Service_Calendar_EventDateTime([
                 'dateTime' => Carbon::parse($meeting->start_time)->toRfc3339String(),
-                'timeZone' => fn_get_setting('general.settings.timezone'),
+                'timeZone' => fn_get_setting('general.timezone'),
             ]),
             'end' => new Google_Service_Calendar_EventDateTime([
                 'dateTime' => Carbon::parse($meeting->end_time)->toRfc3339String(),
-                'timeZone' => fn_get_setting('general.settings.timezone'),
+                'timeZone' => fn_get_setting('general.timezone'),
             ]),
         ]);
 

@@ -17,14 +17,19 @@ return new class extends Migration
             $table->string('order_number')->unique();
             $table->string('status', '1');
             $table->decimal('subtotal', 10, 2);
+            $table->decimal('discount', 10, 2);
             $table->decimal('tax', 10, 2)->default(0);
             $table->decimal('shipping', 10, 2)->default(0);
             $table->decimal('total', 10, 2);
             $table->text('notes')->nullable();
-            $table->string('payment_method');
-            $table->string('payment_status')->default('unpaid');
-            $table->json('shipping_address');
-            $table->json('billing_address');
+            $table->text('currency');
+            $table->text('coupon_code');
+            $table->string('payment_method')->nullable();
+            $table->string('payment_status')->nullable();
+            $table->json('shipping_address')->nullable();
+            $table->json('billing_address')->nullable();
+            $table->text('ip_address');
+            $table->text('user_agent');
             $table->timestamps();
         });
         

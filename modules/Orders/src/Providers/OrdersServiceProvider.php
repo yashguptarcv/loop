@@ -2,9 +2,11 @@
 
 namespace Modules\Orders\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\ServiceProvider;
+use Modules\Notifications\Services\NotificationService;
+use Modules\Notifications\Services\NotificationDispatcher;
 
 class OrdersServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,12 @@ class OrdersServiceProvider extends ServiceProvider
             __DIR__.'/../Config/config.php', 'orders'
         );
 
+        $this->app->singleton(NotificationService::class, function ($app) {
+            return new NotificationService(
+                $app->make(NotificationDispatcher::class)
+            );
+        });
+        
         $this->app->register(OrdersEventServiceProvider::class);
     }
 

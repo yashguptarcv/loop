@@ -38,7 +38,7 @@ return new class extends Migration
             $table->unsignedBigInteger('assigned_to')->nullable();
             $table->foreign('assigned_to')
                   ->references('id')
-                  ->on('admins')
+                  ->on('roles')
                   ->onDelete('set null');
 
             // Foreign key to admins table (created by)

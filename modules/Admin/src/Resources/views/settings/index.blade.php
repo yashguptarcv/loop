@@ -15,9 +15,9 @@
                     [
                         'title' => 'General Settings',
                         'description' => 'Configure store name, contact information, and basic preferences.',
-                        'route' => route('admin.settings.general.leads.index'),
+                        'route' => route('admin.settings.general.index'),
                         'icon' => 'settings',
-                        'permission' => 'admin.settings.general.leads.index'
+                        'permission' => 'admin.settings.general.index'
                     ],
                     [
                         'title' => 'Payment Methods',
@@ -26,50 +26,59 @@
                         'icon' => 'payments',
                         'permission' => ''
                     ],
-                   
+
                     [
-                        'title' => 'Taxes',
-                        'description' => 'Set up tax rules and VAT settings.',
-                        'route' => '#',
-                        'icon' => 'receipt',
+                        'title' => 'Notifications',
+                        'description' => 'View system notification logs.',
+                        'route' => route('admin.notification.index'),
+                        'icon' => 'edit_notifications',
                         'permission' => ''
                     ],
                    
                     [
                         'title' => 'Logs',
                         'description' => 'View system activity logs and error reports.',
-                        'route' => '#',
+                        'route' => route('admin.settings.logs.index'),
                         'icon' => 'list_alt',
                         'permission' => ''
                     ],
                    
                     [
-                        'title' => 'Statuses',
-                        'description' => 'Manage Lead / Payments / Order / Customers statuses',
+                        'title' => 'Lead Configuration',
+                        'description' => 'Manage Lead Tracking / Tags / Sources',
                         'route' => route('admin.settings.statuses.leads.index'),
                         'icon' => 'flag',
                         'permission' => 'admin.settings.statuses.leads.index'
                     ],
+
+                    [
+                        'title' => 'Order Status',
+                        'description' => 'Manage order status',
+                        'route' => route('admin.settings.orders.index'),
+                        'icon' => 'flag',
+                        'permission' => 'admin.settings.orders.index'
+                    ],
+
                     [
                         'title' => 'Currencies',
                         'description' => 'Configure accepted currencies and exchange rates.',
-                        'route' => route('admin.settings.currencies.leads.index'),
+                        'route' => route('admin.settings.currencies.index'),
                         'icon' => 'currency_exchange',
-                        'permission' => 'admin.settings.currencies.leads.index'
+                        'permission' => 'admin.settings.currencies.index'
                     ],
                     [
                         'title' => 'Countries',
                         'description' => 'Manage countries where you operate and ship to.',
-                        'route' => route('admin.settings.countries.leads.index'),
+                        'route' => route('admin.settings.countries.index'),
                         'icon' => 'public',
-                        'permission' => 'admin.settings.countries.leads.index'
+                        'permission' => 'admin.settings.countries.index'
                     ],
                     [
                         'title' => 'States',
                         'description' => 'Manage states/regions for tax and shipping calculations.',
-                        'route' => route('admin.settings.states.leads.index'),
+                        'route' => route('admin.settings.states.index'),
                         'icon' => 'map',
-                        'permission' => 'admin.settings.states.leads.index'
+                        'permission' => 'admin.settings.states.index'
                     ],
                     [
                         'title' => 'Roles & Permissions',

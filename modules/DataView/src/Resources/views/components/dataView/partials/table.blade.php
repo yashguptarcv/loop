@@ -77,14 +77,17 @@
                                         <span class="material-icons-outlined">{{$action['icon']}}</span>
                                     </button>
                                 @else
-                                    @if(!empty($action['modal'])) 
+                                    @if(!empty($action['is_popup'])) 
+                                        @php
+                                            $title = isset($action['icon']) ? "<span class='material-icons-outlined'>".$action['icon']."</span>" : $action['title'] ;
+                                        @endphp
                                         <x-modal 
-                                            buttonText="{{ $action['title'] }}"
+                                            buttonText="{!! $title !!}"
                                             modalTitle="{{ $action['title'] }}"
                                             id="{{$action['index']}}"
                                             ajaxUrl="{{ $action['url'] }}"
                                             color="blue"
-                                            modalSize="sm"
+                                            modalSize="3xl"
                                         />
                                     @else
                                         <a href="{{ $action['url'] }}" class="text-blue-600 hover:text-blue-300 mr-3"

@@ -43,7 +43,7 @@ class UsersGrid extends DataGrid
             'label' => 'ID',
             'type' => 'integer',
             'searchable' => true,
-            'filterable' => true,
+            'filterable' => false,
             'sortable' => true,
         ]);
 
@@ -112,6 +112,7 @@ class UsersGrid extends DataGrid
             })->values()->toArray(),
         ]);
 
+
         $this->addColumn([
             'index' => 'created_at',
             'label' => 'Created At',
@@ -135,6 +136,7 @@ class UsersGrid extends DataGrid
                 'icon' => 'edit',
                 'title' => 'Edit',
                 'method' => 'GET',
+                'is_popup'  => true,
                 'url' => function ($row) {
                     return route('admin.settings.users.show', $row->id);
                 },
@@ -175,6 +177,7 @@ class UsersGrid extends DataGrid
                 'icon' => 'add',
                 'title' => 'Create User',
                 'method' => 'GET',
+                'is_popup'  => true,
                 'action' => 'text-blue-600 bg-blue-100',
                 'url' => 'admin.settings.users.create',
             ]);

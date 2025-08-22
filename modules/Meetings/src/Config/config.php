@@ -56,6 +56,13 @@ return [
     |
     */
 
+    'meeting_colors' => [
+        'blue'   => 'primary',
+        'red'    => 'danger',
+        'blue'   => 'secondary',
+        'blue'   => 'primary',
+    ],
+
     'permissions' => [
         'view' => 'View Meetings',
         'create' => 'Create Meetings',

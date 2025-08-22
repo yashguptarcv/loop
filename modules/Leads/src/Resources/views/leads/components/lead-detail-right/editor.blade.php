@@ -5,12 +5,9 @@
         @csrf
         <div class="mb-4">
             <select name="type" id="type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                <option value="general">General</option>
-                <option value="call">Call</option>
-                <option value="email">Email</option>
-                <option value="meeting">Meeting</option>
-                <option value="whatsapp">Whatsapp</option>
-                <option value="schedule_meeting">Schedule Meeting</option>
+                @foreach(config('leads.lead_options') as $opt_key => $opt)
+                <option value="{{$opt_key}}">{{$opt}}</option>
+                @endforeach
             </select>
         </div>
 
@@ -21,8 +18,7 @@
                    min="{{ now()->format('Y-m-d\TH:i') }}">
         </div>
         
-        <input type="hidden" name="description" id="activity-description">
-        <textarea id="message-editor" rows="8" class="hidden"></textarea>
+        <textarea id="message-editor" name="description" editor="true" rows="8"></textarea>
         
         <div class="mt-4">
             <label class="block text-sm font-medium text-gray-700 mb-1">Duration (minutes)</label>
@@ -32,10 +28,9 @@
         <div class="mt-4">
             <label class="block text-sm font-medium text-gray-700 mb-1">Outcome</label>
             <select name="outcome" class="w-full px-3 py-2 border border-gray-300 rounded-md">
-                <option value="positive">Positive</option>
-                <option value="neutral">Neutral</option>
-                <option value="negative">Negative</option>
-                <option value="follow_up">Follow Up Needed</option>
+                @foreach(config('leads.out_comes') as $out_key => $out)
+                <option value="{{$out_key}}">{{$out}}</option>
+                @endforeach
             </select>
         </div>
         
@@ -71,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const activityType = document.getElementById('type');
     const meetingDateContainer = document.getElementById('meeting-date-container');
     const meetingDateInput = document.getElementById('meeting-date');
-    console.log(activityType);
+    
     // Show/hide date field based on selection
     activityType.addEventListener('change', function() {
         if (this.value === 'schedule_meeting') {

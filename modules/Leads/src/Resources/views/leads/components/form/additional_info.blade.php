@@ -7,8 +7,9 @@
         <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Description
         </label>
-        <textarea id="description" name="description" rows="4"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 @error('description') border-red-500 dark:border-red-400 @enderror">{{ old('description', $lead->description ?? '') }}</textarea>
+        
+        <textarea editor="true" id="message-editor" name="description" rows="8" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 @error('description') border-red-500 dark:border-red-400 @enderror" rows="7">{{ old('description', $lead->description ?? '') }}</textarea>
+
         @error('description')
             <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
         @enderror
@@ -63,20 +64,39 @@
         @endif
     </div>
 
+    <!--  -->
     <div class="mb-6">
-        <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Tags
-        </label>
-        <input type="text" id="tags" name="tags" 
-            value="{{ old('tags', isset($lead) ? implode(',', $lead->tags->pluck('name')->toArray()) : '' )}}"
-            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 @error('tags') border-red-500 dark:border-red-400 @enderror"
-            placeholder="Type to search tags or add new ones">
-            <datalist id="tagList">
-                @foreach(\Modules\Leads\Models\TagsModel::all() as $tag)
-                    <option value="{{ $tag->name }}"></option>
-                @endforeach
-            </datalist>        
+    <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+        Tags
+    </label>
+    
+    <div class="relative">
+        <div id="tag-container" class="flex flex-wrap items-center gap-2 p-2 border rounded-md min-h-[42px] 
+            border-gray-300 dark:border-gray-600 dark:bg-gray-700 bg-white
+            @error('tags') border-red-500 dark:border-red-400 @enderror">
+            <!-- Existing tags will appear here -->
+            <input type="text" id="tags-input" 
+                class="flex-1 min-w-[100px] px-2 py-1 bg-transparent border-0 focus:outline-none focus:ring-0
+                    dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
+                placeholder="Type to search tags or add new ones"
+                list="tagList" />
+        </div>
+        
+        <input type="hidden" id="tags" name="tags" 
+            value="{{ old('tags', isset($lead) ? implode(',', $lead->tags->pluck('name')->toArray()) : '') }}" />
     </div>
+
+    <datalist id="tagList">
+        @foreach(\Modules\Leads\Models\TagsModel::all() as $tag)
+            <option value="{{ $tag->name }}"></option>
+        @endforeach
+    </datalist>
+
+    @error('tags')
+        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+    @enderror
+</div>
+
 </div>
 
 @push('scripts')

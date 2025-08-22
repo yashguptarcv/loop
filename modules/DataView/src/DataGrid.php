@@ -242,8 +242,8 @@ abstract class DataGrid
             index: $action['index'] ?? '',
             icon: $action['icon'] ?? '',
             title: $action['title'],
-            method: $action['method'],
-            modal: $action['modal'] ?? '',
+            is_popup: $action['is_popup'] ?? false,
+            method: $action['method'] ,
             url: $action['url'],
         );
 
@@ -279,6 +279,7 @@ abstract class DataGrid
             method: $massAction['method'],
             url: $massAction['url'],
             action: $massAction['action'],
+            is_popup: $massAction['is_popup'] ??  false,
             options: $massAction['options'] ?? [],
         );
 
@@ -640,11 +641,12 @@ abstract class DataGrid
                 $getUrl = $action->url;
 
                 $record->actions[] = [
-                    'index'  => ! empty($action->index) ? $action->index : 'action_' . $index + 1,
-                    'icon'   => $action->icon,
-                    'title'  => $action->title,
-                    'method' => $action->method,
-                    'url'    => $getUrl($record),
+                    'index'     => ! empty($action->index) ? $action->index : 'action_' . $index + 1,
+                    'icon'      => $action->icon,
+                    'title'     => $action->title,
+                    'is_popup'  => $action->is_popup,
+                    'method'    => $action->method,
+                    'url'       => $getUrl($record),
                 ];
             }
         }

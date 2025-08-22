@@ -22,7 +22,6 @@ class CountryState extends DataGrid
             ->select(
                 'id',
                 'country_id',
-                'country_code',
                 'code',
                 'default_name',
             );
@@ -40,28 +39,13 @@ class CountryState extends DataGrid
             'label' => 'ID',
             'type' => 'integer',
             'searchable' => true,
-            'filterable' => true,
+            'filterable' => false,
             'sortable' => true,
         ]);
-        
 
-        $this->addColumn([
-            'index' => 'country_code',
-            'label' => 'Country_Code',
-            'type' => 'string',
-            'searchable' => true,
-            'filterable' => true,
-            'sortable' => true,
-        ]);
-        
-        $this->addColumn([
-            'index' => 'code',
-            'label' => 'Code',
-            'type' => 'string',
-            'searchable' => true,
-            'filterable' => true,
-            'sortable' => true,
-        ]);
+
+
+
 
         $country = DB::table('countries')->pluck('name', 'id');
         $this->addColumn([
@@ -83,16 +67,26 @@ class CountryState extends DataGrid
             })->values()->toArray(),
         ]);
 
+        $this->addFilter('name', 'country_id');
+
+        $this->addColumn([
+            'index' => 'code',
+            'label' => 'Code',
+            'type' => 'string',
+            'searchable' => true,
+            'filterable' => true,
+            'sortable' => true,
+        ]);
+
         $this->addColumn([
             'index' => 'default_name',
-            'label' => 'State_Name',
+            'label' => 'State Name',
             'type' => 'string',
             'searchable' => false,
             'filterable' => true,
             'sortable' => true,
-           
+
         ]);
-        
     }
 
     /**
@@ -102,24 +96,25 @@ class CountryState extends DataGrid
      */
     public function prepareActions()
     {
-        if (bouncer()->hasPermission('admin.settings.states.leads.edit')) {
+        if (bouncer()->hasPermission('admin.settings.states.edit')) {
             $this->addAction([
                 'icon' => 'edit',
                 'title' => 'Edit',
                 'method' => 'GET',
+                'is_popup'  => true,
                 'url' => function ($row) {
-                    return route('admin.settings.states.leads.edit', $row->id);
+                    return route('admin.settings.states.edit', $row->id);
                 },
             ]);
         }
 
-        if (bouncer()->hasPermission('admin.settings.states.leads.destroy')) {
+        if (bouncer()->hasPermission('admin.settings.states.destroy')) {
             $this->addAction([
                 'icon' => 'delete',
                 'title' => 'Delete',
                 'method' => 'DELETE',
                 'url' => function ($row) {
-                    return route('admin.settings.states.leads.destroy', $row->id);
+                    return route('admin.settings.states.destroy', $row->id);
                 },
             ]);
         }
@@ -133,15 +128,15 @@ class CountryState extends DataGrid
     public function prepareMassActions()
     {
 
-        if (bouncer()->hasPermission('admin.settings.states.leads.create')) {
+        if (bouncer()->hasPermission('admin.settings.states.create')) {
             $this->addMassAction([
                 'icon' => 'add',
                 'title' => 'Add State',
                 'method' => 'GET',
+                'is_popup'  => true,
                 'action' => 'text-blue-600 bg-blue-100',
-                'url' => 'admin.settings.states.leads.create',
+                'url' => 'admin.settings.states.create',
             ]);
         }
-        
     }
 }

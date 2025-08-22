@@ -2,14 +2,15 @@
 
 namespace Modules\Admin\Http\Controllers\Settings\Currencies;
 
+use Throwable;
 use Illuminate\Http\Request;
 use Modules\Acl\Models\Role;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Modules\Acl\Services\CurrencyService;
+use Modules\Admin\Models\CurrencyExchangeRate;
 use Modules\Admin\DataView\Settings\Currency\Currency;
-use Illuminate\Validation\Rule;
-use Throwable;
 
 class CurrencyController extends Controller
 {
@@ -23,17 +24,17 @@ class CurrencyController extends Controller
     public function index(Request $request)
     {
         $lists = fn_datagrid(Currency::class)->process();
-        return view('admin::settings.currencies.leads.index', compact('lists'));
+        return view('admin::settings.currencies.index', compact('lists'));
     }
 
     public function create()
     {
-        return view('admin::settings.currencies.leads.form');
+        $rates = CurrencyExchangeRate::all();
+        return view('admin::settings.currencies.form', compact('rates'));
     }
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'code' => [
                 'required',
@@ -48,44 +49,52 @@ class CurrencyController extends Controller
             'name' => 'required|string|max:255',
             'symbol' => 'string|nullable',
             'decimal' => 'required',
+            'target_currency' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
-            ], 422);
+            ]);
         }
 
         try {
-            $user = $this->currencyService->create($request->all());
+            $currency = $this->currencyService->create($request->all());
+
+            CurrencyExchangeRate::create([
+                'target_currency' => $currency->id,
+                'rate' => $request->input('target_currency'),
+
+            ]);
+
 
             return response()->json([
                 'success' => true,
-                'message' => 'currency created successfully!',
-                'redirect_url' => route('admin.settings.currencies.leads.index'),
-                'data' => $user
+                'message' => 'Currency created successfully!',
+                'redirect_url' => route('admin.settings.currencies.index'),
+                'data' => $currency
             ]);
         } catch (\Throwable $e) {
             return response()->json([
                 'errors' => 'Something went wrong. Please try again. ' . $e
-            ], 500);
+            ]);
         }
     }
 
     public function show($id)
     {
-        $user = $this->currencyService->find($id);
-        if (!$user) {
-            return redirect()->route('admin.settings.currencies.leads.index')->with('error', 'User not found.');
+        $currency = $this->currencyService->find($id);
+        if (!$currency) {
+            return redirect()->route('admin.settings.currencies.index')->with('error', 'User not found.');
         }
-        // $roles = Role::all();
-        return view('admin::settings.currencies.leads.form', compact('user'));
+        return view('admin::settings.currencies.form', compact('user'));
     }
 
     public function edit($id)
     {
+        $rate = CurrencyExchangeRate::where('target_currency', $id)->first();
         $currency = $this->currencyService->find($id);
-        return view('admin::settings.currencies.leads.form', compact('currency'));
+        return view('admin::settings.currencies.form', compact('currency', 'rate'));
     }
 
 
@@ -97,35 +106,39 @@ class CurrencyController extends Controller
                 'string',
                 'max:255',
 
-                Rule::unique('currencies')->where(function ($query) use ($request) {
-                    return $query->where('code', $request->code)
+                Rule::unique('currencies')->where(function ($query) use ($request, $id) {
+                    return $query->where('code', $request->code)->where('id', '!=', $id)
                         ->where('symbol', $request->symbol);
                 })
             ],
             'name' => 'required|string',
             'symbol' => 'required|string',
             'decimal' => 'required',
+            'target_currency' => 'required|numeric',
         ]);
 
-        if ($validator->fails()) {
+        if ($validator->fails()) {  
             return response()->json([
                 'errors' => $validator->errors(),
-            ], 422);
+            ]);
         }
 
         try {
             $currency = $this->currencyService->update($id, $request->all());
+            CurrencyExchangeRate::updateOrCreate(
+                ['target_currency' => $currency->id],
+                ['rate' => $request->input('target_currency')]);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Currency updated successfully!',
-                'redirect_url' => route('admin.settings.currencies.leads.index'),
+                'redirect_url' => route('admin.settings.currencies.index'),
                 'data' => $currency
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.' . $e
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.'.$e->getMessage()
+            ]);
         }
     }
     public function destroy($id)
@@ -134,13 +147,13 @@ class CurrencyController extends Controller
             $this->currencyService->delete($id);
             return response()->json([
                 'success' => true,
-                'message' => 'Admin deleted',
-                'redirect_url' => route('admin.settings.currencies.leads.index'),
+                'message' => 'Currency deleted',
+                'redirect_url' => route('admin.settings.currencies.index'),
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.'.$e->getMessage()
+            ]);
         }
     }
 
@@ -152,9 +165,9 @@ class CurrencyController extends Controller
         ]);
         try {
             $deletedCount = $this->currencyService->deleteMultiple($request->ids);
-            return redirect()->route('admin.settings.currencies.leads.index')->with('success', 'Bulk Deleted Successfully');
+            return redirect()->route('admin.settings.currencies.index')->with('success', 'Bulk Deleted Successfully');
         } catch (\Throwable $e) {
-            return redirect()->route('admin.settings.currencies.leads.index')->with('error', 'Something went wrong. Please try again.');
+            return redirect()->route('admin.settings.currencies.index')->with('error', 'Something went wrong. Please try again.'. $e->getMessage());
         }
     }
 }

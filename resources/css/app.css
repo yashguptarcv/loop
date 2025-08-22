@@ -67,6 +67,14 @@
   --color-danger-hover: #dc2626;
   --color-danger-focus: #b91c1c;
 } 
+/* Astrick  */
+.required::after {
+    content: ' *';
+    color: red;
+    margin-left: 4px;
+    font-weight: bold;
+    display: inline;
+}
 
 /* Input Field Styles */
 .input-field {
@@ -229,4 +237,46 @@ input[type="checkbox"]:disabled {
 .modal-container.show {
     opacity: 1;
     transform: scale(1);
+}
+
+
+/* Checkout progress indicator */
+.checkout-progress {
+    @apply flex justify-between mb-8;
+}
+
+.checkout-progress-step {
+    @apply flex flex-col items-center;
+}
+
+.checkout-progress-step-number {
+    @apply w-10 h-10 rounded-full flex items-center justify-center mb-2 font-semibold;
+}
+
+.checkout-progress-step-active .checkout-progress-step-number {
+    @apply bg-indigo-600 text-white;
+}
+
+.checkout-progress-step-completed .checkout-progress-step-number {
+    @apply bg-green-500 text-white;
+}
+
+.checkout-progress-step-inactive .checkout-progress-step-number {
+    @apply bg-gray-200 text-gray-600;
+}
+
+.checkout-progress-step-label {
+    @apply text-sm font-medium;
+}
+
+.checkout-progress-step-active .checkout-progress-step-label {
+    @apply text-indigo-600;
+}
+
+.checkout-progress-step-completed .checkout-progress-step-label {
+    @apply text-green-600;
+}
+
+.checkout-progress-step-inactive .checkout-progress-step-label {
+    @apply text-gray-500;
 }

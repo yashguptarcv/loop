@@ -20,6 +20,7 @@ class OrderItem extends Model
         'sku',
         'price',
         'quantity',
+        'tax_rate',
         'options'
     ];
 

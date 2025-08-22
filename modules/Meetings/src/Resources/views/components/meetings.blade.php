@@ -18,16 +18,20 @@
 @for($day = 1; $day <= $daysInMonth; $day++)
     <div class="h-auto p-1 relative calendar-day @if($isCurrentMonth && $day == $today) today @endif">
         <div class="text-right p-1 date-number @if($isCurrentMonth && $day == $today) bg-blue-100 text-blue-600 border rounded-lg @endif">{{ $day }}</div>
-        <div class="space-y-1 overflow-y-auto max-h-24">
+        <!-- <div class="space-y-1 overflow-y-auto max-h-24"> -->
+            <div class="space-y-1 overflow-y-auto max-h-24 cursor-pointer" style="overflow-x: hidden; word-wrap: break-word;">
+
             @if(isset($meetings[$day]))
                 @foreach($meetings[$day]->take(3) as $meeting)
-                    <a href="{{ route('admin.meetings.show', $meeting->id) }}" 
-                    class="block text-xs p-1 bg-{{ $meeting->color ?? 'green' }}-100 text-{{ $meeting->color ?? 'green' }}-800 rounded truncate hover:bg-{{ $meeting->color ?? 'green' }}-200 meeting-item"
-                    title="{{ $meeting->title }} ({{ $meeting->start_time 
-    ? \Carbon\Carbon::parse($meeting->start_time)->format('g:i A') 
-    : 'Not Scheduled'; }})">
-                        {{ $meeting->title }}
-                    </a>
+                    
+                    <x-modal 
+                        buttonText="{!! $meeting->title !!}"
+                        modalTitle="Meeting Detail"
+                        id="meeting-show-{{$meeting->id}}"
+                        ajaxUrl="{{ route('admin.meetings.show', $meeting->id) }}"
+                        buttonClass="block text-xs p-1 bg-{{ $meeting->color ?? 'green' }}-100 text-{{ $meeting->color ?? 'green' }}-800 rounded truncate hover:bg-{{ $meeting->color ?? 'green' }}-200 meeting-item"
+                        modalSize="lg"
+                    />
                 @endforeach
                 
                 @if($meetings[$day]->count() >= 3)

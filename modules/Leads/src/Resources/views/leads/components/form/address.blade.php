@@ -60,8 +60,8 @@
                             type="text"
                             autocomplete="dropdown"
                             name="country_name"
-                            value=""
-                            placeholder="autocomplete ( countries )"
+                            value="{{isset($lead->country) ? fn_get_country_name($lead->country) : ''}}"
+                            placeholder="Autocomplete"
                             id="input-country_id"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
                             data-table="countries"
@@ -73,7 +73,7 @@
                             type="hidden"
                             name="country"
                             id="country"
-                            value="{{ old('country', $lead->country ?? '') }}"
+                            value="{{isset($lead->country) ? $lead->country : ''}}"
                             class="mt-1"
                             data-original-value="" />
                         @error('country')

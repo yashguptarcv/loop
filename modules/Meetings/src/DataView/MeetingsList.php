@@ -25,7 +25,7 @@ class MeetingsList extends DataGrid
     public function prepareQueryBuilder()
     {
         $meetings = DB::table('meetings');
-        if (fn_get_setting('general.settings.lead_assigned_user') != auth('admin')->id()) {
+        if (fn_get_setting('general.lead.user_group') != auth('admin')->id()) {
             $meetings->where('admin_id', auth('admin')->id());
         }
         // where('start_time', '>=', Carbon::now())
@@ -136,12 +136,24 @@ class MeetingsList extends DataGrid
 
         if (bouncer()->hasPermission('admin.meetings.edit')) {
             $this->addAction([
-                'title'     => 'Edit',
+                'title'     => 'Edit Meeting',
                 'icon'      => 'edit',
                 'method'    => 'GET',
-                'modal'     => true,
+                'is_popup'     => true,
                 'url'       => function ($row) {
                     return route('admin.meetings.edit', $row->id);
+                },
+            ]);
+        }
+        
+        if (bouncer()->hasPermission('admin.meetings.show')) {
+            $this->addAction([
+                'icon' => 'open_in_new',
+                'title' => 'Meeting Detail',
+                'is_popup'     => true,
+                'method' => 'GET',
+                'url' => function ($row) {
+                    return route('admin.meetings.show', $row->id);
                 },
             ]);
         }

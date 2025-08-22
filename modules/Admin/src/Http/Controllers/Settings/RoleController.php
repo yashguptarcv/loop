@@ -60,8 +60,8 @@ class RoleController extends Controller
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -96,8 +96,8 @@ class RoleController extends Controller
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -119,8 +119,8 @@ class RoleController extends Controller
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -134,7 +134,7 @@ class RoleController extends Controller
             $deletedCount = $this->roleService->deleteMultiple($request->ids);
             return redirect()->route('admin.settings.roles.index')->with('success', 'Roles Deleted Successfully');
         } catch (\Throwable $e) {
-            return redirect()->route('admin.settings.roles.index')->with('error', 'Something went wrong. Please try again.');
+            return redirect()->route('admin.settings.roles.index')->with('error', 'Something went wrong. Please try again.' . $e->getMessage());
 
         }
     }

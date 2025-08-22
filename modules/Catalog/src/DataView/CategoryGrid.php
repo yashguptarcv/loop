@@ -87,6 +87,18 @@ class CategoryGrid extends DataGrid
             'closure' => function ($row) {
                 return ($row->status === 'A') ? 'Active' : 'Inactive';
             },
+            'filterable_type' => 'dropdown',
+            'filterable_options' => [
+                [
+                    'label' => 'Active',
+                    'value' => 'A'
+                ],
+
+                [
+                    'label' => 'Inactive',
+                    'value' => 'D'
+                ]
+            ],
         ]);
 
         $this->addColumn([

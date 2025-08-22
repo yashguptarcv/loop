@@ -24,12 +24,12 @@ class CountryController extends Controller
     public function index(Request $request)
     {
         $lists = fn_datagrid(Country::class)->process();
-        return view('admin::settings.countries.leads.index', compact('lists'));
+        return view('admin::settings.countries.index', compact('lists'));
     }
 
     public function create()
     {
-        return view('admin::settings.countries.leads.form');
+        return view('admin::settings.countries.form');
     }
 
     public function store(Request $request)
@@ -51,7 +51,7 @@ class CountryController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
-            ], 422);
+            ]);
         }
 
         try {
@@ -61,7 +61,7 @@ class CountryController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Country created successfully!',
-                'redirect_url' => route('admin.settings.countries.leads.index'),
+                'redirect_url' => route('admin.settings.countries.index'),
                 'data' => $country
             ]);
         } catch (\Throwable $e) {
@@ -75,10 +75,10 @@ class CountryController extends Controller
     {
         $user = $this->countryService->find($id); // You should already have a method like this in your service
         if (!$user) {
-            return redirect()->route('admin.settings.countries.leads.index')->with('error', 'User not found.');
+            return redirect()->route('admin.settings.countries.index')->with('error', 'User not found.');
         }
 
-        return view('admin::settings.countries.leads.form');
+        return view('admin::settings.countries.form');
     }
 
 
@@ -92,7 +92,7 @@ class CountryController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
-            ], 422);
+            ]);
         }
 
         try {
@@ -101,7 +101,7 @@ class CountryController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Counrty updated successfully!',
-                'redirect_url' => route('admin.settings.countries.leads.index'),
+                'redirect_url' => route('admin.settings.countries.index'),
                 'data' => $user
             ]);
         } catch (\Throwable $e) {
@@ -113,7 +113,7 @@ class CountryController extends Controller
     public function edit($id)
     {
         $country = $this->countryService->find($id);
-        return view('admin::settings.countries.leads.form', compact('country'));
+        return view('admin::settings.countries.form', compact('country'));
     }
     public function destroy($id)
     {
@@ -122,7 +122,7 @@ class CountryController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Country deleted',
-                'redirect_url' => route('admin.settings.countries.leads.index'),
+                'redirect_url' => route('admin.settings.countries.index'),
             ]);
         } catch (\Throwable $e) {
             return response()->json([
@@ -135,13 +135,13 @@ class CountryController extends Controller
     {
         $request->validate([
             'ids' => 'required|array|min:1',
-            'ids.*' => 'integer|exists:country,id',
+            'ids.*' => 'integer|exists:countries,id',
         ]);
         try {
             $deletedCount = $this->countryService->deleteMultiple($request->ids);
-            return redirect()->route('admin.settings.countries.leads.index')->with('success', 'Bulk Deleted Successfully');
+            return redirect()->route('admin.settings.countries.index')->with('success', 'Bulk Deleted Successfully');
         } catch (\Throwable $e) {
-            return redirect()->route('admin.settings.countries.leads.index')->with('error', 'Something went wrong. Please try again.');
+            return redirect()->route('admin.settings.countries.index')->with('error', 'Something went wrong. Please try again.');
         }
     }
 }

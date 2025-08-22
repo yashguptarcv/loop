@@ -84,7 +84,7 @@
             <div class="lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] lg:overflow-y-auto scroll-smooth">
                 <div class="bg-white rounded-lg p-6">
                     <div class="mb-4">
-                        <label class="custom-label">Role Name</label>
+                        <label class="custom-label required">Role Name</label>
                         <input type="text" name="name" id="name" class="input-field" required value="{{ $role->name ?? '' }}"
                             placeholder="Enter role name">
                     </div>

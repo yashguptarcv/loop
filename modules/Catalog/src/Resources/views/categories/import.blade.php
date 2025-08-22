@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Auto-advance to mapping step if file is selected
             showStep(2);
-        }, 500);
+        });
     }
     
     function setupMappingStep() {

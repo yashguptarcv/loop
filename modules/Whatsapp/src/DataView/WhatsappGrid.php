@@ -26,6 +26,8 @@ class WhatsappGrid extends DataGrid
                 'name',
                 'category',
                 'language',
+                'status',
+                'rejection_reason',
                 'template_id',
                 'created_at'
             );
@@ -72,6 +74,24 @@ class WhatsappGrid extends DataGrid
             'searchable' => false,
             'filterable' => true,
             'sortable' => true,
+        ]);
+
+        $this->addColumn([
+            'index' => 'status',
+            'label' => 'Status',
+            'type' => 'string',
+            'searchable' => false,
+            'filterable' => true,
+            'sortable' => true,
+            'closure' => function($row) {
+                if($row->status == 'rejected') {
+                    return  '<span class="bg-red-100 text-red-600 px-2 py-2 rounded-lg text-xs" data-toggle="tooltip" tooltip="'.$row->rejection_reason.'">'.$row->status.'</span>';
+                } elseif($row->status == 'approved') {
+                    return  '<span class="bg-green-100 text-green-600 px-2 py-2 rounded-lg text-xs" data-toggle="tooltip" tooltip="'.$row->rejection_reason.'">'.$row->status.'</span>';
+                } elseif($row->status == 'pending') {
+                    return  '<span class="bg-yellow-100 text-yellow-600 px-2 py-2 rounded-lg text-xs" data-toggle="tooltip" tooltip="'.$row->rejection_reason.'">'.$row->status.'</span>';
+                }
+            }
         ]);
 
         $this->addColumn([
@@ -131,16 +151,6 @@ class WhatsappGrid extends DataGrid
      */
     public function prepareMassActions()
     {
-        if (bouncer()->hasPermission('admin.whatsapp.templates.bulk-delete')) {
-            $this->addMassAction([
-                'icon' => 'delete',
-                'title' => 'Bulk Delete',
-                'method' => 'POST',
-                'action' => 'text-red-600 bg-red-100',
-                'url' => 'admin.whatsapp.templates.bulk-delete',
-            ]);
-        }
-
         if (bouncer()->hasPermission('admin.whatsapp.templates.sync')) {
             $this->addMassAction([
                 'icon' => 'rotate_left',
@@ -148,16 +158,6 @@ class WhatsappGrid extends DataGrid
                 'method' => 'GET',
                 'action' => 'text-blue-600 bg-blue-100',
                 'url' => 'admin.whatsapp.templates.sync',
-            ]);
-        }
-        
-        if (bouncer()->hasPermission('admin.whatsapp.index')) {
-            $this->addMassAction([
-                'icon' => 'share',
-                'title' => 'Send Message',
-                'method' => 'GET',
-                'action' => 'text-blue-600 bg-blue-100',
-                'url' => 'admin.whatsapp.index',
             ]);
         }
 

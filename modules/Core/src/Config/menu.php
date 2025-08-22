@@ -53,20 +53,20 @@ return [
     ],
     [
         'label' => 'Sales',
-        'route' => 'admin.settings.index',
+        'route' => 'admin.orders.index',
         'icon'  => 'trending_up',
-        'permission' => 'admin.settings.index',
+        'permission' => 'admin.orders.index',
         'children' => [
             [
                 'label' => 'Orders',
-                'route' => 'admin.settings.index',
-                'permission' => 'admin.website.cms.index',
+                'route' => 'admin.orders.index',
+                'permission' => 'admin.orders.index',
                 'icon' => 'chevron_right'
             ],
             [
                 'label' => 'Transaction',
-                'route' => 'admin.settings.index',
-                'permission' => 'admin.website.cms.index',
+                'route' => 'admin.transactions.index',
+                'permission' => 'admin.transactions.cms.index',
                 'icon' => 'chevron_right'
             ],
             [
@@ -84,8 +84,26 @@ return [
         'children' => [
             [
                 'label' => 'Coupons',
-                'route' => 'admin.coupons.index',
-                'permission' => 'admin.coupons.index',
+                'route' => 'admin.discount.index',
+                'permission' => 'admin.discount.index',
+                'icon' => 'chevron_right'
+            ],
+            [
+                'label' => 'Tax',
+                'route' => 'admin.tax-category.index',
+                'permission' => 'admin.tax-category.index',
+                'icon' => 'chevron_right'
+            ],
+            [
+                'label' => 'Email Templates',
+                'route' => 'admin.email-templates.index',
+                'permission' => 'admin.email-templates.index',
+                'icon' => 'chevron_right'
+            ],
+            [
+                'label' => 'Promotion / Markiting',
+                'route' => 'admin.email-templates.index',
+                'permission' => 'admin.email-templates.index',
                 'icon' => 'chevron_right'
             ]
         ]

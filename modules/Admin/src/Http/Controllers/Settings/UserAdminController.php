@@ -43,7 +43,7 @@ class UserAdminController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
-            ], 422);
+            ]);
         }
 
         try {
@@ -57,8 +57,8 @@ class UserAdminController extends Controller
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -85,7 +85,7 @@ class UserAdminController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
-            ], 422);
+            ]);
         }
 
         try {
@@ -99,8 +99,8 @@ class UserAdminController extends Controller
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
     public function destroy($id)
@@ -114,8 +114,8 @@ class UserAdminController extends Controller
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -131,7 +131,7 @@ class UserAdminController extends Controller
             $updatedCount = $this->userAdminService->updateStatuses($request->ids, $request->action);
             return redirect()->route('admin.settings.users.index')->with('success', 'Status Updated Successfully');
         } catch (\Throwable $e) {
-            return redirect()->route('admin.settings.users.index')->with('error', 'Something went wrong. Please try again.');
+            return redirect()->route('admin.settings.users.index')->with('error', 'Something went wrong. Please try again.' . $e->getMessage());
         }
     }
 
@@ -145,7 +145,7 @@ class UserAdminController extends Controller
             $deletedCount = $this->userAdminService->deleteMultiple($request->ids);
             return redirect()->route('admin.settings.users.index')->with('success', 'Bulk Deleted Successfully');
         } catch (\Throwable $e) {
-            return redirect()->route('admin.settings.users.index')->with('error', 'Something went wrong. Please try again.');
+            return redirect()->route('admin.settings.users.index')->with('error', 'Something went wrong. Please try again.' . $e->getMessage());
         }
     }
 }

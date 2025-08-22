@@ -22,6 +22,11 @@ class Meeting extends Model
         'admin_id'
     ];
 
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+    ];
+    
     protected $dates = ['start_time', 'end_time'];
 
 }

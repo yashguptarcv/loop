@@ -5,16 +5,24 @@ namespace Modules\Catalog\Http\Controllers\Products;
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Routing\Controller;
 use Modules\Catalog\Models\Product;
 use Modules\Catalog\Models\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Modules\Catalog\DataView\ProductGrid;
-use Illuminate\Validation\Rule;
+use Modules\Filemanager\Services\FileService;
 
 class ProductController extends Controller
 {
+    protected $fileService;
+    
+    public function __construct(FileService $fileService)
+    {
+        $this->fileService = $fileService;
+    }
+    
     /**
      * Display a listing of the resource.
      */
@@ -88,17 +96,28 @@ class ProductController extends Controller
 
             $productData['admin_id']    = auth('admin')->id();
 
-            // Handle image upload
-            if ($request->hasFile('image')) {
-                $productData['image'] = $request->file('image')->store('products', 'public');
-            }
-
+            
             // Create the product
             $product = Product::create($productData);
+            
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                    $fileLink = $this->fileService->uploadFile(
+                    $request->file('image'),
+                    'product',
+                    $product->id
+                );
+            }
 
             // Attach categories
             $product->categories()->attach($request->input('categories'));
 
+            // Handle tags if provided
+            if (!empty($request['tags'])) {
+                $tags = array_map('trim', explode(',', $request['tags']));
+                $product->syncTags($tags);
+            }
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Product created successfully!',
@@ -106,8 +125,8 @@ class ProductController extends Controller
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -179,10 +198,15 @@ class ProductController extends Controller
             // Handle image upload
             if ($request->hasFile('image')) {
                 // Delete old image if exists
-                if ($product->image) {
-                    Storage::disk('public')->delete($product->image);
+                $this->fileService->deleteFile('product', $product->id);
+                 // Handle image upload
+                if ($request->hasFile('image')) {
+                        $fileLink = $this->fileService->uploadFile(
+                        $request->file('image'),
+                        'product',
+                        $product->id
+                    );
                 }
-                $productData['image'] = $request->file('image')->store('products', 'public');
             }
 
             $productData['admin_id']    = auth('admin')->id();
@@ -193,6 +217,12 @@ class ProductController extends Controller
             // Sync categories
             $product->categories()->sync($request->input('categories'));
 
+            // Handle tags if provided
+            if (!empty($request['tags'])) {
+                $tags = array_map('trim', explode(',', $request['tags']));
+                $product->syncTags($tags);
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Product updated successfully!',
@@ -200,8 +230,8 @@ class ProductController extends Controller
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -212,9 +242,7 @@ class ProductController extends Controller
     {
         try {
             // Delete image if exists
-            if ($product->image) {
-                Storage::disk('public')->delete($product->image);
-            }
+            $this->fileService->deleteFile('product', $product->id);
 
             $product->delete();
 
@@ -225,8 +253,8 @@ class ProductController extends Controller
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -249,7 +277,7 @@ class ProductController extends Controller
                 ->with('success', 'Status updated successfully!');
         } catch (\Throwable $e) {
             return redirect()->route('admin.catalog.products.index')
-                ->with('error', 'Something went wrong. Please try again.');
+                ->with('error', 'Something went wrong. Please try again.' . $e->getMessage());
         }
     }
 
@@ -262,23 +290,21 @@ class ProductController extends Controller
 
         try {
             // Get categories with images first
-            $categories = Category::whereIn('id', $request->ids)->get();
+            $products = Product::whereIn('id', $request->ids)->get();
 
             // Delete associated images
-            foreach ($categories as $category) {
-                if ($category->image) {
-                    Storage::disk('public')->delete($category->image);
-                }
+            foreach ($products as $product) {
+                $this->fileService->deleteFile('product', $product->id);
             }
 
             // Delete categories
-            Category::whereIn('id', $request->ids)->delete();
+            Product::whereIn('id', $request->ids)->delete();
 
             return redirect()->route('admin.catalog.products.index')
                 ->with('success', 'Products deleted successfully!');
         } catch (\Throwable $e) {
             return redirect()->route('admin.catalog.products.index')
-                ->with('error', 'Something went wrong. Please try again.');
+                ->with('error', 'Something went wrong. Please try again.' . $e->getMessage());
         }
     }
 }

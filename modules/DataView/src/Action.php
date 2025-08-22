@@ -14,8 +14,8 @@ class Action
         public string $index,
         public string $icon,
         public string $title,
+        public string $is_popup,
         public string $method,
-        public string $modal,
         public mixed $url,
     ) {}
 
@@ -28,8 +28,8 @@ class Action
             'index'  => $this->index,
             'icon'   => $this->icon,
             'title'  => $this->title,
+            'is_popup' => $this->is_popup,
             'method' => $this->method,
-            'modal' => $this->modal,
             'url'    => $this->url,
         ];
     }

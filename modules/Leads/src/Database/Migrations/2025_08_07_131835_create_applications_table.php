@@ -16,11 +16,12 @@ class CreateApplicationsTable extends Migration
             $table->string('mobile');
             $table->string('email');
             $table->string('alternate_contact')->nullable();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('admin_id')->constrained()->cascadeOnDelete();
             $table->foreignId('lead_id')->constrained()->cascadeOnDelete();
             
             // Organization details
             $table->string('organization')->nullable();
+            $table->string('order_id')->nullable();
             $table->string('designation')->nullable();
             
             // Billing address (stored as JSON)

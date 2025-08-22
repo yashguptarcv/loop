@@ -13,10 +13,11 @@ return new class extends Migration
     {
         Schema::create('payment_methods', function (Blueprint $table) {
             $table->id();
+            $table->string('code')->unique()->comment('Processor identifier (stripe, paypal)');
+            $table->string('class_name')->comment('Payment processor class');
             $table->string('name');
-            $table->string('processor');
             $table->boolean('is_active')->default(true);
-            $table->json('configuration')->nullable();
+            $table->json('config')->nullable()->comment('Processor configuration');
             $table->timestamps();
         });
         

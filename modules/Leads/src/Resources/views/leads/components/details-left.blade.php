@@ -76,15 +76,15 @@
                 <div>
                     <p class="text-xs text-gray-500">Value</p>
                     @if(!empty($lead->value))
-                    <p class="text-gray-700 text-sm">{{fn_convert_currency($lead->value, 'USD')}}</p>
+                    <p class="text-gray-700 text-sm">{{fn_get_currency($lead->value)}}</p>
                     @else
-                    <p class="text-gray-700 text-sm">{{fn_convert_currency('0', 'USD')}}</p>
+                    <p class="text-gray-700 text-sm">{{fn_get_currency(0)}}</p>
                     @endif
                 </div>
                 <div>
                     <p class="text-xs text-gray-500">Industry</p>
                     @if(!empty($lead->industries))
-                    <p class="text-gray-700 text-sm">{{$lead->industries}}</p>
+                    <p class="text-gray-700 text-sm">{{fn_get_category_name((int)$lead->industries)}}</p>
                     @endif
                 </div>
                 <div>
@@ -135,7 +135,7 @@
                                 name="button"
                                 class="ml-2 px-2 py-1 bg-blue-100 text-white-600 rounded-md  text-sm hidden"
                                 data-lead-id="{{$lead->id}}">
-                                <span class="material-icons-outlined mr-1 text-sm">edit</span>
+                                <span class="material-icons-outlined mr-1 text-xs">edit</span>
                             </button>
                         </form>
                     </div>
@@ -152,7 +152,7 @@
         @if(!empty($lead->tags))
         <div>
             <h3 class="text-sm font-medium text-gray-500 mb-1">Tags</h3>
-            <div class="flex flex-wrap gap-1">
+            <div class="flex flex-wrap gap-1" style="width: 295px;">
                 @foreach($lead->tags as $tag)
                                         
                 <span class="inline-flex px-2 py-1 bg-{{$tag->color??'gray'}}-100 text-{{$tag->color??'gray'}}-800 dark:text-{{$tag->color??'gray'}}-200 font-medium text-xs rounded-full">{{$tag->name}}</span>

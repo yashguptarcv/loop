@@ -1,26 +1,31 @@
 
 <!-- Trigger Button Only -->
-@if(empty($color) && !empty($buttonClass))
-    <!-- <button class="{{ $buttonClass }}" >
-        {!! $buttonText ?? 'Open Modal' !!}
-    </button> -->
-    <button id="modal-trigger-{{ $id }}" class="{{$buttonClass}}" data-ajax-url="{{ $ajaxUrl }}" data-modal-id="{{ $id }}" data-modal-title="{{ $modalTitle ?? 'Modal Title' }}" data-modal-size="{{ $modalSize ?? 'md' }}">
-        {!! $buttonText ?? 'Open Modal' !!}
-    </button>
-    
-@else
+@if($type === 'button')
+    @if(empty($color) && !empty($buttonClass))
+        
+        <button id="modal-trigger-{{ $id }}" class="{{$buttonClass}}" data-ajax-url="{{ $ajaxUrl }}" data-modal-id="{{ $id }}" data-modal-title="{{ $modalTitle ?? 'Modal Title' }}" data-modal-size="{{ $modalSize ?? 'md' }}">
+            {!! $buttonText ?? '__' !!}
+        </button>
+        
+    @else
 
-    <x-button type="submit" 
-        id="modal-trigger-{{ $id }}"
-        class="{{ $color }}" 
-        label="{!!$buttonText!!}" 
-        icon='' 
-        :calls="[
-            'data-ajax-url'     => $ajaxUrl,
-            'data-modal-id'     => $id,
-            'data-modal-title'  => $modalTitle,
-            'data-modal-size'   => $modalSize,
-            ]"
-    />   
-    
+        <x-button type="submit" 
+            id="modal-trigger-{{ $id }}"
+            as="{{!empty($buttonClass == 'a') ? 'a' : '' }}"
+            class="{{ $color }}" 
+            label="{!!$buttonText!!}" 
+            icon='' 
+            :calls="[
+                'data-ajax-url'     => $ajaxUrl,
+                'data-modal-id'     => $id,
+                'data-modal-title'  => $modalTitle,
+                'data-modal-size'   => $modalSize,
+                ]"
+        />   
+        
+    @endif
+@elseif($type === 'link')
+    <a href="javascript:;" id="modal-trigger-{{ $id }}" class="{{$buttonClass}}" data-ajax-url="{{ $ajaxUrl }}" data-modal-id="{{ $id }}" data-modal-title="{{ $modalTitle ?? 'Modal Title' }}" data-modal-size="{{ $modalSize ?? 'md' }}">
+            {!! $buttonText ?? '__' !!}
+            </a>
 @endif

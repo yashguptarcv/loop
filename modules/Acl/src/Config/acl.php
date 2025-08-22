@@ -52,7 +52,69 @@ return [
     'Customers' => [
         'View' => [
             'admin.customers.index' => 'Access Customers',
+        ],
+
+        'Customer Overview' => [
+            'admin.customers.show'  => 'Customer Overview',
         ]
+    ],
+
+    'Coupons' => [
+        'View' => [
+            'admin.discount.index' => 'Access Coupons',
+            'admin.discount.index' => 'View Discount',
+            'admin.discount.show' => 'View Discount Details',
+            'admin.discount.list' => 'View Discount List',
+        ],
+        'Create' => [
+            'admin.discount.create' => 'Create Discount Form',
+            'admin.discount.store' => 'Save Discount'
+        ],
+        'Update' => [
+            'admin.discount.edit' => 'Edit Discount Form',
+            'admin.discount.update' => 'Update Discount',
+        ],
+        'Delete' => [
+            'admin.discount.destroy' => 'Delete Discount',
+        ],
+    ],
+
+    'Tax Managment' => [
+        'View' => [
+            'admin.tax.index' => 'Access Tax',
+            'admin.tax.show' => 'View Tax Details',
+            'admin.tax.list' => 'View Tax List',
+        ],
+        'Create' => [
+            'admin.tax.create' => 'Create Meeting Form',
+            'admin.tax.store' => 'Save Meeting'
+        ],
+        'Update' => [
+            'admin.tax.edit' => 'Edit Tax Form',
+            'admin.tax.update' => 'Update Tax',
+        ],
+        'Delete' => [
+            'admin.tax.destroy' => 'Delete Tax',
+        ],
+    ],
+
+    'Notificaton' => [
+        'View' => [
+            'admin.notification.index'  => 'Access Notification',
+            'admin.notification.show'   => 'View Notification Details',
+            'admin.notification.list'   => 'View Notification List',
+        ],
+        'Create' => [
+            'admin.notification.create' => 'Create Notification Form',
+            'admin.notification.store' => 'Save Notification'
+        ],
+        'Update' => [
+            'admin.notification.edit' => 'Edit Notification Form',
+            'admin.notification.update' => 'Update Notification',
+        ],
+        'Delete' => [
+            'admin.notification.destroy' => 'Delete Notification',
+        ],
     ],
 
     'Meetings' => [
@@ -86,7 +148,6 @@ return [
         'View' => [
             'admin.leads.index' => 'View Leads',
             'admin.leads.show' => 'View Lead Details',
-            'admin.leads.details' => 'View Lead Details Page',
         ],
         'Create' => [
             'admin.leads.create' => 'Create Lead Form',
@@ -176,7 +237,7 @@ return [
     'Settings' => [
         'General' => [
             'View' => [
-                'admin.settings.index' => 'View Settings',
+                'admin.settings.general.index' => 'View Settings',
             ]
         ],
         'Roles' => [
@@ -289,53 +350,53 @@ return [
 
         'Countries' => [
             'View' => [
-                'admin.settings.countries.leads.index' => 'View Countries',
-                'admin.settings.countries.leads.show' => 'View Country Details',
+                'admin.settings.countries.index' => 'View Countries',
+                'admin.settings.countries.show' => 'View Country Details',
             ],
             'Create' => [
-                'admin.settings.countries.leads.create' => 'Create Country Form',
-                'admin.settings.countries.leads.store' => 'Save Country',
+                'admin.settings.countries.create' => 'Create Country Form',
+                'admin.settings.countries.store' => 'Save Country',
             ],
             'Update' => [
-                'admin.settings.countries.leads.edit' => 'Edit Country Form',
-                'admin.settings.countries.leads.update' => 'Update Country',
+                'admin.settings.countries.edit' => 'Edit Country Form',
+                'admin.settings.countries.update' => 'Update Country',
             ],
             'Delete' => [
-                'admin.settings.countries.leads.destroy' => 'Delete Country',
+                'admin.settings.countries.destroy' => 'Delete Country',
             ]
         ],
         'Currencies' => [
             'View' => [
-                'admin.settings.currencies.leads.index' => 'View Currencies',
-                'admin.settings.currencies.leads.show' => 'View Currency Details',
+                'admin.settings.currencies.index' => 'View Currencies',
+                'admin.settings.currencies.show' => 'View Currency Details',
             ],
             'Create' => [
-                'admin.settings.currencies.leads.create' => 'Create Currency Form',
-                'admin.settings.currencies.leads.store' => 'Save Currency',
+                'admin.settings.currencies.create' => 'Create Currency Form',
+                'admin.settings.currencies.store' => 'Save Currency',
             ],
             'Update' => [
-                'admin.settings.currencies.leads.edit' => 'Edit Currency Form',
-                'admin.settings.currencies.leads.update' => 'Update Currency',
+                'admin.settings.currencies.edit' => 'Edit Currency Form',
+                'admin.settings.currencies.update' => 'Update Currency',
             ],
             'Delete' => [
-                'admin.settings.currencies.leads.destroy' => 'Delete Currency',
+                'admin.settings.currencies.destroy' => 'Delete Currency',
             ]
         ],
         'States' => [
             'View' => [
-                'admin.settings.states.leads.index' => 'View States',
-                'admin.settings.states.leads.show' => 'View State Details',
+                'admin.settings.states.index' => 'View States',
+                'admin.settings.states.show' => 'View State Details',
             ],
             'Create' => [
-                'admin.settings.states.leads.create' => 'Create State Form',
-                'admin.settings.states.leads.store' => 'Save State',
+                'admin.settings.states.create' => 'Create State Form',
+                'admin.settings.states.store' => 'Save State',
             ],
             'Update' => [
-                'admin.settings.states.leads.edit' => 'Edit State Form',
-                'admin.settings.states.leads.update' => 'Update State',
+                'admin.settings.states.edit' => 'Edit State Form',
+                'admin.settings.states.update' => 'Update State',
             ],
             'Delete' => [
-                'admin.settings.states.leads.destroy' => 'Delete State',
+                'admin.settings.states.destroy' => 'Delete State',
             ]
         ]
     ],

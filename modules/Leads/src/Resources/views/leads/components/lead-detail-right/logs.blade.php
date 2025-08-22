@@ -1,4 +1,4 @@
-<div id="logs-tab" class="tab-content">
+
                             <div class="activity-item">
                                 <div class="flex items-start">
                                     <div class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 text-sm font-bold mr-3">
@@ -30,4 +30,4 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        

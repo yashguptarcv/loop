@@ -137,6 +137,23 @@ class ProductGrid extends DataGrid
                     ucfirst($row->status) .
                     '</span>';
             },
+            'filterable_type' => 'dropdown',
+            'filterable_options' => [
+                [
+                    'label' => 'Draft',
+                    'value' => 'draft'
+                ],
+
+                [
+                    'label' => 'Hidden',
+                    'value' => 'hidden'
+                ],
+
+                [
+                    'label' => 'Active',
+                    'value' => 'active'
+                ]
+            ],
         ]);
 
         $this->addColumn([
@@ -144,7 +161,7 @@ class ProductGrid extends DataGrid
             'label' => 'Featured',
             'type' => 'boolean',
             'searchable' => false,
-            'filterable' => true,
+            'filterable' => false,
             'sortable' => true,
             'closure' => function ($row) {
                 return $row->is_featured

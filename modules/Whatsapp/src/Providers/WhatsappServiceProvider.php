@@ -2,9 +2,12 @@
 
 namespace Modules\Whatsapp\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\ServiceProvider;
+use Modules\Whatsapp\Channels\WhatsappChannel;
+use Modules\Notifications\Models\NotificationChannel;
 
 class WhatsappServiceProvider extends ServiceProvider
 {
@@ -17,7 +20,8 @@ class WhatsappServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'whatsapp'
+            __DIR__ . '/../Config/config.php',
+            'whatsapp'
         );
 
         $this->app->register(WhatsappEventServiceProvider::class);
@@ -35,6 +39,34 @@ class WhatsappServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerMigrations();
         $this->registerComponents();
+        $this->resgisterChannel();
+    }
+
+    /**
+     * Method resgisterChannel
+     *
+     * @return void
+     */
+    protected function resgisterChannel()
+    {
+        // Only register if the table exists
+        if (!Schema::hasTable('notification_channels')) {
+            return;
+        }
+
+        // Create or update the whatsapp channel in database
+        NotificationChannel::updateOrCreate(
+            ['name' => 'whatsapp'],
+            [
+                'channel_class' => WhatsappChannel::class,
+                'status' => true,
+                'config' => [
+                    'access_token'          => fn_get_setting('general.whatsapp.access_token'),
+                    'phone_number'          => fn_get_setting('general.whatsapp.phone_number'),
+                    'business_account_id'   => fn_get_setting('general.whatsapp.business_account_id'),
+                ]
+            ]
+        );
     }
 
     /**
@@ -43,11 +75,12 @@ class WhatsappServiceProvider extends ServiceProvider
     protected function registerConfig(): void
     {
         $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('whatsapp.php'),
+            __DIR__ . '/../Config/config.php' => config_path('whatsapp.php'),
         ], 'config');
 
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'whatsapp'
+            __DIR__ . '/../Config/config.php',
+            'whatsapp'
         );
     }
 
@@ -61,7 +94,7 @@ class WhatsappServiceProvider extends ServiceProvider
                 // Add your commands here
             ]);
         }
-    } 
+    }
 
     /**
      * Register routes.
@@ -69,8 +102,8 @@ class WhatsappServiceProvider extends ServiceProvider
     protected function registerRoutes(): void
     {
         try {
-            $webRoutePath = __DIR__.'/../Routes/web.php';
-            $apiRoutePath = __DIR__.'/../Routes/api.php';
+            $webRoutePath = __DIR__ . '/../Routes/web.php';
+            $apiRoutePath = __DIR__ . '/../Routes/api.php';
 
             if (file_exists($webRoutePath)) {
                 $this->loadRoutesFrom($webRoutePath);
@@ -91,7 +124,7 @@ class WhatsappServiceProvider extends ServiceProvider
     protected function registerViews(): void
     {
         $viewPath = resource_path('views/modules/whatsapp');
-        $sourcePath = __DIR__.'/../Resources/views';
+        $sourcePath = __DIR__ . '/../Resources/views';
 
         $this->publishes([
             $sourcePath => $viewPath
@@ -105,7 +138,7 @@ class WhatsappServiceProvider extends ServiceProvider
      */
     protected function registerTranslations(): void
     {
-        $this->loadTranslationsFrom(__DIR__.'/../Resources/lang', 'whatsapp');
+        $this->loadTranslationsFrom(__DIR__ . '/../Resources/lang', 'whatsapp');
     }
 
     /**
@@ -113,15 +146,12 @@ class WhatsappServiceProvider extends ServiceProvider
      */
     protected function registerMigrations(): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../Database/Migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../Database/Migrations');
     }
 
     /**
-    * Register compoenents
-    */
+     * Register compoenents
+     */
 
-    protected function registerComponents(): void
-    {
-       
-    }
-} 
+    protected function registerComponents(): void {}
+}

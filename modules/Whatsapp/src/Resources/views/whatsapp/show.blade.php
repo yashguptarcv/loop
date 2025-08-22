@@ -20,10 +20,15 @@
                     modalSize="sm" />
                 @endif
                 @if(bouncer()->hasPermission('admin.whatsapp.templates.destroy'))
-                <form action="{{ route('admin.whatsapp.templates.destroy', $template) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this template?');">
+                <form action="{{ route('admin.whatsapp.templates.destroy', $template) }}" method="POST" class="form-ajax inline">
                     @csrf
                     @method('DELETE')
-                    <x-button type="submit" label="Delete" class="red" icon='' name='button' />
+                    <x-button type="submit"                     
+                        class="red" 
+                        label="Delete" 
+                        icon=''
+                        name="button"
+                        />  
                 </form>
                 @endif
             </div>

@@ -1,0 +1,1 @@
+"<p>Dear Yash Gupta<\/p>\r\n<p>LoopLynks your account has been created.<\/p>\r\n<p>Don't share the credentials with any one.<\/p>\r\n<p>&nbsp;<\/p>\r\n<p>Account Details:<\/p>\r\n<p>Username: yash.gupta@rcvtechnologies.com<\/p>\r\n<p>Password: <\/p>\r\n<p>&nbsp;<\/p>\r\n<p>Thank you for choosing us.<\/p>\r\n<p>&nbsp;<\/p>\r\n<p>Best regards,<br>LoopLynks Team<\/p>"

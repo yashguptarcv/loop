@@ -16,6 +16,7 @@ class MassAction
         public string $method,
         public mixed $url,
         public string $action,
+        public bool $is_popup,
         public array $options = [],
     ) {}
 
@@ -30,6 +31,7 @@ class MassAction
             'method'  => $this->method,
             'url'     => $this->url,
             'action'     => $this->action,
+            'is_popup'     => $this->is_popup,
             'options' => $this->options,
         ];
     }

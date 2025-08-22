@@ -56,6 +56,22 @@ return [
     |
     */
 
+    'lead_options' => [
+        'general'   => 'General',
+        'call'      => 'Call',
+        'email'     => 'Email',
+        'meeting'   => 'Meeting',
+        'whatsapp'  => 'Whatsapp',
+        'schedule_meeting'  => 'Schedule Meeting'
+    ],
+
+    'out_comes' => [
+        'positive'  => 'Positive',
+        'neutral'   => 'Neutral',
+        'negative'  => 'Negative',
+        'follow_up' => 'Follow Up Needed'
+    ],
+
     'permissions' => [
         'view' => 'View Leads',
         'create' => 'Create Leads',

@@ -15,10 +15,10 @@
     <div class="lg:col-span-2 bg-white rounded-lg  p-6 space-y-6">
 
         <!-- Description -->
-        <input type="hidden" name="description" value="{{ old('description', $category->description ?? '') }}" id="activity-description">
+        
         <div>
             <label class="custom-label">Description</label>
-            <textarea id="message-editor" rows="8"
+            <textarea id="message-editor" editor="true" name="description" rows="8"
                 class="hidden">{{ old('description', $category->description ?? '') }}</textarea>
         </div>
 
@@ -48,14 +48,7 @@
         </div>
 
         <!-- Category Image -->
-        <div>
-            <label class="custom-label">Image</label>
-            <input type="file" name="image" id="image" class="input-field" accept="image/*">
-            <img src="{{ fn_get_image($category->image ?? '', '/', ['width' => 300, 'height' => 200]) }}" 
-                alt="Category Image"
-                class="mt-2 h-20 rounded {{ !empty($category->image) ? '' : 'hidden' }}">
-        </div>
-
+       @include('filemanager::components.file-uploader', ['object_type' => 'category', 'object_id' => $category->id ?? 0, 'name' => 'image'])
 
         <!-- Meta Title -->
         <div>

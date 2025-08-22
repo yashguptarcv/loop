@@ -14,6 +14,8 @@
         @method('PUT')
         @endif
 
+        <input type="hidden" name="assigned_to" value="{{isset($lead->assigned_to) ? $lead->assigned_to : 0}}">
+
         <!-- Personal Information Section -->
         @include('leads::leads.components.form.personal')
 

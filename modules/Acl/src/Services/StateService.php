@@ -15,7 +15,6 @@ class StateService
     {
         return CountryState::create([
             'country_id' => $data['country_id'],
-            'country_code' => $data['country_code'],
             'code' => $data['code'],
             'default_name' => $data['default_name'],
         ]);
@@ -26,11 +25,11 @@ class StateService
         $countryState = CountryState::findOrFail($id);
         $countryState->update([
             'country_id' => $data['country_id'],
-            'country_code' => $data['country_code'],
+
             'code' => $data['code'],
             'default_name' => $data['default_name'],
         ]);
-        
+
         return $countryState;
     }
 
@@ -40,15 +39,6 @@ class StateService
         $countryState->delete();
         return true;
     }
-
-    // public function toggleStatus(int $id)
-    // {
-    //     $countryState = CountryState::findOrFail($id);
-    //     $countryState->status = !$countryState->status;
-    //     $countryState->save();
-
-    //     return $countryState->status;
-    // }
 
     public function updateCurrency(array $ids, int $status): int
     {

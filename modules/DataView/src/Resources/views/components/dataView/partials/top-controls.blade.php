@@ -44,14 +44,28 @@ $perPage = $pagination['per_page'] ?? $data['meta']['per_page'];
                         <div class="py-1" role="none">
                             @foreach($action['options'] as $option)
                             @if($action['method'] === 'POST')
-                            <a href="javascript:;"
-                            onclick="handleMassAction('{{ route($action['url']) }}', '{{ $action['method'] }}', '{{ $option['value'] }}')"
-                            class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
-                            role="menuitem">{{ $option['label'] }}</a>
+                                <a href="javascript:;"
+                                onclick="handleMassAction('{{ route($action['url']) }}', '{{ $action['method'] }}', '{{ $option['value'] }}')"
+                                class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                role="menuitem">{{ $option['label'] }}</a>
                             @else
-                            <a href="{{ route($option['value']) }}"
-                            class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
-                            role="menuitem">{{ $option['label'] }}</a>
+                                @if(!empty($action['is_popup'])) 
+                                    @php
+                                        $title = isset($action['icon']) ? "<span class='material-icons-outlined'>".$action['icon']."</span> ". $action['title'] : $action['title'] ;
+                                    @endphp
+                                    <x-modal 
+                                        buttonText="{!! $title !!}"
+                                        modalTitle="{{ $action['title'] }}"
+                                        id="massaction_{{rand(100, 2000)}}"
+                                        ajaxUrl="{{ route($action['url']) }}"
+                                        color="blue"
+                                        modalSize="2xl"
+                                    />
+                                @else
+                                    <a href="{{ route($option['value']) }}"
+                                    class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100"
+                                    role="menuitem">{{ $option['label'] }}</a>
+                                @endif
                             @endif
                             @endforeach
                         </div>
@@ -79,12 +93,27 @@ $perPage = $pagination['per_page'] ?? $data['meta']['per_page'];
                     $buttonClass .= $action['action'];
                     @endphp
 
-                    <a href="{{ route($action['url']) }}" class="{{ $buttonClass }}">
-                        @if(!empty($action['icon']))
-                        <span class="material-icons-outlined mr-2">{{ $action['icon'] }}</span>
-                        @endif
-                        {{ $action['title'] }}
-                    </a>
+                    @if(!empty($action['is_popup'])) 
+                        @php
+                            $title = isset($action['icon']) ? "<span class='material-icons-outlined'>".$action['icon']."</span> ". $action['title'] : $action['title'] ;
+                        @endphp
+                        <x-modal 
+                            buttonText="{!! $title !!}"
+                            modalTitle="{{ $action['title'] }}"
+                            id="massaction_{{rand(100, 2000)}}"
+                            ajaxUrl="{{ route($action['url']) }}"
+                            color="blue"
+                            modalSize="3xl"
+                        />
+                    @else
+
+                        <a href="{{ route($action['url']) }}" class="{{ $buttonClass }}">
+                            @if(!empty($action['icon']))
+                            <span class="material-icons-outlined mr-2">{{ $action['icon'] }}</span>
+                            @endif
+                            {{ $action['title'] }}
+                        </a>
+                    @endif
                 @endif
             @endif
         @endforeach

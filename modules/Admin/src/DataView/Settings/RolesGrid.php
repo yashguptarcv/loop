@@ -42,7 +42,7 @@ class RolesGrid extends DataGrid
             'label' => 'ID',
             'type' => 'integer',
             'searchable' => true,
-            'filterable' => true,
+            'filterable' => false,
             'sortable' => true,
         ]);
 

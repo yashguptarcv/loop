@@ -17,7 +17,7 @@
                 <button class="p-1 rounded-full hover:bg-gray-200">
                     <i class="fas fa-chevron-left text-gray-600"></i>
                 </button>
-                <span class="text-lg font-medium text-gray-700" id="monthDisplay">{{ now()->format('F Y') }}</span>
+                <span class="text-lg font-medium text-gray-700" id="monthDisplay">{{ now()->format('M, Y') }}</span>
                 <button class="p-1 rounded-full hover:bg-gray-200">
                     <i class="fas fa-chevron-right text-gray-600"></i>
                 </button>
@@ -54,7 +54,7 @@
                 id='new-meeting'
                 ajaxUrl="{{route('admin.meetings.new-meeting')}}"
                 color="blue"
-                modalSize="sm"
+                modalSize="lg"
             />
             @endif
 
@@ -77,7 +77,7 @@
                 id='share_calender'
                 ajaxUrl="{{route('admin.meetings.share-calander')}}"
                 color="purple"
-                modalSize="sm"
+                modalSize="lg"
             />
             @endif
             
@@ -139,6 +139,7 @@ $(document).ready(function() {
     function loadCalendar(month, year) {
         
         ceAjax('get', '{{ route("admin.meetings.my-meeting") }}', {
+            loader:true,
             data: {
                 month: parseInt(month),
                 year: parseInt(year)
@@ -150,7 +151,6 @@ $(document).ready(function() {
                 $('#meetings_calendar').html('<div class="col-span-7 py-8 text-center">Loading calendar...</div>');
             },
             errorCallback: function(xhr) {
-                console.error(xhr.responseText);
                 $('#meetings_calendara').html('<div class="col-span-7 py-8 text-center text-red-500">Error loading calendar data</div>');
             }
         });

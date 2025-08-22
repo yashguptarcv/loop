@@ -4,9 +4,19 @@ namespace Modules\Acl\Services;
 
 use Modules\Acl\Models\Admin;
 use Illuminate\Support\Facades\Hash;
+use Modules\Notifications\Services\NotificationService;
 
 class UserAdminService
 {
+    protected $notificationService;
+
+    public function __construct(
+        NotificationService $notificationService
+    ) {
+        $this->notificationService  = $notificationService;
+
+    }
+
     public function listUsers()
     {
         return Admin::with('role')->latest()->get();
@@ -14,13 +24,25 @@ class UserAdminService
 
     public function create(array $data)
     {
-        return Admin::create([
+        $user = Admin::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'role_id' => $data['role_id'],
             'status' => true,
         ]);
+
+        if ($user) {
+            // Trigger order created event
+            $this->notificationService->trigger(
+                'Admin',
+                'User',
+                $user,
+                $data
+            );
+
+            return $user;
+        }
     }
 
     public function update(int $id, array $data)
@@ -35,7 +57,14 @@ class UserAdminService
         if (!empty($data['password'])) {
             $user->update(['password' => Hash::make($data['password'])]);
         }
-
+        
+        $this->notificationService->trigger(
+            'Admin',
+            'UserUpdate',
+            $user,
+            $data
+        );
+        
         return $user;
     }
 

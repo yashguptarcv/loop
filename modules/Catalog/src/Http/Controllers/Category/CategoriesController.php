@@ -10,9 +10,17 @@ use Modules\Catalog\Models\Category;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Modules\Catalog\DataView\CategoryGrid;
+use Modules\Filemanager\Services\FileService;
 
 class CategoriesController extends Controller
 {
+    protected $fileService;
+    
+    public function __construct(FileService $fileService)
+    {
+        $this->fileService = $fileService;
+    }
+
     public function index(Request $request)
     {
         $lists = fn_datagrid(CategoryGrid::class)->process();
@@ -38,7 +46,7 @@ class CategoriesController extends Controller
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string',
             'slug' => 'nullable|string|max:255',
-            'status' => 'nullable|string|in_array:A,D'
+            'status' => 'nullable|string|in:A,D'
         ]);
 
         if ($validator->fails()) {
@@ -66,13 +74,17 @@ class CategoriesController extends Controller
                 $categoryData['slug'] = Str::slug($categoryData['slug']);
             }
 
-            // Handle image upload
-            if ($request->hasFile('image')) {
-                $categoryData['image'] = $request->file('image')->store('categories/images', 'public');
-            }
-
             // Create category
             $category = Category::create($categoryData);
+
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $fileLink = $this->fileService->uploadFile(
+                    $request->file('image'),
+                    'category',
+                    $category->id
+                );
+            }
 
             return response()->json([
                 'success' => true,
@@ -81,8 +93,8 @@ class CategoriesController extends Controller
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -103,7 +115,7 @@ class CategoriesController extends Controller
             'meta_description' => 'nullable|string',
             'meta_keywords' => 'nullable|string',
             'slug' => 'nullable|string|max:255',
-            'status' => 'nullable|string|in_array:A,D'
+            'status' => 'nullable|string|in:A,D'
         ]);
 
         if ($validator->fails()) {
@@ -136,10 +148,15 @@ class CategoriesController extends Controller
             // Handle image upload
             if ($request->hasFile('image')) {
                 // Delete old image if exists
-                if ($category->image) {
-                    Storage::disk('public')->delete($category->image);
+                $this->fileService->deleteFile('category', $category->id);
+                 // Handle image upload
+                if ($request->hasFile('image')) {
+                        $fileLink = $this->fileService->uploadFile(
+                        $request->file('image'),
+                        'category',
+                        $category->id
+                    );
                 }
-                $updateData['image'] = $request->file('image')->store('categories/images', 'public');
             }
 
             // Update category
@@ -152,8 +169,8 @@ class CategoriesController extends Controller
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -163,9 +180,7 @@ class CategoriesController extends Controller
             $category = Category::findOrFail($id);
 
             // Delete associated image if exists
-            if ($category->image) {
-                Storage::disk('public')->delete($category->image);
-            }
+            $this->fileService->deleteFile('category', $category->id);
 
             $category->delete();
 
@@ -176,8 +191,8 @@ class CategoriesController extends Controller
             ]);
         } catch (Exception $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -197,7 +212,7 @@ class CategoriesController extends Controller
                 ->with('success', 'Status updated successfully!');
         } catch (\Throwable $e) {
             return redirect()->route('admin.catalog.categories.index')
-                ->with('error', 'Something went wrong. Please try again.');
+                ->with('error', 'Something went wrong. Please try again.' . $e->getMessage());
         }
     }
 
@@ -214,9 +229,7 @@ class CategoriesController extends Controller
 
             // Delete associated images
             foreach ($categories as $category) {
-                if ($category->image) {
-                    Storage::disk('public')->delete($category->image);
-                }
+                $this->fileService->deleteFile('category', $category->id);
             }
 
             // Delete categories
@@ -226,7 +239,7 @@ class CategoriesController extends Controller
                 ->with('success', 'Categories deleted successfully!');
         } catch (\Throwable $e) {
             return redirect()->route('admin.catalog.categories.index')
-                ->with('error', 'Something went wrong. Please try again.');
+                ->with('error', 'Something went wrong. Please try again.' . $e->getMessage());
         }
     }
 

@@ -100,8 +100,8 @@ class CouponController extends Controller
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.' . $e
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -175,8 +175,8 @@ class CouponController extends Controller
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.' . $e
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
     public function destroy($id)
@@ -190,8 +190,8 @@ class CouponController extends Controller
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -205,7 +205,7 @@ class CouponController extends Controller
             $deletedCount = $this->couponService->deleteMultiple($request->ids);
             return redirect()->route('admin.coupons.index')->with('success', 'Bulk Deleted Successfully');
         } catch (\Throwable $e) {
-            return redirect()->route('admin.coupons.index')->with('error', 'Something went wrong. Please try again.');
+            return redirect()->route('admin.coupons.index')->with('error', 'Something went wrong. Please try again.' . $e->getMessage());
         }
     }
 }

@@ -46,96 +46,107 @@ class WhatsAppTemplateController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:512|regex:/^[a-z0-9_]+$/|unique:whatsapp_templates,name',
-            'category' => 'required|string|in:marketing,utility,authentication',
-            'language' => 'required|string',
-            'header_type' => 'nullable|string|in:text,image,video,document,none',
-            'header_text' => 'nullable|string|max:60',
-            'header_image' => 'nullable|file|mimes:jpeg,png|max:5120', // 5MB max
-            'header_video' => 'nullable|file|mimes:mp4,3gpp|max:16384', // 16MB max
-            'header_document' => 'nullable|file|mimes:pdf|max:102400', // 100MB max
-            'body_text' => 'required|string|max:1024',
-            'body_examples' => 'nullable|string',
-            'footer_text' => 'nullable|string|max:60',
-            'button_type' => 'nullable|array',
-            'button_text' => 'nullable|array',
-            'button_url' => 'nullable|array',
-            'button_phone' => 'nullable|array',
-        ]);
+        try {
+            $request->validate([
+                'name' => 'required|string|max:512|regex:/^[a-z0-9_]+$/|unique:whatsapp_templates,name',
+                'category' => 'required|string|in:marketing,utility,authentication',
+                'language' => 'required|string',
+                'header_type' => 'nullable|string|in:text,image,video,document,none',
+                'header_text' => 'nullable|string|max:60',
+                'header_image' => 'nullable|file|mimes:jpeg,png|max:5120', // 5MB max
+                'header_video' => 'nullable|file|mimes:mp4,3gpp|max:16384', // 16MB max
+                'header_document' => 'nullable|file|mimes:pdf|max:102400', // 100MB max
+                'body_text' => 'required|string|max:1024',
+                'body_examples' => 'nullable|string',
+                'footer_text' => 'nullable|string|max:60',
+                'button_type' => 'nullable|array',
+                'button_text' => 'nullable|array',
+                'button_url' => 'nullable|array',
+                'button_phone' => 'nullable|array',
+            ]);
 
-        // Format buttons data
-        $buttons = [];
-        if ($request->filled('button_type')) {
-            foreach ($request->button_type as $index => $type) {
-                if (empty($type) || empty($request->button_text[$index])) {
-                    continue;
+            // Format buttons data
+            $buttons = [];
+            if ($request->filled('button_type')) {
+                foreach ($request->button_type as $index => $type) {
+                    if (empty($type) || empty($request->button_text[$index])) {
+                        continue;
+                    }
+                    $button = [
+                        'type' => $type,
+                        'text' => $request->button_text[$index]
+                    ];
+                    if ($type === 'url' && !empty($request->button_url[$index])) {
+                        $button['url'] = $request->button_url[$index];
+                    } elseif ($type === 'phone_number' && !empty($request->button_phone[$index])) {
+                        $button['phone_number'] = $request->button_phone[$index];
+                    }
+                    $buttons[] = $button;
                 }
-                $button = [
-                    'type' => $type,
-                    'text' => $request->button_text[$index]
-                ];
-                if ($type === 'url' && !empty($request->button_url[$index])) {
-                    $button['url'] = $request->button_url[$index];
-                } elseif ($type === 'phone_number' && !empty($request->button_phone[$index])) {
-                    $button['phone_number'] = $request->button_phone[$index];
+            }
+
+            // Prepare template data
+            $templateData = [
+                'name' => $request->name,
+                'category' => $request->category,
+                'language' => $request->language,
+                'body_text' => $request->body_text,
+                'buttons' => $buttons,
+            ];
+
+            // Add header if provided
+            if ($request->header_type !== 'none') {
+                $templateData['header_type'] = $request->header_type;
+                if ($request->header_type === 'text' && $request->filled('header_text')) {
+                    $templateData['header_text'] = $request->header_text;
+                } elseif ($request->header_type === 'image' && $request->hasFile('header_image')) {
+                    $templateData['header_file'] = $request->file('header_image');
+                    $templateData['header_media_type'] = 'image';
+                } elseif ($request->header_type === 'video' && $request->hasFile('header_video')) {
+                    $templateData['header_file'] = $request->file('header_video');
+                    $templateData['header_media_type'] = 'video';
+                } elseif ($request->header_type === 'document' && $request->hasFile('header_document')) {
+                    $templateData['header_file'] = $request->file('header_document');
+                    $templateData['header_media_type'] = 'document';
                 }
-                $buttons[] = $button;
             }
-        }
 
-        // Prepare template data
-        $templateData = [
-            'name' => $request->name,
-            'category' => $request->category,
-            'language' => $request->language,
-            'body_text' => $request->body_text,
-            'buttons' => $buttons,
-        ];
-
-        // Add header if provided
-        if ($request->header_type !== 'none') {
-            $templateData['header_type'] = $request->header_type;
-            if ($request->header_type === 'text' && $request->filled('header_text')) {
-                $templateData['header_text'] = $request->header_text;
-            } elseif ($request->header_type === 'image' && $request->hasFile('header_image')) {
-                $templateData['header_file'] = $request->file('header_image');
-                $templateData['header_media_type'] = 'image';
-            } elseif ($request->header_type === 'video' && $request->hasFile('header_video')) {
-                $templateData['header_file'] = $request->file('header_video');
-                $templateData['header_media_type'] = 'video';
-            } elseif ($request->header_type === 'document' && $request->hasFile('header_document')) {
-                $templateData['header_file'] = $request->file('header_document');
-                $templateData['header_media_type'] = 'document';
+            // Add footer if provided
+            if ($request->filled('footer_text')) {
+                $templateData['footer_text'] = $request->footer_text;
             }
-        }
 
-        // Add footer if provided
-        if ($request->filled('footer_text')) {
-            $templateData['footer_text'] = $request->footer_text;
-        }
+            // Add body examples if provided
+            if ($request->filled('body_examples')) {
+                $templateData['body_examples'] = array_map('trim', explode(',', $request->body_examples));
+            }
 
-        // Add body examples if provided
-        if ($request->filled('body_examples')) {
-            $templateData['body_examples'] = array_map('trim', explode(',', $request->body_examples));
-        }
+            // Create the template
+            $result = $this->whatsAppService->createTemplate($templateData);
 
-        // Create the template
-        $result = $this->whatsAppService->createTemplate($templateData);
+            
+            if ($result['success']) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Template created successfully and submitted for approval.',
+                    'redirect_url' => route('admin.whatsapp.templates.index'),
+                ]);
+            }
 
-        if ($result['success']) {
             return response()->json([
-                'success' => true,
-                'message' => 'Template created successfully and submitted for approval.',
-                'redirect_url' => route('admin.whatsapp.templates.index'),
+                'errors' => 'Failed to create template: ' . $result['error_details']['error']['error_user_msg'] ?? $result['error'],
+                // 'redirect_url' => route('admin.whatsapp.templates.index')
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'errors' => 'Something went wrong. ' . $e->getMessage()
             ]);
         }
-
-        return response()->json(['errors' => [
-                    'message' => 'Failed to create template: ' . $result['error'],
-                    'redirect_url' => route('admin.whatsapp.templates.create')
-                ]
-            ]);
     }
 
     /**
@@ -149,23 +160,31 @@ class WhatsAppTemplateController extends Controller
     /**
      * Delete the specified template
      */
-    public function destroy(WhatsAppTemplate $template): RedirectResponse
+    public function destroy(WhatsAppTemplate $template)
     {
-        $result = $this->whatsAppService->deleteTemplate($template->name);
+        try {
+            $result = $this->whatsAppService->deleteTemplate($template->name);
 
-        if ($result['success']) {
-            // Also remove any associated event mappings
-            DB::table('whatsapp_event_templates')->where('template_name', $template->name)->delete();
-            return redirect()->route('admin.whatsapp.templates.index')
-                ->with('success', 'Template deleted successfully.');
+            if ($result['success']) {
+                // Also remove any associated event mappings
+                DB::table('whatsapp_event_templates')->where('template_name', $template->name)->delete();
+                $messages = 'Template deleted successfully';
+                return response()->json([
+                    'success' => true,
+                    'message' => $messages,
+                    'redirect_url' => route('admin.whatsapp.index'),
+                ]);
+            } else {
+
+                return response()->json([
+                    'errors' => 'Failed to delete template: ' . $result['error']
+                ]);
+            }
+        } catch (\Throwable $e) {
+            return response()->json([
+                'errors' => 'Something went wrong. ' . $e->getMessage()
+            ]);
         }
-
-        return redirect()->back()
-            ->with('error', 'Failed to delete template: ' . $result['error']);
-    }
-
-    public function bulkDelete(Request $request) {
-
     }
 
     /**

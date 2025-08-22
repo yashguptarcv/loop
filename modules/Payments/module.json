@@ -2,7 +2,7 @@
     "name": "Payment",
     "version": "1.0.0",
     "enabled": true,
-    "last_enabled_at": "2025-08-14T09:10:23+00:00",
+    "last_enabled_at": "2025-08-20T07:44:18+00:00",
     "last_disabled_at": null,
     "applied_migrations": [],
     "failed_migrations": [],

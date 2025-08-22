@@ -2,69 +2,125 @@
 
 namespace Modules\Admin\Http\Controllers\Settings\Statuses;
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Modules\Acl\Models\Role;
+use Modules\Admin\Models\Tag;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Modules\Acl\Services\UserAdminService;
-use Modules\Admin\DataView\Settings\Statuses\LeadStatuses;
 use Modules\Admin\Models\LeadStatusesModels;
+use Modules\Admin\DataView\Settings\Statuses\LeadTag;
+use Modules\Admin\DataView\Settings\Statuses\LeadStatuses;
 
 class TagsController extends Controller
 {
     public function index(Request $request)
     {
-        $lists = fn_datagrid(LeadStatuses::class)->process();
-        return view('admin::settings.statuses.leads.index', compact('lists'));
+        $lists = fn_datagrid(LeadTag::class)->process();
+        $tags = Tag::all();
+        return view('admin::settings.statuses.tags.index', compact('lists', 'tags'));
     }
 
     public function create()
     {
-        $roles = Role::all();
-        return view('admin::settings.statuses.leads.form', compact('roles'));
+        $tags = Tag::all();
+        return view('admin::settings.statuses.tags.form', compact('tags'));
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'color' => 'required|string',
-            'sort' => 'required|numeric'
+            'tags' => 'required|array',
+
+            'tags.*.name' => 'required_without:tags.new|string|max:255',
+            'tags.*.color' => 'nullable|string|max:255',
+
+            // Validate new tags:
+            'tags.new' => 'array',
+            'tags.new.*.name' => 'required|string|max:255',
+            'tags.new.*.color' => 'nullable|string|max:255',
+
+            'deleted_tags' => 'sometimes|array',
+            'deleted_tags.*' => 'exists:tags,id',
         ]);
+
 
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
-            ], 422);
+            ]);
         }
 
         try {
-            $user = LeadStatusesModels::create([
-                'name'  => $request['name'],
-                'color'  => $request['color'],
-                'sort'  => $request['sort']
-            ]);
+            DB::beginTransaction();
+
+            // Handle deleted tags
+            if ($request->has('deleted_tags')) {
+                Tag::whereIn('id', $request->deleted_tags)->delete();
+                Log::debug('Deleted tags:', ['deleted_tags' => $request->deleted_tags]);
+            }
+
+            foreach ($request->input('tags', []) as $key => $tagGroup) {
+                if ($key === 'new') {
+                    // Loop through new tags
+                    foreach ($tagGroup as $tagData) {
+                        Tag::create([
+                            'name' => $tagData['name'],
+                            'color' => $tagData['color'] ?? null,
+                        ]);
+                    }
+                } else {
+                    // Existing tags logic, update or create as fallback 
+
+                    if (!empty($tagGroup['id']) && is_numeric($tagGroup['id'])) {
+                        $tag = Tag::find($tagGroup['id']);
+                        if ($tag) {
+                            $tag->name = $tagGroup['name'];
+                            $tag->color = $tagGroup['color'] ?? null;
+                            if ($tag->isDirty()) {
+                                $tag->save();
+                            }
+                        } else {
+                            Tag::create([
+                                'name' => $tagGroup['name'],
+                                'color' => $tagGroup['color'] ?? null,
+                            ]);
+                        }
+                    } else {
+                        Tag::create([
+                            'name' => $tagGroup['name'],
+                            'color' => $tagGroup['color'] ?? null,
+                        ]);
+                    }
+                }
+            }
+
+
+            DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Lead statuses created successfully!',
+                'message' => 'Tags saved successfully!',
                 'redirect_url' => route('admin.settings.statuses.leads.index')
             ]);
         } catch (\Throwable $e) {
+            \DB::rollBack();
             return response()->json([
                 'errors' => $e->getMessage()
-            ], 500);
+            ]);
         }
     }
 
     public function edit($id)
     {
-        $lead = LeadStatusesModels::where('id', $id)->first(); // You should already have a method like this in your service
+        $lead = LeadStatusesModels::where('id', $id)->first();
         if (!$lead) {
-            return redirect()->route('admin.settings.statuses.leads.index')->with('error', 'Lead statuses not found.');
+            return redirect()->route('admin.settings.statuses.index')->with('error', 'Lead statuses not found.');
         }
-        return view('admin::settings.statuses.leads.form', compact('lead'));
+        return view('admin::settings.statuses.form', compact('lead'));
     }
 
 
@@ -73,26 +129,24 @@ class TagsController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'color' => 'required|string',
-            'sort' => 'required|numeric'
         ]);
 
         if ($validator->fails()) {
             return response()->json([
                 'errors' => $validator->errors(),
-            ], 422);
+            ]);
         }
 
         try {
-            $user = LeadStatusesModels::update($id, [
+            $user = Tag::update($id, [
                 'name'  => $request['name'],
                 'color'  => $request['color'],
-                'sort'  => $request['sort']
             ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Lead statuses updated successfully!',
-                'redirect_url' => route('admin.settings.statuses.leads.index'),
+                'message' => 'Lead tag updated successfully!',
+                'redirect_url' => route('admin.settings.statuses.index'),
                 'data' => $user
             ]);
         } catch (\Throwable $e) {
@@ -101,33 +155,16 @@ class TagsController extends Controller
             ], 500);
         }
     }
+
     public function destroy(Request $request, $id)
     {
-        try {
-            LeadStatusesModels::destroy($id);
-            return response()->json([
-                'success' => true,
-                'message' => 'Lead status deleted',
-                'redirect_url' => route('admin.settings.statuses.leads.index'),
-            ]);
-        } catch (\Throwable $e) {
-            return response()->json([
-                'errors' => $e->getMessage()
-            ], 500);
-        }
-    }
+        $tag = Tag::find($id);
 
-    public function bulkDelete(Request $request)
-    {
-        $request->validate([
-            'ids' => 'required|array|min:1',
-            'ids.*' => 'integer|exists:lead_statuses,id',
-        ]);
-        try {
-            $deletedCount = LeadStatusesModels::destroy($request->ids);
-            return redirect()->route('admin.settings.statuses.leads.index')->with('success', 'Bulk Deleted Successfully');
-        } catch (\Throwable $e) {
-            return redirect()->route('admin.settings.statuses.leads.index')->with('error', $e->getMessage());
+        if ($tag) {
+            $tag->delete();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Tag not found.']);
         }
     }
 }

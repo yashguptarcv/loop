@@ -61,7 +61,7 @@ class AutoCompleteController extends Controller
             return response()->json([
                 'error' => 'Database error',
                 'message' => $e->getMessage()
-            ], 500);
+            ]);
         }
     }
 
@@ -71,7 +71,7 @@ class AutoCompleteController extends Controller
     protected function validateTableAndColumns($table, $columns, $searchColumn)
     {
         // Add your allowed tables here for security
-        $allowedTables = ['admins', 'users', 'categories', 'countries', 'country_states']; // Example
+        $allowedTables = ['admins', 'users', 'categories', 'countries', 'country_states', 'roles'];
         
         if (!in_array($table, $allowedTables)) {
             return false;

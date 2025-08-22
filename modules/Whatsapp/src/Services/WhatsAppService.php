@@ -23,9 +23,9 @@ class WhatsAppService
     {
         $this->client            = new Client();
         $this->apiUrl            = 'https://graph.facebook.com/v23.0/';
-        $this->accessToken       = fn_get_setting('general.settings.whatsapp.access_token');
-        $this->phoneNumberId     = fn_get_setting('general.settings.whatsapp.phone_number');
-        $this->businessAccountId = fn_get_setting('general.settings.whatsapp.business_account_id');
+        $this->accessToken       = fn_get_setting('general.whatsapp.access_token');
+        $this->phoneNumberId     = fn_get_setting('general.whatsapp.phone_number');
+        $this->businessAccountId = fn_get_setting('general.whatsapp.business_account_id');
     }
 
     /**
@@ -115,8 +115,6 @@ class WhatsAppService
                     'timeout' => 60, // Increase timeout for large files
                 ]
             );
-
-            // dd($response);
 
             $responseBody = json_decode($response->getBody()->getContents(), true);
 
@@ -414,8 +412,6 @@ class WhatsAppService
             'status' => 'pending'
         ]);
 
-        // dd($messageRecord);
-
         try {
             $payload = [
                 'messaging_product' => 'whatsapp',
@@ -576,11 +572,6 @@ class WhatsAppService
         try {
             // Format the template data for the API
             $apiTemplateData = $this->formatTemplateDataForApi($templateData);
-            // dd($apiTemplateData);
-            Log::info('Creating WhatsApp template', [
-                'template_name' => $templateData['name'],
-                'api_data' => $apiTemplateData
-            ]);
 
             // Make the API request to create the template
             $response = $this->client->post(
@@ -617,12 +608,6 @@ class WhatsAppService
                     'api_response' => $responseBody
                 ]
             );
-
-            Log::info('WhatsApp template created successfully', [
-                'template_id' => $template->id,
-                'template_name' => $template->name,
-                'response' => $responseBody
-            ]);
 
             return [
                 'success' => true,
@@ -803,8 +788,6 @@ class WhatsAppService
                         $templateData['header_file'],
                         $templateData['header_media_type']
                     );
-
-                    // dd($uploadResult);
 
                     if ($uploadResult['success']) {
                         $mediaId = $uploadResult['media_id'];

@@ -1,0 +1,145 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400&display=swap');
+
+:root {
+  --font-lato: 'Lato';
+  --font-vegawanty: 'Vegawanty';
+  --font-thunder: 'Thunder';
+  --font-playfair: 'Milky walky';
+
+}
+
+.lato-regular {
+  font-family: "Lato";
+  font-weight: 400;
+  font-style: normal;
+}
+
+body {
+  font-family: "Lato";
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Set default body font */
+body {
+  font-family: var(--font-lato);
+}
+
+/* Create utility classes for each font */
+.font-lato {
+  font-family: var(--font-lato);
+}
+
+.font-vegawanty {
+  font-family: var(--font-vegawanty);
+}
+
+.font-thunder {
+  font-family: var(--font-thunder);
+}
+
+
+
+
+
+@keyframes logo-scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+
+}
+
+.animate-logo-scroll {
+  animation: logo-scroll 15s linear infinite;
+}
+
+.gradient-text {
+  background: radial-gradient(circle, #FFB90C 3%, #DDB34B 41%, #916520 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.bg-radial {
+  background-image: radial-gradient(circle, #DDB34B 0%, #916520 100%);
+}
+
+
+
+.custom-heading {
+  font-family: 'Vegawanty', 'Playfair Display', serif;
+  font-weight: 400;
+  font-style: normal;
+  /* font-size: 72px; */
+  line-height: 100%;
+  letter-spacing: 2%;
+  text-transform: capitalize;
+}
+
+/* Gallery animation */
+
+.gallery-3d img {
+  transition: transform 0.4s ease, box-shadow 0.3s ease;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.gallery-3d.scroll-in img {
+  transform: scale(1.1) rotateX(8deg) rotateY(-8deg);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.gallery-3d.scroll-out img {
+  transform: scale(0.95) rotateX(0deg) rotateY(0deg);
+  opacity: 0.7;
+}
+
+.grid {
+  justify-content: space-evenly;
+  align-items: end;
+}
+
+.nav-circle {
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(6px);
+}
+
+.parallax {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.gradient-text {
+  background: linear-gradient(90deg, #fcd34d, #f59e0b, #fcd34d);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 200% auto;
+  transition: background-position 0.5s ease;
+}
+
+.btn-hover-effect {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-hover-effect:hover {
+  background: radial-gradient(circle, #FFB90C 3%, #DDB34B 41%, #916520 100%);
+  color: black;
+  border-color: transparent;
+}
+
+.btn-hover-effect:hover .gradient-text {
+  background: black;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

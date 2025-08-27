@@ -22,9 +22,9 @@ class CheckoutController extends Controller
     // Initial checkout page
     public function index(Request $request)
     {
-        
-        // You might want to pass any necessary data here
-        return view('checkout::checkout.index');
+
+        $order = Order::where('user_id', auth('customer')->user()->id)->first();
+        return view('checkout::checkout.checkout', compact('order'));
     }
 
     // Process checkout form

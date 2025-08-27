@@ -83,6 +83,12 @@ return [
         'permission' => '#',
         'children' => [
             [
+                'label' => 'Pages',
+                'route' => 'admin.pages.index',
+                'permission' => 'admin.pages.index',
+                'icon' => 'chevron_right'
+            ],
+            [
                 'label' => 'Coupons',
                 'route' => 'admin.discount.index',
                 'permission' => 'admin.discount.index',

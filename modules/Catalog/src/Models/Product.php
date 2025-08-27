@@ -96,10 +96,14 @@ class Product extends Model
         );
     }
 
-    // Many-to-many relationship with categories
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'category_product');
+        return $this->belongsToMany(
+            Category::class,        // The related model
+            'category_product',     // The pivot table name
+            'product_id',           // Foreign key of the current model
+            'category_id'           // Foreign key of the related model
+        );
     }
 
     protected static function boot()

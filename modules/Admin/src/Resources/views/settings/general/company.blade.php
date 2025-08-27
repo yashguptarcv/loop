@@ -3,7 +3,7 @@
     <div class="px-6 py-6">
         <div class="space-y-6">
             <!-- set company mail -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label for="mail" class="block text-sm font-medium text-gray-700">Company name</label>
                 </div>
@@ -13,7 +13,7 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-md">
                 </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label for="mail" class="block text-sm font-medium text-gray-700">Company Default Mail</label>
                     <p class="mt-1 text-sm text-gray-500">Add mail to send notification to this mail.</p>
@@ -26,7 +26,7 @@
             </div>
 
             <!-- company business address -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label class="block text-sm font-medium text-gray-700">Company Business Address</label>
                     <p class="mt-1 text-sm text-gray-500">Enter detailed business address.</p>
@@ -76,7 +76,7 @@
 
 
             <!-- company logo upload -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label for="company_logo" class="block text-sm font-medium text-gray-700">Company Logo</label>
                     <p class="mt-1 text-sm text-gray-500">Upload the company logo.</p>
@@ -87,7 +87,7 @@
             </div>
 
             <!-- company Fav icon upload -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label for="company_logo" class="block text-sm font-medium text-gray-700">Company Fav icon</label>
                     <p class="mt-1 text-sm text-gray-500">Upload the company Favicon.</p>
@@ -98,7 +98,7 @@
             </div>
 
             <!-- signature editor -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label for="signature" class="block text-sm font-medium text-gray-700">Signature</label>
                     <p class="mt-1 text-sm text-gray-500">Add your signature with formatting.</p>

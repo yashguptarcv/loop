@@ -56,7 +56,7 @@
 
 
             <!-- whatsapp access_token -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label for="tax" class="block text-sm font-medium text-gray-700">Whatsapp Setting</label>
                     <p class="mt-1 text-sm text-gray-500">Set Whatsapp Credentials to use whatsapp notification and promotion.</p>

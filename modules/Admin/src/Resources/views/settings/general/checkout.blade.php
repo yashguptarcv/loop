@@ -1,6 +1,6 @@
 <!-- Order Numbering Section -->
 <div class="bg-white shadow rounded-lg overflow-hidden">
-    <div class="px-6 py-5 border-b border-gray-200">
+    <div class="px-6 py-5 border-b divide-gray-100">
         <h2 class="text-lg font-medium text-gray-800">
             Order Numbering
         </h2>
@@ -40,7 +40,7 @@
 
 <!-- Order Status Section -->
 <div class="bg-white shadow rounded-lg overflow-hidden">
-    <div class="px-6 py-5 border-b border-gray-200">
+    <div class="px-6 py-5 border-b divide-gray-100">
         <h2 class="text-lg font-medium text-gray-800">
             Order Status Settings
         </h2>
@@ -58,8 +58,8 @@
 
                     <select name="settings[general.order.create]" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                         @foreach (fn_get_order_status() as $order)
-                        <option value="{{ $order->name }}"
-                            {{ old('general.order.create', fn_get_setting('general.order.create')) == $order->name ? 'selected' : '' }}>
+                        <option value="{{ $order->status_code }}"
+                            {{ old('general.order.create', fn_get_setting('general.order.create')) == $order->status_code ? 'selected' : '' }}>
                             {{ $order->name }}
                         </option>
                         @endforeach
@@ -69,8 +69,8 @@
                     <label for="order_processing_status" class="block text-sm font-medium text-gray-700 mb-1">Order Processing Status</label>
                     <select name="settings[general.order.processing]" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                         @foreach (fn_get_order_status() as $order)
-                        <option value="{{ $order->name }}"
-                            {{ old('general.order.processing', fn_get_setting('general.order.processing')) == $order->name ? 'selected' : '' }}>
+                        <option value="{{ $order->status_code }}"
+                            {{ old('general.order.processing', fn_get_setting('general.order.processing')) == $order->status_code ? 'selected' : '' }}>
                             {{ $order->name }}
                         </option>
                         @endforeach
@@ -80,8 +80,8 @@
                     <label for="order_complete_status" class="block text-sm font-medium text-gray-700 mb-1">Order Complete Status</label>
                     <select name="settings[general.order.complete]" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                         @foreach (fn_get_order_status() as $order)
-                        <option value="{{ $order->name }}"
-                            {{ old('general.order.complete', fn_get_setting('general.order.complete')) == $order->name ? 'selected' : '' }}>
+                        <option value="{{ $order->status_code }}"
+                            {{ old('general.order.complete', fn_get_setting('general.order.complete')) == $order->status_code ? 'selected' : '' }}>
                             {{ $order->name }}
                         </option>
                         @endforeach
@@ -91,8 +91,8 @@
                     <label for="order_cancelled_status" class="block text-sm font-medium text-gray-700 mb-1">Order Cancelled Status</label>
                     <select name="settings[general.order.cancelled]" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                         @foreach (fn_get_order_status() as $order)
-                        <option value="{{ $order->name }}"
-                            {{ old('general.order.cancelled', fn_get_setting('general.order.cancelled')) == $order->name ? 'selected' : '' }}>
+                        <option value="{{ $order->status_code }}"
+                            {{ old('general.order.cancelled', fn_get_setting('general.order.cancelled')) == $order->status_code ? 'selected' : '' }}>
                             {{ $order->name }}
                         </option>
                         @endforeach
@@ -102,8 +102,8 @@
                     <label for="order_failed_status" class="block text-sm font-medium text-gray-700 mb-1">Order Failed Status</label>
                     <select name="settings[general.order.failed]" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                         @foreach (fn_get_order_status() as $order)
-                        <option value="{{ $order->name }}"
-                            {{ old('general.order.failed', fn_get_setting('general.order.failed')) == $order->name ? 'selected' : '' }}>
+                        <option value="{{ $order->status_code }}"
+                            {{ old('general.order.failed', fn_get_setting('general.order.failed')) == $order->status_code ? 'selected' : '' }}>
                             {{ $order->name }}
                         </option>
                         @endforeach
@@ -113,8 +113,8 @@
                     <label for="order_refunded_status" class="block text-sm font-medium text-gray-700 mb-1">Order Refunded Status</label>
                     <select name="settings[general.order.refunded]" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                         @foreach (fn_get_order_status() as $order)
-                        <option value="{{ $order->name }}"
-                            {{ old('general.order.refunded', fn_get_setting('general.order.refunded')) == $order->name ? 'selected' : '' }}>
+                        <option value="{{ $order->status_code }}"
+                            {{ old('general.order.refunded', fn_get_setting('general.order.refunded')) == $order->status_code ? 'selected' : '' }}>
                             {{ $order->name }}
                         </option>
                         @endforeach
@@ -127,7 +127,7 @@
 
 <!-- Checkout Settings Section -->
 <div class="bg-white shadow rounded-lg overflow-hidden">
-    <div class="px-6 py-5 border-b border-gray-200">
+    <div class="px-6 py-5 border-b divide-gray-100">
         <h2 class="text-lg font-medium text-gray-800">
             Checkout Settings
         </h2>

@@ -108,7 +108,7 @@ class Country extends DataGrid
                 'title' => 'Add Country',
                 'method' => 'GET',
                 'is_popup'  => true,
-                'action' => 'text-blue-600 bg-blue-100',
+                'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.settings.countries.create',
             ]);
         }

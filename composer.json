@@ -16,6 +16,7 @@
         "intervention/image": "^3.11",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
+        "maatwebsite/excel": "^1.1",
         "mpdf/mpdf": "^8.2",
         "rcv/core": "dev-main",
         "symfony/http-client": "^7.3",
@@ -45,14 +46,16 @@
             "Modules\\Meetings\\": "modules/Meetings/src/",
             "Modules\\Catalog\\": "modules/Catalog/src/",
             "Modules\\Checkout\\": "modules/Checkout/src/",
-            "Modules\\Payments\\": "modules/Payments/src/",
             "Modules\\Orders\\": "modules/Orders/src/",
             "Modules\\Notifications\\": "modules/Notifications/src/",
             "Modules\\Shop\\": "modules/Shop/src/",
             "Modules\\Tax\\": "modules/Tax/src/",
             "Modules\\Discounts\\": "modules/Discounts/src/",
             "Modules\\EmailNotification\\": "modules/EmailNotification/src/",
-            "Modules\\Filemanager\\": "modules/Filemanager/src/"
+            "Modules\\Filemanager\\": "modules/Filemanager/src/",
+            "Modules\\Payments\\": "modules/Payments/src/",
+            "Modules\\DataExport\\": "modules/DataExport/src/",
+            "Modules\\Widgets\\": "modules/Widgets/src/"
         },
         "files": [
             "modules/Acl/src/Helpers/helpers.php",

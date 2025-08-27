@@ -2,7 +2,7 @@
 
     <div class="px-6 py-6">
         <div class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label for="product" class="block text-sm font-medium text-gray-700">Default Application Product</label>
                     <p class="mt-1 text-sm text-gray-500">Set Application Product That Will Use Will Application Send Time.</p>
@@ -20,7 +20,7 @@
             </div>
 
             <!-- roles -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label for="role" class="block text-sm font-medium text-gray-700">Default Lead Assigne UserGroup</label>
                     <p class="mt-1 text-sm text-gray-500">Selected user group will manage all leads</p>
@@ -38,7 +38,7 @@
             </div>
 
             <!-- roles -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label for="role" class="block text-sm font-medium text-gray-700">Default Lead Assigne Status</label>
                     <p class="mt-1 text-sm text-gray-500">If no status select then lead will use this status.</p>

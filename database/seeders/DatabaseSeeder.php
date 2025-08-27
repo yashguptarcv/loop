@@ -19,7 +19,9 @@ class DatabaseSeeder extends Seeder
       // CountryStatesSeeder::class,
       // Roles::class,
       // StatusesTableSeeder::class,
-      SettingSeeder::class
+      // SettingSeeder::class
+      // CategorySeeder::class,
+      WidgetSeeder::class,
       // TaxSeeder::class,
       // TagFactorySeeder::class,
     ]);

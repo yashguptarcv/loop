@@ -2,6 +2,8 @@
 
 namespace Modules\Leads\Providers;
 
+use Modules\Core\Events\RegisterSettingsMenu;
+use Modules\Leads\Listeners\RegisterSettings;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class LeadsEventServiceProvider extends ServiceProvider
@@ -12,9 +14,10 @@ class LeadsEventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        // 'SomeEvent' => [
-        //     'SomeListener',
-        // ],
+         RegisterSettingsMenu::class => [
+            RegisterSettings::class,
+            // add more listeners from other modules
+        ],
     ];
 
     /**

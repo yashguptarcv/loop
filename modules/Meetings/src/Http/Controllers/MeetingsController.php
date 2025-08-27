@@ -63,7 +63,6 @@ class MeetingsController extends Controller
                     });
             }
 
-            // Generate calendar HTML
             $html = view('meetings::components.meetings', [
                 'startDate' => $startDate,
                 'endDate' => $endDate,

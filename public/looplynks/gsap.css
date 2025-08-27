@@ -1,0 +1,260 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.event-cards-section {
+  position: relative;
+  height: 300vh;
+  background: linear-gradient(135deg, #000 0%, #111 50%, #000 100%);
+  overflow: hidden;
+}
+
+/* Background heading for cards */
+.cards-bg-heading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 6rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.03);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 1;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+
+.section-title h1 {
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: transparent;
+  font-size: 8rem;
+  line-height: 9rem;
+}
+
+.section-title p {
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.cards-wrapper {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.cards-container {
+  display: flex;
+  gap: 3rem;
+  padding-left: 50vw;
+  padding-right: 3rem;
+  transition: transform 0.1s ease-out;
+  position: relative;
+  z-index: 2;
+  margin-top: 200px;
+  margin-bottom: 50px;
+}
+
+.event-card {
+  flex-shrink: 1;
+  width: 22vw;
+  min-width: 350px;
+  background: rgba(15, 15, 15, 0.103);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  color: white;
+  opacity: 1;
+  transform: translateY(80px);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.1s ease;
+}
+
+/* .event-card:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow:
+        0 12px 48px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+} */
+
+.event-card.initially-hidden {
+  opacity: 0;
+  transform: translateY(50px) translateX(100px);
+}
+
+.card-time {
+  font-weight: 400;
+  color: #fff;
+}
+
+.card-title {
+
+  font-weight: 500;
+  line-height: 1.2;
+  margin-bottom: 5px;
+  color: #fff;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+}
+
+.card-desc {
+  font-size: 1.1rem;
+  font-weight: 400;
+  color: #fff;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.card-image {
+  width: 100%;
+  height: 18rem;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.card-image::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.card-image span {
+  position: relative;
+  z-index: 2;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1rem;
+}
+
+/* Animated background elements */
+.floating-elements {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.floating-element {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  animation: float 6s infinite ease-in-out;
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(180deg);
+    opacity: 1;
+  }
+}
+
+
+/* preloader animation css */
+
+@layer utilities {
+
+
+  @keyframes curtain-left {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  @keyframes curtain-right {
+    to {
+      transform: translateX(100%);
+    }
+  }
+
+  .animate-curtain-left {
+    animation: curtain-left 2.5s ease-out forwards;
+  }
+
+  .animate-curtain-right {
+    animation: curtain-right 2.5s ease-out forwards;
+  }
+
+
+  @keyframes logo-scale {
+    0% {
+      transform: scale(1);
+      opacity: 0;
+    }
+
+    50% {
+      transform: scale(1.2);
+      opacity: 1;
+    }
+
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes line-draw {
+    0% {
+      transform: scaleY(0);
+      opacity: 0;
+    }
+
+    20% {
+      opacity: 1;
+    }
+
+    100% {
+      transform: scaleY(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-line-draw {
+    animation: line-draw 8s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+
+}
+

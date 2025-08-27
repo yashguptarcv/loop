@@ -23,7 +23,7 @@
             <x-button type="button"    
                 as="a"
                 href="{{ route('admin.leads.edit', $lead) }}"
-                class="blue" 
+                class="primary" 
                 label="<span class='material-icons-outlined mr-1'>edit</span>" 
                 icon=''
                 name="button" 
@@ -35,7 +35,7 @@
                 modalTitle="Send Application"
                 id='send_application'
                 ajaxUrl="{{route('admin.application.send_application', $lead)}}"
-                color="blue"
+                color="primary"
                 modalSize="3xl" />
             @endif
         </div>

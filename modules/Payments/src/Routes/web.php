@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Payment\Http\Controllers\HomeController;
+use Modules\Payments\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +14,9 @@ use Modules\Payment\Http\Controllers\HomeController;
 |
 */
 
-Route::prefix('payment')->name('payment.')->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->group(function () {
+    Route::middleware(['admin.auth', 'admin.permission'])->group(function () {
+        
+        Route::resource('payments', HomeController::class);
+    });
 });
-
-// HomeController will be generated automatically by the module generator 

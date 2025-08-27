@@ -66,7 +66,7 @@
     <!-- Submit Button -->
     <div class="pt-4">
         <x-button type="submit"                     
-            class="blue" 
+            class="primary" 
             label="Save" 
             icon=''
             name="button" 

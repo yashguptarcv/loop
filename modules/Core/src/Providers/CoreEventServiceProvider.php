@@ -12,9 +12,7 @@ class CoreEventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        // 'SomeEvent' => [
-        //     'SomeListener',
-        // ],
+       
     ];
 
     /**

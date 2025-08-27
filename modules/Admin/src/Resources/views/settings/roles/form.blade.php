@@ -29,7 +29,7 @@
                 <div id="permissions-tree" class="space-y-4">
                     @php $permissions = config('acl::acl'); @endphp
                     @foreach ($permissions as $topGroup => $subGroups)
-                    <div class="border border-gray-200 rounded-lg p-4 bg-gray-50">
+                    <div class="border divide-gray-100 rounded-lg p-4 bg-gray-50">
                         <h3 class="text-base font-bold mb-3 capitalize text-gray-800">{{ ucfirst($topGroup) }}</h3>
                         @foreach ($subGroups as $section => $items)
                         @if (is_array($items))
@@ -107,7 +107,7 @@
 
                     <div class="mt-6">
 
-                        <x-button type="submit"  class="blue" label="Save Role" icon='' name='button'/>
+                        <x-button type="submit"  class="primary" label="Save Role" icon='' name='button'/>
                     </div>
                 </div>
             </div>

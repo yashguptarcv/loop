@@ -2,6 +2,8 @@
 
 namespace Modules\Notifications\Providers;
 
+use Modules\Core\Events\RegisterSettingsMenu;
+use Modules\Notifications\Listeners\RegisterNotificationSettings;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class NotificationsEventServiceProvider extends ServiceProvider
@@ -12,9 +14,10 @@ class NotificationsEventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        // 'SomeEvent' => [
-        //     'SomeListener',
-        // ],
+        RegisterSettingsMenu::class => [
+            RegisterNotificationSettings::class,
+            // add more listeners from other modules
+        ],
     ];
 
     /**

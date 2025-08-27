@@ -3,7 +3,7 @@
     @csrf
     <!-- Customer Details Section -->
     <div class="mb-8">
-        <h3 class="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-200">Customer Details</h3>
+        <h3 class="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b divide-gray-100">Customer Details</h3>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Full Name -->
@@ -39,7 +39,7 @@
 
     <!-- Organization Details Section -->
     <div class="mb-8">
-        <h3 class="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-200">Organization Details</h3>
+        <h3 class="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b divide-gray-100">Organization Details</h3>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Organization -->
@@ -60,7 +60,7 @@
 
     <!-- Billing Address Section -->
     <div class="mb-8">
-        <h3 class="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-200">Billing Address</h3>
+        <h3 class="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b divide-gray-100">Billing Address</h3>
         
         <div class="grid grid-cols-1 gap-6">
             <!-- Address Line 1 -->
@@ -129,7 +129,7 @@
 
     <!-- Award Categories Section -->
     <div class="mb-8 hidden">
-        <h3 class="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-200">Award Categories</h3>
+        <h3 class="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b divide-gray-100">Award Categories</h3>
         
         <div class="space-y-4">
             @foreach($awardCategories as $awardCategory)
@@ -155,8 +155,8 @@
 
     @if(!empty($application))
     <div class="mb-8">
-        <h3 class="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b border-gray-200">Application Fees</h3>
-        <table class="min-w-full divide-y divide-gray-200">
+        <h3 class="text-xl font-semibold text-gray-700 mb-4 pb-2 border-b divide-gray-100">Application Fees</h3>
+        <table class="min-w-full divide-y divide-gray-100">
             <thead class="bg-gray-50">
             <tr>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Application</th>
@@ -165,7 +165,7 @@
             </tr>
             </thead>
             
-            <tbody class="bg-white divide-y divide-gray-200">                
+            <tbody class="bg-white divide-y divide-gray-100">                
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{$application->name}}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{$application->price}}</td>
@@ -179,7 +179,7 @@
 
     <!-- Form Submission -->
      <div class="flex justify-end">        
-        <x-button type="submit"  class="blue" label="Send" icon='' name='button'/>                        
+        <x-button type="submit"  class="primary" label="Send" icon='' name='button'/>                        
     </div>
 </form>
 @else

@@ -43,7 +43,7 @@
                     </th>
                 </tr>
             </thead>
-            <tbody class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+            <tbody class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 divide-gray-100">
                 @foreach($events as $event)
                 @php
                 $eventMappings = $mappings[$event->id] ?? [];
@@ -107,7 +107,7 @@
                                 modalTitle="Templates Mapping"
                                 id="notification_template_mapping"
                                 ajaxUrl="{{route('admin.notification.show', $event->id)}}"
-                                color="blue"
+                                color="primary"
                                 modalSize="2xl"
                             />
                         </div>
@@ -122,7 +122,7 @@
     <!-- Save Button -->
     <div class="flex justify-end mt-6">
         <x-button type="submit"
-            class="blue"
+            class="primary"
             label="Save"
             icon=''
             name="button" />

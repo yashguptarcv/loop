@@ -11,7 +11,7 @@
    <x-button type="button"    
     as="a"
     href="{{ route('admin.meetings.sync') }}"
-    class="blue" 
+    class="primary" 
     label="<span class='material-icons-outlined mr-1'>file_upload</span>" 
     icon=''
     name="button" 

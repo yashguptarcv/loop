@@ -11,46 +11,40 @@ class StripeProcessor implements PaymentProcessor
     public function __construct(array $config)
     {
         $this->config = $config;
+        Stripe::setApiKey($config['secret_key']);
     }
 
-    public function processPayment($amount, array $options = [])
+    public function charge(array $payload): array
     {
-        // Implement Stripe payment processing
-        return [
-            'success' => true,
-            'transaction_id' => 'stripe_' . uniqid(),
-            'response' => []
-        ];
+        $charge = Charge::create([
+            'amount' => $payload['amount'] * 100, // cents
+            'currency' => $payload['currency'],
+            'source' => $payload['token'],
+            'description' => $payload['description'] ?? 'Payment',
+        ]);
+
+        return $charge->toArray();
     }
 
-    public function refund($amount, $transactionId, array $options = [])
+    public function refund(string $transactionId, float $amount): array
     {
-        // Implement Stripe refund
-        return [
-            'success' => true,
-            'refund_id' => 'stripe_refund_' . uniqid(),
-            'response' => []
-        ];
+        $refund = Refund::create([
+            'charge' => $transactionId,
+            'amount' => $amount * 100,
+        ]);
+
+        return $refund->toArray();
     }
 
-    public function getConfigFields(): array
+    public function handleWebhook(array $payload): array
     {
-        return [
-            'publishable_key' => [
-                'type' => 'text',
-                'label' => 'Publishable Key',
-                'required' => true
-            ],
-            'secret_key' => [
-                'type' => 'text',
-                'label' => 'Secret Key',
-                'required' => true
-            ],
-            'webhook_secret' => [
-                'type' => 'text',
-                'label' => 'Webhook Secret',
-                'required' => false
-            ]
-        ];
+        // handle Stripe webhook event
+        return ['status' => 'ok', 'event' => $payload['type']];
+    }
+
+    public function subscribe(array $payload): array
+    {
+        // implement subscription handling
+        return ['status' => 'subscription_created'];
     }
 }

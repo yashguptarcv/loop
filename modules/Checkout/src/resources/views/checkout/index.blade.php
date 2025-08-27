@@ -8,7 +8,7 @@
         <div class="bg-white rounded-lg shadow-md p-6 mb-6">
             <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
             
-            <div class="divide-y divide-gray-200">
+            <div class="divide-y divide-gray-100">
                 @foreach($items as $item)
                 <div class="py-4 flex justify-between">
                     <div class="flex items-center">
@@ -22,7 +22,7 @@
                 @endforeach
             </div>
             
-            <div class="border-t border-gray-200 mt-4 pt-4">
+            <div class="border-t divide-gray-100 mt-4 pt-4">
                 <div class="flex justify-between text-lg font-semibold">
                     <span>Total</span>
                     <span>${{ number_format($total, 2) }}</span>

@@ -2,7 +2,7 @@
 
 <div class="space-y-4">
     @foreach($lead->attachments as $attachment)
-    <div class="border border-gray-200 rounded-md p-4">
+    <div class="border divide-gray-100 rounded-md p-4">
         <div class="flex items-center">
             <div class="flex-shrink-0 bg-gray-100 rounded-md p-3">
                 @if(str_starts_with($attachment->mime_type, 'image/'))

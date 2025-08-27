@@ -2,6 +2,8 @@
 
 namespace Modules\Admin\Providers;
 
+use Modules\Admin\Listeners\RegisterSettings;
+use Modules\Core\Events\RegisterSettingsMenu;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class AdminEventServiceProvider extends ServiceProvider
@@ -12,9 +14,10 @@ class AdminEventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        // 'SomeEvent' => [
-        //     'SomeListener',
-        // ],
+        RegisterSettingsMenu::class => [
+            RegisterSettings::class,
+            // add more listeners from other modules
+        ],
     ];
 
     /**

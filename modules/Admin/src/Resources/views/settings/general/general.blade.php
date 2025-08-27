@@ -19,7 +19,7 @@
             </div>
 
             <!-- Date Format -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label class="block text-sm font-medium text-gray-700">Date Format</label>
                     <p class="mt-1 text-sm text-gray-500">How dates should be displayed throughout the system.</p>
@@ -42,7 +42,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label for="image_driver" class="block text-sm font-medium text-gray-700">Files Store</label>
                     <p class="mt-1 text-sm text-gray-500">Store Files (s3, local, etc)</p>
@@ -60,7 +60,7 @@
             </div>
 
             <!-- Currency -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label for="currency" class="block text-sm font-medium text-gray-700">Currency</label>
                     <p class="mt-1 text-sm text-gray-500">Set the currency for financial values.</p>
@@ -77,7 +77,7 @@
             </div>
 
             <!-- Tax -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">
                     <label for="tax" class="block text-sm font-medium text-gray-700">Default Tax</label>
                     <p class="mt-1 text-sm text-gray-500">Set the default tax.</p>
@@ -88,6 +88,24 @@
                         <option value="{{ $tax->id }}"
                             {{ old('general.tax', fn_get_setting('general.tax')) == $tax->id ? 'selected' : '' }}>
                             {{ $tax->name }}
+                        </option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <!-- pass -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
+                <div class="md:col-span-1">
+                    <label for="pass" class="block text-sm font-medium text-gray-700">Default Pass Product</label>
+                    <p class="mt-1 text-sm text-gray-500">Set Pass Product That Will Use As Pass.</p>
+                </div>
+                <div class="md:col-span-2">
+                    <select id="pass" name="settings[general.pass]" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                        @foreach (fn_get_products() as $product)
+                        <option value="{{ $product->id }}"
+                            {{ old('general.pass', fn_get_setting('general.pass')) == $product->id ? 'selected' : '' }}>
+                            {{ $product->name }}
                         </option>
                         @endforeach
                     </select>

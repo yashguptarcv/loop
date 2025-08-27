@@ -2,7 +2,7 @@
 <div class="w-full flex flex-col">
     <div class="bg-white rounded-lg shadow mb-6 flex-grow">
         <!-- Tabs -->
-        <div class="border-b border-gray-200">
+        <div class="border-b divide-gray-100">
             <nav class="flex -mb-px">
                 <button onclick="switchTab('activity')" id="activity-tab" data-tab="activity" class="tab-button py-4 px-6 text-center border-b-2 font-medium text-sm border-blue-500 text-blue-600">
                     Comments

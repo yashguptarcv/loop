@@ -233,7 +233,7 @@ class Tax extends DataGrid
                 'title' => 'Create Tax',
                 'method' => 'GET',
                 'is_popup'  => true,
-                'action' => 'text-blue-600 bg-blue-100',
+                'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.tax.create'
             ]);
         }
@@ -258,7 +258,7 @@ class Tax extends DataGrid
                 'icon' => 'settings',
                 'title' => 'More',
                 'method' => 'GET',
-                'action' => 'text-blue-600 bg-blue-100',
+                'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.tax.index',
                 'options' => $options
             ]);

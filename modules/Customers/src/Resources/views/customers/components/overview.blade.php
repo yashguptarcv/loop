@@ -1,7 +1,7 @@
 <!-- Customer Stats -->
 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
     <!-- Total Orders -->
-    <div class="bg-white rounded-lg border border-gray-200 p-4">
+    <div class="bg-white rounded-lg border divide-gray-100 p-4">
         <div class="flex justify-between items-start">
             <div>
                 <p class="text-sm font-medium text-gray-500">Total Orders</p>
@@ -18,7 +18,7 @@
     </div>
 
     <!-- Total Spending -->
-    <div class="bg-white rounded-lg border border-gray-200 p-4">
+    <div class="bg-white rounded-lg border divide-gray-100 p-4">
         <div class="flex justify-between items-start">
             <div>
                 <p class="text-sm font-medium text-gray-500">Total Spending</p>
@@ -35,7 +35,7 @@
     </div>
 
     <!-- Average Order Value -->
-    <div class="bg-white rounded-lg border border-gray-200 p-4">
+    <div class="bg-white rounded-lg border divide-gray-100 p-4">
         <div class="flex justify-between items-start">
             <div>
                 <p class="text-sm font-medium text-gray-500">Avg. Order Value</p>
@@ -52,7 +52,7 @@
     </div>
 
     <!-- Customer Since -->
-    <div class="bg-white rounded-lg border border-gray-200 p-4">
+    <div class="bg-white rounded-lg border divide-gray-100 p-4">
         <div class="flex justify-between items-start">
             <div>
                 <p class="text-sm font-medium text-gray-500">Customer Since</p>
@@ -73,7 +73,7 @@
             <!-- Left Column -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Profit/Loss Analysis -->
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <div class="bg-white rounded-lg border divide-gray-100 p-6">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-lg font-semibold text-gray-900">Profit Analysis</h2>
                         <select class="text-sm border border-gray-300 rounded-md px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -109,7 +109,7 @@
                 </div>
 
                 <!-- Recent Orders -->
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <div class="bg-white rounded-lg border divide-gray-100 p-6">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-lg font-semibold text-gray-900">Recent Orders</h2>
                         <button class="text-blue-600 hover:text-blue-800 text-sm font-medium">
@@ -118,7 +118,7 @@
                     </div>
 
                     <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
+                        <table class="min-w-full divide-y divide-gray-100">
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order #</th>
@@ -128,7 +128,7 @@
                                     <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
+                            <tbody class="bg-white divide-y divide-gray-100">
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">
                                         <a href="#" class="hover:underline">#ORD-2023-01542</a>
@@ -177,7 +177,7 @@
             <!-- Right Column -->
             <div class="lg:col-span-1 space-y-6">
                 <!-- Customer Details -->
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <div class="bg-white rounded-lg border divide-gray-100 p-6">
                     <h2 class="text-lg font-semibold text-gray-900 mb-6">Customer Details</h2>
                     
                     <div class="space-y-4">
@@ -224,7 +224,7 @@
                 </div>
 
                 <!-- Customer Lifetime Value -->
-                <div class="bg-white rounded-lg border border-gray-200 p-6">
+                <div class="bg-white rounded-lg border divide-gray-100 p-6">
                     <h2 class="text-lg font-semibold text-gray-900 mb-6">Customer Value</h2>
                     
                     <div class="space-y-4">
@@ -236,7 +236,7 @@
                             <p class="text-2xl font-bold text-gray-900 mt-1">$8,245.00</p>
                         </div>
                         
-                        <div class="pt-4 border-t border-gray-200">
+                        <div class="pt-4 border-t divide-gray-100">
                             <h3 class="text-sm font-medium text-gray-500 mb-2">PROFIT MARGIN</h3>
                             <div class="w-full bg-gray-200 rounded-full h-2.5">
                                 <div class="bg-green-600 h-2.5 rounded-full" style="width: 30%"></div>
@@ -247,7 +247,7 @@
                             </div>
                         </div>
                         
-                        <div class="pt-4 border-t border-gray-200">
+                        <div class="pt-4 border-t divide-gray-100">
                             <h3 class="text-sm font-medium text-gray-500 mb-2">PURCHASE CATEGORIES</h3>
                             <div class="space-y-2">
                                 <div class="flex items-center justify-between">

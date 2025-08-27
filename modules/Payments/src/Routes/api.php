@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Payment\Http\Controllers\Api\HomeController;
+use Modules\Payments\Http\Controllers\Api\HomeController;
 
 /*
 |--------------------------------------------------------------------------

@@ -15,15 +15,16 @@ use Modules\Checkout\Http\Controllers\CheckoutController;
 |
 */
 
-// routes/web.php
-// Route::middleware(['auth'])->group(function () {
-    Route::prefix('checkout')->group(function () {
-        Route::get('/', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::prefix('checkout')->middleware('web')->name('checkout.')->group(function () {
+    Route::middleware(['user.auth', 'user.permission'])->group(function () {
+        Route::get('/', [CheckoutController::class, 'index']);
+
         Route::post('/process', [CheckoutController::class, 'process'])->name('checkout.process');
+
         Route::get('/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
+
         Route::post('/complete', [CheckoutController::class, 'complete'])->name('checkout.complete');
+
         Route::get('/confirmation/{order}', [CheckoutController::class, 'confirmation'])->name('checkout.confirmation');
     });
-// });
-
-// HomeController will be generated automatically by the module generator 
+});

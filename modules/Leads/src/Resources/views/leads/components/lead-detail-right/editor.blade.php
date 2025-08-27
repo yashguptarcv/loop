@@ -55,7 +55,7 @@
                     @enderror
                 </div>
             </div>
-            <x-button type="submit"  class="blue" label="Send Message" icon='' name='button'/>                
+            <x-button type="submit"  class="primary" label="Send Message" icon='' name='button'/>                
         </div>
     </form>
 </div>

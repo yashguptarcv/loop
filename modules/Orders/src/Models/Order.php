@@ -7,6 +7,7 @@ use Modules\Orders\Models\OrderItem;
 use Modules\Payments\Models\Payment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Modules\Payments\Models\Payments;
 
 class Order extends Model
 {
@@ -16,6 +17,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'admin_id',
         'order_number',
         'status',
         'subtotal',
@@ -51,7 +53,12 @@ class Order extends Model
 
     public function payments()
     {
-        return $this->hasMany(Payment::class);
+        return $this->hasMany(Payments::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payments::class);
     }
 
     public function getFormattedStatusAttribute()

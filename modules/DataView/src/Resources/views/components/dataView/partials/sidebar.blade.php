@@ -29,9 +29,9 @@
                                             <input id="filter-{{ $column['index'] }}-{{ $option['value'] }}"
                                                 name="filters[{{ $column['index'] }}][]" type="checkbox" value="{{ $option['value'] }}"
                                                 @if(in_array($option['value'], $selectedValues)) checked @endif
-                                                class="h-4 w-4 text-blue-600 focus:ring-blue-600 border-blue-100 rounded">
+                                                class="h-4 w-4 text-primary-100 focus:ring-primary-600 border-primary-100 rounded">
                                             <label for="filter-{{ $column['index'] }}-{{ $option['value'] }}"
-                                                class="ml-3 text-sm text-[var(--color-text-secondary)]">
+                                                class="ml-3 text-sm text-white-100">
                                                 {{ $option['label'] }}
                                             </label>
                                         </div>
@@ -81,12 +81,8 @@
         </div>
 
         <div class="mt-6 flex space-x-3">
-            <a href="{{ url()->current() }}"
-                class="flex-1 inline-flex justify-center py-2 px-4 border border-blue-100 shadow-sm text-sm font-medium rounded-md text-[var(--color-text-primary)] bg-[var(--color-white)] hover:bg-[var(--color-gray-50)]">
-                Reset
-            </a>
             <button type="submit"
-                class="flex-1 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-[var(--color-white)] bg-blue-600 hover:bg-[var(--color-primary-dark)]">
+                class="flex-1 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-amber-100 bg-primary-100 hover:bg-amber-100 hover:text-primary-100">
                 Apply
             </button>
         </div>

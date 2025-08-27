@@ -164,7 +164,7 @@ class CategoryGrid extends DataGrid
                 'icon' => 'add',
                 'title' => 'Create Category',
                 'method' => 'GET',
-                'action' => 'text-blue-600 bg-blue-100',
+                'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.catalog.categories.create',
             ]);
         }
@@ -189,7 +189,7 @@ class CategoryGrid extends DataGrid
                 'icon' => 'file_upload',
                 'title' => 'Import',
                 'method' => 'GET',
-                'action' => 'text-blue-600 bg-blue-100',
+                'action' => 'text-amber-100 bg-primary-100',
                 'url'   => 'admin.catalog.categories.import_form',
             ]);
         }

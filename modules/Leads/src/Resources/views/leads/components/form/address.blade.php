@@ -28,30 +28,6 @@
                 </div>
 
                 <div>
-                    <label for="state" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        State/Province
-                    </label>
-                    <input type="text" id="state" name="state" 
-                           value="{{ old('state', $lead->state ?? '') }}"
-                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 @error('state') border-red-500 dark:border-red-400 @enderror">
-                    @error('state')
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
-                    <label for="postal_code" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Postal Code
-                    </label>
-                    <input type="text" id="postal_code" name="postal_code" 
-                           value="{{ old('postal_code', $lead->postal_code ?? '') }}"
-                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 @error('postal_code') border-red-500 dark:border-red-400 @enderror">
-                    @error('postal_code')
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
-                </div>
-
-                <div>
                     <label for="country" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         Country
                     </label>
@@ -81,5 +57,31 @@
                         @enderror
                     </div>
                 </div>
+
+                <div>
+                    <label for="state" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        State/Province
+                    </label>
+                    <input type="text" id="state" name="state" 
+                           value="{{ old('state', $lead->state ?? '') }}"
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 @error('state') border-red-500 dark:border-red-400 @enderror">
+                    @error('state')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label for="postal_code" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Postal Code
+                    </label>
+                    <input type="text" id="postal_code" name="postal_code" 
+                           value="{{ old('postal_code', $lead->postal_code ?? '') }}"
+                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 @error('postal_code') border-red-500 dark:border-red-400 @enderror">
+                    @error('postal_code')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                
             </div>
         </div>

@@ -35,7 +35,7 @@
         </select>
     </div>
     <div class="flex justify-end">
-        <x-button type="submit"  class="blue" label="Save" icon='' name='button'/>                
+        <x-button type="submit"  class="primary" label="Save" icon='' name='button'/>                
         
     </div>
 </form>

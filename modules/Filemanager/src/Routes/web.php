@@ -14,8 +14,10 @@ use Modules\Filemanager\Http\Controllers\HomeController;
 |
 */
 
-Route::prefix('filemanager')->name('filemanager.')->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-});
+Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->group(function () {
+    Route::middleware(['admin.auth', 'admin.permission'])->group(function () {
+        Route::delete('filemanager/{id}/delete', [HomeController::class, 'deleteFile'])->name('filemanager.delete');   
+    });        
+}); 
 
 // HomeController will be generated automatically by the module generator 

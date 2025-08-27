@@ -1,5 +1,7 @@
 <?php
 
+use Modules\Payments\Processors\StripeProcessor;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -62,4 +64,8 @@ return [
         'edit' => 'Edit Payment',
         'delete' => 'Delete Payment',
     ],
+
+    'services' =>   [
+        'stripe' => StripeProcessor::class,
+    ]
 ]; 

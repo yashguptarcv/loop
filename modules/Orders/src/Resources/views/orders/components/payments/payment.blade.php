@@ -1,4 +1,4 @@
-<div class="rounded-xl shadow-sm p-6 pl-2 flex items-center gap-3 p-3 border border-gray-200 rounded-lg">
+<div class="rounded-xl shadow-sm p-6 pl-2 flex items-center gap-3 p-3 border divide-gray-100 rounded-lg">
                                 <div class="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
                                     <i class="fab fa-cc-visa text-blue-800"></i>
                                 </div>

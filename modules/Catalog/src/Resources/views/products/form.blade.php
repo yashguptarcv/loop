@@ -87,26 +87,27 @@
          <!-- Slug -->
         <div>
             <label class="custom-label">Slug</label>
-            <input type="text" name="slug" id="slug" value="{{ old('slug', $category->slug ?? '') }}"
+            <input type="text" name="slug" id="slug" value="{{ old('slug', $product->slug ?? '') }}"
                 class="input-field">
         </div>
 
-        <!-- Categories (Multiple Select) -->
-        <div>
-            <label class="custom-label">Categories</label>
-            <select name="categories[]" id="categories" multiple
-                class="w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-md leading-tight h-auto">
-                @foreach($categories as $category)
-                    <option value="{{ $category->id }}" 
-                        @if(isset($product) && $product->categories->contains($category->id)) selected @endif>
-                        {{ $category->name }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
+            <x-autocomplete 
+                label="Categories"
+                field="categories"
+                table="categories"
+                value-field="id"
+                search-fields="name"
+                list-attributes="id,name"
+                :multiple="true"
+                :actions="[
+                    ['label' => 'Select', 'callback' => 'selectItem'],
+                ]"
+                :selected="!empty($product->categories) ?$product->categories->toArray() : []"
+            />
+        
 
         <!-- Inventory Management -->
-        <div class="border-t border-gray-200 pt-4">
+        <div class="border-t divide-gray-100 pt-4">
             <h3 class="text-lg font-medium text-gray-900 mb-3">Inventory</h3>
             
             <!-- Track Stock -->
@@ -174,7 +175,7 @@
 
         <div class="flex justify-end">
             <x-button type="submit"
-                class="blue"
+                class="primary"
                 label="Save"
                 icon=''
                 name="button" />
@@ -188,12 +189,7 @@
 <script>
 
     // Initialize select2 for multiple categories
-    $(document).ready(function() {
-        $('#categories').select2({
-            placeholder: "Select categories",
-            allowClear: true
-        });
-    });
+ 
 
     // Toggle stock fields based on track_stock checkbox
     document.getElementById('track_stock').addEventListener('change', function() {        

@@ -95,10 +95,9 @@ class OrderController extends Controller
         if ($request->input('tab')) {
             $html = view('orders::orders.components.order_detail', $orderData)->render();
 
-            return response()->json([
+             return response()->json([
                 'success' => true,
-                'order_data' => $html,
-                // 'order_number' => $order->order_number
+                'order_datas' => $html
             ]);
         }
 

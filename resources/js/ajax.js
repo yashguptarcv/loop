@@ -3,7 +3,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     const notifications = [];
 
-    
+
     // Loader Management Functions
     const Loader = {
       // Create loader element with blur background
@@ -92,6 +92,9 @@
     initTinyMCEEditors();
     initializeScriptTag();
     initStateFormScript();
+    initializeScriptSource();
+    initializeImageUploaders();
+    // setupDropdowns();
 
 
     // Set up MutationObserver to handle dynamically added forms
@@ -102,6 +105,9 @@
           initTinyMCEEditors();
           initStateFormScript();
           initializeScriptTag();
+          initializeScriptSource();
+          initializeImageUploaders();
+
         }
       });
     });
@@ -110,14 +116,142 @@
       childList: true,
       subtree: true
     });
-    
+
+    // start dropdown
+    const GAP = 8;
+    let openMenu = null;
+
+    function closeMenu() {
+      if (openMenu) {
+        openMenu.style.display = "none";
+        openMenu.classList.add("opacity-0", "scale-95", "invisible");
+        openMenu = null;
+      }
+    }
+
+    function openMenuAt(trigger, menu) {
+      closeMenu();
+
+      // make measurable
+      menu.style.display = "block";
+      menu.style.position = "fixed";
+      menu.style.visibility = "hidden";
+      menu.classList.remove("opacity-0", "scale-95", "invisible");
+
+      const triggerRect = trigger.getBoundingClientRect();
+      const menuRect = menu.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      let top = triggerRect.bottom + GAP;
+      let left = triggerRect.right - menuRect.width;
+
+      // flip up if not enough space below
+      if (vh - triggerRect.bottom < menuRect.height + GAP) {
+        top = triggerRect.top - menuRect.height - GAP;
+      }
+
+      // keep inside viewport horizontally
+      if (left < 8) left = 8;
+      if (left + menuRect.width > vw - 8) left = vw - menuRect.width - 8;
+
+      // apply final position
+      menu.style.top = `${top}px`;
+      menu.style.left = `${left}px`;
+      menu.style.visibility = "visible";
+
+      menu.classList.add("opacity-100", "scale-100", "visible");
+      openMenu = menu;
+    }
+
+    document.addEventListener("click", function (e) {
+      const trigger = e.target.closest(".dropdown-trigger");
+      if (trigger) {
+        e.preventDefault();
+        const id = trigger.getAttribute("data-id");
+        const menu = document.querySelector(`.dropdown-menu[data-id="${id}"]`);
+        if (!menu) return;
+
+        if (menu === openMenu) {
+          closeMenu();
+        } else {
+          openMenuAt(trigger, menu);
+        }
+      } else if (!e.target.closest(".dropdown-menu")) {
+        closeMenu();
+      }
+    });
+    // end dropdown
+
+    function initializeImageUploaders() {
+      document.querySelectorAll(".image-uploader").forEach((uploader, uploaderIndex) => {
+        const fileInput = uploader.querySelector(".image-input");
+        const previewContainer = uploader.querySelector(".preview-container");
+
+        if (!fileInput || !previewContainer) return;
+
+        // --- clear old listeners (important if MutationObserver re-inits) ---
+        fileInput.removeEventListener("change", handleFileChange);
+        previewContainer.removeEventListener("click", handleRemoveClick);
+
+        fileInput.addEventListener("change", handleFileChange);
+        previewContainer.addEventListener("click", handleRemoveClick);
+
+        function handleFileChange(e) {
+          previewContainer.innerHTML = ""; // reset previews
+
+          [...e.target.files].forEach((file, index) => {
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+              const imageCard = document.createElement("div");
+              imageCard.className =
+                "relative border rounded-lg p-2 w-[160px] h-[160px] flex flex-col justify-between items-center bg-white shadow new-image";
+              imageCard.dataset.index = index;
+
+              imageCard.innerHTML = `
+            <img src="${ev.target.result}" class="h-[100px] w-full object-contain rounded">
+            <input type="text" name="new_alts[${uploaderIndex}][]" value="${file.name}" 
+                   class="mt-2 px-2 py-1 border border-gray-300 rounded text-sm w-full"
+                   placeholder="Alt text">
+            <button type="button" class="absolute top-1 right-1 text-red-500 hover:text-red-700 remove-btn">
+              <i class="fas fa-times"></i>
+            </button>
+          `;
+
+              previewContainer.appendChild(imageCard);
+            };
+            reader.readAsDataURL(file);
+          });
+        }
+
+        function handleRemoveClick(e) {
+          if (e.target.closest(".remove-btn")) {
+            const card = e.target.closest(".new-image");
+            if (!card) return;
+
+            const index = parseInt(card.dataset.index, 10);
+            card.remove();
+
+            // rebuild FileList without removed file
+            const dt = new DataTransfer();
+            [...fileInput.files].forEach((f, i) => {
+              if (i !== index) dt.items.add(f);
+            });
+            fileInput.files = dt.files;
+          }
+        }
+      });
+    }
+
 
     function initializeScriptTag() {
-      document.querySelectorAll('#tag-remove').forEach(tag => {
-        tag.addEventListener('click', function (e) {
-          e.preventDefault();
-          console.log($(this).parent().parent().remove());
-        });
+      $(document).off('click', '.tag-remove').on('click', '.tag-remove', function (e) {
+        e.preventDefault();
+
+        // Get the tag ID from the button's data attribute
+        const tagId = $(this).data('tag-id');
+
+        $(this).closest('tr').remove();
       });
 
       $(document).off('click', '#tag-add').on('click', '#tag-add', function (e) {
@@ -140,6 +274,42 @@
         // Insert before current row
         $currentRow.before($clonedRow);
       });
+
+
+    }
+    function initializeScriptSource() {
+
+      $(document).off('click', '.source-remove').on('click', '.source-remove', function (e) {
+        e.preventDefault();
+
+        // Get the source ID from the button's data attribute
+        const sourceId = $(this).data('source-id');
+        $(e.target).closest('tr').remove();
+
+      });
+
+
+      $(document).off('click', '#source-add').on('click', '#source-add', function (e) {
+        e.preventDefault();
+        console.log("Clicked");
+
+        const $currentRow = $(this).closest('tr');
+        const $clonedRow = $currentRow.clone();
+
+        // Change Add → Remove
+        const $button = $clonedRow.find('#source-add');
+        $button
+          .removeClass('bg-blue-100 text-blue-600 border-blue-300 hover:border-blue-300 hover:text-blue-300')
+          .addClass('bg-red-100 text-red-600 border-red-300 hover:border-red-300 hover:text-red-300')
+          .attr('id', 'source-remove')
+          .html("<span class='material-icons-outlined mr-1 text-xs'>delete</span>");
+
+        // Clear inputs
+        $clonedRow.find('input').val('');
+
+        // Insert before current row
+        $currentRow.before($clonedRow);
+      });
     }
 
 
@@ -147,31 +317,67 @@
      * Initialize TinyMCE editors for all textareas with editor="true" attribute
      */
     function initTinyMCEEditors() {
-        document.querySelectorAll('textarea[editor="true"]').forEach(textarea => {
-            const editorId = textarea.id || `tinymce-editor-${Math.random().toString(36).substr(2, 9)}`;
-            textarea.id = editorId;
-            
-            tinymce.init({
-                selector: `#${editorId}`,
-                plugins: 'mentions autolink code table lists link wordcount',
-                toolbar: 'undo redo | bold italic | bullist numlist | link | alignleft aligncenter alignright alignjustify',
-                menubar: false,
-                statusbar: false,
-                height: 280,
-                setup: function(editor) {
-                    // Sync content back to textarea on change
-                    editor.on('change', function() {
-                        textarea.value = editor.getContent();
-                    });
-                    
-                    // Initialize with current textarea content
-                    editor.on('init', function() {
-                        editor.setContent(textarea.value);
-                    });
-                }
+      document.querySelectorAll('textarea[editor="true"]').forEach(textarea => {
+        const editorId = textarea.id || `tinymce-editor-${Math.random().toString(36).substr(2, 9)}`;
+        textarea.id = editorId;
+
+        tinymce.init({
+          selector: `#${editorId}`,
+          plugins: 'mentions autolink code table lists link wordcount',
+          toolbar: 'undo redo | bold italic | bullist numlist | link | alignleft aligncenter alignright alignjustify',
+          menubar: false,
+          statusbar: false,
+          height: 280,
+          setup: function (editor) {
+            // Sync content back to textarea on change
+            editor.on('change', function () {
+              textarea.value = editor.getContent();
             });
+
+            // Initialize with current textarea content
+            editor.on('init', function () {
+              editor.setContent(textarea.value);
+            });
+          }
         });
+      });
     }
+
+    function initQuillEditors() {
+      document.querySelectorAll('textarea[editor="true"]').forEach(textarea => {
+        const id = textarea.id || `quill-editor-${Math.random().toString(36).substr(2, 9)}`;
+        textarea.style.display = "none"; // hide original textarea
+
+        // Create a wrapper div for Quill
+        const editorDiv = document.createElement("div");
+        editorDiv.id = "quill-" + id;
+        editorDiv.style.height = "280px";
+        textarea.parentNode.insertBefore(editorDiv, textarea.nextSibling);
+
+        // Init Quill
+        const quill = new Quill(editorDiv, {
+          theme: "snow",
+          modules: {
+            toolbar: [
+              [{ 'undo': 'undo', 'redo': 'redo' }], // you need custom module for undo/redo
+              ["bold", "italic", "underline", "strike"],
+              [{ "list": "ordered" }, { "list": "bullet" }],
+              [{ "align": [] }],
+              ["link", "code-block", "table"]
+            ]
+          }
+        });
+
+        // Set initial content from textarea
+        quill.root.innerHTML = textarea.value;
+
+        // Sync back to textarea on change
+        quill.on("text-change", () => {
+          textarea.value = quill.root.innerHTML;
+        });
+      });
+    }
+
 
     function initializeAjaxForms() {
       document.querySelectorAll('.form-ajax').forEach(form => {
@@ -187,7 +393,7 @@
       });
     }
 
-     function initStateFormScript() {
+    function initStateFormScript() {
       const form = document.getElementById('stateForm');
       if (!form) return; // if form not present, skip
 
@@ -644,95 +850,95 @@
 
   });
 
-    // Tags manager
-    const tagContainer = document.getElementById('tag-container');
-    const tagsInput = document.getElementById('tags-input');
-    const hiddenInput = document.getElementById('tags');
-    const datalist = document.getElementById('tagList');
-    
-    // Check if required elements exist
-    if (!tagContainer || !tagsInput || !hiddenInput || !datalist) {
-        console.error('One or more required elements for tag manager not found');
-        return;
+  // Tags manager
+  const tagContainer = document.getElementById('tag-container');
+  const tagsInput = document.getElementById('tags-input');
+  const hiddenInput = document.getElementById('tags');
+  const datalist = document.getElementById('tagList');
+
+  // Check if required elements exist
+  if (!tagContainer || !tagsInput || !hiddenInput || !datalist) {
+    console.error('One or more required elements for tag manager not found');
+    return;
+  }
+
+  // Initialize with existing tags
+  const initialTags = hiddenInput.value ? hiddenInput.value.split(',').filter(tag => tag.trim()) : [];
+  initialTags.forEach(tag => addTag(tag.trim()));
+  updateHiddenInput();
+
+  tagsInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleTagInput();
+    } else if (e.key === ',' || e.key === ';') {
+      e.preventDefault();
+      handleTagInput();
+    } else if (e.key === 'Backspace' && this.value === '') {
+      const tags = tagContainer.querySelectorAll('.tag');
+      if (tags.length > 0) {
+        const lastTag = tags[tags.length - 1];
+        removeTag(lastTag);
+        tagsInput.focus();
+      }
     }
-    
-    // Initialize with existing tags
-    const initialTags = hiddenInput.value ? hiddenInput.value.split(',').filter(tag => tag.trim()) : [];
-    initialTags.forEach(tag => addTag(tag.trim()));
-    updateHiddenInput();
-    
-    tagsInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            handleTagInput();
-        } else if (e.key === ',' || e.key === ';') {
-            e.preventDefault();
-            handleTagInput();
-        } else if (e.key === 'Backspace' && this.value === '') {
-            const tags = tagContainer.querySelectorAll('.tag');
-            if (tags.length > 0) {
-                const lastTag = tags[tags.length - 1];
-                removeTag(lastTag);
-                tagsInput.focus();
-            }
-        }
-    });
-    
-    tagsInput.addEventListener('blur', function() {
-        if (this.value.trim() !== '') {
-            handleTagInput();
-        }
-    });
-    
-    function handleTagInput() {
-        if (tagsInput.value.trim() !== '') {
-            addTag(tagsInput.value.trim());
-            tagsInput.value = '';
-        }
+  });
+
+  tagsInput.addEventListener('blur', function () {
+    if (this.value.trim() !== '') {
+      handleTagInput();
     }
-    
-    function addTag(tagName) {
-        if (!tagName) return;
-        
-        // Check if tag already exists
-        const existingTags = Array.from(tagContainer.querySelectorAll('.tag')).map(tag => tag.dataset.tag);
-        if (existingTags.includes(tagName)) {
-            tagsInput.value = '';
-            return;
-        }
-        
-        const tagElement = document.createElement('div');
-        tagElement.className = 'tag inline-flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm';
-        tagElement.dataset.tag = tagName;
-        
-        tagElement.innerHTML = `
+  });
+
+  function handleTagInput() {
+    if (tagsInput.value.trim() !== '') {
+      addTag(tagsInput.value.trim());
+      tagsInput.value = '';
+    }
+  }
+
+  function addTag(tagName) {
+    if (!tagName) return;
+
+    // Check if tag already exists
+    const existingTags = Array.from(tagContainer.querySelectorAll('.tag')).map(tag => tag.dataset.tag);
+    if (existingTags.includes(tagName)) {
+      tagsInput.value = '';
+      return;
+    }
+
+    const tagElement = document.createElement('div');
+    tagElement.className = 'tag inline-flex items-center bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm';
+    tagElement.dataset.tag = tagName;
+
+    tagElement.innerHTML = `
             ${tagName}
             <button type="button" class="ml-1.5 -mr-1 text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-100 focus:outline-none">
                 &times;
             </button>
         `;
-        
-        tagElement.querySelector('button').addEventListener('click', function() {
-            removeTag(tagElement);
-            tagsInput.focus();
-        });
-        
-        // Insert before the input
-        tagContainer.insertBefore(tagElement, tagsInput);
-        updateHiddenInput();
+
+    tagElement.querySelector('button').addEventListener('click', function () {
+      removeTag(tagElement);
+      tagsInput.focus();
+    });
+
+    // Insert before the input
+    tagContainer.insertBefore(tagElement, tagsInput);
+    updateHiddenInput();
+  }
+
+  function removeTag(tagElement) {
+    if (tagElement && tagElement.parentNode) {
+      tagElement.remove();
+      updateHiddenInput();
     }
-    
-    function removeTag(tagElement) {
-        if (tagElement && tagElement.parentNode) {
-            tagElement.remove();
-            updateHiddenInput();
-        }
-    }
-    
-    function updateHiddenInput() {
-        if (!hiddenInput) return;
-        const tags = Array.from(tagContainer.querySelectorAll('.tag')).map(tag => tag.dataset.tag);
-        hiddenInput.value = tags.join(',');
-    }
+  }
+
+  function updateHiddenInput() {
+    if (!hiddenInput) return;
+    const tags = Array.from(tagContainer.querySelectorAll('.tag')).map(tag => tag.dataset.tag);
+    hiddenInput.value = tags.join(',');
+  }
 
 })();

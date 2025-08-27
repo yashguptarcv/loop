@@ -54,7 +54,7 @@
                 
                 <div class="flex justify-end">
                     <x-button type="submit"                     
-                        class="blue" 
+                        class="primary" 
                         label="Save" 
                         icon=''
                         name="button" 

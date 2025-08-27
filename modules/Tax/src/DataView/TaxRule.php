@@ -128,7 +128,7 @@ class TaxRule extends DataGrid
                 'icon' => 'add',
                 'title' => 'Create Tax Rule',
                 'method' => 'GET',
-                'action' => 'text-blue-600 bg-blue-100',
+                'action' => 'text-amber-100 bg-primary-100',
                 'is_popup'  => true,
                 'url' => 'admin.tax-rules.create'
             ]);
@@ -154,7 +154,7 @@ class TaxRule extends DataGrid
                 'icon' => 'settings',
                 'title' => 'More',
                 'method' => 'GET',
-                'action' => 'text-blue-600 bg-blue-100',
+                'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.tax-rules.index',
                 'options' => $options
             ]);

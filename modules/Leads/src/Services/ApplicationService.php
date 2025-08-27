@@ -17,23 +17,24 @@ class ApplicationService
     {
         try {
             $password = Str::random(12); // Generate random password
-            
+
             // Check if user exists with this email
             $user = User::where('email', $data['email'])->first();
 
             if (!$user) {
                 // Create new user
-                
+
                 $user = User::create([
                     'name' => $data['full_name'],
                     'email' => $data['email'],
                     'password' => Hash::make($password),
                     'phone' => $data['mobile'],
+                    'status'    => 'P'
                 ]);
-                
+
                 LeadModel::find($leadId)->notes()->create([
                     'admin_id'  => auth('admin')->id(),
-                    'note'      => "Customer created Email: ". $user->email . ", Password: ". $password,
+                    'note'      => "Customer created Email: " . $user->email . ", Password: " . $password,
                     'created'   => now()
                 ]);
             }
@@ -64,7 +65,7 @@ class ApplicationService
             ]);
 
             return ['success' => true, 'data' =>  $application, 'user' => $user, 'password' => $password];
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             return ['success' => false, 'response' => $e->getMessage()];
         }
     }

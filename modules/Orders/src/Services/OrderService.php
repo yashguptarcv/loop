@@ -14,6 +14,7 @@ use Modules\Inventory\Models\Inventory;
 use Illuminate\Support\Facades\Notification;
 use Modules\Payments\Services\PaymentService;
 use Modules\Notifications\Events\OrderCreated;
+use Modules\Payments\Services\PaymentsService;
 use Modules\Shipping\Services\ShippingService;
 use Modules\Discounts\Services\DiscountService;
 use Modules\Orders\Services\TransactionService;
@@ -24,7 +25,7 @@ use Modules\Notifications\Services\NotificationDispatcher;
 class OrderService
 {
     public function __construct(
-        protected PaymentService $paymentService,
+        protected PaymentsService $paymentService,
         protected TransactionService $transactionService,
         // protected ShippingService $shippingService,
         protected TaxService $taxService,
@@ -137,6 +138,7 @@ class OrderService
         return [
             'order' => [
                 'user_id' => $user->id,
+                'admin_id' => auth('admin')->id(),
                 'order_number' => $this->generateOrderNumber(),
                 'status' => $orderData['status'] ?? fn_get_setting('general.order.create'),
                 'subtotal' => $subtotal,
@@ -365,25 +367,17 @@ class OrderService
 
     protected function processPayment(Order $order, array $orderData): void
     {
-        $payment = $this->paymentService->process(
-            $order,
-            $orderData['payment_method']
+        $this->paymentService->charge(
+            $orderData['payment_method'],
+            $order
         );
-
-        $order->update([
-            'status' => $payment->order_status,
-            'payment_status' => $payment->status,
-            'payment_method' => $orderData['payment_method'],
-            'payment_id' => $payment->id,
-        ]);
     }
 
     protected function processRefund(Order $order): void
     {
         $this->paymentService->refund(
-            order: $order,
-            amount: $order->total,
-            reason: 'Order cancelled'
+            $order,
+            $order->total
         );
     }
 

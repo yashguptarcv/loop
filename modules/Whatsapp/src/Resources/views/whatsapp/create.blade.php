@@ -228,7 +228,7 @@
                 </div>
 
                 <div class="border-t border-blue-200 dark:border-blue-700 pt-6">
-                   <x-button type="submit" class="blue" label="Save" icon='' name='button'/>
+                   <x-button type="submit" class="primary" label="Save" icon='' name='button'/>
                 </div>
             </form>
         </div>
@@ -290,7 +290,7 @@
 
         if (buttonCount < 3) { // WhatsApp allows max 3 buttons
             const newRow = document.createElement('div');
-            newRow.className = 'button-row mb-4 p-4 border border-gray-200 dark:border-gray-600 rounded-md';
+            newRow.className = 'button-row mb-4 p-4 border divide-gray-100 dark:border-gray-600 rounded-md';
             newRow.innerHTML = `
             <div class="flex justify-between items-center mb-2">
                 <h4 class="font-medium text-gray-900 dark:text-gray-200">Button ${buttonCount + 1}</h4>

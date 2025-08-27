@@ -43,7 +43,7 @@
                         <h3 class="text-lg font-medium text-gray-900 mb-4">Map CSV Columns to Database Fields</h3>
                         
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
+                            <table class="min-w-full divide-y divide-gray-100">
                                 <thead class="bg-gray-100">
                                     <tr>
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CSV Column</th>
@@ -51,7 +51,7 @@
                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sample Data</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white divide-y divide-gray-200" id="mapping-fields">
+                                <tbody class="bg-white divide-y divide-gray-100" id="mapping-fields">
                                     <!-- Will be populated by JavaScript -->
                                 </tbody>
                             </table>
@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const validationContainer = document.getElementById('validation-results');
         validationContainer.innerHTML = `
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-                <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+                <div class="px-4 py-5 sm:px-6 border-b divide-gray-100">
                     <h3 class="text-lg leading-6 font-medium text-gray-900">Import Summary</h3>
                     <p class="mt-1 text-sm text-gray-500">Review the data before importing</p>
                 </div>
@@ -329,13 +329,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="mt-6">
                         <h4 class="text-sm font-medium text-gray-500 mb-2">Sample Import Data</h4>
                         <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
+                            <table class="min-w-full divide-y divide-gray-100">
                                 <thead class="bg-gray-50">
                                     <tr>
                                         ${Object.keys(fieldMappings).map(f => `<th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">${dbFields[f].label}</th>`).join('')}
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
+                                <tbody class="bg-white divide-y divide-gray-100">
                                     <tr>
                                         ${Object.keys(fieldMappings).map(f => `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${sampleData[fieldMappings[f]] || '-'}</td>`).join('')}
                                     </tr>

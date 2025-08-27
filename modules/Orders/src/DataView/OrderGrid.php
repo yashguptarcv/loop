@@ -84,6 +84,7 @@ class OrderGrid extends DataGrid
             },
         ]);
 
+        $orderStatuses = fn_get_order_status();
         $this->addColumn([
             'index' => 'status',
             'label' => 'Order Status',
@@ -91,25 +92,21 @@ class OrderGrid extends DataGrid
             'searchable' => false,
             'filterable' => true,
             'filterable_type' => 'dropdown',
-            'filterable_options' => [
-                ['label' => 'Pending', 'value' => 'P'],
-                ['label' => 'Processing', 'value' => 'H'],
-                ['label' => 'Completed', 'value' => 'Z'],
-                ['label' => 'Cancelled', 'value' => 'C'],
-                ['label' => 'New', 'value' => 'O'],
-                ['label' => 'Incomplete', 'value' => 'N'],
-                ['label' => 'Failed', 'value' => 'F'],
-                ['label' => 'Refunded', 'value' => 'R'],
-            ],
+            'filterable_options' => collect($orderStatuses)->map(function ($name, $id) {
+                return [
+                    'label' => $name->name,
+                    'value' => $name->id
+                ];
+            })->values()->toArray(),
             'closure' => function ($row) {
                 // Get the status from the row
                 $statusValue = $row->status;
                 
                 try {
                     // Convert the status value to the enum
-                    $status = OrderStatus::from($statusValue);
+                    $status = OrderStatus::from($statusValue);                    
                     return $status->label();
-                } catch (\ValueError $e) {
+                } catch (\ValueError $e) {                    
                     // Handle unexpected status values
                     return 'Unknown';
                 }
@@ -187,7 +184,7 @@ class OrderGrid extends DataGrid
                 'icon' => 'add',
                 'title' => 'Order',
                 'method' => 'GET',
-                'action' => 'text-blue-600 bg-blue-100',
+                'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.orders.create',
             ]);
         }

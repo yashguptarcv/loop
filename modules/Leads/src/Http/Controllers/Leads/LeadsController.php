@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Routing\Controller;
 use Modules\Leads\Models\LeadModel;
 use Modules\Meetings\Models\Meeting;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Modules\Leads\Models\LeadSourceModel;
 use Modules\Leads\Models\LeadStatusModel;
@@ -257,26 +258,27 @@ class LeadsController extends Controller
 
     public function downloadAttachment(LeadModel $lead, LeadAttachmentModel $attachment)
     {
+
         // Verify the attachment belongs to the lead
-        if ($attachment->lead_id !== $lead->id) {
+        if ($attachment->lead_id != $lead->id) {
             session()->flash('error', 'Unable to download attachment');
             return redirect()->route('admin.leads.show', $lead->id);
         }
-
-        $path = storage_path('app/lead_attachments/' . $attachment->filename);
-
-        if (!file_exists($path)) {
+        
+        $filepath = 'uploads/' . strtolower('leads/'). $lead->id . '/'. $attachment->filename;
+        
+        if (!Storage::disk(fn_get_setting('general.image_driver'))->exists($filepath)) {
             session()->flash('error', 'Unable to download attachment');
             return redirect()->route('admin.leads.show', $lead->id);
         }
 
         $lead->notes()->create([
             'admin_id'  => auth('admin')->id(),
-            'note'      => auth('admin')->name . " download attachments ",
+            'note'      => auth('admin')->name . " has been download attachments ". $filepath,
             'created'   => now()
         ]);
 
-        return response()->download($path, $attachment->original_filename);
+        return response()->download('storage/'.$filepath);
     }
 
     public function destroyAttachment(LeadModel $lead, LeadAttachmentModel $attachment)
@@ -287,12 +289,9 @@ class LeadsController extends Controller
             return redirect()->route('admin.leads.show', $lead->id);
         }
 
-        $path = storage_path('app/lead_attachments/' . $attachment->filename);
-
-        // Delete the file if it exists
-        if (file_exists($path)) {
-            unlink($path);
-        }
+        // Delete main file
+        $path = 'uploads/' . strtolower('leads/'). $lead->id . '/';
+        Storage::disk(fn_get_setting('general.image_driver'))->delete($path . '/' . $attachment->filename);
 
         // Add note about the deletion
         $lead->notes()->create([
@@ -304,8 +303,7 @@ class LeadsController extends Controller
         // Delete the attachment record
         $attachment->delete();
 
-        session()->flash('success', 'Attachment deleted successfully');
-        return redirect()->route('admin.leads.show', $lead->id);
+        return redirect()->back()->with('success', 'Attachment deleted successfully');
     }
     protected function validateRequest(Request $request, $lead = null)
     {
@@ -328,18 +326,22 @@ class LeadsController extends Controller
         if ($request->hasFile('images')) {
 
             foreach ($request->file('images') as $file) {
-                $originalFilename = $file->getClientOriginalName();
+                $fileName = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+                $originalName = $file->getClientOriginalName();
+                $mimeType = $file->getMimeType();
                 $extension = $file->getClientOriginalExtension();
-                $filename = LeadAttachmentModel::generateFilename($extension);
-                $path = $file->storeAs('lead_attachments', $filename);
+                $size = $file->getSize();
+                $path = 'uploads/' . strtolower('leads/'. $lead->id);
+                
+                Storage::disk(fn_get_setting('general.image_driver'))->putFileAs($path, $file, $fileName);
 
                 LeadAttachmentModel::create([
                     'lead_id' => $lead->id,
                     'admin_id' => auth('admin')->id(),
-                    'filename' => $filename,
-                    'original_filename' => $originalFilename,
-                    'mime_type' => $file->getMimeType(),
-                    'size' => $file->getSize(),
+                    'filename' => $fileName,
+                    'original_filename' => $originalName,
+                    'mime_type' => $mimeType,
+                    'size' => $size,
                 ]);
             }
         }

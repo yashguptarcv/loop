@@ -9,7 +9,7 @@
 @include('customers::customers.components.info_bar')
 
 <!-- Tab Navigation -->
-<div class="border-b border-gray-200 mb-6">
+<div class="border-b divide-gray-100 mb-6">
     <nav class="-mb-px flex space-x-8">
         <a href="#" class="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
             Overview

@@ -5,10 +5,21 @@
 @endphp
 
 @php
-    $class = "inline-flex items-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 hover:text-$class-300 text-$class-600 bg-$class-100";
+    
+    $textClass = 'amber';
+
+    if($class == 'amber') {
+        $textClass = 'primary';
+    }
+
+    
+    $class = "inline-flex items-center px-4 py-2 rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 hover:text-$textClass-200 text-$textClass-100 bg-$class-100";
     if(empty($class) && !empty($custom_class)) {
         $class = $custom_class;
+
     } 
+
+
 @endphp
 @if ($as === 'a')
     <a href="{{ $href }}"
@@ -21,7 +32,7 @@
         @endif
         {!! $label !!}
         @if ($badge)
-            <span class="ml-2 inline-block bg-{{$class ?? 'blue'}}-100 text-{{$class ?? 'blue'}}-600 text-xs px-2 rounded-full">{{ $badge }}</span>
+            <span class="ml-2 inline-block bg-{{$class ?? 'primary'}}-100 hover:text-{{$textClass}}-200 text-{{$textClass}}-100 text-xs px-2 rounded-full">{{ $badge }}</span>
         @endif
     </a>
 @elseif($as === 'link') 
@@ -35,7 +46,7 @@
         @endif
         {!! $label !!}
         @if ($badge)
-            <span class="ml-2 inline-block bg-{{$class ?? 'blue'}}-100 text-{{$class ?? 'blue'}}-600 text-xs px-2 rounded-full">{{ $badge }}</span>
+            <span class="ml-2 inline-block bg-{{$class ?? 'primary'}}-100 hover:text-{{$textClass}}-200 text-{{$textClass}}-100 text-xs px-2 rounded-full">{{ $badge }}</span>
         @endif
     </a>
 @elseif($as === 'general') 
@@ -49,7 +60,7 @@
         @endif
         {!! $label !!}
         @if ($badge)
-            <span class="ml-2 inline-block text-{{$class ?? 'blue'}}-600 text-xs px-2">{{ $badge }}</span>
+            <span class="ml-2 inline-block hover:text-{{$textClass}}-200 text-{{$textClass}}-100 text-xs px-2">{{ $badge }}</span>
         @endif
     </button>
 @else
@@ -63,7 +74,7 @@
         @endif
         {!! $label !!}
         @if ($badge)
-            <span class="ml-2 inline-block bg-{{$class ?? 'blue'}}-100 text-{{$class ?? 'blue'}}-600 text-xs px-2 rounded-full">{{ $badge }}</span>
+            <span class="ml-2 inline-block bg-{{$class ?? 'primary'}}-100 hover:text-{{$textClass}}-200 text-{{$textClass}}-100 text-xs px-2 rounded-full">{{ $badge }}</span>
         @endif
     </button>
 @endif

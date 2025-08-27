@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Payment\Services;
+namespace Modules\Payments\Services;
 
 use Rcv\Core\Services\BaseService as CoreBaseService;
 

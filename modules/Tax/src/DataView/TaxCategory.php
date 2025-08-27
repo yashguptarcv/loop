@@ -153,7 +153,7 @@ class TaxCategory extends DataGrid
                 'icon' => 'add',
                 'title' => 'Create Tax Category',
                 'method' => 'GET',
-                'action' => 'text-blue-600 bg-blue-100',
+                'action' => 'text-amber-100 bg-primary-100',
                 'is_popup'  => true,
                 'url' => 'admin.tax-category.create'
             ]);
@@ -179,7 +179,7 @@ class TaxCategory extends DataGrid
                 'icon' => 'settings',
                 'title' => 'More',
                 'method' => 'GET',
-                'action' => 'text-blue-600 bg-blue-100',
+                'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.tax.index',
                 'options' => $options
             ]);

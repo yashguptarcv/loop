@@ -136,6 +136,35 @@ class FileService
             return false;
         }   
     }
+
+    /**
+     * Delete a file and its database records.
+     */
+    public function deleteFileWithId($file_id): bool
+    {
+        try {
+            $fileLinks = FileLink::with('file')
+                ->where('id', $file_id)
+                ->get();
+            
+            foreach ($fileLinks as $fileLink) {
+                // Delete the physical files
+                $this->deletePhysicalFiles($fileLink->file);
+                
+                // Delete file link
+                $fileLink->delete();
+                
+                // Delete file record
+                $fileLink->file->delete();
+            }
+            
+            return true;
+            
+        } catch (Exception $e) {
+            \Log::error('File deletion failed: ' . $e->getMessage());
+            return false;
+        }   
+    }
     
     /**
      * Delete physical files from storage.
@@ -213,6 +242,7 @@ class FileService
             'id' => $file->id,
             'file_name' => $file->file_name,
             'original_name' => $file->original_name,
+            'alt_text'  => $file->alt_text ?? $file->original_name,
             'mime_type' => $file->mime_type,
             'extension' => $file->extension,
             'size' => $file->size,

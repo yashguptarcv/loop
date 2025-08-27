@@ -6,13 +6,8 @@
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
     @include('admin::components.common.back-button', ['route' => route('admin.orders.index'), 'name' => isset($order) ? 'Order #'.$order->order_number : 'New order'])
 
+    @if(!empty($order))
     <div class="flex items-center">
-        <span class="px-3 py-1 text-xs font-medium rounded-full 
-            {{ $order->status == 'O' ? 'bg-blue-100 text-blue-800' : 
-                ($order->status == 'C' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800') }}">
-            {{ $order->status == 'O' ? 'Open' : 
-                ($order->status == 'C' ? 'Completed' : $order->status) }}
-        </span>
         <span class="ml-3 text-sm text-gray-500">
             Placed on {{ $order->created_at->format('M d, Y') }}
         </span>
@@ -23,25 +18,30 @@
             </span>
         </span>
     </div>
+    @endif
 </div>
 
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
     <div class="flex items-center gap-2">
-        <button class="px-4 py-2 rounded-lg bg-blue-100 text-blue-600 hover:text-blue-300 transition flex items-center gap-2">
+        <button class="px-4 py-2 rounded-lg bg-primary-100 text-amber-100 hover:text-amber-200 transition flex items-center gap-2">
             Save
         </button>
-        <button class="px-4 py-2 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition flex items-center gap-2">
+        @if(!empty($order))
+        <button class="px-4 py-2 rounded-lg border border-primary-100 bg-white text-primary-100 hover:border-primary-200 transition flex items-center gap-2">
             <i class="fas fa-print"></i> Print
         </button>
 
-        <button class="px-4 py-2 rounded-lg bg-blue-100 text-blue-600 hover:text-blue-300 transition flex items-center gap-2">
+        <button class="px-4 py-2 rounded-lg bg-primary-100 text-amber-100 hover:text-amber-200 transition flex items-center gap-2">
             <i class="fas fa-cog"></i> Generate Invoice
         </button>
+        @endif
 
     </div>
+    @if(!empty($order))
     <button class="px-4 py-2 rounded-lg bg-red-100 text-red-600 hover:text-red-300 transition flex items-center gap-2">
         <i class="fas fa-trash-alt"></i> Cancel Order
     </button>
+    @endif
 </div>
 
 <form id="orderForm" class="form-ajax" method="POST"
@@ -50,7 +50,7 @@
     @csrf
     @isset($order) @method('PUT') @endisset
     <!-- Main Content Grid -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" id="order_data">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" id="order_datas">
         @include('orders::orders.components.order_detail')
     </div>
 </form>
@@ -58,19 +58,20 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-        // loadOrder();
+        loadOrder();
     });
 
     function loadOrder() {
-        ceAjax('get', '{{ route("admin.orders.show", $order->id) }}', {
+        ceAjax('get', '{{ route("admin.orders.show", $order->id ?? 0) }}', {
             loader: true,
-            result_ids: 'order_data', // This will update the calendar container directly
             data: {
                 tab: true,
+                order_id: '{{$order->id ?? 0}}'
             },
+            result_ids: 'order_datas', // This will update the calendar container directly
             caching: false,
             callback: function(data) {
-                $('#order_data').html('<div class="col-span-7 py-8 text-center">Order Loading...</div>');
+                $('#order_datas').html('<div class="col-span-7 py-8 text-center">Order Loading...</div>');
             },
             errorCallback: function(xhr) {
                 showToast('Unable to load order data', 'error', 'Error');

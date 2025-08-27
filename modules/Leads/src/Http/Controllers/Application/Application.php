@@ -139,7 +139,8 @@ class Application extends Controller
         $lead = LeadModel::find($request->input('lead_id'));
 
         return [
-            'user_id' => $user->id ?? null, // Or use a default system user if needed
+            'user_id'   => $user->id ?? null, // Or use a default system user if needed
+            'admin_id'  => auth('admin')->id(), // Or use a default system user if needed
             'items' => $items,
             'status' => fn_get_setting('general.order.create'),
             'billing_address' => [

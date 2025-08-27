@@ -156,7 +156,7 @@ class WhatsappGrid extends DataGrid
                 'icon' => 'rotate_left',
                 'title' => 'Sync',
                 'method' => 'GET',
-                'action' => 'text-blue-600 bg-blue-100',
+                'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.whatsapp.templates.sync',
             ]);
         }
@@ -166,7 +166,7 @@ class WhatsappGrid extends DataGrid
                 'icon' => 'add',
                 'title' => 'Create Template',
                 'method' => 'GET',
-                'action' => 'text-blue-600 bg-blue-100',
+                'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.whatsapp.templates.create',
             ]);
         }

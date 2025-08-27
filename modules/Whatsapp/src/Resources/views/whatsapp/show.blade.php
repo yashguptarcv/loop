@@ -16,7 +16,7 @@
                     modalTitle="Send Message"
                     id='send_message'
                     ajaxUrl="#"
-                    color="blue"
+                    color="primary"
                     modalSize="sm" />
                 @endif
                 @if(bouncer()->hasPermission('admin.whatsapp.templates.destroy'))
@@ -103,7 +103,7 @@
                     </div>
 
                     <!-- Template Preview -->
-                    <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
+                    <div class="border divide-gray-100 rounded-lg p-4 bg-gray-50 dark:border-gray-700 dark:bg-gray-800">
                         <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Template Preview</h3>
                         <div class="bg-white rounded-lg p-4 dark:bg-gray-900 max-w-sm mx-auto border border-gray-300 dark:border-gray-600 shadow-sm">
                             <!-- Header -->

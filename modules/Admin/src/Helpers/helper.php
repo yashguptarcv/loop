@@ -8,7 +8,7 @@ use Modules\Catalog\Models\Category;
 if (!function_exists('fn_get_usergroups')) {
     function fn_get_usergroups(): mixed
     {
-        return Role::get();
+        return Role::get()->toArray();
     }
 }
 
@@ -29,7 +29,7 @@ if (!function_exists('fn_get_category_name')) {
 if (!function_exists('fn_get_categories')) {
     function fn_get_categories(): mixed
     {
-        return Category::get();
+        return Category::get()->toArray();
     }
 }
 
@@ -52,7 +52,7 @@ if (!function_exists('fn_get_product_name')) {
 if (!function_exists('fn_get_products')) {
     function fn_get_products(): mixed
     {
-        return Product::get();
+        return Product::get()->toArray();
     }
 }
 
@@ -73,6 +73,6 @@ if (!function_exists('fn_get_country_name')) {
 if (!function_exists('fn_get_countries')) {
     function fn_get_countries(int $id = 0): mixed
     {
-        return Country::get();
+        return Country::get()->toArray();
     }
 }

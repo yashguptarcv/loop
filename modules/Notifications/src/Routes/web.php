@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Notifications\Http\Controllers\HomeController;
+use Modules\Notifications\Http\Controllers\LogsController;
 use Modules\Notifications\Http\Controllers\NotificationController;
 
 /*
@@ -20,6 +21,8 @@ Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->
 
         // Notification CRUD
         Route::resource('notification', NotificationController::class);
+
+        Route::resource('logs', LogsController::class);
     });
 });
 

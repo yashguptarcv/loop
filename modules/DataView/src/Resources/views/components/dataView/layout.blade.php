@@ -3,12 +3,12 @@
 
     <!-- Top Controls -->
     <x-topbar :data="$data" />
-
+    
     <div class="flex flex-col">
         <!-- Main Content -->
         <div class="flex-1">
             <x-table :data="$data" />
-            <x-pagination :data="$data['meta']" />
+            <x-pagination :data="$data" />
         </div>
     </div>
 

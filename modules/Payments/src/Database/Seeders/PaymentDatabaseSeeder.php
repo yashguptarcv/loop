@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\Payment\Database\Seeders;
+namespace Modules\Payments\Database\Seeders;
 
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PaymentDatabaseSeeder extends Seeder
+class PaymentsDatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.

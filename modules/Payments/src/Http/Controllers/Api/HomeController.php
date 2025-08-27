@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Payment\Http\Controllers\Api;
+namespace Modules\Payments\Http\Controllers\Api;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;

@@ -12,7 +12,7 @@
     @isset($discount) @method('PUT') @endisset
 
     <!-- Main Tabs Navigation -->
-    <div class="border-b border-gray-200 mb-6">
+    <div class="border-b divide-gray-100 mb-6">
         <nav class="-mb-px flex space-x-8" aria-label="Tabs">
             <button type="button" data-tab="general" class="tab-button active border-indigo-500 text-indigo-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
                 General
@@ -43,7 +43,7 @@
 
     <!-- Submit Button -->
     <div class="flex justify-end mt-6">
-        <x-button type="submit" class="blue" label="Save" icon='' name="button" />
+        <x-button type="submit" class="primary" label="Save" icon='' name="button" />
     </div>
 </form>
 

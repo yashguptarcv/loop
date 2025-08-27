@@ -17,7 +17,7 @@
 <!-- Current month days -->
 @for($day = 1; $day <= $daysInMonth; $day++)
     <div class="h-auto p-1 relative calendar-day @if($isCurrentMonth && $day == $today) today @endif">
-        <div class="text-right p-1 date-number @if($isCurrentMonth && $day == $today) bg-blue-100 text-blue-600 border rounded-lg @endif">{{ $day }}</div>
+        <div class="text-right p-1 date-number @if($isCurrentMonth && $day == $today) bg-primary-100 text-amber-100 border rounded-lg @endif">{{ $day }}</div>
         <!-- <div class="space-y-1 overflow-y-auto max-h-24"> -->
             <div class="space-y-1 overflow-y-auto max-h-24 cursor-pointer" style="overflow-x: hidden; word-wrap: break-word;">
 
@@ -29,7 +29,7 @@
                         modalTitle="Meeting Detail"
                         id="meeting-show-{{$meeting->id}}"
                         ajaxUrl="{{ route('admin.meetings.show', $meeting->id) }}"
-                        buttonClass="block text-xs p-1 bg-{{ $meeting->color ?? 'green' }}-100 text-{{ $meeting->color ?? 'green' }}-800 rounded truncate hover:bg-{{ $meeting->color ?? 'green' }}-200 meeting-item"
+                        buttonClass="block text-xs p-1 bg-{{ $meeting->color ?? 'primary' }}-100 text-{{ $meeting->color ?? 'primary' }}-200 rounded truncate hover:bg-{{ $meeting->color ?? 'primary' }}-200 meeting-item"
                         modalSize="lg"
                     />
                 @endforeach
@@ -43,7 +43,7 @@
                         )->format('Y-m-d');
                     @endphp
                     <a href="{{ route('admin.meetings.list') }}?filters[start_time][0][0]={{$date}}&filters[start_time][0][1]={{$date}}" 
-                    class="block text-xs text-center text-blue-600 hover:text-blue-800 hover:underline mt-1">
+                    class="block text-xs text-center text-primary-100 hover:text-primary-200 hover:underline mt-1">
                         + {{ $meetings[$day]->count() - 3 }} more meetings
                     </a>
                 @endif

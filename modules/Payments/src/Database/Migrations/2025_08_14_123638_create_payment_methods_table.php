@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('class_name')->comment('Payment processor class');
             $table->string('name');
             $table->boolean('is_active')->default(true);
-            $table->json('config')->nullable()->comment('Processor configuration');
+            $table->string('template')->nullable()->comment('Processor configuration');
             $table->timestamps();
         });
         

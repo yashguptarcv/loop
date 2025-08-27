@@ -55,7 +55,7 @@
     </div>
 
     <!-- Action Buttons -->
-    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end space-x-3">
+    <div class="px-6 py-4 bg-gray-50 border-t divide-gray-100 flex justify-end space-x-3">
             <x-button type="submit" 
                 id="modal-meeting-delete"
                 class="red" 

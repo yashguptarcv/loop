@@ -1,9 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Leads\Http\Controllers\Application\Application;
 use Modules\Leads\Http\Controllers\HomeController;
 use Modules\Leads\Http\Controllers\Leads\LeadsController;
+use Modules\Leads\Http\Controllers\Application\Application;
+use Modules\Leads\Http\Controllers\Statuses\TagsController;
+use Modules\Leads\Http\Controllers\Statuses\SourceController;
+use Modules\Leads\Http\Controllers\Statuses\LeadsController as LeadStatuses;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,15 +25,12 @@ Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->
 
 
         Route::post('/leads/update-status', [LeadsController::class, 'updateStatus'])->name('leads.update-status');
-        // Route::get('/leads/details/{lead_id}', [LeadsController::class, 'details'])->name('leads.details');
+
         Route::post('/leads/bulk-delete', [LeadsController::class, 'bulkDelete'])->name('leads.leads.bulk-delete');
         Route::post('/leads/{lead}/update-assignment', [LeadsController::class, 'updateAssignment'])->name('leads.update-assignment');
 
-        // Attachment routes
-        // Route::get('/details/{lead_id}', [LeadsController::class, 'details'])->name('leads.details');
-
         Route::post('/leads/{lead}/notes', [LeadsController::class, 'storeNote'])->name('leads.notes.store');
-        Route::post('/leads/{lead}/attachments', [LeadsController::class, 'storeAttachment'])->name('leads.attachments.store');
+
         Route::get('/leads/{lead}/attachments/{attachment}/download', [LeadsController::class, 'downloadAttachment'])->name('leads.attachments.download');
         Route::delete('/leads/{lead}/attachments/{attachment}', [LeadsController::class, 'destroyAttachment'])->name('leads.attachments.destroy');
 
@@ -40,6 +40,12 @@ Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->
 
         Route::resource('application', Application::class);
         Route::get('/application/send_application/{lead}', [Application::class, 'send_application'])->name('application.send_application');
+
+        Route::prefix('statuses')->name('statuses.')->group(function () {
+            Route::resource('leads', LeadStatuses::class);
+            Route::resource('source', SourceController::class);
+            Route::resource('tags', TagsController::class);
+        });
     });
 });
 

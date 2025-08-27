@@ -1,6 +1,6 @@
 <!-- Mail Driver Section -->
 <div class="bg-white shadow rounded-lg overflow-hidden">
-    <div class="px-6 py-5 border-b border-gray-200">
+    <div class="px-6 py-5 border-b divide-gray-100">
         <h2 class="text-lg font-medium text-gray-800">
             Mail Server Configuration
         </h2>
@@ -26,7 +26,7 @@
 
 <!-- SMTP Settings Section -->
 <div class="bg-white shadow rounded-lg overflow-hidden">
-    <div class="px-6 py-5 border-b border-gray-200">
+    <div class="px-6 py-5 border-b divide-gray-100">
         <h2 class="text-lg font-medium text-gray-800">
             SMTP Settings
         </h2>
@@ -45,7 +45,7 @@
         </div>
 
         <!-- Mail Port -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
             <div class="md:col-span-1">
                 <label class="block text-sm font-medium text-gray-700">Mail Port</label>
                 <p class="mt-1 text-sm text-gray-500">Port number for your email server</p>
@@ -56,7 +56,7 @@
         </div>
 
         <!-- Mail Username -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
             <div class="md:col-span-1">
                 <label class="block text-sm font-medium text-gray-700">Mail Username</label>
                 <p class="mt-1 text-sm text-gray-500">Your email account username</p>
@@ -67,7 +67,7 @@
         </div>
 
         <!-- Mail Password -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
             <div class="md:col-span-1">
                 <label class="block text-sm font-medium text-gray-700">Mail Password</label>
                 <p class="mt-1 text-sm text-gray-500">Your email account password</p>
@@ -80,7 +80,7 @@
         </div>
 
         <!-- Mail Encryption -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
             <div class="md:col-span-1">
                 <label class="block text-sm font-medium text-gray-700">Mail Encryption</label>
                 <p class="mt-1 text-sm text-gray-500">Encryption method for email transmission</p>
@@ -102,7 +102,7 @@
 
 <!-- Email Address Configuration -->
 <div class="bg-white shadow rounded-lg overflow-hidden">
-    <div class="px-6 py-5 border-b border-gray-200">
+    <div class="px-6 py-5 border-b divide-gray-100">
         <h2 class="text-lg font-medium text-gray-800">
             Email Address Configuration
         </h2>
@@ -121,7 +121,7 @@
         </div>
 
         <!-- From Name -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
             <div class="md:col-span-1">
                 <label class="block text-sm font-medium text-gray-700">Mail From Name</label>
                 <p class="mt-1 text-sm text-gray-500">The name that will appear as sender</p>
@@ -132,7 +132,7 @@
         </div>
 
         <!-- CC Emails -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
             <div class="md:col-span-1">
                 <label class="block text-sm font-medium text-gray-700">Add CC</label>
                 <p class="mt-1 text-sm text-gray-500">Use comma separated values to add multiple CC addresses</p>
@@ -145,8 +145,8 @@
 </div>
 
 <!-- Test Email Section -->
-<div class="bg-white shadow rounded-lg overflow-hidden">
-    <div class="px-6 py-5 border-b border-gray-200">
+<div class="bg-white shadow rounded-lg overflow-hidden hidden">
+    <div class="px-6 py-5 border-b divide-gray-100">
         <h2 class="text-lg font-medium text-gray-800">
             Test Email Configuration
         </h2>
@@ -160,10 +160,10 @@
             </div>
             <div class="md:col-span-2">
                 <div class="flex space-x-4">
-                    <input name="settings[general.mail.driver]" type="text" placeholder="recipient@example.com" class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                    <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <input type="text" placeholder="recipient@example.com" class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    <a type="button" href="{{route('admin.settings.send.test-mail')}}" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
                         Send Test
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>

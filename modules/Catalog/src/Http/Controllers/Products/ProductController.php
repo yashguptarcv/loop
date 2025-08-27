@@ -17,12 +17,12 @@ use Modules\Filemanager\Services\FileService;
 class ProductController extends Controller
 {
     protected $fileService;
-    
+
     public function __construct(FileService $fileService)
     {
         $this->fileService = $fileService;
     }
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -96,13 +96,13 @@ class ProductController extends Controller
 
             $productData['admin_id']    = auth('admin')->id();
 
-            
+
             // Create the product
             $product = Product::create($productData);
-            
+
             // Handle image upload
             if ($request->hasFile('image')) {
-                    $fileLink = $this->fileService->uploadFile(
+                $fileLink = $this->fileService->uploadFile(
                     $request->file('image'),
                     'product',
                     $product->id
@@ -117,7 +117,7 @@ class ProductController extends Controller
                 $tags = array_map('trim', explode(',', $request['tags']));
                 $product->syncTags($tags);
             }
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Product created successfully!',
@@ -137,6 +137,9 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $statuses = Product::getStatuses();
+
+        // Eager load categories using the query builder
+        $product = Product::with('categories')->find($product->id);
         return view('catalog::products.form', compact('product', 'categories', 'statuses'));
     }
 
@@ -199,9 +202,9 @@ class ProductController extends Controller
             if ($request->hasFile('image')) {
                 // Delete old image if exists
                 $this->fileService->deleteFile('product', $product->id);
-                 // Handle image upload
+                // Handle image upload
                 if ($request->hasFile('image')) {
-                        $fileLink = $this->fileService->uploadFile(
+                    $fileLink = $this->fileService->uploadFile(
                         $request->file('image'),
                         'product',
                         $product->id

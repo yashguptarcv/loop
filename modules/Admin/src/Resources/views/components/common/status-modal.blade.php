@@ -13,14 +13,14 @@
             <input type="hidden" name="status" id="status-value" value="">
             <div class="flex justify-end gap-4">
                 <x-button type="button"                     
-                    class="blue" 
+                    class="primary" 
                     label="Cancel" 
                     icon=''
                     id='status-cancel-btn'
                     />   
 
                 <x-button type="submit"                     
-                    class="blue" 
+                    class="primary" 
                     label="Change" 
                     icon=''
                     name="button" 

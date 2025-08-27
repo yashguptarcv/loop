@@ -30,11 +30,6 @@ class AuthService
     {
         $hashedPassword = Hash::make($data['password']);
 
-        if ($this->guard === 'agency') {
-            // Store data here 
-        }
-
-
         throw new \Exception('Registration not allowed for this guard');
     }
 

@@ -17,11 +17,23 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+
+    @if(fn_get_setting('general.editor.type') == 'tinymce')
+    @elseif(fn_get_setting('general.editor.type') == 'quill')
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    @endif
+     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/gridstack@9.3.0/dist/gridstack-h5.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- meta -->
     @yield('meta')
+    @include('admin::layouts.tailwind-config')
     <!-- styles -->
     @yield('styles')
+    
 </head>
 
 <body class="bg-white text-black-300 font-sans">
@@ -47,7 +59,11 @@
     <x-delete-modal />
     <x-status-modal />
     <script src="{{ asset('js/toast.js') }}"></script>
+    @if(fn_get_setting('general.editor.type') == 'tinymce')
     <script src="https://cdn.tiny.cloud/1/{{fn_get_setting('general.editor.api_key')}}/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+    @elseif(fn_get_setting('general.editor.type') == 'quill')
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    @endif
     @yield('scripts')
 
     {{-- notification toggle --}}
@@ -109,14 +125,14 @@
     </script>
 
     <script>
-        @if (session('success'))
-            showToast(@json(session('success')), 'success', 'Success');
-        @elseif (session('error'))
-            showToast(@json(session('error')), 'error', 'Error');
-        @elseif (session('info'))
-            showToast(@json(session('info')), 'info', 'Information');
-        @elseif (session('warning'))
-            showToast(@json(session('warning')), 'warning', 'Warning');
+        @if(session('success'))
+        showToast(@json(session('success')), 'success', 'Success');
+        @elseif(session('error'))
+        showToast(@json(session('error')), 'error', 'Error');
+        @elseif(session('info'))
+        showToast(@json(session('info')), 'info', 'Information');
+        @elseif(session('warning'))
+        showToast(@json(session('warning')), 'warning', 'Warning');
         @endif
     </script>
 
@@ -125,20 +141,27 @@
         window.addEventListener('DOMContentLoaded', () => {
             const toast = sessionStorage.getItem('toastMessage');
             if (toast) {
-                const { message, type, title } = JSON.parse(toast);
-                showToast(message, type, title);  // Your existing toast function
-                sessionStorage.removeItem('toastMessage');  // Clear after showing
+                const {
+                    message,
+                    type,
+                    title
+                } = JSON.parse(toast);
+                showToast(message, type, title); // Your existing toast function
+                sessionStorage.removeItem('toastMessage'); // Clear after showing
             }
         });
     </script>
 
     {{-- delete modal --}}
     <script>
-        function openDeleteModal(actionUrl) {
+        function openDeleteModal(actionUrl, isAjax = true) {
             const modal = document.getElementById('global-delete-modal');
             const form = document.getElementById('global-delete-form');
 
             form.setAttribute('action', actionUrl);
+            if (isAjax) {
+                form.classList.add('form-ajax');
+            }
             modal.classList.remove('hidden');
         }
 
@@ -170,7 +193,7 @@
             modal.classList.add('hidden');
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const cancelBtn = document.getElementById('status-cancel-btn');
             if (cancelBtn) {
                 cancelBtn.addEventListener('click', closeStatusModal);

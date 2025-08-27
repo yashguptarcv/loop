@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Config;
-
+use Modules\Admin\View\Components\Autocomplete;
 use Modules\Admin\View\Components\Common\Button;
 use Modules\Admin\View\Components\Common\DeleteModal;
 use Modules\Admin\View\Components\Common\StatusModal;
@@ -45,11 +45,6 @@ class AdminServiceProvider extends ServiceProvider
                 $this->mergeConfigFrom($file, "admin::$filename");
             }
         }
-
-
-
-
-
 
         $this->app->register(AdminEventServiceProvider::class);
     }
@@ -158,6 +153,7 @@ class AdminServiceProvider extends ServiceProvider
         Blade::component('button', Button::class);
         Blade::component('delete-modal', DeleteModal::class);
         Blade::component('status-modal', StatusModal::class);
+        Blade::component('autocomplete', Autocomplete::class);
         
     }
 }

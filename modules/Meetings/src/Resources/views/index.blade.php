@@ -10,7 +10,7 @@
     <div class="flex items-center justify-between mb-6">
         <div class="flex items-center space-x-4">
             <h1 class="text-2xl font-bold text-gray-800">Meetings Calendar</h1>
-            <button class="px-3 py-1 bg-blue-100 text-blue-600 rounded-md hover:bg-blue-200 transition">
+            <button class="px-3 py-1 bg-primary-100 text-amber-100 rounded-md hover:text-amber-200 transition">
                 Today
             </button>
             <div class="flex items-center space-x-2">
@@ -29,7 +29,7 @@
                 <x-button type="button"    
                     as="a"
                     href="#"
-                    class="blue" 
+                    class="primary" 
                     label="Connected" 
                     icon=''
                     name="button" 
@@ -53,7 +53,7 @@
                 modalTitle="New Meeting"
                 id='new-meeting'
                 ajaxUrl="{{route('admin.meetings.new-meeting')}}"
-                color="blue"
+                color="primary"
                 modalSize="lg"
             />
             @endif
@@ -93,7 +93,7 @@
         </div>
 
         <!-- Calendar Days -->
-        <div class="grid grid-cols-7 divide-x divide-y divide-gray-200" id="meetings_calendar"></div>
+        <div class="grid grid-cols-7 divide-x divide-y divide-gray-100" id="meetings_calendar"></div>
 
     </div>
 
@@ -147,7 +147,6 @@ $(document).ready(function() {
             result_ids: 'meetings_calendar,monthDisplay', // This will update the calendar container directly
             caching: false,
             beforeSend: function() {
-                // Add loading indicator
                 $('#meetings_calendar').html('<div class="col-span-7 py-8 text-center">Loading calendar...</div>');
             },
             errorCallback: function(xhr) {

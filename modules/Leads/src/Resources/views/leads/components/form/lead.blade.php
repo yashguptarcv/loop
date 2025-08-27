@@ -23,34 +23,21 @@
                 </div>
 
                 <div>
-                    <label for="industry" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Industry
-                    </label>
-                    <div id="auto-complete">
-                        <input
-                            type="text"
-                            autocomplete="dropdown"
-                            name="industry_name"
-                            value="{{!empty($lead->industries) ? fn_get_category_name((int)$lead->industries) : ''}}"
-                            placeholder="Autocomplete"
-                            id="input-industry"
-                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 @error('industry') border-red-500 dark:border-red-400 @enderror"
-                            data-table="categories"
-                            data-select_columns="id, name"
-                            data-search_column="name"
-                            data-target="industry"
-                            data-original-value="" />
-                        <input
-                            type="hidden"
-                            name="industry"
-                            id="industry"
-                            value="{{$lead->industries ?? 0}}"
-                            class="mt-1"
-                            data-original-value="" />
-                    </div>
-                    @error('industry')
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
+
+                 <x-autocomplete 
+                    label="Industry"
+                    field="industry"
+                    table="categories"
+                    value-field="id"
+                    search-fields="name"
+                    list-attributes="id,name"
+                    :multiple="false"
+                    :selected="!empty($lead->industries) ? [fn_get_category_data($lead->industries)] : []"
+                />
+
+                @error('industry')
+                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                @enderror
                 </div>
 
                 <div>

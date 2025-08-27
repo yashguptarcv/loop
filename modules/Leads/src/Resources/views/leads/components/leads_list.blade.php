@@ -2,7 +2,7 @@
 @php
     list($initials, $colorClass) = fn_get_name_placeholder($lead->createdBy->name);
 @endphp
-<div class="lead-card bg-white border border-gray-200 rounded-lg p-4 cursor-move" 
+<div class="lead-card bg-white border divide-gray-100 rounded-lg p-4 cursor-move" 
      draggable="true" data-lead-id="{{ $lead->id }}">
      <div class="flex items-center mb-2 mt-2 gap-3">
         <div class="text-xs text-gray-500">{{ $lead->created_at->diffForHumans() }}</div>

@@ -37,7 +37,7 @@
                 
                 <div class="mt-6">
                     <h3 class="font-medium text-gray-900">Items</h3>
-                    <ul class="divide-y divide-gray-200">
+                    <ul class="divide-y divide-gray-100">
                         @foreach($order->items as $item)
                         <li class="py-4 flex justify-between">
                             <div class="flex items-center">

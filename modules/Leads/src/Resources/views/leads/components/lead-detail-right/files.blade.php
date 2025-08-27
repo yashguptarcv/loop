@@ -2,7 +2,7 @@
 
 <div class="space-y-4">
     @foreach($items as $attachment)
-    <div class="border border-gray-200 rounded-md p-4">
+    <div class="border divide-gray-100 rounded-md p-4">
         <div class="flex items-center">
             <div class="flex-shrink-0 bg-gray-100 rounded-md p-3">
                 @if(str_starts_with($attachment->mime_type, 'image/'))
@@ -25,7 +25,13 @@
             <div class="ml-auto flex space-x-2">
                 @if(bouncer()->hasPermission('admin.leads.attachments.download'))
                 
-                    <x-button as="a" type="button"  class="blue" label="" icon="<span class='material-icons-outlined mr-1'>file_download</span>" name='button'/> 
+                    
+                <form action="{{route('admin.leads.attachments.download', [$lead->id, $attachment->id])}}" method="get">
+                    @csrf
+                    @method('get')
+                    <x-button type="submit"  class="primary" label="" icon="<span class='material-icons-outlined mr-1'>file_download</span>" name='button'/> 
+                    
+                </form>
                 @endif
                 @if(bouncer()->hasPermission('admin.leads.attachments.destroy'))
                 

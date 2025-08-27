@@ -6,7 +6,7 @@
 @include('admin::components.common.back-button', ['route' => route('admin.settings.index'), 'name' => 'Settings'])
 
 <!-- Right side - Activity tabs -->
-<div class="border-b border-gray-200">
+<div class="border-b divide-gray-100">
     <nav class="flex -mb-px space-x-8">
         <a href="javascript:;" onclick="switchTab('general')" data-tab="general"
             class="tab-button whitespace-nowrap py-4 px-2 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">
@@ -49,10 +49,10 @@
         @include('admin::settings.general.general')
 
     </div>
-    <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+    <div class="px-6 py-4 bg-gray-50 border-t divide-gray-100 flex justify-end">
 
         <x-button type="submit"
-            class="blue"
+            class="primary"
             label="Save"
             icon=''
             name="button" />

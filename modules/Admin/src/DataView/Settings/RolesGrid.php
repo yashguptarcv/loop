@@ -142,7 +142,7 @@ class RolesGrid extends DataGrid
                 'icon' => 'add',
                 'title' => 'Create Role',
                 'method' => 'GET',
-                'action' => 'text-blue-600 bg-blue-100',
+                'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.settings.roles.create',
             ]);
         }

@@ -3,33 +3,32 @@
         <!-- Order Items Card -->
         <div class="bg-white rounded-xl p-6">
             <div class="flex justify-between items-start mb-4">
-                <h2 class="text-lg font-semibold text-gray-800">Order Items ({{ count($order_items) }})</h2>                
-                <x-modal 
+                <h2 class="text-lg font-semibold text-gray-800">Order Items ({{ count($order_items??[]) }})</h2>
+                <x-modal
                     buttonText='<i class="fas fa-plus"></i> Add Item'
                     type='link'
                     modalTitle="Add To Cart"
                     id="add_to_cart"
-                    ajaxUrl="{{route('dataview.export')}}"
+                    ajaxUrl="{{route('admin.orders.cart.lists', $order)}}"
                     buttonClass="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-sm hover:bg-blue-100 flex items-center gap-2"
-                    modalSize="2xl"
-                />
+                    modalSize="3xl" />
             </div>
 
             <!-- Order Items Table -->
-            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-                <table class="min-w-full divide-y divide-gray-200">
+            <div class="bg-white rounded-lg border divide-gray-100 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-100">
                     <thead class="bg-gray-50">
                         <tr>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">SKU</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Qty</th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>                            
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">&nbsp;</th>                            
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">&nbsp;</th>
                         </tr>
                     </thead>
-                    <tbody id="order_items" class="bg-white divide-y divide-gray-200">
-                        @foreach($order_items as $item)
+                    <tbody id="order_items" class="bg-white divide-y divide-gray-100">
+                        @foreach($order_items ?? [] as $item)
                         <tr class="hover:bg-gray-50 group">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
@@ -70,7 +69,7 @@
                                 ${{ number_format($item->price * $item->quantity, 2) }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <div class="flex justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">                                    
+                                <div class="flex justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                     <a href="#" class="text-gray-600 hover:text-gray-900">
                                         <i class="fas fa-times-circle"></i>
                                     </a>
@@ -86,19 +85,18 @@
             <div class="mt-6 pt-4 border-t border-gray-100">
                 <div class="flex justify-between items-center mb-2">
                     <h3 class="text-sm font-medium text-gray-700">DISCOUNTS</h3>
-                    
-                    <x-modal 
+
+                    <x-modal
                         buttonText='<i class="fas fa-plus"></i> Add Discount'
                         type='link'
                         modalTitle="Add Discount"
                         id="add_cart_discount"
                         ajaxUrl="{{route('dataview.export')}}"
                         buttonClass="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1"
-                        modalSize="2xl"
-                    />
+                        modalSize="2xl" />
                 </div>
                 <div id="discount">
-                    @if($order_summary['discount'] > 0)
+                    @if(!empty($order_summary) && $order_summary['discount'] > 0)
                     <div class="bg-blue-50 p-3 mb-2 rounded-lg flex justify-between items-center">
                         <div>
                             <p class="text-sm font-medium text-blue-800">DISCOUNT</p>
@@ -116,18 +114,18 @@
             <div id="order_summary" class="mt-6 pt-4 border-t border-gray-100">
                 <div class="flex justify-between py-2">
                     <span class="text-gray-600">Subtotal</span>
-                    <span class="text-gray-800 font-medium">${{ number_format($order_summary['subtotal'], 2) }}</span>
+                    <span class="text-gray-800 font-medium">${{ number_format($order_summary['subtotal'] ?? 0, 2) }}</span>
                 </div>
-                @if($order_summary['discount'] > 0)
+                @if(!empty($order_summary) && $order_summary['discount'] > 0)
                 <div class="flex justify-between py-2">
                     <span class="text-gray-600">Discount</span>
-                    <span class="text-red-600 font-medium">-${{ number_format($order_summary['discount'], 2) }}</span>
+                    <span class="text-red-600 font-medium">-${{ number_format($order_summary['discount'] ?? 0, 2) }}</span>
                 </div>
                 @endif
                 <div class="flex justify-between py-2">
                     <span class="text-gray-600">Shipping</span>
                     <div class="flex items-center gap-2">
-                        <input type="text" value="${{ number_format($order_summary['shipping'], 2) }}" class="w-20 p-1 border border-gray-300 rounded-md text-sm text-right">
+                        <input type="text" value="${{ number_format($order_summary['shipping'] ?? 0, 2) }}" class="w-20 p-1 border border-gray-300 rounded-md text-sm text-right">
                         <button class="text-gray-400 hover:text-blue-600">
                             <i class="fas fa-check text-xs"></i>
                         </button>
@@ -136,7 +134,7 @@
                 <div class="flex justify-between py-2">
                     <span class="text-gray-600">Tax</span>
                     <div class="flex items-center gap-2">
-                        <input type="text" value="${{ number_format($order_summary['tax'], 2) }}" class="w-20 p-1 border border-gray-300 rounded-md text-sm text-right">
+                        <input type="text" value="${{ number_format($order_summary['tax'] ?? 0, 2) }}" class="w-20 p-1 border border-gray-300 rounded-md text-sm text-right">
                         <button class="text-gray-400 hover:text-blue-600">
                             <i class="fas fa-check text-xs"></i>
                         </button>
@@ -144,7 +142,7 @@
                 </div>
                 <div class="flex justify-between py-3 mt-2 border-t border-gray-100">
                     <span class="text-gray-800 font-semibold">Total</span>
-                    <span class="text-gray-800 font-bold text-lg">${{ number_format($order_summary['total'], 2) }}</span>
+                    <span class="text-gray-800 font-bold text-lg">${{ number_format($order_summary['total'] ?? 0, 2) }}</span>
                 </div>
             </div>
         </div>
@@ -159,24 +157,25 @@
                 <div class="mb-6 group">
                     <div>
                         <h3 class="text-sm font-medium text-gray-500 mb-2 flex items-center justify-between">
-                            <span>CUSTOMER DETAILS</span>                            
-                            <x-modal 
+                            <span>CUSTOMER DETAILS</span>
+                            <x-modal
                                 buttonText='<i class="fas fa-edit"></i> Update Customer'
                                 type='link'
                                 modalTitle="Update Customer"
                                 id="add_cart_update_customer"
                                 ajaxUrl="{{route('dataview.export')}}"
                                 buttonClass="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1"
-                                modalSize="2xl"
-                            />
+                                modalSize="2xl" />
                         </h3>
                         <div id="customer_details" class="rounded-xl p-4 pl-2 space-y-1 bg-gray-50">
+                            @if(!empty($customer_details))
                             <p class="text-gray-800">
                                 <span class="font-medium">{{ $customer_details['name'] }}</span>
                                 (Customer ID: #{{ $customer_details['id'] }})
                             </p>
                             <p class="text-gray-800">{{ $customer_details['email'] }}</p>
                             <p class="text-gray-800">{{ $customer_details['phone'] }}</p>
+                            @endif
 
                         </div>
                     </div>
@@ -187,18 +186,18 @@
                     <div>
                         <h3 class="text-sm font-medium text-gray-500 mb-2 flex items-center justify-between">
                             <span>BILLING ADDRESS</span>
-                            
-                            <x-modal 
+
+                            <x-modal
                                 buttonText='<i class="fas fa-edit"></i> Update Customer'
                                 type='link'
                                 modalTitle="Update Billing Address"
                                 id="add_cart_update_billing"
                                 ajaxUrl="{{route('dataview.export')}}"
                                 buttonClass="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1"
-                                modalSize="2xl"
-                            />
+                                modalSize="2xl" />
                         </h3>
                         <div id="billing_address" class="rounded-xl p-4 pl-2 space-y-1 bg-gray-50">
+                            @if(!empty($billing_address))
                             @if(!empty($billing_address['name']))
                             <p class="text-gray-800 font-medium">{{ $billing_address['name'] }}</p>
                             @endif
@@ -222,6 +221,7 @@
                             @if(!empty($billing_address['phone']))
                             <p class="text-gray-800">{{ $billing_address['phone'] }}</p>
                             @endif
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -231,20 +231,19 @@
                     <div>
                         <h3 class="text-sm font-medium text-gray-500 mb-2 flex items-center justify-between">
                             <span>PAYMENT DETAILS</span>
-                            
-                             <x-modal 
+
+                            <x-modal
                                 buttonText='<i class="fas fa-edit"></i> Update Payment'
                                 type='link'
                                 modalTitle="Update Payment"
                                 id="add_cart_update_billing_payment"
                                 ajaxUrl="{{route('dataview.export')}}"
                                 buttonClass="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1"
-                                modalSize="2xl"
-                            />
+                                modalSize="2xl" />
                         </h3>
                         <div id="payment_details">
-                            @if($payment_details)
-                            <div class="rounded-xl shadow-sm p-4 flex items-center gap-3 border border-gray-200 rounded-lg bg-gray-50">
+                            @if(!empty($payment_details))
+                            <div class="rounded-xl shadow-sm p-4 flex items-center gap-3 border divide-gray-100 rounded-lg bg-gray-50">
                                 <div class="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
                                     <i class="fab fa-cc-visa text-blue-800"></i>
                                 </div>
@@ -258,7 +257,7 @@
                                 </div>
                             </div>
                             @else
-                            <div class="rounded-xl shadow-sm p-4 border border-gray-200 rounded-lg bg-gray-50">
+                            <div class="rounded-xl shadow-sm p-4 border divide-gray-100 rounded-lg bg-gray-50">
                                 <p class="text-sm text-gray-600">No payment details available</p>
                             </div>
                             @endif
@@ -271,16 +270,15 @@
                     <div>
                         <h3 class="text-sm font-medium text-gray-500 mb-2 flex items-center justify-between">
                             <span>ORDER NOTES</span>
-                            
-                            <x-modal 
+
+                            <x-modal
                                 buttonText='<i class="fas fa-edit"></i> Note'
                                 type='link'
                                 modalTitle="Order Note"
                                 id="add_cart_update_order_note"
                                 ajaxUrl="{{route('dataview.export')}}"
                                 buttonClass="text-blue-600 hover:text-blue-800 text-sm flex items-center gap-1"
-                                modalSize="2xl"
-                            />
+                                modalSize="2xl" />
                         </h3>
                         <div id="order_notes" class="rounded-xl shadow-sm p-4 bg-gray-50">
                             {{ $order_note ?? 'No notes available' }}

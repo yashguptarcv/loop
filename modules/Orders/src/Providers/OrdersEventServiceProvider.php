@@ -2,6 +2,8 @@
 
 namespace Modules\Orders\Providers;
 
+use Modules\Core\Events\RegisterSettingsMenu;
+use Modules\Orders\Listeners\RegisterOrdersSettings;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class OrdersEventServiceProvider extends ServiceProvider
@@ -12,9 +14,10 @@ class OrdersEventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        // 'SomeEvent' => [
-        //     'SomeListener',
-        // ],
+        RegisterSettingsMenu::class => [
+            RegisterOrdersSettings::class,
+            // add more listeners from other modules
+        ],
     ];
 
     /**

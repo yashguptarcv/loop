@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Application;
+use Modules\Core\Http\Middleware\UserAuthChecking;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
@@ -14,6 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin.auth' => \Modules\Core\Http\Middleware\AuthChecking::class,
             'admin.permission' => \Modules\Acl\Http\Middleware\AdminPermissionMiddleware::class,
+
+            // customer
+            'user.auth' => UserAuthChecking::class,
+            'user.permission' => \Modules\Acl\Http\Middleware\UserPermissionMiddleware::class,
 
         ]);
     })

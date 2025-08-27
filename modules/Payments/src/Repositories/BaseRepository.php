@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Payment\Repositories;
+namespace Modules\Payments\Repositories;
 
 use Rcv\Core\Repositories\BaseRepository as CoreBaseRepository;
 

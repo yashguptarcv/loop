@@ -21,31 +21,17 @@
             <textarea id="message-editor" editor="true" name="description" rows="8"
                 class="hidden">{{ old('description', $category->description ?? '') }}</textarea>
         </div>
-
         <!-- Parent Category -->
-        <div id="auto-complete">
-            <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Parent Category</label>
-            <input
-                type="text"
-                autocomplete="dropdown"
-                name="country_name"
-                value="{{fn_get_category_name($category->parent_id ?? 0)}}"
-                placeholder=""
-                id="input-parent_id"
-                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                data-table="categories"
-                data-select_columns="id, name"
-                data-search_column="name"
-                data-target="parent_id"
-                data-original-value="" />
-            <input
-                type="hidden"
-                name="parent_id"
-                id="parent_id"
-                value="{{$category->parent_id ?? ''}}"
-                class="mt-1"
-                data-original-value="" />
-        </div>
+        <x-autocomplete 
+            label="Parent Category"
+            field="parent_id"
+            table="categories"
+            value-field="id"
+            search-fields="name"
+            list-attributes="id,name"
+            :multiple="false"
+            :selected="!empty($category->parent_id) ? [fn_get_category_data($category->parent_id)] : []"
+        />
 
         <!-- Category Image -->
        @include('filemanager::components.file-uploader', ['object_type' => 'category', 'object_id' => $category->id ?? 0, 'name' => 'image'])
@@ -111,7 +97,7 @@
         <div class="flex justify-end">
 
             <x-button type="submit"
-                class="blue"
+                class="primary"
                 label="Save"
                 icon=''
                 name="button" />

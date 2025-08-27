@@ -6,7 +6,7 @@
 @include('admin::components.common.back-button', ['route' => route('admin.settings.index'), 'name' => 'Settings'])
 
 <!-- Tabs -->
-<div class="border-b border-gray-200">
+<div class="border-b divide-gray-100">
     <nav class="flex -mb-px space-x-8">
         <a href="{{ route('admin.settings.general.index') }}" class="whitespace-nowrap py-4 px-2 border-b-2 border-indigo-500 font-medium text-sm text-indigo-600">General</a>
         <a href="{{ route('admin.settings.company.index') }}" class="whitespace-nowrap py-4 px-2 border-b-2 border-transparent font-medium text-sm text-gray-500 hover:text-gray-700 hover:border-gray-300">Company</a>
@@ -40,7 +40,7 @@
                 </div>
 
                 <!-- Date Format -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                     <div class="md:col-span-1">
                         <label class="block text-sm font-medium text-gray-700">Date Format</label>
                         <p class="mt-1 text-sm text-gray-500">How dates should be displayed throughout the system.</p>
@@ -64,7 +64,7 @@
                 </div>
 
                 <!-- Default Currency -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                     <div class="md:col-span-1">
                         <label for="currency" class="block text-sm font-medium text-gray-700">Default Currency</label>
                         <p class="mt-1 text-sm text-gray-500">Set the default currency for financial values.</p>
@@ -80,7 +80,7 @@
                 </div>
 
                 <!-- System Notifications -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                     <div class="md:col-span-1">
                         <label class="block text-sm font-medium text-gray-700">System Notifications</label>
                         <p class="mt-1 text-sm text-gray-500">Configure which system notifications are enabled.</p>
@@ -119,7 +119,7 @@
                 </div>
 
                 <!-- Data Retention -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-gray-200">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                     <div class="md:col-span-1">
                         <label for="data-retention" class="block text-sm font-medium text-gray-700">Data Retention Period</label>
                         <p class="mt-1 text-sm text-gray-500">How long should inactive records be kept?</p>
@@ -134,10 +134,10 @@
                 </div>
             </div>
         </div>
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end">
+        <div class="px-6 py-4 bg-gray-50 border-t divide-gray-100 flex justify-end">
 
             <x-button type="submit"
-                class="blue"
+                class="primary"
                 label="Save"
                 icon=''
                 name="button" />

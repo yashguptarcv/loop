@@ -1,15 +1,14 @@
 <?php
 
-use Modules\Acl\Models\Role;
-use Modules\Admin\Models\Status;
+
 use Modules\Core\Models\Setting;
-use Illuminate\Support\Facades\DB;
-use Modules\Leads\Models\LeadStatusModel;
-use Intervention\Image\Facades\Image as InterventionImage;
 use Modules\Admin\Models\Country;
+
+use Modules\Orders\Models\Status;
+use Illuminate\Support\Facades\DB;
 use Modules\Admin\Models\Currency;
-use Modules\Admin\Models\TaxRate;
 use Modules\Tax\Models\TaxCategory;
+use Modules\Leads\Models\LeadStatusModel;
 
 if (!function_exists('fn_get_countries')) {
     function fn_get_countries()

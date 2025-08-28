@@ -10,6 +10,7 @@ use Modules\Admin\View\Components\Autocomplete;
 use Modules\Admin\View\Components\Common\Button;
 use Modules\Admin\View\Components\Common\DeleteModal;
 use Modules\Admin\View\Components\Common\StatusModal;
+use Modules\Admin\View\Components\CountryState;
 use Modules\Admin\View\Components\DataView\Layout;
 use Modules\Admin\View\Components\DataView\Partials\Pagination;
 use Modules\Admin\View\Components\DataView\Partials\Sidebar;
@@ -152,8 +153,6 @@ class AdminServiceProvider extends ServiceProvider
         Blade::component('sidebar.link', Link::class);
         Blade::component('button', Button::class);
         Blade::component('delete-modal', DeleteModal::class);
-        Blade::component('status-modal', StatusModal::class);
-        Blade::component('autocomplete', Autocomplete::class);
-        
+        Blade::component('status-modal', StatusModal::class);        
     }
 }

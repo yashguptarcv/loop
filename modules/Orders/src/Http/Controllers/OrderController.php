@@ -65,33 +65,8 @@ class OrderController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $order = Order::with(['user', 'items', 'payments'])
-            ->where('id', $id)
-            ->first();
-
-        // Prepare data for the view
-        $orderData = [
-            'order' => $order,
-            'order_items' => $order->items,
-            'discount' => $order->discount,
-            'order_summary' => [
-                'subtotal' => $order->subtotal,
-                'discount' => $order->discount,
-                'tax' => $order->tax,
-                'shipping' => $order->shipping,
-                'total' => $order->total,
-            ],
-            'customer_details' => [
-                'id'    => $order->user->id,
-                'name' => $order->user->name,
-                'email' => $order->user->email,
-                'phone' => '',
-            ],
-            'billing_address' => $order->billing_address,
-            'shipping_address' => $order->shipping_address,
-            'payment_details' => $order->payments->first(),
-            'order_note' => $order->notes,
-        ];
+        $orderData = $this->orderService->getOrder($id);
+       
         if ($request->input('tab')) {
             $html = view('orders::orders.components.order_detail', $orderData)->render();
 

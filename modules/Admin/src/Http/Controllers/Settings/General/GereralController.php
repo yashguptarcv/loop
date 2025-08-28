@@ -7,10 +7,10 @@ use Illuminate\Http\Request;
 use Modules\Tax\DataView\Tax;
 use App\Http\Controllers\Controller;
 use Modules\Catalog\DataView\ProductGrid;
+use Modules\Orders\DataView\OrdersStatuses;
 use Modules\Filemanager\Services\FileService;
 use Modules\Admin\DataView\Settings\RolesGrid;
 use Modules\Admin\DataView\Settings\UsersGrid;
-use Modules\Admin\DataView\Settings\OrdersStatuses;
 use Modules\Admin\DataView\Settings\Country\Country;
 use Modules\Admin\DataView\Settings\Currency\Currency;
 use Modules\Admin\DataView\Settings\Statuses\LeadStatuses;
@@ -48,20 +48,8 @@ class GereralController extends Controller
             $timezones[$tz] = "($formattedOffset) $tz";
         }
 
-
-        $currencies = fn_datagrid(Currency::class)->process();
-        $users = fn_datagrid(UsersGrid::class)->process();
-        $taxes = fn_datagrid(Tax::class)->process();
-        $orderStatus = fn_datagrid(OrdersStatuses::class)->process();
-        
-
         return view('admin::settings.general.index', compact(
-            'currencies',
-            'users',
-            'timezones',
-            'taxes',
-            'orderStatus',
-            
+            'timezones'            
         ));
     }
 

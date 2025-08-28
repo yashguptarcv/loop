@@ -17,6 +17,7 @@ return new class extends Migration
             $table->decimal('price', 10, 2);
             $table->decimal('sale_price', 10, 2)->nullable();
             $table->string('sku')->nullable()->unique();
+            $table->string('tax_id')->nullable();
             $table->string('image')->nullable();
             $table->string('track_stock', '1')->default('N');
             $table->integer('stock_quantity')->default(0);

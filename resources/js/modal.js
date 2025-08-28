@@ -1,5 +1,4 @@
 
-// Wrap everything in a function to avoid global scope pollution
 (function () {
     class ModalController {
         constructor(modalId, ajaxUrl) {
@@ -51,6 +50,13 @@
                     }
                     delete this.backdrop.dataset.clicked;
                 });
+
+                // Add keyboard event listener for Escape key
+                this.backdrop.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape' && !this.isTransitioning) {
+                        this.toggleModal(false);
+                    }
+                });
             }
         }
 
@@ -74,17 +80,22 @@
             this.backdrop.classList.remove('modal-hidden');
             this.container.classList.remove('modal-hidden');
 
+            // Force reflow to ensure CSS transitions work
             void this.backdrop.offsetWidth;
 
             this.backdrop.classList.add('show');
             this.container.classList.add('show');
             document.body.style.overflow = 'hidden';
 
+            // Set focus to the modal for accessibility
+            this.container.setAttribute('aria-hidden', 'false');
+            this.container.focus();
+
             setTimeout(() => {
                 this.backdrop.style.pointerEvents = 'auto';
                 this.container.style.pointerEvents = 'auto';
                 this.isTransitioning = false;
-            }, 100);
+            }, 200);
 
             this.fetchData();
         }
@@ -95,6 +106,7 @@
 
             this.backdrop.classList.remove('show');
             this.container.classList.remove('show');
+            this.container.setAttribute('aria-hidden', 'true');
 
             setTimeout(() => {
                 this.backdrop.classList.add('modal-hidden');
@@ -110,7 +122,7 @@
                         this.backdrop.parentNode.removeChild(this.backdrop);
                     }
                 }, 100);
-            }, 100);
+            }, 200);
         }
 
         updateLoadingUI() {
@@ -129,7 +141,7 @@
             if (!this.contentElement || !this.errorElement) return;
 
             if (this.content && !this.isLoading && !this.error) {
-                this.contentElement.innerHTML = this.content;
+                this.contentElement.innerHTML = this.formatContent(this.content);
                 this.contentElement.classList.remove('modal-hidden');
                 this.errorElement.classList.add('modal-hidden');
             } else {
@@ -149,8 +161,39 @@
             }
         }
 
+        formatContent(content) {
+            try {
+                // Try to parse as JSON and format it
+                const data = JSON.parse(content);
+                return `
+                            <div class="space-y-4">
+                                ${Object.entries(data).map(([key, value]) => `
+                                    <div class="flex">
+                                        <span class="font-semibold text-gray-700 w-1/3">${key}:</span>
+                                        <span class="text-gray-600 flex-1">${typeof value === 'object' ? JSON.stringify(value) : value}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        `;
+            } catch (e) {
+                // If not JSON, return as plain HTML
+                return content;
+            }
+        }
+
         async fetchData() {
-            if (!this.ajaxUrl) return;
+            if (!this.ajaxUrl) {
+                this.content = `
+                            <div class="p-4 bg-blue-50 rounded-lg">
+                                <p class="text-blue-700">This is custom modal content without an AJAX call.</p>
+                                <p class="text-blue-700 mt-2">You can add any HTML content here.</p>
+                            </div>
+                        `;
+                this.isLoading = false;
+                this.updateLoadingUI();
+                this.updateContentUI();
+                return;
+            }
 
             this.isLoading = true;
             this.error = null;
@@ -160,13 +203,10 @@
 
             try {
                 const response = await fetch(this.ajaxUrl);
-                if (!response.ok) throw new Error('Failed to load content');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
                 this.content = await response.text();
-                if (this.contentElement) {
-                    this.contentElement.innerHTML = this.content;
-                }
             } catch (err) {
-                this.error = err.message;
+                this.error = err.message || 'Failed to load content';
                 console.error(`Modal ${this.modalId} error:`, err);
             } finally {
                 this.isLoading = false;
@@ -184,17 +224,17 @@
 
         e.preventDefault();
 
-        const modalId = trigger.dataset.modalId;
+        const modalId = trigger.id.replace('modal-trigger-', '');
         const ajaxUrl = trigger.dataset.ajaxUrl;
         const modalTitle = trigger.dataset.modalTitle;
-        const modalSize = trigger.dataset.modalSize;
+        const modalSize = trigger.dataset.modalSize || 'modal-lg';
 
         // Create and show the modal
         createModal(modalId, ajaxUrl, modalTitle, modalSize);
     });
 
     function createModal(modalId, ajaxUrl, modalTitle, modalSize) {
-        
+
         // Check if modal already exists
         const existingModal = document.getElementById(`modal-backdrop-${modalId}`);
         if (existingModal) {
@@ -203,48 +243,50 @@
 
         // Create modal HTML
         const modalHTML = `
-        <div id="modal-backdrop-${modalId}" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm modal-hidden">
-            <div id="modal-container-${modalId}" role="dialog" aria-modal="true" aria-labelledby="modal-title-${modalId}"
-                class="modal-container w-full ${modalSize} bg-white rounded-xl shadow-2xl overflow-hidden max-h-[90vh]">
+                <div id="modal-backdrop-${modalId}" class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm modal-hidden">
+                    <div id="modal-container-${modalId}" role="dialog" aria-modal="true" aria-labelledby="modal-title-${modalId}"
+                        class="modal-container w-full ${modalSize} bg-white rounded-xl shadow-2xl overflow-hidden max-h-[90vh]">
 
-                <div class="flex justify-between items-center p-4 border-b bg-gradient-to-r from-gray-50 to-white">
-                    <h5 class="text-lg font-bold text-gray-800">${modalTitle}</h5>
-                    <button id="modal-close-${modalId}"
-                        class="p-1 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500 hover:text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="p-6 overflow-y-auto max-h-[60vh]">
-                    <div id="modal-loading-${modalId}" class="flex flex-col items-center justify-center py-12 space-y-4">
-                        <div class="modal-spinner"></div>
-                    </div>
-
-                    <div id="modal-content-${modalId}" class="prose max-w-none modal-hidden"></div>
-
-                    <div id="modal-error-${modalId}"
-                        class="p-4 bg-red-50 border-l-4 border-red-500 rounded-lg modal-hidden">
-                        <div class="flex items-center">
-                            <svg class="h-5 w-5 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <h4 class="text-lg font-medium text-red-800">Error</h4>
+                        <div class="flex justify-between items-center p-4 border-b bg-gradient-to-r from-gray-50 to-white">
+                            <h5 id="modal-title-${modalId}" class="text-lg font-bold text-gray-800">${modalTitle}</h5>
+                            <button id="modal-close-${modalId}"
+                                class="p-1 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                aria-label="Close modal">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-500 hover:text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
                         </div>
-                        <p id="modal-error-message-${modalId}" class="mt-2 text-red-600"></p>
-                        <button id="modal-retry-${modalId}"
-                            class="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                            </svg>
-                            Retry
-                        </button>
+
+                        <div class="p-6 overflow-y-auto max-h-[60vh]">
+                            <div id="modal-loading-${modalId}" class="flex flex-col items-center justify-center py-12 space-y-4">
+                                <div class="modal-spinner"></div>
+                                <p class="text-gray-500">Loading content...</p>
+                            </div>
+
+                            <div id="modal-content-${modalId}" class="max-w-none modal-hidden"></div>
+
+                            <div id="modal-error-${modalId}"
+                                class="p-4 bg-red-50 border-l-4 border-red-500 rounded-lg modal-hidden">
+                                <div class="flex items-center">
+                                    <svg class="h-5 w-5 text-red-500 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <h4 class="text-lg font-medium text-red-800">Error</h4>
+                                </div>
+                                <p id="modal-error-message-${modalId}" class="mt-2 text-red-600"></p>
+                                <button id="modal-retry-${modalId}"
+                                    class="mt-4 px-4 py-2 bg-red-100 text-red-700 rounded-md hover:bg-red-200 transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                    </svg>
+                                    Retry
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-        `;
+                `;
 
         // Append modal to body
         document.body.insertAdjacentHTML('beforeend', modalHTML);

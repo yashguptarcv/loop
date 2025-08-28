@@ -55,7 +55,8 @@
             "Modules\\Filemanager\\": "modules/Filemanager/src/",
             "Modules\\Payments\\": "modules/Payments/src/",
             "Modules\\DataExport\\": "modules/DataExport/src/",
-            "Modules\\Widgets\\": "modules/Widgets/src/"
+            "Modules\\Widgets\\": "modules/Widgets/src/",
+            "Modules\\Cart\\": "modules/Cart/src/"
         },
         "files": [
             "modules/Acl/src/Helpers/helpers.php",

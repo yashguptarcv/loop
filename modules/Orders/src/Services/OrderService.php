@@ -130,10 +130,10 @@ class OrderService
 
     protected function prepareOrderData(array $orderData, User $user): array
     {
-        $subtotal = $this->calculateSubtotal($orderData['items']);
-        $discounts = $this->calculateDiscounts($orderData);
-        $shipping = $this->calculateShipping($orderData);
-        $tax = $this->calculateTax($orderData, $user);
+        $subtotal       = $this->calculateSubtotal($orderData['items']);
+        $discountAmount = $this->calculateDiscounts($orderData, $orderData['coupon_code'] ?? '');
+        $shipping       = $this->calculateShipping($orderData);
+        $tax            = $this->calculateTax($orderData, $user);
 
         return [
             'order' => [
@@ -142,12 +142,12 @@ class OrderService
                 'order_number' => $this->generateOrderNumber(),
                 'status' => $orderData['status'] ?? fn_get_setting('general.order.create'),
                 'subtotal' => $subtotal,
-                'discount' => $discounts,
+                'discount' => $discountAmount,
                 'tax' => $tax,
                 'shipping' => $shipping,
-                'total' => $subtotal - $discounts + $tax + $shipping,
+                'total' => $subtotal - $discountAmount + $tax + $shipping,
                 'billing_address' => $orderData['billing_address'] ?? null,
-                'shipping_address' => $orderData['billing_address'] ?? null,
+                'shipping_address' => $orderData['shipping_address'] ?? null,
                 'notes' => $orderData['notes'] ?? null,
                 'ip_address' => request()->ip(),
                 'user_agent' => request()->userAgent(),
@@ -190,63 +190,35 @@ class OrderService
             $previousStatus = $order->status;
             $previousTotal = $order->total;
 
-            // Prepare the base order data to update
-            $orderUpdates = [];
+            // Apply base updates
+            $order->fill(array_intersect_key($updateData, array_flip([
+                'status',
+                'billing_address',
+                'shipping_address',
+                'notes'
+            ])));
 
-            // Handle status updates
-            if (isset($updateData['status'])) {
-                $orderUpdates['status'] = $updateData['status'];
-            }
-
-            // Handle address updates
-            if (isset($updateData['billing_address'])) {
-                $orderUpdates['billing_address'] = $updateData['billing_address'];
-            }
-
-            if (isset($updateData['shipping_address'])) {
-                $orderUpdates['shipping_address'] = $updateData['shipping_address'];
-            }
-
-            // Handle notes update
-            if (isset($updateData['notes'])) {
-                $orderUpdates['notes'] = $updateData['notes'];
-            }
-
-            // Handle item updates if requested
-            if ($updateItems && isset($updateData['items'])) {
+            // Update items if needed
+            if ($updateItems && !empty($updateData['items'])) {
                 $this->handleItemUpdates($order, $updateData['items']);
-
-                // Recalculate order totals if items changed
-                $subtotal = $this->calculateSubtotal($updateData['items']);
-                $discounts = $this->calculateDiscounts($updateData);
-                $shipping = $this->calculateShipping($updateData);
-                $tax = $this->calculateTax($updateData, $order->user);
-
-                $orderUpdates = array_merge($orderUpdates, [
-                    'subtotal' => $subtotal,
-                    'discount' => $discounts,
-                    'tax' => $tax,
-                    'shipping' => $shipping,
-                    'total' => $subtotal - $discounts + $tax + $shipping,
-                ]);
             }
 
-            // Update the order with prepared data
-            $order->update($orderUpdates);
+            // Always recalc totals after update
+            $order = $this->recalculateOrder($order, $updateItems ? $updateData['items'] : null);
 
-            // Handle status change events if status was updated
+            // Fire status change event
             if (isset($updateData['status']) && $previousStatus !== $updateData['status']) {
                 // event(new OrderStatusChanged($order, $previousStatus));
             }
 
-            // Record transaction if total amount changed
-            if (isset($orderUpdates['total']) && $previousTotal != $orderUpdates['total']) {
+            // Record transaction if total changed
+            if ($previousTotal != $order->total) {
                 $this->transactionService->record(
                     order: $order,
                     type: 'order_updated',
                     amount: $order->total,
                     status: 'completed',
-                    notes: 'Order updated with new items/prices'
+                    notes: 'Order updated with recalculated totals'
                 );
             }
 
@@ -399,11 +371,11 @@ class OrderService
         $length = fn_get_setting('general.order.length');
         $auto_generate = fn_get_setting('general.order.auto_generate');
         $date = '';
-        if($auto_generate === 'Y') {
+        if ($auto_generate === 'Y') {
             $date = date('Ymd');
         }
         do {
-            $number = $prefix . $date .'-' . Str::upper(Str::random($length)) . $suffix;
+            $number = $prefix . $date . '-' . Str::upper(Str::random($length)) . $suffix;
         } while (Order::where('order_number', $number)->exists());
 
         return $number;
@@ -415,20 +387,19 @@ class OrderService
         $carry + ($item['price'] * $item['quantity']), 0);
     }
 
-    protected function calculateDiscounts(array $orderData): float
+    protected function calculateDiscounts(array $orderData, $coupon_code = null): float
     {
-        if (isset($orderData['coupon_code'])) {
-            return $this->discountService->applyCoupon(
-                $orderData['coupon_code'],
-                $this->calculateSubtotal($orderData['items'])
-            );
+        if (!empty($orderData['coupon_code'])) {
+            $result = $this->discountService->applyCoupon($orderData['coupon_code'], $orderData['order']);
+            return $result['discount_amount'] ?? 0.0;
         }
 
-        return $orderData['discount'] ?? 0;
+        return 0.0;
     }
 
     protected function calculateTax(array $orderData, User $user): float
     {
+
         return $this->taxService->calculate(
             items: $orderData['items'],
             shippingAddress: $orderData['shipping_address'],
@@ -466,7 +437,8 @@ class OrderService
             $validated[] = array_merge($item, [
                 'name' => $product->name,
                 'sku' => $product->sku,
-                'manages_inventory' => $product->stock_quantity
+                'manages_inventory' => $product->stock_quantity,
+                'tax_id' => $product->tax_id // Make sure this is passed
             ]);
         }
 
@@ -485,5 +457,180 @@ class OrderService
             'download_url' => route('digital.download', ['product' => $item->product_id]),
             'expires_at' => now()->addYears(1),
         ]);
+    }
+
+    /**
+     * Update the discount for an order
+     */
+    public function updateDiscount(Order $order, String $discount): Order
+    {
+        $order->coupon_code = $discount;
+        $order->save();
+
+        return $this->recalculateOrder($order);
+    }
+
+    /**
+     * Update the tax for an order
+     */
+    public function updateTax(Order $order, float $tax): Order
+    {
+        $order->tax = $tax;
+        $order->save();
+
+        return $this->recalculateOrder($order);
+    }
+
+    /**
+     * Update the shipping cost for an order
+     */
+    public function updateShipping(Order $order, float $shipping): Order
+    {
+        $order->shipping = $shipping;
+        $order->save();
+
+        return $this->recalculateOrder($order);
+    }
+
+    /**
+     * Update payment details or status for an order
+     */
+    public function updatePayment(Order $order, array $paymentData): Order
+    {
+        $order->payment_method = $paymentData;
+        $order->save();
+
+        return $this->recalculateOrder($order);
+    }
+
+    /**
+     * Update notes for an order
+     */
+    public function updateNotes(Order $order, string $notes): Order
+    {
+        $order->notes = $notes;
+        $order->save();
+
+        return $this->recalculateOrder($order);
+    }
+
+    public function recalculateOrder(Order $order, array $items = null): Order
+    {
+
+        $items = $items ?? $order->items->toArray();
+        $user = $order->user;
+
+        $subtotal = $this->calculateSubtotal($items);
+
+        $discounts = $this->calculateDiscounts([
+            'order' => $order,
+            'coupon_code' => $order->coupon_code,
+            'items' => $items,
+        ]);
+
+        $shipping = $this->calculateShipping([
+            'items' => $items,
+            'shipping_address' => $order->shipping_address,
+        ]);
+
+        $tax = $this->calculateTax([
+            'items' => $items,
+            'shipping_address' => $order->shipping_address,
+            'billing_address' => $order->billing_address,
+        ], $user);
+
+        $order->update([
+            'subtotal' => $subtotal,
+            'discount' => $discounts,
+            'shipping' => $shipping,
+            'tax' => $tax,
+            'total' => $subtotal - $discounts + $tax + $shipping,
+        ]);
+
+        return $order->fresh()->load('items', 'user');
+    }
+
+    public function getOrder(int $orderId): array
+    {
+        $order = Order::with([
+            'items.product',
+            'user',
+            'payments',
+        ])->findOrFail($orderId);
+
+        $customer = $order->user;
+        $shippingAddress = $order->shipping_address ?? [];
+        $billingAddress = $order->billing_address ?? [];
+
+        $itemsData = [];
+        $subtotal = 0;
+
+        $groupedTaxes = []; // summary taxes by type
+
+        foreach ($order->items as $item) {
+            /** @var Product $product */
+            $product = $item->product;
+            $lineTotal = $item->price * $item->quantity;
+            $subtotal += $lineTotal;
+
+            // Get tax rates for this product
+            $taxRates = $this->taxService->getProductTaxRates($product->tax_id ?? null, $shippingAddress);
+
+            $itemTaxSum = 0;
+            foreach ($taxRates as $rate) {
+                $taxAmount = $this->taxService->calculateRateTaxFromOrder($rate, $lineTotal);
+                $itemTaxSum += $taxAmount;
+
+                // group by tax name for summary
+                if (!isset($groupedTaxes[$rate->name])) {
+                    $groupedTaxes[$rate->name] = [
+                        'name'   => $rate->name,
+                        'rate'   => $rate->rate_value,
+                        'amount' => 0,
+                    ];
+                }
+                $groupedTaxes[$rate->name]['amount'] += $taxAmount;
+            }
+
+            $itemsData[] = [
+                'id'         => $item->id,
+                'product_id' => $product->id,
+                'product_name' => $product->name,
+                'sku'        => $product->sku ?? null,
+                'price'      => $item->price,
+                'quantity'   => $item->quantity,
+                'line_total' => $lineTotal,
+                'tax'        => $itemTaxSum, // ✅ only tax sum for this item
+            ];
+        }
+
+        $discount = $order->discount ?? 0;
+        $shipping = $order->shipping ?? 0;
+        $totalTax = collect($groupedTaxes)->sum('amount');
+        $grandTotal = ($subtotal - $discount) + $shipping + $totalTax;
+
+        return [
+            'order' => $order,
+            'order_items' => $itemsData,
+            'discount' => $discount,
+            'order_summary' => [
+                'subtotal' => $subtotal,
+                'discount' => $discount,
+                'shipping' => $shipping,
+                'tax'      => $totalTax,
+                'taxes'    => array_values($groupedTaxes), // breakdown for order summary
+                'total'    => $grandTotal,
+            ],
+            'customer_details' => [
+                'id'    => $customer->id,
+                'name'  => $customer->name,
+                'email' => $customer->email,
+                'phone' => $customer->phone ?? '',
+            ],
+            'billing_address' => $billingAddress,
+            'shipping_address' => $shippingAddress,
+            'payment_details' => $order->payments->first(),
+            'order_note' => $order->notes,
+        ];
     }
 }

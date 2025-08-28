@@ -5,12 +5,13 @@ namespace Modules\Tax\Services;
 use Modules\Customers\Models\User;
 use Modules\Tax\Models\TaxRate;
 use Modules\Tax\Enums\TaxType;
+use Modules\Catalog\Models\Product;
 use Illuminate\Support\Facades\Cache;
 
 class TaxService
 {
     /**
-     * Calculate tax for order items
+     * Calculate tax for order items with product-specific tax rates
      */
     public function calculate(
         array $items,
@@ -22,19 +23,24 @@ class TaxService
         $taxAddress = $this->getTaxableAddress($shippingAddress, $billingAddress);
 
         foreach ($items as $item) {
+            $product = Product::find($item['product_id']);
+            $itemTotal = $item['price'] * $item['quantity'];
+
             $taxTotal += $this->calculateItemTax(
-                $item['price'] * $item['quantity'],
+                $itemTotal,
                 $taxAddress,
-                $customer
+                $customer,
+                $product->tax_id ?? null
             );
         }
 
         // Calculate shipping tax if applicable
-        if (config('tax.tax_shipping')) {
+        if (fn_get_setting('tax.tax_shipping')) {
             $taxTotal += $this->calculateItemTax(
                 $this->getShippingAmount($items, $shippingAddress),
                 $taxAddress,
-                $customer
+                $customer,
+                null // Shipping typically uses default tax rates
             );
         }
 
@@ -42,27 +48,49 @@ class TaxService
     }
 
     /**
-     * Calculate tax for a single item
+     * Calculate tax for a single item with product-specific tax rate
      */
     protected function calculateItemTax(
         float $amount,
         array $address,
-        User $customer
+        User $customer,
+        ?int $taxCategoryId = null
     ): float {
         if ($this->isTaxExempt($customer)) {
             return 0;
         }
 
-        $taxRates = $this->getTaxRatesForLocation(
-            $address['country'],
-            $address['state'],
-            $address['postcode'],
-            $address['city']
-        );
+        // Get all applicable tax rates from the category (federal + state + city)
+        $taxRates = $this->getTaxRatesForCategory($taxCategoryId, $address);
 
         return $taxRates->reduce(function ($carry, $rate) use ($amount) {
             return $carry + $this->calculateRateTax($rate, $amount);
         }, 0);
+    }
+
+    protected function getTaxRatesForCategory(?int $taxCategoryId, array $address)
+    {
+        if (!$taxCategoryId) {
+            return collect();
+        }
+
+        $cacheKey = "tax_category_rates_{$taxCategoryId}_" .
+            ($address['country'] ?? 'any') . "_" .
+            ($address['state'] ?? 'any');
+
+        // return Cache::remember($cacheKey, now()->addDay(), function () use ($taxCategoryId, $address) {
+            return TaxRate::query()
+                ->whereHas('taxCategories', function ($q) use ($taxCategoryId) {
+                    $q->where('tax_category_id', $taxCategoryId);
+                })
+                ->when($address['country'] ?? null, fn($q, $country) => $q->where('country_id', fn_get_country_code($address['country'])['id'] ?? 0))
+                ->when($address['state'] ?? null, fn($q, $state) => $q->where(function ($qq) use ($state) {
+                    $qq->where('state', $state)->orWhereNull('state');
+                }))
+                ->where('is_active', true)
+                ->orderBy('priority', 'desc')
+                ->get();
+        // });
     }
 
     /**
@@ -70,7 +98,7 @@ class TaxService
      */
     protected function calculateRateTax(TaxRate $rate, float $amount): float
     {
-        return match($rate->type) {
+        return match ($rate->type) {
             TaxType::FIXED => $rate->rate_value,
             TaxType::PERCENTAGE => ($amount * $rate->rate_value) / 100,
             default => 0
@@ -78,52 +106,13 @@ class TaxService
     }
 
     /**
-     * Get applicable tax rates for a location
-     */
-    protected function getTaxRatesForLocation(
-        string $country,
-        ?string $state = null,
-        ?string $postcode = null,
-        ?string $city = null
-    ) {
-        $cacheKey = "tax_rates_{$country}_{$state}_{$postcode}_{$city}";
-
-        return Cache::remember($cacheKey, now()->addDay(), function () use (
-            $country,
-            $state,
-            $postcode,
-            $city
-        ) {
-            return TaxRate::query()
-                ->where(function ($query) use ($country, $state, $postcode, $city) {
-                    $query->where('country_id', $country)
-                        ->where(function ($query) use ($state) {
-                            $query->where('state', $state)
-                                ->orWhereNull('state');
-                        })
-                        ->where(function ($query) use ($postcode) {
-                            $query->where('postcode', $postcode)
-                                ->orWhereNull('postcode');
-                        })
-                        ->where(function ($query) use ($city) {
-                            $query->where('city', $city)
-                                ->orWhereNull('city');
-                        });
-                })
-                ->where('is_active', true)
-                ->orderBy('priority', 'desc')
-                ->get();
-        });
-    }
-
-    /**
      * Determine which address to use for tax calculation
      */
     protected function getTaxableAddress(array $shippingAddress, array $billingAddress): array
     {
-        return config('tax.use_shipping_address_for_tax') 
-            ? $shippingAddress 
-            : $billingAddress;
+        return (fn_get_setting('general.tax_applicable') == 'billing')
+            ? $billingAddress
+            : $shippingAddress;
     }
 
     /**
@@ -131,17 +120,16 @@ class TaxService
      */
     protected function isTaxExempt(User $customer): bool
     {
-        return $customer->tax_exempt || 
-               ($customer->group && $customer->group->tax_exempt);
+        return $customer->tax_exempt ||
+            ($customer->group && $customer->group->tax_exempt);
     }
 
     /**
-     * Get shipping amount (simplified - would normally come from ShippingService)
+     * Get shipping amount
      */
     protected function getShippingAmount(array $items, array $address): float
     {
-        // Implement your shipping calculation logic here
-        return 10.00; // Default flat rate example
+        return 0.0; // Implement your shipping calculation logic
     }
 
     /**
@@ -149,7 +137,7 @@ class TaxService
      */
     public function saveTaxRate(array $data): TaxRate
     {
-        $taxRate = isset($data['id']) 
+        $taxRate = isset($data['id'])
             ? TaxRate::findOrFail($data['id'])
             : new TaxRate();
 
@@ -167,5 +155,15 @@ class TaxService
     public function clearTaxRateCache(): void
     {
         Cache::tags(['tax_rates'])->flush();
+    }
+
+    public function getProductTaxRates(?int $taxCategoryId, $address)
+    {
+        return $this->getTaxRatesForCategory($taxCategoryId, $address);
+    }
+
+    public function calculateRateTaxFromOrder($rate, $amount)
+    {
+        return $this->calculateRateTax($rate, $amount);
     }
 }

@@ -52,7 +52,7 @@ if (!function_exists('fn_get_product_name')) {
 if (!function_exists('fn_get_products')) {
     function fn_get_products(): mixed
     {
-        return Product::get()->toArray();
+        return Product::get();
     }
 }
 
@@ -60,6 +60,13 @@ if (!function_exists('fn_get_country_data')) {
     function fn_get_country_data(int $id): mixed
     {
         return Country::where('id', $id)->first();
+    }
+}
+
+if (!function_exists('fn_get_country_code')) {
+    function fn_get_country_code(string $code): mixed
+    {
+        return Country::where('code', $code)->first();
     }
 }
 

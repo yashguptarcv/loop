@@ -53,6 +53,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
+            'tax_id' => 'nullable|numeric|exists:tax_categories,id',
             'sale_price' => 'nullable|numeric|min:0|lte:price',
             'track_stock' => 'required|string|in:Y,N',
             'stock_quantity' => [
@@ -89,6 +90,7 @@ class ProductController extends Controller
                 'stock_quantity',
                 'stock_status',
                 'stock_notes',
+                'tax_id',
                 'sku',
                 'status',
                 'is_featured'
@@ -154,6 +156,7 @@ class ProductController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
+            'tax_id' => 'nullable|numeric|exists:tax_categories,id',
             'sale_price' => 'nullable|numeric|min:0|lte:price',
             'track_stock' => 'required|string|in:Y,N',
             'stock_quantity' => [
@@ -193,6 +196,7 @@ class ProductController extends Controller
                 'stock_quantity',
                 'stock_status',
                 'stock_notes',
+                'tax_id',
                 'sku',
                 'status',
                 'is_featured'

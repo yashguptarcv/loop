@@ -27,6 +27,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/gridstack@9.3.0/dist/gridstack-h5.js"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- meta -->
     @yield('meta')

@@ -39,36 +39,29 @@
                             class="w-full px-3 py-2 border border-gray-300 rounded-md">
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label for="address_city" class="block text-sm font-medium text-gray-700">City</label>
-                            <input type="text" id="address_city" name="settings[general.company.address_city]"
-                                value="{{ old('general.company.address_city', fn_get_setting('general.company.address_city')) }}"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md">
-                        </div>
-                        <div>
-                            <label for="address_state" class="block text-sm font-medium text-gray-700">State</label>
-                            <input type="text" id="address_state" name="settings[general.company.address_state]"
-                                value="{{ old('general.company.address_state', fn_get_setting('general.company.address_state')) }}"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <x-country-state
+                            :countries="fn_get_countries()->toArray()"
+                            :selectedCountry="fn_get_setting('general.company.country') ?? null"
+                            :selectedState="fn_get_setting('general.company.country') ?? null"
+                            prefix="general.company."
+                        />
+                        
                         <div>
                             <label for="address_postal" class="block text-sm font-medium text-gray-700">Postal Code</label>
                             <input type="text" id="address_postal" name="settings[general.company.address_postal]"
                                 value="{{ old('general.company.address_postal', fn_get_setting('general.company.address_postal')) }}"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md">
                         </div>
+
                         <div>
-                            <select id="country" name="settings[general.company.country]" class="w-full mt-6 px-3 py-2 border border-gray-300 rounded-md">
-                                @foreach (fn_get_countries() as $country)
-                                <option value="{{ $country->code }}"
-                                    {{ old('settings[general.company.country]') == $country->code ? 'selected' : '' }}>
-                                    {{ $country->name }} ({{ $country->code }})
-                                </option>
-                                @endforeach
-                            </select>
+                            <label for="address_city" class="block text-sm font-medium text-gray-700">City</label>
+                            <input type="text" id="address_city" name="settings[general.company.address_city]"
+                                value="{{ old('general.company.address_city', fn_get_setting('general.company.address_city')) }}"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md">
                         </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       
                     </div>
                 </div>
             </div>

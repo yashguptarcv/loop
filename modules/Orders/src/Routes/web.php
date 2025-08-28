@@ -17,7 +17,6 @@ use Modules\Orders\Http\Controllers\Statuses\OrdersStatusController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->group(function () {
     Route::middleware(['admin.auth', 'admin.permission'])->group(function () {
         
@@ -26,9 +25,6 @@ Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->
         Route::post('orders/toggle-status', [OrderController::class, 'index'])->name('orders.toggle-status');
 
         // order edit
-        // list product
-        Route::get('orders/cart/lists', [Productlists::class, 'index'])->name('orders.cart.lists');
-
         Route::resource('transactions', Transaction::class);
         Route::post('transactions/bulk-delete', [Transaction::class, 'index'])->name('transactions.bulk-delete');
         Route::post('transactions/toggle-status', [Transaction::class, 'index'])->name('transactions.toggle-status');

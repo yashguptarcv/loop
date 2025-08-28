@@ -12,7 +12,7 @@
     @isset($product) @method('PUT') @endisset
 
     <!-- Left Column (2/3) -->
-    <div class="lg:col-span-2 bg-white rounded-lg p-6 space-y-6">        
+    <div class="lg:col-span-2 bg-white rounded-lg p-6 space-y-6">
         <!-- Description -->
         <div>
             <label class="custom-label">Description</label>
@@ -22,54 +22,65 @@
 
         @include('filemanager::components.file-uploader', ['object_type' => 'product', 'object_id' => $product->id ?? 0, 'name' => 'image'])
         <!-- Image -->
-      
+
 
         <!-- Pricing -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label class="custom-label">Price <span class="text-red-500">*</span></label>
-                <input type="number" step="0.01" name="price" id="price" 
-                    value="{{ old('price', $product->price ?? '') }}" 
+                <input type="number" step="0.01" name="price" id="price"
+                    value="{{ old('price', $product->price ?? '') }}"
                     class="input-field" required>
             </div>
             <div>
                 <label class="custom-label">Sale Price</label>
-                <input type="number" step="0.01" name="sale_price" id="sale_price" 
-                    value="{{ old('sale_price', $product->sale_price ?? '') }}" 
+                <input type="number" step="0.01" name="sale_price" id="sale_price"
+                    value="{{ old('sale_price', $product->sale_price ?? '') }}"
                     class="input-field">
             </div>
         </div>
+
+        <x-autocomplete 
+            label="Tax"
+            field="tax_id"
+            table="tax_categories"
+            value-field="id"
+            search-fields="name"
+            list-attributes="id,name"
+            :multiple="true"
+            :selected="!empty($product->tax_id) ? [$product->tax_id] : []"
+        />
 
         <div class="mb-6">
             <label for="tags" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Tags
             </label>
-            
-         <div class="relative">
-            <div id="tag-container" class="flex flex-wrap items-center gap-2 p-2 border rounded-md min-h-[42px] 
+
+            <div class="relative">
+                <div id="tag-container" class="flex flex-wrap items-center gap-2 p-2 border rounded-md min-h-[42px] 
                 border-gray-300 dark:border-gray-600 dark:bg-gray-700 bg-white
                 @error('tags') border-red-500 dark:border-red-400 @enderror">
-                <!-- Existing tags will appear here -->
-                <input type="text" id="tags-input" 
-                    class="flex-1 min-w-[100px] px-2 py-1 bg-transparent border-0 focus:outline-none focus:ring-0
+                    <!-- Existing tags will appear here -->
+                    <input type="text" id="tags-input"
+                        class="flex-1 min-w-[100px] px-2 py-1 bg-transparent border-0 focus:outline-none focus:ring-0
                         dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
-                    placeholder="Type to search tags or add new ones"
-                    list="tagList" />
+                        placeholder="Type to search tags or add new ones"
+                        list="tagList" />
+                </div>
+
+                <input type="hidden" id="tags" name="tags"
+                    value="{{ old('tags', isset($product) ? implode(',', $product->tags->pluck('name')->toArray()) : '') }}" />
             </div>
-            
-            <input type="hidden" id="tags" name="tags" 
-                value="{{ old('tags', isset($product) ? implode(',', $product->tags->pluck('name')->toArray()) : '') }}" />
-        </div>
 
-        <datalist id="tagList">
-            @foreach(\Modules\Leads\Models\TagsModel::all() as $tag)
+            <datalist id="tagList">
+                @foreach(\Modules\Leads\Models\TagsModel::all() as $tag)
                 <option value="{{ $tag->name }}"></option>
-            @endforeach
-        </datalist>
+                @endforeach
+            </datalist>
 
-        @error('tags')
+            @error('tags')
             <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-        @enderror
+            @enderror
         </div>
     </div>
 
@@ -79,41 +90,40 @@
         <!-- Name -->
         <div>
             <label class="custom-label">Name <span class="text-red-500">*</span></label>
-            <input type="text" name="name" id="name" 
-                value="{{ old('name', $product->name ?? '') }}" 
+            <input type="text" name="name" id="name"
+                value="{{ old('name', $product->name ?? '') }}"
                 class="input-field" required>
         </div>
 
-         <!-- Slug -->
+        <!-- Slug -->
         <div>
             <label class="custom-label">Slug</label>
             <input type="text" name="slug" id="slug" value="{{ old('slug', $product->slug ?? '') }}"
                 class="input-field">
         </div>
 
-            <x-autocomplete 
-                label="Categories"
-                field="categories"
-                table="categories"
-                value-field="id"
-                search-fields="name"
-                list-attributes="id,name"
-                :multiple="true"
-                :actions="[
+        <x-autocomplete
+            label="Categories"
+            field="categories"
+            table="categories"
+            value-field="id"
+            search-fields="name"
+            list-attributes="id,name"
+            :multiple="true"
+            :actions="[
                     ['label' => 'Select', 'callback' => 'selectItem'],
                 ]"
-                :selected="!empty($product->categories) ?$product->categories->toArray() : []"
-            />
-        
+            :selected="!empty($product->categories) ?$product->categories->toArray() : []" />
+
 
         <!-- Inventory Management -->
         <div class="border-t divide-gray-100 pt-4">
             <h3 class="text-lg font-medium text-gray-900 mb-3">Inventory</h3>
-            
+
             <!-- Track Stock -->
             <div class="flex items-center mb-3">
                 <input type="hidden" id="track_stock" name="track_stock" value="N">
-                <input type="checkbox" id="track_stock" name="track_stock" value="Y" 
+                <input type="checkbox" id="track_stock" name="track_stock" value="Y"
                     class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                     {{ (isset($product) && $product->track_stock === 'Y') ? 'checked' : '' }}>
                 <label for="track_stock" class="ml-2 block text-sm text-gray-900">
@@ -125,8 +135,8 @@
             <div id="stock_fields" class="{{ (isset($product) && $product->track_stock === 'Y') ? '' : 'hidden' }} space-y-3">
                 <div>
                     <label class="custom-label">Stock Quantity</label>
-                    <input type="number" name="stock_quantity" id="stock_quantity" 
-                        value="{{ old('stock_quantity', $product->stock_quantity ?? 0) }}" 
+                    <input type="number" name="stock_quantity" id="stock_quantity"
+                        value="{{ old('stock_quantity', $product->stock_quantity ?? 0) }}"
                         class="input-field">
                 </div>
 
@@ -145,8 +155,8 @@
             <!-- SKU -->
             <div class="mt-3">
                 <label class="custom-label">SKU</label>
-                <input type="text" name="sku" id="sku" 
-                    value="{{ old('sku', $product->sku ?? '') }}" 
+                <input type="text" name="sku" id="sku"
+                    value="{{ old('sku', $product->sku ?? '') }}"
                     class="input-field">
             </div>
         </div>
@@ -156,16 +166,16 @@
             <label class="custom-label">Status</label>
             <select name="status" class="w-full bg-white border border-gray-300 text-gray-700 py-2 px-4 pr-8 rounded-md leading-tight">
                 @foreach($statuses as $key => $status)
-                    <option value="{{ $key }}" {{ (isset($product) && $product->status == $key) ? 'selected' : '' }}>
-                        {{ $status }}
-                    </option>
+                <option value="{{ $key }}" {{ (isset($product) && $product->status == $key) ? 'selected' : '' }}>
+                    {{ $status }}
+                </option>
                 @endforeach
             </select>
         </div>
 
         <!-- Featured -->
         <div class="flex items-center">
-            <input type="checkbox" id="is_featured" name="is_featured" value="1" 
+            <input type="checkbox" id="is_featured" name="is_featured" value="1"
                 class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                 {{ (isset($product) && $product->is_featured) ? 'checked' : '' }}>
             <label for="is_featured" class="ml-2 block text-sm text-gray-900">
@@ -187,12 +197,11 @@
 
 @section('scripts')
 <script>
-
     // Initialize select2 for multiple categories
- 
+
 
     // Toggle stock fields based on track_stock checkbox
-    document.getElementById('track_stock').addEventListener('change', function() {        
+    document.getElementById('track_stock').addEventListener('change', function() {
         const stockFields = document.getElementById('stock_fields');
         if (this.checked) {
             stockFields.classList.remove('hidden');

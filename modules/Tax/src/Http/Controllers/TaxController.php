@@ -33,7 +33,12 @@ class TaxController extends Controller
                 'message' => 'Tax Rate Created Successfully!',
                 'redirect_url' => route('admin.tax.index'),
             ]);
-        } catch (\Throwable $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'errors' => 'Something went wrong. Please try again. ' . $e->getMessage()
             ]);
@@ -41,7 +46,7 @@ class TaxController extends Controller
     }
 
     public function edit(TaxRate $tax)
-    {   
+    {
         $countries = Country::all();
         return view('tax::rates.form', compact('tax', 'countries'));
     }
@@ -55,7 +60,12 @@ class TaxController extends Controller
                 'message' => 'Tax Rate Updated Successfully!',
                 'redirect_url' => route('admin.tax.index'),
             ]);
-        } catch (\Throwable $e) {
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'errors' => 'Something went wrong. Please try again. ' . $e->getMessage()
             ]);
@@ -64,7 +74,7 @@ class TaxController extends Controller
 
     public function destroy(TaxRate $tax)
     {
-        
+
         try {
             $tax->delete();
             return response()->json([

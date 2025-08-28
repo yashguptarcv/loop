@@ -94,6 +94,23 @@
                 </div>
             </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
+                <div class="md:col-span-1">
+                    <label for="tax" class="block text-sm font-medium text-gray-700">Tax Applicable</label>
+                    <p class="mt-1 text-sm text-gray-500">Set Tax will be applied.</p>
+                </div>
+                <div class="md:col-span-2">
+                    <select id="tax" name="settings[general.tax_applicable]" class="w-full px-3 py-2 border border-gray-300 rounded-md">                        
+                        <option value="billing" {{ old('general.tax_applicable', fn_get_setting('general.tax_applicable')) == 'billing' ? 'selected' : '' }}>
+                            Billing Address
+                        </option>
+                        <option value="shipping" {{ old('general.tax_applicable', fn_get_setting('general.tax_applicable')) == 'shipping' ? 'selected' : '' }}>
+                            Shipping Address
+                        </option>
+                    </select>
+                </div>
+            </div>
+
             <!-- pass -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t divide-gray-100">
                 <div class="md:col-span-1">

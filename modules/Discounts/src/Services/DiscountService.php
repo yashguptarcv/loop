@@ -147,10 +147,10 @@ class DiscountService
      *
      * @param string $code
      * @param User|null $user
-     * @param float|null $orderTotal
+     * @param object|array|null $order
      * @return Coupon|null
      */
-    public function validateCoupon(string $code, ?User $user = null, ?float $orderTotal = null): ?Coupon
+    public function validateCoupon(string $code, ?User $user = null, $order = null): ?Coupon
     {
         $coupon = Coupon::where('code', $code)
             ->with('discount')
@@ -190,6 +190,14 @@ class DiscountService
                 return null;
             }
         }
+        
+        if ($coupon->discount->apply_to == 'subtotal') {
+            $orderTotal = $order->subtotal;
+        } elseif ($coupon->discount->apply_to == 'total') {
+            $orderTotal = $order->total;
+        } else {
+            $orderTotal = $order->subtotal;
+        }
 
         // Check minimum order amount
         if ($orderTotal && $coupon->min_order_amount && $orderTotal < $coupon->min_order_amount) {
@@ -203,15 +211,15 @@ class DiscountService
      * Apply coupon to an order and return discount details
      *
      * @param string $couponCode
-     * @param float $subtotal
+     * @param object|array $order
      * @return float
      * @throws Exception
      */
-    public function applyCoupon(string $couponCode, float $subtotal): array
+    public function applyCoupon(string $couponCode, $order): array
     {
         // Validate the coupon first
-        $coupon = $this->validateCoupon($couponCode, null, $subtotal);
-
+        $coupon = $this->validateCoupon($couponCode, null, $order);
+        
         if (!$coupon) {
             throw new Exception('Invalid or expired coupon code');
         }
@@ -220,26 +228,35 @@ class DiscountService
 
         // Calculate discount amount based on discount type
         $discountAmount = 0;
+        if ($discount->apply_to == 'subtotal') {
 
-        switch ($discount->type) {
+            $orderTotal = $order['subtotal'];
+        } elseif ($discount->apply_to == 'total') {
+
+            $orderTotal = $order['total'];
+        } else {
+
+            $orderTotal = $order['subtotal'];
+        }
+
+        switch ($discount->type->value) {
             case 'F': // Fixed amount
-                $discountAmount = min($discount->amount, $subtotal);
+                $discountAmount = min($discount->amount, $orderTotal);
                 break;
 
             case 'P': // Percentage
-                $discountAmount = $subtotal * ($discount->amount / 100);
+                $discountAmount = $orderTotal * ($discount->amount / 100);
                 break;
         }
 
         // Round to 2 decimal places
         $discountAmount = round($discountAmount, 2);
 
-        return $discountAmount;
         return [
             'coupon' => $coupon,
             'discount' => $discount,
             'discount_amount' => $discountAmount,
-            'discount_type' => $discount->type,
+            'discount_type' => $discount->type->value,
             'apply_to' => $discount->apply_to,
         ];
     }

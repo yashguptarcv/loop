@@ -1,143 +1,224 @@
-class Autocomplete {
-    constructor(el, options) {
-        this.el = el;
-        this.field = options.field;
-        this.table = options.table;
-        this.valueField = options.valueField;
-        this.labelField = options.labelField || 'name';
-        this.searchFields = options.searchFields;
-        this.listAttributes = options.listAttributes;
-        this.multiple = options.multiple;
-        this.actions = options.actions || {};
-
-        this.search = '';
-        this.results = [];
-        this.selected = options.selected || []; // load initial
-
-        // DOM refs
-        this.input = el.querySelector('#search-input');
-        this.resultsList = el.querySelector('#results-list');
-        this.selectedItems = el.querySelector('#selected-items');
-        this.hiddenInputs = el.querySelector('#hidden-inputs');
-        this.popupBtn = el.querySelector('#open-popup');
-
-        this.bindEvents();
-        this.renderSelected(); // render preselected items
+// Initialize autocomplete functionality
+function initAutocomplete(input) {
+    const $input = $(input);
+    
+    // Skip if already initialized
+    if ($input.data('autocomplete-initialized')) {
+        return;
     }
-
-    bindEvents() {
-        this.input.addEventListener('input', () => this.fetchResults());
-        // this.popupBtn.addEventListener('click', () => this.openPopup());
-
-        // Close dropdown on outside click
-        document.addEventListener('click', (e) => {
-            if (!this.el.contains(e.target)) {
-                this.resultsList.classList.add('hidden');
-            }
+    
+    const container = $input.closest('#auto-complete');
+    
+    // Create results container if it doesn't exist
+    if (container.find('.autocomplete-results').length === 0) {
+        const $resultsBox = $('<div>', {
+            class: 'autocomplete-results absolute z-50 bg-white border border-gray-300 w-full max-h-52 overflow-auto shadow-md rounded-md hidden text-sm',
         });
+        container.append($resultsBox);
     }
+    
+    // Store initialization flag
+    $input.data('autocomplete-initialized', true);
+    
+    // Handle input event
+    $input.on('input', function() {
+        const $input = $(this);
+        const container = $input.closest('#auto-complete');
+        const $resultsBox = container.find('.autocomplete-results');
+        
+        var table = $input.data('table');
+        var select_columns = $input.data('select_columns');
+        var search_column = $input.data('search_column');
+        var id = $input.data('id');
+        var query = $input.val();
 
-    fetchResults() {
-        this.search = this.input.value.trim();
-        if (!this.search.length) {
-            this.results = [];
-            this.renderResults();
+        // Position the dropdown
+        $resultsBox.css({
+            'position': 'relative',
+            'margin-bottom': '0.25rem',
+            'margin-top': '10px',
+            'width': 'auto',
+            'display': 'block'
+        });
+
+        if (query.length < 2) {
+            $resultsBox.hide();
             return;
         }
 
-        fetch(`/admin/autocomplete/search?table=${this.table}&value_field=${this.valueField}&search_fields=${this.searchFields}&q=${this.search}`)
-            .then(res => res.json())
-            .then(data => {
-                this.results = data;
-                this.renderResults();
+        if (query.length >= 3) {
+            $.ajax({
+                url: '/api/autocomplete/autocomplete',
+                type: 'get',
+                data: {
+                    table: table,
+                    select_columns: select_columns,
+                    search_column: search_column,
+                    query: query,
+                    id: id
+                },
+                success: function(response) {
+                    var data = response;
+
+                    if (data.length) {
+                        let html = '';
+                        data.forEach(item => {
+                            html += `
+                                <div class="autocomplete-suggestion 
+                                    px-4 py-2 
+                                    hover:bg-gray-50 
+                                    cursor-pointer 
+                                    transition-colors 
+                                    duration-150
+                                    border-b border-gray-100
+                                    last:border-b-0
+                                    text-gray-700
+                                    hover:text-gray-900
+                                    focus:outline-none
+                                    focus:bg-gray-100
+                                    focus:ring-1 focus:ring-blue-500
+                                    aria-selected:bg-blue-50
+                                    aria-selected:text-blue-700"
+                                    role="option"
+                                    data-id="${item.id}"
+                                    data-name="${item.name}"
+                                    tabindex="0">
+                                    ${item.name}
+                                </div>`;
+                        });
+                        $resultsBox.html(html).removeClass('hidden').addClass('block');
+                    } else {
+                        $resultsBox.html(`
+                            <div class="autocomplete-suggestion 
+                                px-4 py-3 
+                                text-gray-400 
+                                italic
+                                text-center
+                                border-b border-gray-100"
+                                role="status">
+                                No results found
+                            </div>`).removeClass('hidden').addClass('block');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    $resultsBox.html(`
+                        <div class="autocomplete-suggestion 
+                            px-4 py-3 
+                            text-red-500 
+                            italic
+                            text-center"
+                            role="alert">
+                            Error loading results
+                        </div>`).removeClass('hidden').addClass('block');
+                }
             });
-    }
-
-    renderResults() {
-        this.resultsList.innerHTML = '';
-        if (!this.results.length) {
-            this.resultsList.classList.add('hidden');
-            return;
-        }
-
-        this.results.forEach(item => {
-            let li = document.createElement('li');
-            li.className = "px-3 py-2 hover:bg-blue-100 cursor-pointer";
-            li.textContent = item[this.labelField] ?? item[this.valueField];
-            li.addEventListener('click', () => this.selectItem(item));
-            this.resultsList.appendChild(li);
-        });
-
-        this.resultsList.className = "relative left-0 right-0 mt-1 z-10 bg-white border rounded shadow max-h-60 overflow-y-auto";
-    }
-
-    selectItem(item) {
-        if (this.multiple) {
-            if (!this.selected.find(s => s[this.valueField] === item[this.valueField])) {
-                this.selected.push(item);
-            }
         } else {
-            this.selected = [item];
+            $resultsBox.hide();
         }
+    });
 
-        this.search = '';
-        this.input.value = '';
-        this.results = [];
-        this.renderResults();
-        this.renderSelected();
-    }
+    // Keyboard navigation
+    $input.on('keydown', function(e) {
+        const $input = $(this);
+        const $results = $input.closest('#auto-complete').find('.autocomplete-results');
+        const $suggestions = $results.find('.autocomplete-suggestion[role="option"]');
+        const currentFocus = $results.find('.autocomplete-suggestion[aria-selected="true"]');
 
-    removeItem(index) {
-        this.selected.splice(index, 1);
-        this.renderSelected();
-    }
-
-    renderSelected() {
-        this.selectedItems.innerHTML = '';
-        this.hiddenInputs.innerHTML = '';
-
-        this.selected.forEach((item, index) => {
-            // Badge
-            let span = document.createElement('span');
-            span.className = "px-3 py-1 bg-blue-100 text-blue-800 rounded flex items-center gap-2";
-
-            let text = document.createElement('span');
-            text.textContent = item[this.labelField] ?? item[this.valueField]; // show name
-
-            let btn = document.createElement('button');
-            btn.type = "button";
-            btn.textContent = "×";
-            btn.className = "text-red-600";
-            btn.addEventListener('click', () => this.removeItem(index));
-
-            span.appendChild(text);
-            span.appendChild(btn);
-            this.selectedItems.appendChild(span);
-
-            // Hidden input (for form submit)
-            let hidden = document.createElement('input');
-            hidden.type = "hidden";
-            hidden.name = this.multiple ? this.field + '[]' : this.field;
-            hidden.value = item[this.valueField]; // submit ID, not text
-            this.hiddenInputs.appendChild(hidden);
-        });
-    }
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (currentFocus.length) {
+                currentFocus.removeAttr('aria-selected');
+                const next = currentFocus.next('.autocomplete-suggestion[role="option"]');
+                if (next.length) {
+                    next.attr('aria-selected', 'true');
+                    next[0].scrollIntoView({ block: 'nearest' });
+                }
+            } else if ($suggestions.length) {
+                $suggestions.first().attr('aria-selected', 'true');
+            }
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (currentFocus.length) {
+                currentFocus.removeAttr('aria-selected');
+                const prev = currentFocus.prev('.autocomplete-suggestion[role="option"]');
+                if (prev.length) {
+                    prev.attr('aria-selected', 'true');
+                    prev[0].scrollIntoView({ block: 'nearest' });
+                }
+            }
+        } else if (e.key === 'Enter' && currentFocus.length) {
+            e.preventDefault();
+            currentFocus.trigger('click');
+        } else if (e.key === 'Escape') {
+            $results.hide();
+        }
+    });
 }
 
-// init
-document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".autocomplete-component").forEach((element) => {
-        new Autocomplete(element, {
-            field: element.dataset.field,
-            table: element.dataset.table,
-            valueField: element.dataset.valueField,
-            labelField: element.dataset.labelField,
-            searchFields: element.dataset.searchFields,
-            listAttributes: element.dataset.listAttributes,
-            multiple: element.dataset.multiple === "true",
-            actions: JSON.parse(element.dataset.actions || "[]"),
-            selected: JSON.parse(element.dataset.selected || "[]")
-        });
+// Initialize existing inputs on DOM ready
+$(document).ready(function() {
+    $('input[autocomplete="dropdown"]').each(function() {
+        initAutocomplete(this);
     });
 });
 
+// Set up MutationObserver to detect new inputs
+const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+        if (mutation.addedNodes && mutation.addedNodes.length > 0) {
+            for (let i = 0; i < mutation.addedNodes.length; i++) {
+                const node = mutation.addedNodes[i];
+                
+                // Check if the added node is an input with autocomplete="dropdown"
+                if (node.nodeType === 1 && node.matches('input[autocomplete="dropdown"]')) {
+                    initAutocomplete(node);
+                }
+                
+                // Check if the added node contains inputs with autocomplete="dropdown"
+                if (node.nodeType === 1 && node.querySelectorAll) {
+                    const inputs = node.querySelectorAll('input[autocomplete="dropdown"]');
+                    inputs.forEach(function(input) {
+                        initAutocomplete(input);
+                    });
+                }
+            }
+        }
+    });
+});
+
+// Start observing the document
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+
+// Handle click outside to close dropdown (only needs to be set up once)
+$(document).on('click', function(e) {
+    if (!$(e.target).closest('#auto-complete').length) {
+        $('.autocomplete-results').hide();
+    }
+});
+
+// Handle suggestion selection (only needs to be set up once)
+$(document).on('click', '.autocomplete-suggestion[role="option"]', function() {
+    const $suggestion = $(this);
+    const $input = $suggestion.closest('#auto-complete').find('input[autocomplete="dropdown"]');
+
+    $input.val($suggestion.data('name'));
+    if ($input.data('target')) {
+        $('#' + $input.data('target')).val($suggestion.data('id'));
+    }
+    $('.autocomplete-results').hide();
+});
+
+// Handle click on autocomplete suggestions (alternative handler)
+$(document).on('click', '.autocomplete-suggestion:not(.disabled)', function() {
+    const $item = $(this);
+    const $container = $item.closest('.col-sm-10');
+    const $input = $container.find('input[autocomplete="dropdown"]');
+    const targetId = $input.data('target');
+
+    $input.val($item.data('name'));
+    $('#' + targetId).val($item.data('id'));
+    $container.find('.autocomplete-results').hide();
+});

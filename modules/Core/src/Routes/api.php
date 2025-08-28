@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Core\Http\Controllers\Api\HomeController;
+use Modules\Core\Http\Controllers\Api\LocationController;
+use Modules\Core\Http\Controllers\Api\AutocompleteController;
+use Modules\Core\Http\Controllers\Api\AutocompleteSingleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +16,13 @@ use Modules\Core\Http\Controllers\Api\HomeController;
 |
 */
 
-Route::prefix('api/core')->name('api.core.')->group(function () {
-    Route::get('/', [HomeController::class, 'index'])->name('home');
-});
+Route::prefix('api')->name('api')->group(function () {
+    Route::get('/countries/{country}/states', [LocationController::class, 'states']);
 
-// Api\HomeController will be generated automatically by the module generator 
+    Route::prefix('autocomplete')->name('autocomplete.')->group(function () {
+        Route::get('/search', [AutocompleteController::class, 'search']);
+        Route::get('/list', [AutocompleteController::class, 'list']);
+        Route::get('/autocomplete', [AutocompleteSingleController::class, 'index'])->name('autocomplete');
+    });
+
+});

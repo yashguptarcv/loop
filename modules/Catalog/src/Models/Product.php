@@ -20,6 +20,7 @@ class Product extends Model
         'price',
         'sale_price',
         'sku',
+        'tax_id',
         'image',
         'track_stock',
         'stock_quantity',

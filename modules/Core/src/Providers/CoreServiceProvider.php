@@ -2,9 +2,10 @@
 
 namespace Modules\Core\Providers;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Config;
+use Modules\Core\Views\Components\Address\CountryState;
+use Modules\Core\Views\Components\Autocomplete\Autocomplete;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -137,6 +138,7 @@ class CoreServiceProvider extends ServiceProvider
 
     protected function registerComponents(): void
     {
-       
+        Blade::component('autocomplete', Autocomplete::class);
+        Blade::component('country-state', CountryState::class);
     }
 } 

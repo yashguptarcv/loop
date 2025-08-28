@@ -4,21 +4,13 @@ use Illuminate\Support\Facades\Route;
 use Modules\Admin\Http\Controllers\Auth\AuthController;
 use Modules\Admin\Http\Controllers\DashboardController;
 use Modules\Admin\Http\Controllers\AutoCompleteController;
-use Modules\Admin\Http\Controllers\AutocompleteController as ComponentAutoComplete;
 use Modules\Admin\Http\Controllers\Settings\RoleController;
 use Modules\Admin\Http\Controllers\Settings\SettingController;
-use Modules\Admin\Http\Controllers\Settings\Logs\LogsController;
 use Modules\Admin\Http\Controllers\Settings\UserAdminController;
 use Modules\Admin\Http\Controllers\Settings\States\StateController;
-use Modules\Admin\Http\Controllers\Settings\Statuses\TagsController;
-use Modules\Admin\Http\Controllers\Settings\Statuses\LeadsController;
-use Modules\Admin\Http\Controllers\Settings\Company\CompanyController;
 use Modules\Admin\Http\Controllers\Settings\General\GereralController;
-use Modules\Admin\Http\Controllers\Settings\Statuses\SourceController;
-use Modules\Admin\Http\Controllers\Settings\Statuses\StatusController;
 use Modules\Admin\Http\Controllers\Settings\Countries\CountryController;
 use Modules\Admin\Http\Controllers\Settings\Currencies\CurrencyController;
-use Modules\Admin\Http\Controllers\Settings\Statuses\OrdersStatusController;
 
 Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login.form');
@@ -28,8 +20,6 @@ Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->
 
     Route::middleware(['admin.auth', 'admin.permission'])->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('index');
-        Route::get('/autocomplete/autocomplete', [AutoCompleteController::class, 'index'])->name('autocomplete.autocomplete');
-
         // setting
         Route::prefix('settings')->name('settings.')->group(function () {
             Route::get('/', [SettingController::class, 'index'])->name('index');
@@ -52,16 +42,6 @@ Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->
 
             Route::resource('general', GereralController::class);
             Route::get('send/test-mail', [GereralController::class, 'send_test_mail'])->name('send.test-mail');
-        });
-
-        Route::prefix('autocomplete')->name('autocomplete.')->group(function () {
-            // For quick dropdown suggestions
-            Route::get('/search', [ComponentAutoComplete::class, 'search'])
-                ->name('search');
-
-            // For full popup list (sortable + paginated)
-            Route::get('/list', [ComponentAutoComplete::class, 'list'])
-                ->name('list');
         });
     });
 });

@@ -39,14 +39,14 @@
     </div>
 
     <!-- Country Field -->
-    <div class="mb-4">
+    <!-- <div class="mb-4">
         <label class="custom-label">Country <span class="text-red-500">*</span></label>
         <select name="country_id" id="country_id" 
             class="input-field @error('country_id') border-red-500 @enderror">
             <option value="">Select Country</option>
             @foreach($countries as $country)
                 <option value="{{ $country->id }}" 
-                    @selected(($tax->country_id ?? old('country_id')) == $country->id)>
+                    @selected(($tax->code ?? old('country_id')) == $country->id)>
                     {{ $country->name }}
                 </option>
             @endforeach
@@ -54,10 +54,34 @@
         <div class="error-message text-red-500 text-sm mt-1" id="country_id-error">
             @error('country_id') {{ $message }} @enderror
         </div>
-    </div>
+    </div> -->
 
+    <div id="auto-complete">
+        <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country </label>
+        <input
+            type="text"
+            autocomplete="dropdown"
+            multiselect=true
+            name="country_name"
+            value="{{!empty($tax->country_id) ? fn_get_country_name($tax->country_id) : ''}}"
+            placeholder=""
+            id="input-country_id"
+            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+            data-table="countries"
+            data-select_columns="id, name"
+            data-search_column="name"
+            data-target="country"
+            data-original-value="" />
+        <input
+            type="hidden"
+            name="country"
+            id="country"
+            value="{{$tax->country_id ?? 0}}"
+            class="mt-1"    
+            data-original-value="" />
+    </div>
     <!-- State Field -->
-    <div class="mb-4">
+    <!-- <div class="mb-4">
         <label class="custom-label">State/Region</label>
         <input type="text" name="state" id="state"
             value="{{ $tax->state ?? old('state') }}"
@@ -65,10 +89,10 @@
         <div class="error-message text-red-500 text-sm mt-1" id="state-error">
             @error('state') {{ $message }} @enderror
         </div>
-    </div>
+    </div> -->
 
     <!-- Postcode Field -->
-    <div class="mb-4">
+    <!-- <div class="mb-4">
         <label class="custom-label">Postal/Zip Code</label>
         <input type="text" name="postcode" id="postcode"
             value="{{ $tax->postcode ?? old('postcode') }}"
@@ -76,10 +100,10 @@
         <div class="error-message text-red-500 text-sm mt-1" id="postcode-error">
             @error('postcode') {{ $message }} @enderror
         </div>
-    </div>
+    </div> -->
 
     <!-- City Field -->
-    <div class="mb-4">
+    <!-- <div class="mb-4">
         <label class="custom-label">City</label>
         <input type="text" name="city" id="city"
             value="{{ $tax->city ?? old('city') }}"
@@ -87,7 +111,7 @@
         <div class="error-message text-red-500 text-sm mt-1" id="city-error">
             @error('city') {{ $message }} @enderror
         </div>
-    </div>
+    </div> -->
 
     <!-- Status Field -->
     <div class="mb-4">

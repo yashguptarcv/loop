@@ -4,3 +4,4 @@ import './ajax';
 import './modal';
 import './autocomplete-with-list';
 import './autocomplete';
+import './country-state';

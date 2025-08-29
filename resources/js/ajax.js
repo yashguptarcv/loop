@@ -494,6 +494,13 @@
             }));
           }
 
+          if(res.callback) {
+            // res.callback;
+              if (res.callback && typeof res.callback === 'string') {
+                  new Function(res.callback)(); // runs "loadOrder()"
+              }
+          }
+
           if (res.redirect_url) {
             window.location.href = res.redirect_url;
           }
@@ -536,8 +543,7 @@
     }
 
     // Modified ceAjax function with loader and CSRF token support
-    function ceAjax(method, url, options) {
-      // Default options
+    window.ceAjax = function (method, url, options = {}) {
       const config = {
         result_ids: '',
         caching: true,
@@ -547,114 +553,60 @@
         complete: null,
         data: null,
         headers: {},
-        loader: false, // Default to no loader
+        loader: false,
         ...options
       };
 
-      // Show loader if enabled
-      if (config.loader) {
-        Loader.show();
-      }
+      if (config.loader) Loader.show();
+      if (typeof config.beforeSend === 'function') config.beforeSend();
 
-      // Execute beforeSend callback if provided
-      if (typeof config.beforeSend === 'function') {
-        config.beforeSend();
-      }
-
-      // Create XMLHttpRequest
       const xhr = new XMLHttpRequest();
-
-      // Handle caching
       const finalUrl = config.caching ? url : `${url}${url.includes('?') ? '&' : '?'}_=${Date.now()}`;
-
-      // Determine HTTP method
-      const httpMethod = method === 'request' ? 'GET' : method.toUpperCase();
+      const httpMethod = method.toUpperCase();
 
       xhr.open(httpMethod, finalUrl, true);
-
-      // Set headers
       xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
 
-      // Add CSRF token for non-GET requests
       if (httpMethod !== 'GET') {
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
-        if (csrfToken) {
-          xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-        }
+        if (csrfToken) xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
       }
 
-      // Add custom headers
       for (const [key, value] of Object.entries(config.headers)) {
         xhr.setRequestHeader(key, value);
       }
 
       xhr.onload = function () {
-        // Hide loader if it was shown
-        if (config.loader) {
-          Loader.hide();
-        }
-
-        // Execute complete callback if provided
-        if (typeof config.complete === 'function') {
-          config.complete();
-        }
+        if (config.loader) Loader.hide();
+        if (typeof config.complete === 'function') config.complete();
 
         if (xhr.status >= 200 && xhr.status < 300) {
           let response;
-          try {
-            response = JSON.parse(xhr.responseText);
-          } catch (e) {
-            response = xhr.responseText;
-          }
+          try { response = JSON.parse(xhr.responseText); } catch { response = xhr.responseText; }
 
-          // Automatic DOM updates based on result_ids
           if (config.result_ids) {
-            const resultIds = typeof config.result_ids === 'string'
-              ? config.result_ids.split(',')
-              : Object.keys(config.result_ids);
-
+            const resultIds = typeof config.result_ids === 'string' ? config.result_ids.split(',') : Object.keys(config.result_ids);
             resultIds.forEach(id => {
-              const element = document.getElementById(id.trim());
-              if (element) {
-                if (typeof response === 'object' && response[id.trim()]) {
-                  element.innerHTML = response[id.trim()];
-                } else if (typeof response === 'string') {
-                  element.innerHTML = response;
-                }
+              const el = document.getElementById(id.trim());
+              if (el) {
+                if (typeof response === 'object' && response[id.trim()]) el.innerHTML = response[id.trim()];
+                else if (typeof response === 'string') el.innerHTML = response;
               }
             });
           }
 
-          // Execute success callback if provided
-          if (typeof config.callback === 'function') {
-            config.callback(response, config.data);
-          }
-        } else {
-          console.error('Request failed:', xhr.statusText);
-          if (typeof config.errorCallback === 'function') {
-            config.errorCallback(xhr);
-          }
-        }
-      };
-
-      xhr.onerror = function () {
-        // Hide loader on error too
-        if (config.loader) {
-          Loader.hide();
-        }
-
-        // Execute complete callback if provided
-        if (typeof config.complete === 'function') {
-          config.complete();
-        }
-
-        console.error('Network error occurred');
-        if (typeof config.errorCallback === 'function') {
+          if (typeof config.callback === 'function') config.callback(response, config.data);
+        } else if (typeof config.errorCallback === 'function') {
           config.errorCallback(xhr);
         }
       };
 
-      // Prepare data
+      xhr.onerror = function () {
+        if (config.loader) Loader.hide();
+        if (typeof config.complete === 'function') config.complete();
+        if (typeof config.errorCallback === 'function') config.errorCallback(xhr);
+      };
+
       let requestData = null;
       if (config.data) {
         if (httpMethod === 'GET') {
@@ -665,13 +617,8 @@
           requestData = new URLSearchParams(config.data).toString();
         }
       }
-
-      // Send request
       xhr.send(requestData);
-    }
-
-    // Make it available globally
-    window.ceAjax = ceAjax;
+    };
 
   });
 

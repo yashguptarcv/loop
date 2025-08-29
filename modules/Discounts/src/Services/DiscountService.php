@@ -192,11 +192,11 @@ class DiscountService
         }
         
         if ($coupon->discount->apply_to == 'subtotal') {
-            $orderTotal = $order->subtotal;
+            $orderTotal = $order['subtotal'];
         } elseif ($coupon->discount->apply_to == 'total') {
-            $orderTotal = $order->total;
+            $orderTotal = $order['total'];
         } else {
-            $orderTotal = $order->subtotal;
+            $orderTotal = $order['subtotal'];
         }
 
         // Check minimum order amount

@@ -83,7 +83,7 @@ class TaxService
                 ->whereHas('taxCategories', function ($q) use ($taxCategoryId) {
                     $q->where('tax_category_id', $taxCategoryId);
                 })
-                ->when($address['country'] ?? null, fn($q, $country) => $q->where('country_id', fn_get_country_code($address['country'])['id'] ?? 0))
+                ->when($address['country'] ?? null, fn($q, $country) => $q->where('country_id', $address['country'] ?? 0))
                 ->when($address['state'] ?? null, fn($q, $state) => $q->where(function ($qq) use ($state) {
                     $qq->where('state', $state)->orWhereNull('state');
                 }))

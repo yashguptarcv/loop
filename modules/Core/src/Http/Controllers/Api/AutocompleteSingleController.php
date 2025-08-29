@@ -34,9 +34,10 @@ class AutocompleteSingleController extends Controller
 
         // Convert select_columns to array
         $columns = array_map('trim', explode(',', $selectColumns));
+        $search_columns = array_map('trim', explode(',', $searchColumn));
 
         // Basic security check - validate table and column names
-        if (!$this->validateTableAndColumns($table, $columns, $searchColumn)) {
+        if (!$this->validateTableAndColumns($table, $columns, $search_columns)) {
             return response()->json([
                 'error' => 'Invalid table or column name'
             ]);
@@ -49,7 +50,11 @@ class AutocompleteSingleController extends Controller
 
             // Add search condition if query exists
             if (!empty($query)) {
-                $results->where($searchColumn, 'LIKE', '%' . $query . '%');
+                $results->where(function ($q) use ($search_columns, $query) {
+                    foreach ($search_columns as $column) {
+                        $q->orWhere($column, 'LIKE', '%' . $query . '%');
+                    }
+                });
             }
 
             // Limit results for autocomplete
@@ -83,7 +88,7 @@ class AutocompleteSingleController extends Controller
         }
 
         // Merge all columns to check
-        $allColumns = array_merge($columns, [$searchColumn]);
+        $allColumns = array_merge($columns, $searchColumn);
 
         // Enhanced column name validation with support for aliases
         foreach ($allColumns as $column) {

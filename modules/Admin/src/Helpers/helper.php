@@ -1,6 +1,7 @@
 <?php
 use Modules\Acl\Models\Role;
 use Modules\Admin\Models\Country;
+use Modules\Admin\Models\CountryState;
 use Modules\Catalog\Models\Product;
 use Modules\Catalog\Models\Category;
 
@@ -77,9 +78,41 @@ if (!function_exists('fn_get_country_name')) {
     }
 }
 
+
 if (!function_exists('fn_get_countries')) {
     function fn_get_countries(int $id = 0): mixed
     {
         return Country::get()->toArray();
+    }
+}
+
+// states
+
+if (!function_exists('fn_get_state_data')) {
+    function fn_get_state_data(int $id): mixed
+    {
+        return CountryState::where('id', $id)->first();
+    }
+}
+
+if (!function_exists('fn_get_state_code')) {
+    function fn_get_state_code(string $code): mixed
+    {
+        return CountryState::where('code', $code)->first();
+    }
+}
+
+if (!function_exists('fn_get_state_name')) {
+    function fn_get_state_name($id = 0): mixed
+    {
+        return CountryState::where('id', $id)->value('default_name');
+    }
+}
+
+
+if (!function_exists('fn_get_states')) {
+    function fn_get_states(int $id = 0): mixed
+    {
+        return CountryState::get();
     }
 }

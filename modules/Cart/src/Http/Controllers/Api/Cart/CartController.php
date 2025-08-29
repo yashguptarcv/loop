@@ -7,17 +7,21 @@ use Illuminate\Http\Request;
 use Modules\Orders\Models\Order;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+use Modules\Customers\Models\User;
 use Modules\Catalog\Models\Product;
-use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Hash;
 use Modules\Orders\Models\OrderItem;
+use Modules\Customers\Models\Address;
+use function PHPUnit\Framework\callback;
 use Modules\Orders\Services\OrderService;
 use Modules\Discounts\Services\DiscountService;
+
+use Modules\Customers\Http\Requests\StoreOrUpdateCustomerRequest;
 
 class CartController extends Controller
 {
     protected OrderService $orderService;
     protected DiscountService $discountService;
-
 
     public function __construct(OrderService $orderService, DiscountService $discountService)
     {
@@ -32,105 +36,6 @@ class CartController extends Controller
         return view('cart::cart.discount.form', compact('order'));
     }
 
-    public function addDiscount(Request $request)
-    {
-        try {
-            $request->validate([
-                'order_id' => 'required|integer|exists:orders,id',
-                'coupon_code' => 'required|string',
-            ]);
-
-            $order = Order::find($request->order_id);
-
-            if ($this->discountService->validateCoupon($request->coupon_code, null, $order)) {
-
-                $updatedOrder = $this->orderService->updateDiscount($order, $request->coupon_code);
-
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Discount Modified Successfully',
-                    'order' => $updatedOrder
-                ]);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'errors' => 'Invalidate Coupon Code'
-                ]);
-            }
-        } catch (\Illuminate\Validation\ValidationException $e) {
-
-            return response()->json([
-                'success' => false,
-                'errors' => $e->errors()
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'errors' => $e->getMessage()
-            ]);
-        }
-    }
-
-    public function removeDiscount(Request $request)
-    {
-        $request->validate([
-            'order_id' => 'required|exists:orders,id'
-        ]);
-
-        try {
-            $Order = Order::findOrFail($request->order_id);
-
-            $Order->coupon_code  = '';
-            $Order->discount     = 0;
-            $Order->save();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Coupon removed successfully'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error updating quantity: ' . $e->getMessage()
-            ]);
-        }
-    }
-
-    // product
-    public function updateItemQuantity(Request $request)
-    {
-        $request->validate([
-            'item_id' => 'required|exists:order_items,id',
-            'quantity' => 'required|integer|min:1',
-            'order_id' => 'required|exists:orders,id'
-        ]);
-
-        try {
-            $item = OrderItem::findOrFail($request->item_id);
-
-            // Verify the item belongs to the specified order
-            if ($item->order_id != $request->order_id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Item does not belong to this order'
-                ]);
-            }
-
-            $item->quantity = $request->quantity;
-            $item->save();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Quantity updated successfully'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error updating quantity: ' . $e->getMessage()
-            ]);
-        }
-    }
-
     public function viewItems(Request $request, $order_id)
     {
 
@@ -138,155 +43,369 @@ class CartController extends Controller
         return view('cart::cart.items.form', compact('items', 'order_id'));
     }
 
-    public function addItems(Request $request, $order_id)
+    public function viewCustomerForm(Request $request, $order_id)
     {
-        $request->validate([
-            'items' => 'required|array',
-            'items.*' => 'required|exists:products,id', // Validate each item as product ID
-        ]);
+        $order = Order::with('user')->where('id', $order_id)->first();
+        return view('cart::cart.customer.form', compact('order'));
+    }
 
+    public function profileUpdateForm(Request $request, $customer_id)
+    {
+        $customer = User::findOrFail($customer_id);
+
+        return view('cart::cart.profile.form', compact('customer'));
+    }
+
+    public function updateCustomer(StoreOrUpdateCustomerRequest $request, $customer_id)
+    {
         try {
-            DB::beginTransaction();
+            $customer = User::find($customer_id);
+            DB::transaction(function () use ($request, $customer) {
 
-            // Check if order exists
-            if (!$order_id || $order_id === 'new') {
-                // Create new order
-                $order = $this->createNewOrder();
-                $order_id = $order->id;
-            } else {
-                // Get existing order
-                $order = Order::findOrFail($order_id);
-            }
+                $this->saveCustomer($customer, $request);
+                $this->saveAddresses($customer, $request);
+            });
+            $orderData = session()->get('orderData', []);
 
-            $addedItems = [];
-            $errors = [];
+            $getCustomer = User::find($customer_id);
+            $orderData['customer_details'] = [
+                'id'        => $getCustomer->id,
+                "name"      => $getCustomer->name,
+                "email"     => $getCustomer->email,
+                "phone"     => $getCustomer->phone
+            ];
 
-            foreach ($request->items as $productId) {
-                try {
-                    $product = Product::findOrFail($productId);
 
-                    // Check if product already exists in order
-                    $existingItem = OrderItem::where('order_id', $order_id)
-                        ->where('product_id', $productId)
-                        ->first();
+            $customer->load(['defaultBillingAddress', 'defaultShippingAddress']);
 
-                    if ($existingItem) {
-                        // Update quantity if item already exists
-                        $existingItem->quantity += 1; // Increment by 1
-                        $existingItem->save();
-                        $addedItems[] = $existingItem;
-                    } else {
-                        // Create new order item
-                        $item = new OrderItem([
-                            'order_id'      => $order_id,
-                            'product_id'    => $productId,
-                            'quantity'      => 1, // Default quantity
-                            'price'         => $product->price,
-                            'name'          => $product->name,
-                            'sku'           => $product->sku,
-                        ]);
+            $address = [
+                'name'      => $customer->defaultBillingAddress->name ?? $customer->name,
+                "email"     => $customer->defaultBillingAddress->email ?? $customer->email,
+                "phone"     => $customer->defaultBillingAddress->phone ?? $customer->phone,
+                "company"   => $customer->defaultBillingAddress->company ?? '',
+                "city"      => $customer->defaultBillingAddress->city ?? '',
+                "state"     => $customer->defaultBillingAddress->state ?? '',
+                "country"   => $customer->defaultBillingAddress->country ?? '',
+                "postcode"  => $customer->defaultBillingAddress->postcode ?? '',
+                "address_1" => $customer->defaultBillingAddress->address_1 ?? '',
+                "address_2" => $customer->defaultBillingAddress->address_2 ?? '',
+            ];
 
-                        $item->save();
-                        $addedItems[] = $item;
-                    }
-                } catch (\Exception $e) {
-                    $errors[] = [
-                        'product_id' => $productId,
-                        'error' => $e->getMessage()
-                    ];
-                }
-            }
+            // dd($customer->defaultShippingAddress);
+            $orderData['billing_address'] = $address;
+            $orderData['shipping_address'] = $address;
 
-            DB::commit();
+            $orderData = $this->orderService->recalculateSessionOrder($orderData);
+
+            session(['orderData' => $orderData]);
 
             return response()->json([
                 'success' => true,
-                'order_id' => $order_id,
-                'added_items' => count($addedItems),
-                'errors' => $errors,
-                'message' => count($addedItems) . ' items added successfully' . (count($errors) ? ' with ' . count($errors) . ' errors' : '')
+                'message' => 'Customer updated successfully',
+                'callback'  => 'loadOrder()'
             ]);
-        } catch (\Exception $e) {
-            DB::rollBack();
+        } catch (\Illuminate\Validation\ValidationException $e) {
+
             return response()->json([
                 'success' => false,
-                'message' => 'Error adding items: ' . $e->getMessage()
+                'errors' => $e->errors()
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'errors'  => 'Something went wrong. Please try again. ' . $e->getMessage()
             ]);
         }
     }
 
-    private function createNewOrder()
+    /**
+     * Save or update customer.
+     */
+    protected function saveCustomer(User $customer, StoreOrUpdateCustomerRequest $request): void
     {
-        // Get the next order number
-        $orderNumber = $this->generateOrderNumber();
-
-        // Create a new order with default values
-        $order = new Order([
-            'order_number'  => $orderNumber,
-            'user_id'       => '',
-            'status'        => fn_get_setting('general.order.create'),
-            'subtotal'      => 0,
-            'tax_amount'    => 0,
-            'discount'      => 0,
-            'shipping'      => 0,
-            'total'         => 0,
-            'currency'      => fn_get_setting('general.currency'),
-            'payment_status' => 'pending',
-            'payment_method' => 'unpaid',
+        $customer->update([
+            'name'  => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone ?? null,
+            // Only update password if provided
+            'password' => $request->filled('password')
+                ? bcrypt($request->password)
+                : $customer->password,
         ]);
-
-        $order->save();
-
-        return $order;
     }
 
-    public function removeItem(Request $request)
+    /**
+     * Save billing & shipping addresses.
+     */
+    protected function saveAddresses(User $customer, StoreOrUpdateCustomerRequest $request): void
+    {
+        // Billing
+        Address::updateOrCreate(
+            ['user_id' => $customer->id, 'type' => 'billing'],
+            [
+                'address_1'  => $request->billing_address_1,
+                'city'       => $request->billing_city,
+                'state'      => $request->billing_state,
+                'postcode'   => $request->billing_zip,
+                'country'    => $request->billing_country,
+                'phone'      => $customer->phone,
+                'email'      => $customer->email,
+                'is_default' => true,
+            ]
+        );
+
+        // Shipping
+        $shippingData = $request->boolean('sameAsBilling')
+            ? [
+                'address_1' => $request->billing_address_1,
+                'city'      => $request->billing_city,
+                'state'     => $request->billing_state,
+                'postcode'  => $request->billing_zip,
+                'country'   => $request->billing_country,
+            ]
+            : [
+                'address_1' => $request->shipping_address_1,
+                'city'      => $request->shipping_city,
+                'state'     => $request->shipping_state,
+                'postcode'  => $request->shipping_zip,
+                'country'   => $request->shipping_country,
+            ];
+
+        Address::updateOrCreate(
+            ['user_id' => $customer->id, 'type' => 'shipping'],
+            array_merge($shippingData, [
+                'phone'      => $customer->phone,
+                'name'       => $customer->name,
+                'email'      => $customer->email,
+                'is_default' => !$request->boolean('sameAsBilling'),
+            ])
+        );
+    }
+
+
+    public function addCustomerOrUpdate(Request $request)
     {
         $request->validate([
-            'item_id'    => 'required|exists:order_items,id',
-            'product_id' => 'required|exists:products,id',
-            'order_id'   => 'required|exists:orders,id',
+            'customer_id' => 'required|string|exists:users,id',
         ]);
 
         try {
-            $item = OrderItem::findOrFail($request->item_id);
+            $orderData = session()->get('orderData', []);
 
-            // Verify item belongs to the specified order and product
-            if ($item->order_id != $request->order_id || $item->product_id != $request->product_id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invalid item request',
-                ]);
-            }
+            $getCustomer = User::find($request->customer_id);
 
-            $orderId = $item->order_id;
+            $orderData['customer_details'] = [
+                'id'        => $getCustomer->id,
+                "name"      => $getCustomer->name,
+                "email"     => $getCustomer->email,
+                "phone"     => $getCustomer->phone
+            ];
 
-            // Delete the item
-            $item->delete();
+            $address = [
+                'name'      => $getCustomer->defaultBillingAddress()->name ?? $getCustomer->name,
+                "email"     => $getCustomer->defaultBillingAddress()->email ?? $getCustomer->email,
+                "phone"     => $getCustomer->defaultBillingAddress()->phone ?? $getCustomer->phone,
+                "company"   => $getCustomer->defaultBillingAddress()->company ?? '',
+                "city"      => $getCustomer->defaultBillingAddress()->city ?? '',
+                "state"     => $getCustomer->defaultBillingAddress()->state ?? '',
+                "country"   => $getCustomer->defaultBillingAddress()->country ?? '',
+                "postcode"  => $getCustomer->defaultBillingAddress()->postcode ?? '',
+                "address_1" => $getCustomer->defaultBillingAddress()->address_1 ?? '',
+                "address_2" => $getCustomer->defaultBillingAddress()->address_2 ?? '',
+            ];
 
-            // Check if order has any items left
-            $remainingItems = OrderItem::where('order_id', $orderId)->count();
+            $orderData['billing_address'] = $address;
+            $orderData['shipping_address'] = $address;
 
-            if ($remainingItems === 0) {
-                Order::where('id', $orderId)->delete();
+            $orderData = $this->orderService->recalculateSessionOrder($orderData);
+
+            session(['orderData' => $orderData]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Customer updated successfully',
+                'order'   => $orderData,
+                'callback' => 'loadOrder()'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'errors'  => $e->getMessage(),
+            ]);
+        }
+    }
+
+    /**
+     * Add a discount (stored in session only).
+     */
+    public function addDiscount(Request $request)
+    {
+        $request->validate([
+            'coupon_code' => 'required|string',
+        ]);
+
+        try {
+            $orderData = session()->get('orderData', []);
+
+            if ($this->discountService->validateCoupon($request->coupon_code, null, $orderData)) {
+                $orderData['coupon_code'] = $request->coupon_code;
+                $orderData = $this->orderService->recalculateSessionOrder($orderData);
+
+                session(['orderData' => $orderData]);
 
                 return response()->json([
                     'success' => true,
-                    'message' => 'Item removed. Order deleted since no items remain.',
-                    'redirect_url' => route('admin.orders.create'),
+                    'message' => 'Discount applied successfully',
+                    'order'   => $orderData,
+                    'callback'  => 'loadOrder()'
                 ]);
             }
 
             return response()->json([
-                'success' => true,
-                'message' => 'Item removed successfully',
-                'order_deleted' => false,
+                'success' => false,
+                'errors'  => 'Invalid Coupon Code',
             ]);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error removing item: ' . $e->getMessage(),
-            ], 500);
+                'errors'  => $e->getMessage(),
+            ]);
         }
+    }
+
+    /**
+     * Remove discount (from session only).
+     */
+    public function removeDiscount(Request $request)
+    {
+        $orderData = session()->get('orderData', []);
+        $orderData['coupon_code'] = null;
+        $orderData['discount'] = 0;
+
+        $orderData = $this->orderService->recalculateSessionOrder($orderData);
+
+        session(['orderData' => $orderData]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Discount removed successfully',
+            'order'   => $orderData,
+            'callback' => 'loadOrder()'
+        ]);
+    }
+
+    /**
+     * Update item quantity (session only).
+     */
+    public function updateItemQuantity(Request $request)
+    {
+        $request->validate([
+            'item_id'  => 'required|integer',
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $orderData = session()->get('orderData', []);
+
+        if (! empty($orderData['order_items'])) {
+            foreach ($orderData['order_items'] as &$item) {
+                if ($item['id'] == $request->item_id) {
+                    $item['quantity'] = $request->quantity;
+                    $item['line_total'] = $item['price'] * $item['quantity'];
+                }
+            }
+        }
+
+
+        $orderData = $this->orderService->recalculateSessionOrder($orderData);
+        session(['orderData' => $orderData]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Quantity updated successfully',
+            'order'   => $orderData,
+            'callback' => 'loadOrder()'
+        ]);
+    }
+
+    /**
+     * Add new items (session only).
+     */
+    public function addItems(Request $request)
+    {
+        // dd($request->input());
+        $request->validate([
+            'items'   => 'required|array',
+            'items.*' => 'required|exists:products,id',
+        ]);
+
+        $orderData = session()->get('orderData', []);
+        $orderData['order_items'] = $orderData['order_items'] ?? [];
+
+        foreach ($request->items as $productId) {
+            $product = Product::findOrFail($productId);
+
+            // check if already exists in order_items
+            $existingIndex = null;
+            foreach ($orderData['order_items'] as $index => $item) {
+                if ($item['product_id'] == $productId) {
+                    $existingIndex = $index;
+                    break;
+                }
+            }
+
+            if ($existingIndex !== null) {
+                $orderData['order_items'][$existingIndex]['quantity'] += 1;
+                $orderData['order_items'][$existingIndex]['line_total'] =
+                    $orderData['order_items'][$existingIndex]['price'] *
+                    $orderData['order_items'][$existingIndex]['quantity'];
+            } else {
+                $orderData['order_items'][] = [
+                    'id'          => $productId, // temporary ID for session
+                    'product_id'  => $productId,
+                    'product_name' => $product->name,
+                    'sku'         => $product->sku,
+                    'price'       => $product->price,
+                    'quantity'    => 1,
+                    'line_total'  => $product->price,
+                    'tax'         => 0,
+                ];
+            }
+        }
+
+        $orderData = $this->orderService->recalculateSessionOrder($orderData);
+        session(['orderData' => $orderData]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Items added successfully',
+            'order'   => $orderData,
+            'callback' => 'loadOrder()'
+        ]);
+    }
+
+    /**
+     * Remove item (session only).
+     */
+    public function removeItem(Request $request)
+    {
+        $request->validate([
+            'item_id' => 'required|integer',
+        ]);
+
+        $orderData = session()->get('orderData', []);
+        $orderData['order_items'] = array_filter(
+            $orderData['order_items'] ?? [],
+            fn($item) => $item['id'] != $request->item_id
+        );
+
+        $orderData = $this->orderService->recalculateSessionOrder($orderData);
+        session(['orderData' => $orderData]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item removed successfully',
+            'order'   => $orderData,
+            'callback' => 'loadOrder()'
+        ]);
     }
 }

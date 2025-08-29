@@ -11,16 +11,20 @@ class CountryState extends Component
     public $selectedCountry;
     public $selectedState;
     public $prefix;
+    public $country_name;
+    public $state_name;
 
     /**
      * Create a new component instance.
      */
-    public function __construct($selectedCountry = null, $selectedState = null, $prefix = null)
+    public function __construct($selectedCountry = null, $selectedState = null, $prefix = null, $country_name = null, $state_name = null)
     {
         $this->countries = Country::orderBy('name')->get();
         $this->selectedCountry = $selectedCountry;
         $this->selectedState = $selectedState;
         $this->prefix = $prefix;
+        $this->country_name = $country_name;
+        $this->state_name = $state_name;
     }
 
     /**

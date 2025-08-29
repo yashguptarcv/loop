@@ -13,7 +13,7 @@
         search-fields="name"
         list-attributes="id,name"
         :multiple="true"
-        :selected="!empty($items) ? $items->toArray() : []" />
+        :selected="[]" />
     <div class="mt-6">
         <x-button type="submit"
             class="primary"

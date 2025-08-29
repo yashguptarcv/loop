@@ -9,8 +9,10 @@ use Illuminate\Routing\Controller;
 use Modules\Customers\Models\User;
 use Modules\Catalog\Models\Product;
 use Modules\Orders\DataView\OrderGrid;
+use Illuminate\Support\Facades\Session;
 use Modules\Orders\Services\OrderService;
 use Modules\Orders\Http\Requests\OrderRequest;
+use Modules\Payments\Models\PaymentConfiguration;
 
 class OrderController extends Controller
 {
@@ -33,13 +35,27 @@ class OrderController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        $products = Product::active()->get();
-        $customers = User::get();
-        $countries = Country::all();
 
-        return view('orders::orders.form', compact('products', 'customers', 'countries'));
+        $payments  = PaymentConfiguration::where('is_active', true)->get(); 
+
+        if ($request->input('tab')) {
+            $html = view('orders::orders.components.order_detail', array_merge(
+                session('orderData', []),
+                ['mode' => 'create', 'payments'  => $payments]
+            ))->render();
+
+            return response()->json([
+                'success' => true,
+                'order_datas' => $html
+            ]);
+        }        
+        
+        return view('orders::orders.form', array_merge(
+            session('orderData', []),
+            ['mode' => 'create', 'payments'  => $payments]
+        ));
     }
 
     /**
@@ -65,31 +81,41 @@ class OrderController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $orderData = $this->orderService->getOrder($id);
-       
-        if ($request->input('tab')) {
-            $html = view('orders::orders.components.order_detail', $orderData)->render();
-
-             return response()->json([
-                'success' => true,
-                'order_datas' => $html
-            ]);
-        }
-
-        return view('orders::orders.form', $orderData);
+        Session::forget('orderData');
+        $orderData = $this->orderService->getOrder($id);        
+        return view('orders::orders.form', array_merge($orderData, [
+            'mode' => 'view'
+        ]));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request, string $id)
     {
-        $order = Order::with(['items.product', 'user'])->findOrFail($id);
-        $products = Product::active()->get();
-        $customers = User::get();
-        $countries = Country::all();
+        if (!session()->get('orderData', [])) {
+            $order = $this->orderService->getOrder($id);
+            session(['orderData' => $order]);
+        }
 
-        return view('orders::orders.form', compact('order', 'products', 'customers', 'countries'));
+        $payments  = PaymentConfiguration::where('is_active', true)->get(); 
+
+        if ($request->input('tab')) {
+            $html = view('orders::orders.components.order_detail', array_merge(
+                session('orderData', []),
+                ['mode' => 'edit', 'payments'  => $payments]
+            ))->render();
+
+            return response()->json([
+                'success' => true,
+                'order_datas' => $html
+            ]);
+        }        
+        
+        return view('orders::orders.form', array_merge(
+            session('orderData', []),
+            ['mode' => 'edit', 'payments'  => $payments]
+        ));
     }
 
     /**

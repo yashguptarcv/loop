@@ -64,7 +64,8 @@
             "modules/Core/src/Helpers/settinghelpers.php",
             "modules/Discounts/src/Helper/DiscountRuleHelper.php",
             "modules/Admin/src/Helpers/helper.php",
-            "modules/Filemanager/src/Helpers/helper.php"
+            "modules/Filemanager/src/Helpers/helper.php",
+            "modules/Customers/src/Helper/AddressHelper.php"
         ]
     },
     "autoload-dev": {

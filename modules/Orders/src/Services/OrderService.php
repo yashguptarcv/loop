@@ -390,7 +390,7 @@ class OrderService
     protected function calculateDiscounts(array $orderData, $coupon_code = null): float
     {
         if (!empty($orderData['coupon_code'])) {
-            $result = $this->discountService->applyCoupon($orderData['coupon_code'], $orderData['order']);
+            $result = $this->discountService->applyCoupon($orderData['coupon_code'], $orderData);
             return $result['discount_amount'] ?? 0.0;
         }
 
@@ -600,7 +600,7 @@ class OrderService
                 'price'      => $item->price,
                 'quantity'   => $item->quantity,
                 'line_total' => $lineTotal,
-                'tax'        => $itemTaxSum, // ✅ only tax sum for this item
+                'tax'        => $itemTaxSum,
             ];
         }
 
@@ -610,16 +610,23 @@ class OrderService
         $grandTotal = ($subtotal - $discount) + $shipping + $totalTax;
 
         return [
-            'order' => $order,
-            'order_items' => $itemsData,
-            'discount' => $discount,
+            'order_id'      => $order->id,
+            'currency'      => $order->currency,
+            'order_number'  => $order->order_number,
+            'status'        => $order->status,
+            'coupon_code'   => $order->coupon_code,
+            'payment_method'=> $order->payment_method,
+            'payment_status'=> $order->payment_status,
+            'ip_address'    => $order->ip_address,
+            'order_items'   => $itemsData,
+            'discount'      => $discount,
             'order_summary' => [
-                'subtotal' => $subtotal,
-                'discount' => $discount,
-                'shipping' => $shipping,
-                'tax'      => $totalTax,
-                'taxes'    => array_values($groupedTaxes), // breakdown for order summary
-                'total'    => $grandTotal,
+                'subtotal'  => $subtotal,
+                'discount'  => $discount,
+                'shipping'  => $shipping,
+                'tax'       => $totalTax,
+                'taxes'     => array_values($groupedTaxes), // breakdown for order summary
+                'total'     => $grandTotal,
             ],
             'customer_details' => [
                 'id'    => $customer->id,
@@ -631,6 +638,102 @@ class OrderService
             'shipping_address' => $shippingAddress,
             'payment_details' => $order->payments->first(),
             'order_note' => $order->notes,
+            'created_at' => $order->created_at,
+            'updated_at' => $order->updated_at,
+            'subtotal' => $order->subtotal,
+            'shipping' => $order->shipping,
+            'tax' => $totalTax,
+            'total' => $grandTotal,
         ];
+    }
+
+    /**
+     * Recalculate order data stored in session (array-based), with support for multiple taxes per item.
+     *
+     * @param array $orderData
+     * @return array
+     */
+    public function recalculateSessionOrder(array $orderData): array
+    {
+        $items = $orderData['order_items'] ?? [];
+        $subtotal = 0.0;
+        $groupedTaxes = [];
+
+        // Preload products used by items to avoid N+1
+        $productIds = array_unique(array_filter(array_map(fn($i) => $i['product_id'] ?? null, $items)));
+        $products = [];
+        if (!empty($productIds)) {
+            $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
+        }
+
+        foreach ($items as $index => $item) {
+            $price = (float)($item['price'] ?? 0);
+            $quantity = (int)($item['quantity'] ?? 0);
+            $lineTotal = $price * $quantity;
+            $subtotal += $lineTotal;
+
+            // Compute multi-rate taxes for this item
+            $itemTaxSum = 0.0;
+            $product = $products[$item['product_id']] ?? null;
+
+            // Use the same tax lookup as getOrder()
+            $taxRates = $this->taxService->getProductTaxRates($product->tax_id ?? null, $orderData['billing_address'] ?? []);
+
+            foreach ($taxRates as $rate) {
+                // calculateRateTaxFromOrder should compute tax amount for this rate & line total
+                $taxAmount = $this->taxService->calculateRateTaxFromOrder($rate, $lineTotal);
+                $itemTaxSum += $taxAmount;
+
+                $taxName = $rate->name ?? ('tax_' . ($rate->id ?? uniqid()));
+                $rateValue = $rate->rate_value ?? ($rate->rate ?? 0);
+
+                if (!isset($groupedTaxes[$taxName])) {
+                    $groupedTaxes[$taxName] = [
+                        'name'   => $taxName,
+                        'rate'   => $rateValue,
+                        'amount' => 0.0,
+                    ];
+                }
+                $groupedTaxes[$taxName]['amount'] += $taxAmount;
+            }
+
+            // Update item fields in session representation
+            $orderData['order_items'][$index]['line_total'] = $lineTotal;
+            $orderData['order_items'][$index]['tax'] = $itemTaxSum;
+        }
+
+        // Discount (uses existing calculateDiscounts helper)
+        $discount = $this->calculateDiscounts($orderData, $orderData['coupon_code'] ?? null);
+
+        // Shipping (calculateShipping expects 'items' key; pass order_items)
+        $shipping = $this->calculateShipping([
+            'items'            => $orderData['order_items'] ?? [],
+            'shipping_address' => $orderData['shipping_address'] ?? [],
+        ]);
+
+        // Total tax (sum of grouped tax amounts)
+        $totalTax = array_reduce($groupedTaxes, fn($carry, $g) => $carry + ($g['amount'] ?? 0), 0.0);
+
+        // Final total
+        $total = ($subtotal - $discount) + $shipping + $totalTax;
+
+        // Update order-level summary
+        $orderData['order_summary'] = [
+            'subtotal' => $subtotal,
+            'discount' => $discount,
+            'shipping' => $shipping,
+            'tax'      => $totalTax,
+            'taxes'    => array_values($groupedTaxes),
+            'total'    => $total,
+        ];
+
+        // Keep convenient top-level fields in sync
+        $orderData['subtotal'] = $subtotal;
+        $orderData['discount'] = $discount;
+        $orderData['shipping'] = $shipping;
+        $orderData['tax'] = $totalTax;
+        $orderData['total'] = $total;
+
+        return $orderData;
     }
 }

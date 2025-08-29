@@ -47,7 +47,7 @@
             value-field="id"
             search-fields="name"
             list-attributes="id,name"
-            :multiple="true"
+            :multiple="false"
             :selected="!empty($product->tax_id) ? [$product->tax_id] : []"
         />
 

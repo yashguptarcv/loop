@@ -19,7 +19,7 @@ use Modules\Customers\Http\Controllers\Auth\AuthCustomerController;
 Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->group(function () {
     Route::middleware(['admin.auth', 'admin.permission'])->group(function () {
         Route::resource('customers', CustomersController::class);
-            Route::post('/customers/bulk-delete', [CustomersController::class, 'bulkDelete'])->name('customers.bulk-delete');
+        Route::post('/customers/bulk-delete', [CustomersController::class, 'bulkDelete'])->name('customers.bulk-delete');
     });
 });
 

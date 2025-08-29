@@ -4,6 +4,7 @@ namespace Modules\Discounts\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Modules\Discounts\Models\Coupon;
 
 class UpdateDiscountRequest extends FormRequest
 {
@@ -27,13 +28,28 @@ class UpdateDiscountRequest extends FormRequest
             'expires_at' => 'nullable|date|after_or_equal:starts_at',
             'user_groups' => 'nullable|array',
             'user_groups.*' => 'integer|exists:user_groups,id',
-            
+
             'coupons' => 'nullable|array',
             'coupons.*.code' => [
                 'required',
                 'string',
-                Rule::unique('coupons', 'code')->where('discount_id', '!=', $discountId)
+                function ($attribute, $value, $fail) use ($discountId) {
+                    $index = explode('.', $attribute)[1];
+                    $couponId = request()->input("coupons.$index.id");
+
+                    $query = Coupon::where('code', $value)
+                        ->where('discount_id', $discountId);
+
+                    if ($couponId) {
+                        $query->where('id', '!=', $couponId);
+                    }
+
+                    if ($query->exists()) {
+                        $fail("The code '$value' has already been taken.");
+                    }
+                },
             ],
+
             'coupons.*.description' => 'nullable|string',
             'coupons.*.starts_at' => 'nullable|date',
             'coupons.*.expires_at' => 'nullable|date|after_or_equal:coupons.*.starts_at',
@@ -41,10 +57,10 @@ class UpdateDiscountRequest extends FormRequest
             'coupons.*.usage_limit_per_user' => 'nullable|integer|min:1',
             'coupons.*.min_order_amount' => 'nullable|numeric|min:0',
             'coupons.*.is_active' => 'boolean',
-            
+
             'rules' => 'nullable|array',
-            'rules.*.rule_type' => ['required', Rule::in(['product', 'category'])],
-            'rules.*.rule_id' => 'required|integer',
+            'rules.*.rule_type' => ['required', Rule::in(['product', 'category', 'subtotal', 'quantity'])],
+            'rules.*.rule_id' => 'nullable|integer',
             'rules.*.rule_value' => 'nullable|string',
         ];
     }

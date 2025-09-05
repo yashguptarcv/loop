@@ -6,7 +6,7 @@ use Modules\Payments\Models\PaymentMethod;
 
 class PaymentConfiguration extends Model
 {
-    protected $fillable = ['payment_method_id', 'merchant_name', 'is_active', 'config'];
+    protected $fillable = ['payment_method_id', 'merchant_name', 'amount', 'is_active', 'config'];
 
     protected $casts = [
         'config' => 'array',

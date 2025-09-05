@@ -11,7 +11,7 @@
     <form class="form-ajax grid grid-cols-1 gap-6" method="POST" action="{{ isset($lead) ? route('admin.leads.update', $lead->id) : route('admin.leads.store') }}">
         @csrf
         @if(isset($lead))
-        @method('PUT')
+            @method('PUT')
         @endif
 
         <input type="hidden" name="assigned_to" value="{{isset($lead->assigned_to) ? $lead->assigned_to : 0}}">
@@ -36,12 +36,7 @@
 
         <!-- Form Actions -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-2">
-
-            <div class="mt-8 flex justify-start space-x-3">
-
-                <x-button type="submit"  class="primary" label="Save" icon='' name='button'/> 
-            </div>
-
+            <x-button type="submit"  class="primary" label="Save" icon='' name='button'/>            
         </div>
     </form>
 

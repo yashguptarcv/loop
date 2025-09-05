@@ -4,7 +4,24 @@ $currentPage = $pagination['page'] ?? $data['meta']['current_page'];
 $perPage = $pagination['per_page'] ?? $data['meta']['per_page'];
 @endphp
 
-<div class="flex-1 flex flex-col sm:flex-row justify-end gap-4">
+
+<div class="flex flex-col md:flex-row md:items-center mt-6 md:justify-between mb-6 gap-4">
+    <div class="relative max-w-md">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-[var(--color-text-secondary)]" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clip-rule="evenodd"></path>
+            </svg>
+        </div>
+        <input type="text" name="all" id="all" value="{{ request('filters')['all'][0] ?? '' }}"
+            class="block w-full pl-10 pr-3 py-2 border border-blue-100 rounded-md leading-5 bg-[var(--color-white)] 
+               placeholder-[var(--color-text-secondary)] text-[var(--color-text-primary)] sm:text-sm 
+               focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-200" placeholder="Search..."
+            onkeypress="handleKeySearch(event)">
+    </div>
+
+    <div class="flex-1 flex flex-col sm:flex-row justify-end gap-4">
     <!-- Mass Action Button Group (hidden by default) -->
     <div class="flex items-center space-x-2">
         @foreach($data['mass_actions'] as $action)
@@ -137,23 +154,6 @@ $perPage = $pagination['per_page'] ?? $data['meta']['per_page'];
     </button>
 </div>
 
-
-<div class="flex flex-col md:flex-row md:items-center mt-6 md:justify-between mb-6 gap-4">
-    <div class="relative max-w-md">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg class="h-5 w-5 text-[var(--color-text-secondary)]" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clip-rule="evenodd"></path>
-            </svg>
-        </div>
-        <input type="text" name="all" id="all" value="{{ request('filters')['all'][0] ?? '' }}"
-            class="block w-full pl-10 pr-3 py-2 border border-blue-100 rounded-md leading-5 bg-[var(--color-white)] 
-               placeholder-[var(--color-text-secondary)] text-[var(--color-text-primary)] sm:text-sm 
-               focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition-all duration-200" placeholder="Search..."
-            onkeypress="handleKeySearch(event)">
-    </div>
-
     
 </div>
 
@@ -235,6 +235,7 @@ $perPage = $pagination['per_page'] ?? $data['meta']['per_page'];
                 const form = document.createElement('form');
                 form.method = 'POST';
                 form.action = url;
+                form.class = 'form-ajax';
 
                 // Add CSRF token if using Laravel
                 const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;

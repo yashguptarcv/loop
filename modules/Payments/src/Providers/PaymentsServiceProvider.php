@@ -3,8 +3,9 @@
 namespace Modules\Payments\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Modules\Payments\Processors\StripeProcessor;
+use Modules\Payments\Processors\CodProcessor;
 use Modules\Payments\Services\PaymentsProcessorRegistry;
+use Modules\Payments\Providers\PaymentsEventServiceProvider;
 
 class PaymentsServiceProvider extends ServiceProvider
 {
@@ -23,14 +24,24 @@ class PaymentsServiceProvider extends ServiceProvider
 
         $this->app->register(PaymentsEventServiceProvider::class);
 
-        $this->app->singleton(PaymentsProcessorRegistry::class, function () {
+        // Register the PaymentsProcessorRegistry singleton
+        $this->app->singleton(PaymentsProcessorRegistry::class, function ($app) {
+            
             $registry = new PaymentsProcessorRegistry();
 
-            // Example: Register built-in processors
-            $registry->register('stripe', new StripeProcessor(config('services.stripe')));
-
+            $this->registerProcessors($registry);
+            
             return $registry;
         });
+    }
+
+     /**
+     * Register the available payment processors.
+     */
+    protected function registerProcessors(PaymentsProcessorRegistry $registry): void
+    {
+        $CodProcessor = new CodProcessor();
+        $registry->register('cod', $CodProcessor);
     }
 
     /**
@@ -45,6 +56,8 @@ class PaymentsServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerMigrations();
         $this->registerComponents();
+        $registry = app(PaymentsProcessorRegistry::class);
+
     }
 
     /**

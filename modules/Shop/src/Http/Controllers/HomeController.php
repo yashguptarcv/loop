@@ -25,7 +25,7 @@ class HomeController extends Controller
             } else {
                 $page = Page::active()->where('slug', $slug)->firstOrFail();
             }
-        } catch(Exception $e) {
+        } catch (Exception $e) {
             abort(404, 'Home page not found.');
         }
 
@@ -41,10 +41,10 @@ class HomeController extends Controller
         return view($viewName, [
             'page' => $page,
             'meta' => [
-                'title' => $page->meta_title ?? $page->title ?? config('app.name'),
-                'description' => $page->meta_description ?? '',
-                'keywords' => $page->meta_keywords ?? '',
-                'og_image' => $page->meta_og_image ?? asset('images/default-og.jpg'),
+                'title'         => $page->meta_title ?? $page->title ?? fn_get_setting('general.company.name'),
+                'description'   => $page->meta_description ?? '',
+                'keywords'      => $page->meta_keywords ?? '',
+                'og_image'      => $page->meta_og_image ?? fn_get_default_image()['url'],
             ]
         ]);
     }

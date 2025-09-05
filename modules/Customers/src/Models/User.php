@@ -53,6 +53,11 @@ class User extends Authenticatable implements MustVerifyEmail
             ->orderBy('created_at', 'desc');
     }
 
+    public function getOrderTotal()
+    {
+        return $this->orders()->sum('total'); // assuming your orders table has a `total` column
+    }
+
     public function transactions()
     {
         return $this->hasManyThrough(

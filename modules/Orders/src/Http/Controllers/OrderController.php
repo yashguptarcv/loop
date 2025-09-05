@@ -28,6 +28,7 @@ class OrderController extends Controller
      */
     public function index()
     {
+        Session::forget('cart');
         $lists = fn_datagrid(OrderGrid::class)->process();
         return view('orders::orders.index', compact('lists'));
     }
@@ -38,11 +39,11 @@ class OrderController extends Controller
     public function create(Request $request)
     {
 
-        $payments  = PaymentConfiguration::where('is_active', true)->get(); 
+        $payments  = PaymentConfiguration::where('is_active', true)->get();
 
         if ($request->input('tab')) {
             $html = view('orders::orders.components.order_detail', array_merge(
-                session('orderData', []),
+                session('cart', []),
                 ['mode' => 'create', 'payments'  => $payments]
             ))->render();
 
@@ -50,30 +51,12 @@ class OrderController extends Controller
                 'success' => true,
                 'order_datas' => $html
             ]);
-        }        
-        
+        }
+
         return view('orders::orders.form', array_merge(
-            session('orderData', []),
+            session('cart', []),
             ['mode' => 'create', 'payments'  => $payments]
         ));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(OrderRequest $request)
-    {
-        try {
-            $order = $this->orderService->createOrder($request->validated());
-
-            return redirect()
-                ->route('admin.orders.show', $order->id)
-                ->with('success', 'Order created successfully');
-        } catch (\Exception $e) {
-            return back()
-                ->withInput()
-                ->with('error', 'Failed to create order: ' . $e->getMessage());
-        }
     }
 
     /**
@@ -81,8 +64,9 @@ class OrderController extends Controller
      */
     public function show(Request $request, $id)
     {
-        Session::forget('orderData');
-        $orderData = $this->orderService->getOrder($id);        
+        Session::forget('cart');
+        $orderData = $this->orderService->getOrder($id);
+
         return view('orders::orders.form', array_merge($orderData, [
             'mode' => 'view'
         ]));
@@ -93,16 +77,16 @@ class OrderController extends Controller
      */
     public function edit(Request $request, string $id)
     {
-        if (!session()->get('orderData', [])) {
+        if (!session()->get('cart', [])) {
             $order = $this->orderService->getOrder($id);
-            session(['orderData' => $order]);
+            session(['cart' => $order]);
         }
 
-        $payments  = PaymentConfiguration::where('is_active', true)->get(); 
+        $payments  = PaymentConfiguration::where('is_active', true)->get();
 
         if ($request->input('tab')) {
             $html = view('orders::orders.components.order_detail', array_merge(
-                session('orderData', []),
+                session('cart', []),
                 ['mode' => 'edit', 'payments'  => $payments]
             ))->render();
 
@@ -110,34 +94,97 @@ class OrderController extends Controller
                 'success' => true,
                 'order_datas' => $html
             ]);
-        }        
-        
+        }
+
         return view('orders::orders.form', array_merge(
-            session('orderData', []),
+            session('cart', []),
             ['mode' => 'edit', 'payments'  => $payments]
         ));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Store a newly created resource in storage.
      */
-    public function update(OrderRequest $request, string $id)
+    public function store(Request $request)
+    {
+        $sessionOrder = session('cart', []);
+
+        if (empty($sessionOrder)) {
+            return redirect()->back()->with('success', 'No session order data found');
+        }
+
+        $sessionOrder = $this->orderService->recalculateSessionOrder($sessionOrder);
+        $createData = [
+            'user_id'         => $sessionOrder['customer_details']['id'] ?? null,
+            'items'           => $sessionOrder['order_items'] ?? [],
+            'currency'        => $sessionOrder['currency'] ?? 'USD',
+            'status'          => $sessionOrder['status'] ?? fn_get_setting('general.order.create'),
+            'coupon_code'     => $sessionOrder['coupon_code'] ?? null,
+            'billing_address' => $sessionOrder['billing_address'] ?? [],
+            'shipping_address' => $sessionOrder['shipping_address'] ?? [],
+            'notes'           => $sessionOrder['order_note'] ?? null,
+            'payment_method'  => $sessionOrder['payment_method'] ?? null,
+            'subtotal'        => $sessionOrder['subtotal'],
+            'total'           => $sessionOrder['total'],
+            'requires_payment' => false, // or false if you're only storing order
+        ];
+
+        try {
+            $this->orderService->createOrder($createData);
+            return redirect()->back()->with('success', 'Order created successfully');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()->with('success', 'Failed to create order' . $e->getMessage());
+        } catch (\Throwable $e) {
+
+            return redirect()->back()->with('success', 'Failed to create order' . $e->getMessage());
+        } catch (\InvalidArgumentException $e) {
+
+            return redirect()->back()->with('success', 'Failed to create order' . $e->getMessage());
+        } catch (\Exception $e) {
+            return redirect()->back()->with('success', 'Failed to create order' . $e->getMessage());
+        }
+    }
+
+    // /**
+    //  * Update the specified resource in storage.
+    //  */
+    public function update(Request $request, string $id)
     {
         try {
-            $order = Order::findOrFail($id);
-            $updatedOrder = $this->orderService->updateOrder(
-                $order,
-                $request->validated(),
-                true // Update items
-            );
+            $sessionData = session('cart', []); // or however you store it
 
-            return redirect()
-                ->route('admin.orders.show', $updatedOrder->id)
-                ->with('success', 'Order updated successfully');
+            if (empty($sessionData['order_id'])) {
+                return redirect()->route('admin.orders.index')->with('error', 'Missing order ID');
+            }
+
+            $order = Order::findOrFail($sessionData['order_id']);
+
+            $updateData = [
+                'order_id'          => $sessionData['order_id'],
+                'status'            => $sessionData['status'],
+                'total'             => $sessionData['total'],
+                'subtotal'          => $sessionData['subtotal'],
+                'billing_address'   => $sessionData['billing_address'],
+                'shipping_address'  => $sessionData['shipping_address'],
+                'notes'             => $sessionData['order_note'],
+                'items'             => $sessionData['order_items'],
+                'coupon_code'       => $sessionData['coupon_code'],
+                'payment_method'    => $sessionData['payment_method'],
+                'user_id'           => $sessionData['customer_details']['id']
+            ];
+
+            $this->orderService->updateOrder($order, $updateData, true);
+            return redirect()->route('admin.orders.show', $sessionData['order_id'])->with('success', 'Order updated successfully');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->route('admin.orders.show', $sessionData['order_id'])->with('success', 'Unable to update order: ' . $e->getMessage());
+        } catch (\Throwable $e) {
+
+            return redirect()->route('admin.orders.show', $sessionData['order_id'])->with('success', 'Unable to update order: ' . $e->getMessage());
+        } catch (\InvalidArgumentException $e) {
+
+            return redirect()->route('admin.orders.show', $sessionData['order_id'])->with('success', 'Unable to update order: ' . $e->getMessage());
         } catch (\Exception $e) {
-            return back()
-                ->withInput()
-                ->with('error', 'Failed to update order: ' . $e->getMessage());
+            return redirect()->route('admin.orders.show', $sessionData['order_id'])->with('success', 'Unable to update order: ' . $e->getMessage());
         }
     }
 
@@ -148,7 +195,9 @@ class OrderController extends Controller
     {
         try {
             $order = Order::findOrFail($id);
-            $this->orderService->cancelOrder($order, 'Order cancelled by admin');
+            if (!empty($order)) {
+                Order::destroy($id);
+            }
 
             return redirect()
                 ->route('admin.orders.index')
@@ -159,22 +208,49 @@ class OrderController extends Controller
         }
     }
 
-    /**
-     * Update order status
-     */
-    public function updateStatus(Request $request, string $id)
+    public function bulkDelete(Request $request)
     {
         $request->validate([
-            'status' => 'required|string',
-            'reason' => 'nullable|string'
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer|exists:orders,id',
         ]);
 
         try {
-            $order = Order::findOrFail($id);
-            $updatedOrder = $this->orderService->updateOrderStatus(
-                $order,
-                $request->input('status')
-            );
+            $deletedCount = Order::whereIn('id', $request->ids)->delete();
+            return redirect()->route('admin.orders.index')->with('success', "Deleted {$deletedCount} orders successfully");
+        } catch (\Throwable $e) {
+            return redirect()->route('admin.orders.index')->with('error', 'Something went wrong. Please try again.');
+        }
+    }
+
+    /**
+     * Update order status
+     */
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'action' => 'required|string|exists:statuses,id',
+            'ids' => 'required|array|min:1',
+            'ids.*'    => 'nullable|string|exists:orders,id'
+        ]);
+
+        try {
+            $statusCode = fn_get_order_status_code($request->input('action'));
+            // Process multiple orders if ids are passed
+            $orderIds = $request->input('ids', []);  // Default to empty array if no ids passed
+
+            // If no order IDs are provided, we can choose to handle this differently
+            if (empty($orderIds)) {
+                return back()->with('error', 'No orders selected.');
+            }
+
+            foreach ($orderIds as $orderId) {
+                // Find order by ID
+                $order = Order::findOrFail($orderId);
+
+                // Update the status using the service
+                $this->orderService->updateOrderStatus($order, $statusCode['status_code']);
+            }
 
             return back()
                 ->with('success', 'Order status updated successfully');
@@ -182,21 +258,5 @@ class OrderController extends Controller
             return back()
                 ->with('error', 'Failed to update order status: ' . $e->getMessage());
         }
-    }
-
-    /**
-     * Search products for order
-     */
-    public function searchProducts(Request $request)
-    {
-        $search = $request->input('search');
-
-        $products = Product::active()
-            ->where('name', 'like', "%{$search}%")
-            ->orWhere('sku', 'like', "%{$search}%")
-            ->limit(10)
-            ->get(['id', 'name', 'sku', 'price']);
-
-        return response()->json($products);
     }
 }

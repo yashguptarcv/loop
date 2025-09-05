@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->boolean('is_active')->default(true);
             $table->string('template')->nullable()->comment('Processor configuration');
+            $table->string('processor')->nullable()->comment('Processor configuration');
             $table->timestamps();
         });
         

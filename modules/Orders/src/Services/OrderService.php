@@ -2,6 +2,7 @@
 
 namespace Modules\Orders\Services;
 
+use Exception;
 use Illuminate\Support\Str;
 use Modules\Orders\Models\Order;
 use Illuminate\Support\Facades\DB;
@@ -10,7 +11,9 @@ use Modules\Catalog\Models\Product;
 use Modules\Orders\Models\OrderItem;
 use Modules\Tax\Services\TaxService;
 use Modules\Orders\Enums\OrderStatus;
+use Modules\Payments\Models\Payments;
 use Modules\Inventory\Models\Inventory;
+use Modules\Orders\Enums\TransactionStatus;
 use Illuminate\Support\Facades\Notification;
 use Modules\Payments\Services\PaymentService;
 use Modules\Notifications\Events\OrderCreated;
@@ -65,6 +68,7 @@ class OrderService
             }
 
             // Record initial transaction
+            $this->recordInitialTransaction($order);
 
             // Trigger order created event
             $this->notificationService->trigger(
@@ -115,7 +119,7 @@ class OrderService
                 order: $order,
                 type: 'order_cancelled',
                 amount: $order->total,
-                status: 'completed',
+                status: 'cancelled',
                 notes: $reason ?? 'Order cancelled by customer'
             );
 
@@ -191,11 +195,15 @@ class OrderService
             $previousTotal = $order->total;
 
             // Apply base updates
-            $order->fill(array_intersect_key($updateData, array_flip([
+            $order->update(array_intersect_key($updateData, array_flip([
                 'status',
                 'billing_address',
                 'shipping_address',
-                'notes'
+                'notes',
+                'coupon_code',
+                'payment_method',
+                'payment_status',
+                'user_id'
             ])));
 
             // Update items if needed
@@ -204,7 +212,7 @@ class OrderService
             }
 
             // Always recalc totals after update
-            $order = $this->recalculateOrder($order, $updateItems ? $updateData['items'] : null);
+            $order = $this->recalculateOrder($order, $updateData, $updateItems ? $updateData['items'] : null);
 
             // Fire status change event
             if (isset($updateData['status']) && $previousStatus !== $updateData['status']) {
@@ -212,14 +220,13 @@ class OrderService
             }
 
             // Record transaction if total changed
-            if ($previousTotal != $order->total) {
-                $this->transactionService->record(
-                    order: $order,
-                    type: 'order_updated',
-                    amount: $order->total,
-                    status: 'completed',
-                    notes: 'Order updated with recalculated totals'
-                );
+            if ($previousTotal != $order['total']) {
+                // Update existing transaction
+                $this->transactionService->updateTransaction($order->pendingTransaction, [
+                    'amount' => $order->total,
+                    'notes'  => 'Order total updated with recalculated totals',
+                    'status' => TransactionStatus::PENDING,
+                ]);
             }
 
             return $order->fresh()->load('items', 'user');
@@ -246,6 +253,7 @@ class OrderService
         $this->addItems($order, $itemsToAdd->all());
 
         // Items to update
+        // Wrong code
         $itemsToUpdate = $newItems->intersectByKeys($currentItems)
             ->filter(function ($newItem, $productId) use ($currentItems) {
                 $currentItem = $currentItems[$productId];
@@ -306,6 +314,7 @@ class OrderService
             $item->update([
                 'quantity' => $itemData['quantity'],
                 'price' => $itemData['price'],
+                'options' => $itemData['options'] ?? [],
             ]);
 
             // Adjust inventory if needed
@@ -391,7 +400,12 @@ class OrderService
     {
         if (!empty($orderData['coupon_code'])) {
             $result = $this->discountService->applyCoupon($orderData['coupon_code'], $orderData);
-            return $result['discount_amount'] ?? 0.0;
+            if (!empty($result)) {
+                return $result['discount_amount'] ?? 0.0;
+            } else {
+                $orderData['discount']   = 0;
+                $orderData['coupon_code']   = '';
+            }
         }
 
         return 0.0;
@@ -459,95 +473,50 @@ class OrderService
         ]);
     }
 
-    /**
-     * Update the discount for an order
-     */
-    public function updateDiscount(Order $order, String $discount): Order
+
+    public function recalculateOrder(Order $order, $updateOrder, array $items = null): Order
     {
-        $order->coupon_code = $discount;
-        $order->save();
-
-        return $this->recalculateOrder($order);
-    }
-
-    /**
-     * Update the tax for an order
-     */
-    public function updateTax(Order $order, float $tax): Order
-    {
-        $order->tax = $tax;
-        $order->save();
-
-        return $this->recalculateOrder($order);
-    }
-
-    /**
-     * Update the shipping cost for an order
-     */
-    public function updateShipping(Order $order, float $shipping): Order
-    {
-        $order->shipping = $shipping;
-        $order->save();
-
-        return $this->recalculateOrder($order);
-    }
-
-    /**
-     * Update payment details or status for an order
-     */
-    public function updatePayment(Order $order, array $paymentData): Order
-    {
-        $order->payment_method = $paymentData;
-        $order->save();
-
-        return $this->recalculateOrder($order);
-    }
-
-    /**
-     * Update notes for an order
-     */
-    public function updateNotes(Order $order, string $notes): Order
-    {
-        $order->notes = $notes;
-        $order->save();
-
-        return $this->recalculateOrder($order);
-    }
-
-    public function recalculateOrder(Order $order, array $items = null): Order
-    {
-
-        $items = $items ?? $order->items->toArray();
+        $items = $items ?? $updateOrder['items'];
         $user = $order->user;
 
         $subtotal = $this->calculateSubtotal($items);
 
-        $discounts = $this->calculateDiscounts([
-            'order' => $order,
-            'coupon_code' => $order->coupon_code,
-            'items' => $items,
-        ]);
+        $discounts = $this->calculateDiscounts($updateOrder, $order->coupon_code);
 
         $shipping = $this->calculateShipping([
             'items' => $items,
-            'shipping_address' => $order->shipping_address,
+            'shipping_address' => $order['shipping_address'],
         ]);
 
         $tax = $this->calculateTax([
             'items' => $items,
-            'shipping_address' => $order->shipping_address,
-            'billing_address' => $order->billing_address,
+            'shipping_address' => $order['shipping_address'],
+            'billing_address' => $order['billing_address'],
         ], $user);
 
         $order->update([
-            'subtotal' => $subtotal,
-            'discount' => $discounts,
-            'shipping' => $shipping,
-            'tax' => $tax,
+            'subtotal'          => $subtotal,
+            'discount'          => $discounts,
+            'shipping'          => $shipping,
+            'tax'               => $tax,
             'total' => $subtotal - $discounts + $tax + $shipping,
         ]);
 
         return $order->fresh()->load('items', 'user');
+    }
+
+    public function getPaymentData($orderData)
+    {
+        try {
+            if (!empty($orderData['order_id'])) {
+                return [];
+            }
+            $payment = Payments::with('method')->where('order_id', $orderData['order_id'])->get();
+
+            return $payment->toArray();
+        } catch (Exception $e) {
+            return [];
+        }
     }
 
     public function getOrder(int $orderId): array
@@ -559,6 +528,7 @@ class OrderService
         ])->findOrFail($orderId);
 
         $customer = $order->user;
+
         $shippingAddress = $order->shipping_address ?? [];
         $billingAddress = $order->billing_address ?? [];
 
@@ -574,7 +544,7 @@ class OrderService
             $subtotal += $lineTotal;
 
             // Get tax rates for this product
-            $taxRates = $this->taxService->getProductTaxRates($product->tax_id ?? null, $shippingAddress);
+            $taxRates = $this->taxService->getProductTaxRates($product->tax_id ?? null, $billingAddress);
 
             $itemTaxSum = 0;
             foreach ($taxRates as $rate) {
@@ -593,14 +563,15 @@ class OrderService
             }
 
             $itemsData[] = [
-                'id'         => $item->id,
-                'product_id' => $product->id,
-                'product_name' => $product->name,
-                'sku'        => $product->sku ?? null,
-                'price'      => $item->price,
-                'quantity'   => $item->quantity,
-                'line_total' => $lineTotal,
-                'tax'        => $itemTaxSum,
+                'id'            => $item->id,
+                'product_id'    => $product->id,
+                'product_name'  => $product->name,
+                'sku'           => $product->sku ?? null,
+                'price'         => $item->price,
+                'quantity'      => $item->quantity,
+                'line_total'    => $lineTotal,
+                'tax'           => $itemTaxSum,
+                'options'       => $item->options ?? []
             ];
         }
 
@@ -615,8 +586,8 @@ class OrderService
             'order_number'  => $order->order_number,
             'status'        => $order->status,
             'coupon_code'   => $order->coupon_code,
-            'payment_method'=> $order->payment_method,
-            'payment_status'=> $order->payment_status,
+            'payment_method' => $order->payment_method,
+            'payment_status' => $order->payment_status,
             'ip_address'    => $order->ip_address,
             'order_items'   => $itemsData,
             'discount'      => $discount,
@@ -666,7 +637,7 @@ class OrderService
             $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
         }
 
-        foreach ($items as $index => $item) {
+        foreach ($items as $index => &$item) {
             $price = (float)($item['price'] ?? 0);
             $quantity = (int)($item['quantity'] ?? 0);
             $lineTotal = $price * $quantity;
@@ -711,11 +682,34 @@ class OrderService
             'shipping_address' => $orderData['shipping_address'] ?? [],
         ]);
 
+        $paymentDetail = $this->getPaymentData($orderData);
+
         // Total tax (sum of grouped tax amounts)
         $totalTax = array_reduce($groupedTaxes, fn($carry, $g) => $carry + ($g['amount'] ?? 0), 0.0);
 
         // Final total
         $total = ($subtotal - $discount) + $shipping + $totalTax;
+
+        $orderData['order_id']      = $orderData['order_id'] ?? $this->generateOrderNumber();
+        $orderData['currency']      = $orderData['currency'] ?? fn_get_setting('general.currency');
+        $orderData['order_number']  = $orderData['order_number'] ?? $this->generateOrderNumber();
+        $orderData['status']        = $orderData['status'] ?? fn_get_setting('general.order.create');
+        $orderData['coupon_code']   = $orderData['coupon_code'] ?? '';
+        $orderData['payment_method'] = $orderData['payment_method'] ?? '';
+        $orderData['payment_status'] = $orderData['payment_status'] ?? '';
+        $orderData['ip_address']    = $orderData['ip_address'] ?? '';
+        $orderData['order_items']   = $orderData['order_items'] ?? [];
+        $orderData['discount']      = $discount ?? 0;
+        $orderData['customer_details'] = [
+            'id'    => $orderData['customer_details']['id'] ?? '',
+            'name'  => $orderData['customer_details']['name'] ?? '',
+            'email' => $orderData['customer_details']['email'] ?? '',
+            'phone' => $orderData['customer_details']['phone'] ?? '',
+        ];
+        $orderData['billing_address']   = $orderData['billing_address'] ?? [];
+        $orderData['shipping_address']  = $orderData['shipping_address'] ?? [];
+        $orderData['payment_details']   = $paymentDetail;
+        $orderData['order_note'] = $orderData['notes'] ?? '';
 
         // Update order-level summary
         $orderData['order_summary'] = [

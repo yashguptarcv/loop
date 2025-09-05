@@ -28,6 +28,9 @@ return [
             'Import' => [
                 'admin.catalog.categories.import_form' => 'View Import Form',
                 'admin.catalog.categories.import' => 'Import Categories',
+            ],
+            'Status' => [
+                'admin.catalog.categories.toggle-status' => 'Toggle Category Status',
             ]
         ],
         'Products' => [
@@ -45,6 +48,11 @@ return [
             ],
             'Delete' => [
                 'admin.catalog.products.destroy' => 'Delete Product',
+                'admin.catalog.products.bulk-delete' => 'Bulk Delete Products',
+            ],
+            'Status' => [
+                'admin.catalog.products.toggle-status' => 'Toggle Product Status',
+                'admin.catalog.products.toggle-featured' => 'Toggle Featured Product',
             ]
         ]
     ],
@@ -52,19 +60,33 @@ return [
     'Customers' => [
         'View' => [
             'admin.customers.index' => 'Access Customers',
+            'admin.customers.show' => 'View Customer Details',
         ],
-
-        'Customer Overview' => [
-            'admin.customers.show'  => 'Customer Overview',
+        'Create' => [
+            'admin.customers.create' => 'Create Customer Form',
+            'admin.customers.store' => 'Save Customer',
+        ],
+        'Update' => [
+            'admin.customers.edit' => 'Edit Customer Form',
+            'admin.customers.update' => 'Update Customer',
+        ],
+        'Delete' => [
+            'admin.customers.destroy' => 'Delete Customer',
+            'admin.customers.bulk-delete' => 'Bulk Delete Customers',
+        ],
+        'Overview' => [
+            'admin.customers.application' => 'View Customer Applications',
+            'admin.customers.application.delete' => 'Delete Customer Application',
+            'admin.customers.lead' => 'View Customer Leads',
+            'admin.customers.orders' => 'View Customer Orders',
+            'admin.customers.transactions' => 'View Customer Transactions',
         ]
     ],
 
-    'Coupons' => [
+    'Discounts' => [
         'View' => [
-            'admin.discount.index' => 'Access Coupons',
-            'admin.discount.index' => 'View Discount',
+            'admin.discount.index' => 'Access Discounts',
             'admin.discount.show' => 'View Discount Details',
-            'admin.discount.list' => 'View Discount List',
         ],
         'Create' => [
             'admin.discount.create' => 'Create Discount Form',
@@ -77,32 +99,76 @@ return [
         'Delete' => [
             'admin.discount.destroy' => 'Delete Discount',
         ],
+        'Status' => [
+            'admin.discount.toggle-status' => 'Toggle Discount Status',
+        ],
+        'Validation' => [
+            'admin.apply-coupon' => 'Apply Coupon',
+            'admin.discount.validate-coupon' => 'Validate Coupon',
+        ]
     ],
 
-    'Tax Managment' => [
-        'View' => [
-            'admin.tax.index' => 'Access Tax',
-            'admin.tax.show' => 'View Tax Details',
-            'admin.tax.list' => 'View Tax List',
+    'Tax Management' => [
+        'Tax' => [
+            'View' => [
+                'admin.tax.index' => 'Access Tax',
+                'admin.tax.show' => 'View Tax Details',
+            ],
+            'Create' => [
+                'admin.tax.create' => 'Create Tax Form',
+                'admin.tax.store' => 'Save Tax'
+            ],
+            'Update' => [
+                'admin.tax.edit' => 'Edit Tax Form',
+                'admin.tax.update' => 'Update Tax',
+            ],
+            'Delete' => [
+                'admin.tax.destroy' => 'Delete Tax',
+            ],
+            'Status' => [
+                'admin.tax.toggle-status' => 'Toggle Tax Status',
+            ]
         ],
-        'Create' => [
-            'admin.tax.create' => 'Create Meeting Form',
-            'admin.tax.store' => 'Save Meeting'
+        'Tax Categories' => [
+            'View' => [
+                'admin.tax-category.index' => 'Access Tax Categories',
+                'admin.tax-category.show' => 'View Tax Category Details',
+            ],
+            'Create' => [
+                'admin.tax-category.create' => 'Create Tax Category Form',
+                'admin.tax-category.store' => 'Save Tax Category'
+            ],
+            'Update' => [
+                'admin.tax-category.edit' => 'Edit Tax Category Form',
+                'admin.tax-category.update' => 'Update Tax Category',
+            ],
+            'Delete' => [
+                'admin.tax-category.destroy' => 'Delete Tax Category',
+            ]
         ],
-        'Update' => [
-            'admin.tax.edit' => 'Edit Tax Form',
-            'admin.tax.update' => 'Update Tax',
-        ],
-        'Delete' => [
-            'admin.tax.destroy' => 'Delete Tax',
-        ],
+        'Tax Rules' => [
+            'View' => [
+                'admin.tax-rules.index' => 'Access Tax Rules',
+                'admin.tax-rules.show' => 'View Tax Rule Details',
+            ],
+            'Create' => [
+                'admin.tax-rules.create' => 'Create Tax Rule Form',
+                'admin.tax-rules.store' => 'Save Tax Rule'
+            ],
+            'Update' => [
+                'admin.tax-rules.edit' => 'Edit Tax Rule Form',
+                'admin.tax-rules.update' => 'Update Tax Rule',
+            ],
+            'Delete' => [
+                'admin.tax-rules.destroy' => 'Delete Tax Rule',
+            ]
+        ]
     ],
 
-    'Notificaton' => [
+    'Notifications' => [
         'View' => [
-            'admin.notification.index'  => 'Access Notification',
-            'admin.notification.show'   => 'View Notification Details',
-            'admin.notification.list'   => 'View Notification List',
+            'admin.notification.index' => 'Access Notifications',
+            'admin.notification.show' => 'View Notification Details',
         ],
         'Create' => [
             'admin.notification.create' => 'Create Notification Form',
@@ -115,18 +181,33 @@ return [
         'Delete' => [
             'admin.notification.destroy' => 'Delete Notification',
         ],
+        'Logs' => [
+            'View' => [
+                'admin.logs.index' => 'Access Logs',
+                'admin.logs.show' => 'View Log Details',
+            ],
+            'Create' => [
+                'admin.logs.create' => 'Create Log Form',
+                'admin.logs.store' => 'Save Log'
+            ],
+            'Update' => [
+                'admin.logs.edit' => 'Edit Log Form',
+                'admin.logs.update' => 'Update Log',
+            ],
+            'Delete' => [
+                'admin.logs.destroy' => 'Delete Log',
+            ]
+        ]
     ],
 
     'Meetings' => [
         'View' => [
             'admin.meetings.index' => 'View Meetings',
             'admin.meetings.show' => 'View Meeting Details',
-            'admin.meetings.list' => 'View Meetings List',
         ],
         'Create' => [
             'admin.meetings.create' => 'Create Meeting Form',
             'admin.meetings.store' => 'Save Meeting',
-            'admin.meetings.new-meeting' => 'Create New Meeting',
         ],
         'Update' => [
             'admin.meetings.edit' => 'Edit Meeting Form',
@@ -141,6 +222,8 @@ return [
             'admin.meetings.sync' => 'Sync with Google',
             'admin.meetings.share-calander' => 'Share Calendar',
             'admin.meetings.my-meeting' => 'Fetch Meetings',
+            'admin.meetings.list' => 'View Meetings List',
+            'admin.meetings.new-meeting' => 'Create New Meeting',
         ]
     ],
 
@@ -165,34 +248,187 @@ return [
         ],
         'Activities' => [
             'admin.leads.activities.store' => 'Add Lead Activity',
+            'admin.leads.getActivitityTabs' => 'Get Activity Tabs',
         ],
         'Attachments' => [
-            'admin.leads.attachments.store' => 'Add Attachment',
             'admin.leads.attachments.download' => 'Download Attachment',
             'admin.leads.attachments.destroy' => 'Delete Attachment',
         ],
         'Notes' => [
             'admin.leads.notes.store' => 'Add Note',
         ],
-        'Application' => [
+        
+        'Statuses' => [
             'View' => [
-                'admin.application.index' => 'View Applications',
-                'admin.application.show' => 'View Application Details',
+                'admin.statuses.leads.index' => 'View Lead Statuses',
+                'admin.statuses.leads.show' => 'View Lead Status Details',
             ],
             'Create' => [
-                'admin.application.create' => 'Create Application Form',
-                'admin.application.store' => 'Save Application',
+                'admin.statuses.leads.create' => 'Create Lead Status Form',
+                'admin.statuses.leads.store' => 'Save Lead Status',
             ],
             'Update' => [
-                'admin.application.edit' => 'Edit Application Form',
-                'admin.application.update' => 'Update Application',
+                'admin.statuses.leads.edit' => 'Edit Lead Status Form',
+                'admin.statuses.leads.update' => 'Update Lead Status',
             ],
             'Delete' => [
-                'admin.application.destroy' => 'Delete Application',
-            ],
-            'Send' => [
-                'admin.application.send_application' => 'Send Application',
+                'admin.statuses.leads.destroy' => 'Delete Lead Status',
             ]
+        ],
+        'Sources' => [
+            'View' => [
+                'admin.statuses.source.index' => 'View Sources',
+                'admin.statuses.source.show' => 'View Source Details',
+            ],
+            'Create' => [
+                'admin.statuses.source.create' => 'Create Source Form',
+                'admin.statuses.source.store' => 'Save Source',
+            ],
+            'Update' => [
+                'admin.statuses.source.edit' => 'Edit Source Form',
+                'admin.statuses.source.update' => 'Update Source',
+            ],
+            'Delete' => [
+                'admin.statuses.source.destroy' => 'Delete Source',
+            ]
+        ],
+        'Tags' => [
+            'View' => [
+                'admin.statuses.tags.index' => 'View Tags',
+                'admin.statuses.tags.show' => 'View Tag Details',
+            ],
+            'Create' => [
+                'admin.statuses.tags.create' => 'Create Tag Form',
+                'admin.statuses.tags.store' => 'Save Tag',
+            ],
+            'Update' => [
+                'admin.statuses.tags.edit' => 'Edit Tag Form',
+                'admin.statuses.tags.update' => 'Update Tag',
+            ],
+            'Delete' => [
+                'admin.statuses.tags.destroy' => 'Delete Tag',
+            ]
+        ]
+    ],
+
+    'Applications' => [
+        'View' => [
+            'admin.application.index' => 'View Applications',
+            'admin.application.show' => 'View Application Details',
+        ],
+        'Create' => [
+            'admin.application.create' => 'Create Application Form',
+            'admin.application.store' => 'Save Application',
+        ],
+        'Update' => [
+            'admin.application.edit' => 'Edit Application Form',
+            'admin.application.update' => 'Update Application',
+        ],
+        'Delete' => [
+            'admin.application.destroy' => 'Delete Application',
+        ],
+        'Send' => [
+            'admin.application.send_application' => 'Send Application',
+        ]
+    ],
+
+    'Orders' => [
+        'View' => [
+            'admin.orders.index' => 'View Orders',
+            'admin.orders.show' => 'View Order Details',
+        ],
+        'Create' => [
+            'admin.orders.create' => 'Create Order Form',
+            'admin.orders.store' => 'Save Order',
+        ],
+        'Update' => [
+            'admin.orders.edit' => 'Edit Order Form',
+            'admin.orders.update' => 'Update Order',
+        ],
+        'Delete' => [
+            'admin.orders.destroy' => 'Delete Order',
+            'admin.orders.bulk-delete' => 'Bulk Delete Orders',
+        ],
+        'Status' => [
+            'admin.orders.toggle-status' => 'Toggle Order Status',
+        ],
+        'Statuses' => [
+            'View' => [
+                'admin.orders-statuses.index' => 'View Order Statuses',
+                'admin.orders-statuses.show' => 'View Order Status Details',
+            ],
+            'Create' => [
+                'admin.orders-statuses.create' => 'Create Order Status Form',
+                'admin.orders-statuses.store' => 'Save Order Status',
+            ],
+            'Update' => [
+                'admin.orders-statuses.edit' => 'Edit Order Status Form',
+                'admin.orders-statuses.update' => 'Update Order Status',
+            ],
+            'Delete' => [
+                'admin.orders-statuses.destroy' => 'Delete Order Status',
+            ]
+        ]
+    ],
+
+    'Transactions' => [
+        'View' => [
+            'admin.transactions.index' => 'View Transactions',
+            'admin.transactions.show' => 'View Transaction Details',
+        ],
+        'Create' => [
+            'admin.transactions.create' => 'Create Transaction Form',
+            'admin.transactions.store' => 'Save Transaction',
+        ],
+        'Update' => [
+            'admin.transactions.edit' => 'Edit Transaction Form',
+            'admin.transactions.update' => 'Update Transaction',
+        ],
+        'Delete' => [
+            'admin.transactions.destroy' => 'Delete Transaction',
+            'admin.transactions.bulk-delete' => 'Bulk Delete Transactions',
+        ],
+        'Status' => [
+            'admin.transactions.mark-complete' => 'Mark Transaction Complete',
+        ]
+    ],
+
+    'Invoices' => [
+        'View' => [
+            'admin.invoice.index' => 'View Invoices',
+            'admin.invoice.show' => 'View Invoice Details',
+        ],
+        'Create' => [
+            'admin.invoice.create' => 'Create Invoice Form',
+            'admin.invoice.store' => 'Save Invoice',
+        ],
+        'Update' => [
+            'admin.invoice.edit' => 'Edit Invoice Form',
+            'admin.invoice.update' => 'Update Invoice',
+        ],
+        'Delete' => [
+            'admin.invoice.destroy' => 'Delete Invoice',
+        ]
+    ],
+
+    'Payments' => [
+        'View' => [
+            'admin.payments.index' => 'View Payments',
+            'admin.payments.show' => 'View Payment Details',
+        ],
+        'Create' => [
+            'admin.payments.create' => 'Create Payment Form',
+            'admin.payments.store' => 'Save Payment',
+        ],
+        'Update' => [
+            'admin.payments.edit' => 'Edit Payment Form',
+            'admin.payments.update' => 'Update Payment',
+        ],
+        'Delete' => [
+            'admin.payments.destroy' => 'Delete Payment',
+        ],
+        'Configuration' => [
+            'admin.payments.config' => 'View Payment Configuration',
         ]
     ],
 
@@ -216,7 +452,6 @@ return [
             ],
             'Delete' => [
                 'admin.whatsapp.templates.destroy' => 'Delete Template',
-                'admin.whatsapp.templates.bulk-delete' => 'Bulk Delete Templates',
             ],
             'Sync' => [
                 'admin.whatsapp.templates.sync' => 'Sync Templates',
@@ -234,10 +469,106 @@ return [
         ]
     ],
 
+    'Email Templates' => [
+        'View' => [
+            'admin.email-templates.index' => 'View Email Templates',
+            'admin.email-templates.show' => 'View Email Template Details',
+        ],
+        'Create' => [
+            'admin.email-templates.create' => 'Create Email Template Form',
+            'admin.email-templates.store' => 'Save Email Template',
+        ],
+        'Update' => [
+            'admin.email-templates.edit' => 'Edit Email Template Form',
+            'admin.email-templates.update' => 'Update Email Template',
+        ],
+        'Delete' => [
+            'admin.email-templates.destroy' => 'Delete Email Template',
+        ]
+    ],
+
+    'Pages' => [
+        'View' => [
+            'admin.pages.index' => 'View Pages',
+            'admin.pages.show' => 'View Page Details',
+        ],
+        'Create' => [
+            'admin.pages.create' => 'Create Page Form',
+            'admin.pages.store' => 'Save Page',
+        ],
+        'Update' => [
+            'admin.pages.edit' => 'Edit Page Form',
+            'admin.pages.update' => 'Update Page',
+        ],
+        'Delete' => [
+            'admin.pages.destroy' => 'Delete Page',
+            'admin.pages.bulk-delete' => 'Bulk Delete Pages',
+        ],
+        'Status' => [
+            'admin.pages.toggle-status' => 'Toggle Page Status',
+        ]
+    ],
+
+    'Widgets' => [
+        'View' => [
+            'admin.widgets.index' => 'View Widgets',
+            'admin.widgets.show' => 'View Widget Details',
+        ],
+        'Create' => [
+            'admin.widgets.create' => 'Create Widget Form',
+            'admin.widgets.store' => 'Save Widget',
+        ],
+        'Update' => [
+            'admin.widgets.edit' => 'Edit Widget Form',
+            'admin.widgets.update' => 'Update Widget',
+        ],
+        'Delete' => [
+            'admin.widgets.destroy' => 'Delete Widget',
+        ],
+        'Management' => [
+            'admin.widgets.position' => 'Update Widget Position',
+            'admin.widgets.sort' => 'Sort Widgets',
+            'admin.widgets.assign' => 'Assign Widget',
+            'admin.widgets.render' => 'Render Widget',
+        ]
+    ],
+
+    'File Manager' => [
+        'Delete' => [
+            'admin.filemanager.delete' => 'Delete File',
+        ]
+    ],
+
+    'Data Export' => [
+        'View' => [
+            'admin.import.index' => 'View Data Export',
+        ],
+        'Export' => [
+            'admin.import.export' => 'Export Data',
+            'admin.import.preview' => 'Preview Data',
+            'admin.import.columns' => 'View Columns',
+        ]
+    ],
+
     'Settings' => [
         'General' => [
             'View' => [
-                'admin.settings.general.index' => 'View Settings',
+                'admin.settings.general.index' => 'View General Settings',
+                'admin.settings.general.show' => 'View General Setting Details',
+            ],
+            'Create' => [
+                'admin.settings.general.create' => 'Create General Setting Form',
+                'admin.settings.general.store' => 'Save General Setting',
+            ],
+            'Update' => [
+                'admin.settings.general.edit' => 'Edit General Setting Form',
+                'admin.settings.general.update' => 'Update General Setting',
+            ],
+            'Delete' => [
+                'admin.settings.general.destroy' => 'Delete General Setting',
+            ],
+            'Email' => [
+                'admin.settings.send.test-mail' => 'Send Test Email',
             ]
         ],
         'Roles' => [
@@ -277,77 +608,6 @@ return [
                 'admin.settings.users.bulk-delete' => 'Bulk Delete Users',
             ]
         ],
-
-        'Leads Statuses' => [
-            'View' => [
-                'admin.settings.statuses.leads.index' => 'View Lead Statuses',
-                'admin.settings.statuses.leads.show' => 'View Lead Status Details',
-            ],
-            'Create' => [
-                'admin.settings.statuses.leads.create' => 'Create Lead Status Form',
-                'admin.settings.statuses.leads.store' => 'Save Lead Status',
-            ],
-            'Update' => [
-                'admin.settings.statuses.leads.edit' => 'Edit Lead Status Form',
-                'admin.settings.statuses.leads.update' => 'Update Lead Status',
-            ],
-            'Delete' => [
-                'admin.settings.statuses.leads.destroy' => 'Delete Lead Status',
-                'admin.settings.statuses.leads.bulk-delete' => 'Bulk Delete Lead Statuses',
-            ]
-        ],
-        'Orders Statuses' => [
-            'View' => [
-                'admin.settings.statuses.orders.index' => 'View Order Statuses',
-                'admin.settings.statuses.orders.show' => 'View Order Status Details',
-            ],
-            'Create' => [
-                'admin.settings.statuses.orders.create' => 'Create Order Status Form',
-                'admin.settings.statuses.orders.store' => 'Save Order Status',
-            ],
-            'Update' => [
-                'admin.settings.statuses.orders.edit' => 'Edit Order Status Form',
-                'admin.settings.statuses.orders.update' => 'Update Order Status',
-            ],
-            'Delete' => [
-                'admin.settings.statuses.orders.destroy' => 'Delete Order Status',
-            ]
-        ],
-        'Tags Statuses' => [
-            'View' => [
-                'admin.settings.statuses.tags.index' => 'View Tag Statuses',
-                'admin.settings.statuses.tags.show' => 'View Tag Status Details',
-            ],
-            'Create' => [
-                'admin.settings.statuses.tags.create' => 'Create Tag Status Form',
-                'admin.settings.statuses.tags.store' => 'Save Tag Status',
-            ],
-            'Update' => [
-                'admin.settings.statuses.tags.edit' => 'Edit Tag Status Form',
-                'admin.settings.statuses.tags.update' => 'Update Tag Status',
-            ],
-            'Delete' => [
-                'admin.settings.statuses.tags.destroy' => 'Delete Tag Status',
-            ]
-        ],
-        'Source Statuses' => [
-            'View' => [
-                'admin.settings.statuses.source.index' => 'View Sources',
-                'admin.settings.statuses.source.show' => 'View Source Details',
-            ],
-            'Create' => [
-                'admin.settings.statuses.source.create' => 'Create Source Form',
-                'admin.settings.statuses.source.store' => 'Save Source',
-            ],
-            'Update' => [
-                'admin.settings.statuses.source.edit' => 'Edit Source Form',
-                'admin.settings.statuses.source.update' => 'Update Source',
-            ],
-            'Delete' => [
-                'admin.settings.statuses.source.destroy' => 'Delete Source',
-            ]
-        ],
-
         'Countries' => [
             'View' => [
                 'admin.settings.countries.index' => 'View Countries',
@@ -363,6 +623,7 @@ return [
             ],
             'Delete' => [
                 'admin.settings.countries.destroy' => 'Delete Country',
+                'admin.settings.countries.bulk-delete' => 'Bulk Delete Countries',
             ]
         ],
         'Currencies' => [
@@ -380,6 +641,7 @@ return [
             ],
             'Delete' => [
                 'admin.settings.currencies.destroy' => 'Delete Currency',
+                'admin.settings.currencies.bulk-delete' => 'Bulk Delete Currencies',
             ]
         ],
         'States' => [
@@ -397,6 +659,7 @@ return [
             ],
             'Delete' => [
                 'admin.settings.states.destroy' => 'Delete State',
+                'admin.settings.states.bulk-delete' => 'Bulk Delete States',
             ]
         ]
     ],

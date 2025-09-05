@@ -10,7 +10,7 @@
 
         <!-- Name -->
         <div class="col-span-1">
-            <label class="custom-label required">Name</label>
+            <label class="custom-label ">Name</label>
             <input type="text" name="name" id="name"
                 value="{{ old('name', $sources->name ?? '') }}"
                 class="input-field">
@@ -18,7 +18,7 @@
 
         <!-- Slug -->
         <div class="col-span-1">
-            <label class="custom-label required">Slug</label>
+            <label class="custom-label ">Slug</label>
             <input type="text" name="slug" id="slug"
                 value="{{ old('slug', $sources->slug ?? '') }}"
                 class="input-field">

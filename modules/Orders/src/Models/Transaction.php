@@ -4,6 +4,7 @@ namespace Modules\Orders\Models;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Orders\Models\Order;
 use Modules\Payments\Models\Payment;
+use Modules\Payments\Models\Payments;
 
 class Transaction extends Model
 {
@@ -42,7 +43,7 @@ class Transaction extends Model
 
     public function payment()
     {
-        return $this->belongsTo(Payment::class);
+        return $this->belongsTo(Payments::class);
     }
 
     public function scopeCompleted($query)

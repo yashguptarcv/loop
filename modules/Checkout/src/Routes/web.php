@@ -17,14 +17,11 @@ use Modules\Checkout\Http\Controllers\CheckoutController;
 
 Route::prefix('checkout')->middleware('web')->name('checkout.')->group(function () {
     Route::middleware(['user.auth', 'user.permission'])->group(function () {
-        Route::get('/', [CheckoutController::class, 'index']);
-
-        Route::post('/process', [CheckoutController::class, 'process'])->name('checkout.process');
-
-        Route::get('/payment', [CheckoutController::class, 'payment'])->name('checkout.payment');
-
-        Route::post('/complete', [CheckoutController::class, 'complete'])->name('checkout.complete');
-
-        Route::get('/confirmation/{order}', [CheckoutController::class, 'confirmation'])->name('checkout.confirmation');
+        Route::get('confirm', [CheckoutController::class, 'confirm'])->name('confirm');
+        // nomination
+        Route::get('/nomination', [CheckoutController::class, 'application'])->name('nomination');
+        Route::post('/nomination', [CheckoutController::class, 'createApplication'])->name('nomination');
+        Route::put('/nomination', [CheckoutController::class, 'updateApplication'])->name('nomination');
+        
     });
 });

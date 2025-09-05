@@ -79,17 +79,22 @@ class TaxService
             ($address['state'] ?? 'any');
 
         // return Cache::remember($cacheKey, now()->addDay(), function () use ($taxCategoryId, $address) {
-            return TaxRate::query()
-                ->whereHas('taxCategories', function ($q) use ($taxCategoryId) {
-                    $q->where('tax_category_id', $taxCategoryId);
-                })
-                ->when($address['country'] ?? null, fn($q, $country) => $q->where('country_id', $address['country'] ?? 0))
-                ->when($address['state'] ?? null, fn($q, $state) => $q->where(function ($qq) use ($state) {
+        return TaxRate::query()
+            ->whereHas('taxCategories', function ($q) use ($taxCategoryId) {
+                $q->where('tax_category_id', $taxCategoryId);
+            })
+            ->where('country_id', $address['country'] ?? 0) 
+            ->when(!empty($address['state']), function ($q) use ($address) {
+                $state = $address['state'];
+                $q->where(function ($qq) use ($state) {
                     $qq->where('state', $state)->orWhereNull('state');
-                }))
-                ->where('is_active', true)
-                ->orderBy('priority', 'desc')
-                ->get();
+                });
+            })
+            ->where('is_active', true)
+            ->orderBy('priority', 'desc')
+            ->get();
+
+
         // });
     }
 

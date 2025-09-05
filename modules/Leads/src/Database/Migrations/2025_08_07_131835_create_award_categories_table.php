@@ -12,28 +12,11 @@ class CreateAwardCategoriesTable extends Migration
             $table->id();
             $table->string('name');
 
-            // Either use this shorthand (recommended):
-            $table->foreignId('country_id')->constrained('countries');
-
-            // // OR explicitly define the relationship like this:
-            
-            // $table->foreign('country_id')
-            //     ->references('id')
-            //     ->on('countries');
-
+            // country_id must be nullable if you use onDelete('set null')
+            $table->unsignedBigInteger('country_id')->nullable();
             // Category relationships
             $table->unsignedBigInteger('main_category_id');
             $table->unsignedBigInteger('sub_category_id');
-
-            $table->foreign('main_category_id')
-                ->references('category_id')
-                ->on('categories')
-                ->onDelete('cascade');
-
-            $table->foreign('sub_category_id')
-                ->references('category_id')
-                ->on('categories')
-                ->onDelete('cascade');
 
             $table->timestamps();
         });

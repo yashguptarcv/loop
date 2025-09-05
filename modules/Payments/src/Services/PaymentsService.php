@@ -4,19 +4,22 @@ namespace Modules\Payments\Services;
 
 use Modules\Payments\Models\PaymentMethod;
 use Modules\Payments\Contracts\PaymentProcessor;
+use Modules\Payments\Models\PaymentConfiguration;
 
 class PaymentsService
 {
-    protected function getProcessor(string $code): PaymentProcessor
+    protected function getProcessor(string $code)
     {
-        $method = PaymentMethod::where('code', $code)->where('is_active', true)->firstOrFail();
-        $class = $method->class_name;
-        return new $class(json_decode($method->config, true));
+        
+        $paymentConfiguration = PaymentConfiguration::where('payment_method_id', $code)->firstOrFail();
+        $class = $paymentConfiguration->method->class_name;
+        
+        return new $class(json_decode($paymentConfiguration->config, true));
     }
 
-    public function charge(string $code, $order)
+    public function charge(string $code, $order, $request = null)
     {
-        return $this->getProcessor($code)->charge($order);
+        return $this->getProcessor($code)->charge($order, $request);
     }
 
     public function refund(string $code, string $transactionId, $reason = null)

@@ -40,7 +40,7 @@ class Payments extends Model
 
     public function method()
     {
-        return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
+        return $this->belongsTo(PaymentConfiguration::class, 'payment_method_id', 'id');
     }
 
     public function transactions()

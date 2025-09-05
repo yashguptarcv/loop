@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('merchant_name')->nullable();
             $table->boolean('is_active')->default(true);
             $table->json('config')->nullable()->comment('Processor configuration (keys, secrets, etc.)');
+            $table->decimal('amount', 10, 2);
             $table->timestamps();
         });
         

@@ -114,7 +114,6 @@ class Template extends DataGrid
                 'icon' => 'edit',
                 'title' => 'Update Template',
                 'method' => 'GET',
-                'is_popup'  => true,
                 'url' => function ($row) {
                     return route('admin.email-templates.edit', $row->id);
                 },
@@ -145,7 +144,6 @@ class Template extends DataGrid
                 'icon' => 'add',
                 'title' => 'Create Template',
                 'method' => 'GET',
-                'is_popup'  => true,
                 'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.email-templates.create',
             ]);

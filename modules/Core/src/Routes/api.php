@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Core\Http\Controllers\Api\CategoryController;
 use Modules\Core\Http\Controllers\Api\LocationController;
 use Modules\Core\Http\Controllers\Api\AutocompleteController;
 use Modules\Core\Http\Controllers\Api\AutocompleteSingleController;
@@ -24,5 +25,7 @@ Route::prefix('api')->name('api')->group(function () {
         Route::get('/list', [AutocompleteController::class, 'list']);
         Route::get('/autocomplete', [AutocompleteSingleController::class, 'index'])->name('autocomplete');
     });
+
+    Route::get('/categories/{parentId}/children', [CategoryController::class, 'children']);
 
 });

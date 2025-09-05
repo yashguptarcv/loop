@@ -2,10 +2,11 @@
 
 namespace Modules\Leads\Models;
 
+use Modules\Orders\Models\Order;
+use Modules\Customers\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Leads\Models\AwardCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Modules\Customers\Models\User;
 
 class Application extends Model
 {
@@ -22,7 +23,8 @@ class Application extends Model
         'designation',
         'billing_address',
         'lead_id',
-        'admin_id'
+        'admin_id',
+        'order_id'
     ];
 
     protected $casts = [
@@ -34,8 +36,18 @@ class Application extends Model
         return $this->belongsToMany(AwardCategory::class, 'application_award_category')
             ->withTimestamps();
     }
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
 
-    public function user() {
+    public function orders()
+    {
+        return $this->hasOne(Order::class, 'id', 'order_id');
+    }
+
+    public function user()
+    {
         return $this->belongsToMany(User::class, 'email');
     }
 
@@ -53,7 +65,7 @@ class Application extends Model
             'billing_address.city' => 'nullable|string|max:255',
             'billing_address.state' => 'nullable|string|max:255',
             'billing_address.postal_code' => 'nullable|string|max:20',
-            'billing_address.country' => 'renullablequired|string|max:255',
+            'billing_address.country' => 'nullable|string|max:255',
             'award_categories' => 'nullable|array',
             'award_categories.*' => 'nullable|exists:award_categories,id'
         ];

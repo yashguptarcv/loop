@@ -8,7 +8,7 @@
         </div>
         <p class="mb-6 text-amber-100 text-base leading-relaxed">Are you sure you want to delete this item? This action is permanent and cannot be undone.</p>
 
-        <form id="global-delete-form" class="" method="POST">
+        <form id="global-delete-form" class="form-ajax" method="POST">
             @csrf
             @method('DELETE')
             <div class="flex justify-end gap-4">

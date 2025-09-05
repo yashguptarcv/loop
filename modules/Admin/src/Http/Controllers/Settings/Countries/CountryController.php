@@ -66,8 +66,8 @@ class CountryController extends Controller
             ]);
         } catch (\Throwable $e) {
             return response()->json([
-                'errors' => 'Something went wrong. Please try again.' . $e
-            ], 500);
+                'errors' => 'Something went wrong. Please try again.' . $e->getMessage()
+            ]);
         }
     }
 
@@ -107,7 +107,7 @@ class CountryController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+            ]);
         }
     }
     public function edit($id)
@@ -127,7 +127,7 @@ class CountryController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+            ]);
         }
     }
 

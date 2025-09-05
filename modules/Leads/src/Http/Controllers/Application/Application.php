@@ -66,7 +66,6 @@ class Application extends Controller
         try {
             DB::beginTransaction();
 
-            // 1. Create the application
             $application = $this->applicationService->createApplication(
                 $request->validated(),
                 $request->input('lead_id'),
@@ -88,9 +87,7 @@ class Application extends Controller
 
                 $orderData = $this->prepareOrderData($application['data'], $request, $application['user']);
             
-                
                 $order = $this->orderService->createOrder($orderData);
-
                 
                 if (isset($application['data']->id)) {                    
                     $application['data']->update(['order_id' => $order->id]);
@@ -108,7 +105,14 @@ class Application extends Controller
                     'errors' => $application['response'] ?? 'Unknown error',
                 ]);
             }
-        } catch (\Exception $e) {
+         } catch (\Illuminate\Validation\ValidationException $e) {
+
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ]);
+            
+        } catch (\Throwable $e) {
             DB::rollBack();
             return response()->json([
                 'errors' => 'Failed to process application: ' . $e->getMessage()
@@ -137,34 +141,25 @@ class Application extends Controller
 
         // Get lead information for billing/shipping addresses if needed
         $lead = LeadModel::find($request->input('lead_id'));
-
+        
+        $address = [    
+                'name'      => $request->full_name ?? 'N/A',
+                'email'     => $request->email ?? 'N/A',
+                'phone'     => $request->mobile ?? 'N/A',
+                'address'   => $request->billing_address['address_line1'] ?? '',
+                'country'   => $request->billing_address['country'] ?? '',
+                'state'     => $request->billing_address['state'] ?? '',
+                'city'      => $request->billing_address['city'] ?? '',
+                'postcode'  => $request->billing_address['postal_code'],
+                // Add other address fields as needed
+        ];
         return [
             'user_id'   => $user->id ?? null, // Or use a default system user if needed
             'admin_id'  => auth('admin')->id(), // Or use a default system user if needed
             'items' => $items,
             'status' => fn_get_setting('general.order.create'),
-            'billing_address' => [
-                'name' => $lead->name ?? 'N/A',
-                'email' => $lead->email ?? 'N/A',
-                'phone' => $lead->phone ?? 'N/A',
-                'country'   => '',
-                'state'     => '',
-                'city'      => '',
-                'postcode'   => '',
-                'address_1'     => '',
-                // Add other address fields as needed
-            ],
-            'shipping_address' => [
-                'name' => $lead->name ?? 'N/A',
-                'email' => $lead->email ?? 'N/A',
-                'phone' => $lead->phone ?? 'N/A',
-                'country'   => '',
-                'state'     => '',
-                'city'      => '',
-                'postcode'   => '',
-                'address_1'     => '',
-                // Same as billing or customize as needed
-            ],
+            'billing_address' => $address,
+            'shipping_address' => $address,
             'notes' => 'Application submission for lead #' . $lead->id,
             'requires_payment' => false, // Set based on your business logic
             'currency' => fn_get_setting('general.currency'),

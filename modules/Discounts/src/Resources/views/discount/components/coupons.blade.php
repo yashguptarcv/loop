@@ -1,10 +1,14 @@
 <div class="bg-white rounded-lg shadow p-6 space-y-4">
     <div class="flex justify-between items-center">
         <h3 class="text-lg font-medium text-gray-900">Coupons</h3>
-        <button type="button" id="add-coupon-btn"
-            class="text-sm bg-blue-100 text-blue-600 px-3 py-2 rounded-md hover:bg-blue-200">
-            Add Coupon
-        </button>
+        
+        <x-button type="button"                     
+            class="primary" 
+            label="Add Coupon" 
+            icon=''
+            id="add-coupon-btn"
+            name="button" 
+        />
     </div>
 
     <div class="overflow-x-auto">
@@ -29,7 +33,7 @@
                             <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap">
                                 <input type="hidden" value="{{ $coupon->id }}" data-base-name="id">
                                 <input type="text" value="{{ $coupon->code }}" class="input-field" placeholder="SUMMER20"
-                                    required data-base-name="code">
+                                     data-base-name="code">
                             </td>
                             <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap">
                                 <input type="number" value="{{ $coupon->usage_limit }}" class="input-field"
@@ -60,7 +64,7 @@
     <template id="coupon-template">
         <tr>
             <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap">
-                <input type="text" class="input-field" placeholder="SUMMER20" required data-base-name="code">
+                <input type="text" class="input-field" placeholder="SUMMER20"  data-base-name="code">
             </td>
             <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap">
                 <input type="number" class="input-field" placeholder="Unlimited if empty" data-base-name="usage_limit">

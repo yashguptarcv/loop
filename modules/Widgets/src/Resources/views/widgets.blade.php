@@ -35,15 +35,23 @@
             @foreach($widgets as $w)
                 <div class="border border-gray-200 rounded-lg  bg-white p-6 cursor-pointer" data-id="{{ $w->id }}">
                     <div class="flex items-start justify-between mb-4">
+                        <div class="flex gap-2">
+    
+                            <button onclick="openDeleteModal('{{ route('admin.widgets.destroy', $w->id) }}')"
+                                class="text-primary-100 hover:text-amber-200 text-sm font-medium">                    
+                                <i class="fas fa-trash ml-1"></i>
+                            </button>
+
+                            <x-modal 
+                                buttonText='Assign <i class="fas fa-arrow-right ml-1"></i>'
+                                modalTitle="{{$w->title}}"
+                                id="assigne_widgets"
+                                ajaxUrl="{{route('admin.widgets.show', $w->id)}}"
+                                buttonClass="text-primary-100 hover:text-amber-200 text-sm font-medium"
+                                modalSize="2xl"
+                            />
                         
-                    <x-modal 
-                        buttonText='Assign <i class="fas fa-arrow-right ml-1"></i>'
-                        modalTitle="{{$w->title}}"
-                        id="assigne_widgets"
-                        ajaxUrl="{{route('admin.widgets.show', $w->id)}}"
-                        buttonClass="text-primary-100 hover:text-amber-200 text-sm font-medium"
-                        modalSize="2xl"
-                    />
+                        </div>
                         
                         <div class="flex space-x-1">
                             @if($w->user_groups)
@@ -102,30 +110,30 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    let grid = GridStack.init({
-        float: true,
-        cellHeight: 120,
-        resizable: { handles: 'all' }
-    }, '#widgets-grid');
+    // let grid = GridStack.init({
+    //     float: true,
+    //     cellHeight: 120,
+    //     resizable: { handles: 'all' }
+    // }, '#widgets-grid');
 
-    grid.on('change', function(event, items) {
-        let positions = items.map(el => ({
-            id: el.el.dataset.id,
-            x: el.x,
-            y: el.y,
-            w: el.w,
-            h: el.h
-        }));
+    // grid.on('change', function(event, items) {
+    //     let positions = items.map(el => ({
+    //         id: el.el.dataset.id,
+    //         x: el.x,
+    //         y: el.y,
+    //         w: el.w,
+    //         h: el.h
+    //     }));
 
-        fetch("{{ route('admin.widgets.position') }}", {
-            method: 'POST',
-            headers: {
-                "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({positions})
-        });
-    });
+    //     fetch("{{ route('admin.widgets.position') }}", {
+    //         method: 'POST',
+    //         headers: {
+    //             "X-CSRF-TOKEN": "{{ csrf_token() }}",
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify({positions})
+    //     });
+    // });
 });
 
 </script>

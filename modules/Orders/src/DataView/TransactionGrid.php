@@ -100,9 +100,15 @@ class TransactionGrid extends DataGrid
             'filterable' => false,
             'searchable' => false,
             'sortable' => true,
-            'closure' => function ($row) {
-                return strtoupper($row->currency) . ' ' . number_format($row->amount, 2);
-            },
+        ]);
+
+        $this->addColumn([
+            'index' => 'currency',
+            'label' => 'Currency',
+            'type' => 'string',
+            'searchable' => true,
+            'filterable' => true,
+            'sortable' => false,
         ]);
 
         $this->addColumn([

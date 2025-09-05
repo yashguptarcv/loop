@@ -1,80 +1,75 @@
 @extends('admin::layouts.app')
 
 @section('title')
-    @if($mode === 'create')
-        Create Order
-    @elseif($mode === 'edit')
-        Edit Order #{{ $order_number ?? '' }}
-    @else
-        Order Detail #{{ $order_number ?? '' }}
-    @endif
+@if($mode === 'create')
+Create Order
+@elseif($mode === 'edit')
+Edit Order #{{ $order_number ?? '' }}
+@else
+Order Detail #{{ $order_number ?? '' }}
+@endif
 @endsection
 
 @section('content')
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
     @php
-        $redirect_route = route('admin.orders.index');
+    $redirect_route = route('admin.orders.index');
     if($mode === 'create') {
-        $redirect_route = route('admin.orders.index');
+    $redirect_route = route('admin.orders.index');
     } elseif($mode === 'edit') {
-        $redirect_route = route('admin.orders.show', $order_id ?? 0);
+    $order_title = 'Order #'. $order_number;
+    $redirect_route = route('admin.orders.show', $order_id ?? 0);
+    } else {
+    $order_title = 'Order #'. $order_number . ' / Total: ' . fn_convert_currency($total ?? 0, $currency);
     }
+
     @endphp
-        @include('admin::components.common.back-button', [
-            'route' => $redirect_route,
-            'name' => $mode === 'create' ? 'New Order' : 'Order #'. $order_number ?? 0
-        ])
 
-    @if($mode !== 'create' && !empty($order))
-    <div class="flex items-center">
-        <span class="ml-3 text-sm text-gray-500">
-            Placed on {{ $created_at->format('M d, Y') }}
-        </span>
-        <span class="ml-3 text-sm text-gray-500">
-            Payment:
-            <span class="{{ $payment_status == 'paid' ? 'text-green-600' : 'text-red-600' }}">
-                {{ ucfirst($payment_status) }}
-            </span>
-        </span>
-    </div>
-    @endif
-</div>
+    @include('admin::components.common.back-button', [
+    'route' => $redirect_route,
+    'name' => $mode === 'create' ? 'New Order' : $order_title
+    ])
 
-<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-    <div class="flex items-center gap-2">
-        @if($mode === 'create')
-        <button type="submit" form="order_form"
-            class="px-4 py-2 rounded-lg bg-primary-100 text-amber-100 hover:text-amber-200 transition flex items-center gap-2">
-            Save
-        </button>
-        @elseif($mode === 'edit')
-        <button type="submit" form="order_form"
-            class="px-4 py-2 rounded-lg bg-primary-100 text-amber-100 hover:text-amber-200 transition flex items-center gap-2">
-            Update
-        </button>
-        @else {{-- view mode --}}
-        <a href="{{ route('admin.orders.edit', $order_id) }}"
-            class="px-4 py-2 rounded-lg bg-primary-100 text-amber-100 hover:text-amber-200 transition flex items-center gap-2">
-            Edit Order
-        </a>
-        <button class="px-4 py-2 rounded-lg border border-primary-100 bg-white text-primary-100 hover:border-primary-200 transition flex items-center gap-2">
-            <i class="fas fa-print"></i> Print
-        </button>
-        <button class="px-4 py-2 rounded-lg bg-primary-100 text-amber-100 hover:text-amber-200 transition flex items-center gap-2">
-            <i class="fas fa-cog"></i> Generate Invoice
-        </button>
-        @endif
-    </div>
 
-    @if($mode !== 'create' && !empty($order))
-    <button class="px-4 py-2 rounded-lg bg-red-100 text-red-600 hover:text-red-300 transition flex items-center gap-2">
-        <i class="fas fa-trash-alt"></i> Cancel Order
-    </button>
+    @if($mode == 'view' && !empty($order_id))
+    @include('dataview::components.dataView.components.actions-dropdown', ['icon' => 'keyboard_arrow_down', 'title' => 'Actions', 'class' => 'bg-primary-100 text-amber-100 rounded px-2 py-1', 'actions' => [
+    [
+    'title' => 'Print Order',
+    'icon' => '',
+    'method' => '',
+    'url' => ''
+    ],
+    [
+    'title' => 'Generate Invoice',
+    'icon' => '',
+    'method' => '',
+    'url' => ''
+    ],
+    [
+    'title' => 'Edit Order',
+    'icon' => '',
+    'method' => 'GET',
+    'url' => route('admin.orders.edit', $order_id ?? 0)
+    ],
+    [
+    'title' => 'Cancel Order',
+    'icon' => '',
+    'method' => '',
+    'url' => ''
+    ]
+    ], "id" => $order_id ?? ''])
+    @else
+    <x-button type="submit"
+        class="primary"
+        label="Save"
+        icon=''
+        id="update_order"
+        name="button" />
     @endif
 </div>
 
 <!-- Main Content Grid -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6" id="order_datas">
+<div class="" id="order_datas">
     @include('orders::orders.components.order_detail')
 </div>
 
@@ -83,6 +78,15 @@
 <script>
     @if($mode === 'create' || $mode === 'edit')
     document.addEventListener('DOMContentLoaded', function() {
+
+        document.querySelectorAll('#update_order').forEach(button => {
+            if (button.dataset.bound) return;
+            button.dataset.bound = true;
+
+            button.addEventListener('click', () => {
+                mutations.save();
+            });
+        });
 
         function getOrderContainer() {
             return document.getElementById('order_datas');
@@ -167,6 +171,56 @@
                         showToast('Error removing coupon', 'error');
                     }
                 });
+            },
+
+            payment_method_form(paymentCode, payment_id) {
+                if (typeof ceAjax !== 'function') return console.error('ceAjax is not defined');
+
+                ceAjax('GET', '{{ route("api.cart.payment.payment_form") }}', {
+                    loader: true,
+                    result_ids: 'payment-detail-action',
+                    data: {
+                        payment_id: payment_id,
+                    },
+                    callback: function(response) {
+
+                    },
+                    errorCallback: function() {
+                        showToast('Error removing coupon', 'error');
+                    }
+                });
+            },
+
+            update_status(status) {
+                if (typeof ceAjax !== 'function') return console.error('ceAjax is not defined');
+
+                ceAjax('POST', '{{ route("api.cart.order.update_status", $order_id ?? 0) }}', {
+                    loader: true,
+                    result_ids: 'payment-detail-action',
+                    data: {
+                        status: status,
+                    },
+                    callback: function(response) {
+                         if (response.success) {
+                            showToast('Status updated successfully', 'success');
+                            loadOrder();
+                        } else {
+                            showToast(response.message || 'Error status update', 'error');
+                        }
+                    },
+                    errorCallback: function() {
+                        showToast('Error removing coupon', 'error');
+                    }
+                });
+            },
+            
+            save() {
+                const form = document.querySelector('form#order_idForm');
+                if (form) {
+                    form.submit();
+                } else {
+                    console.warn('Form with ID #order_idForm not found.');
+                }
             }
         };
 
@@ -257,6 +311,30 @@
                 button.dataset.bound = true;
                 button.addEventListener('click', mutations.removeCoupon);
             });
+
+            // payment method
+            container.querySelectorAll('#payment_method').forEach(select => {
+                if (select.dataset.bound) return;
+                select.dataset.bound = true;
+
+                select.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const selectedValue = selectedOption.dataset.paymentCode;
+
+                    mutations.payment_method_form(selectedValue, this.value);
+                });
+            });
+
+            container.querySelectorAll('#order_status').forEach(select => {
+                
+                if (select.dataset.bound) return;
+                select.dataset.bound = true;
+
+                select.addEventListener('change', function() {
+                    mutations.update_status(this.value);
+                });
+            });
+
         }
 
         // ------------------------------

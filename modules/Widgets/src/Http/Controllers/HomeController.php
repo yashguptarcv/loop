@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Modules\Widgets\Models\Widget;
-use Illuminate\Support\Facades\Schema;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Schema;
 use Modules\Widgets\Services\WidgetQueryBuilder;
+use Modules\Widgets\Http\Requests\StoreWidgetRequest;
 
 class HomeController extends Controller
 {
@@ -27,34 +28,47 @@ class HomeController extends Controller
 
     public function show(Widget $widget)
     {
-
         $groups = fn_get_usergroups();
         return view('widgets::components.assigne-modal', compact('widget', 'groups'));
     }
 
-    public function store(Request $request)
+     public function store(StoreWidgetRequest $request)
     {
-        $data = $request->validate([
-            'title'         => 'required|string|max:190',
-            'table_name'    => 'required|string',
-            'column_name'   => 'nullable|string',
-            'operation'     => 'required|in:count,sum,avg,min,max,profit_loss,month_compare',
-            'revenue_column' => 'nullable|string',
-            'cost_column'   => 'nullable|string',
-            'joins'         => 'nullable',
-            'conditions'    => 'nullable',
-            'date_column'   => 'nullable|string',
-            'date_filter'   => 'required|in:none,today,week,month,year,custom',
-            'date_from'     => 'nullable|date',
-            'date_to'       => 'nullable|date',
-            'widget_type'   => 'required|in:stat,line,bar,pie,worldmap',
-            'user_groups'   => 'nullable|array',
-            'group_by'      => 'nullable|string',
-        ]);
+        $data = $request->validated();
+        // Decode joins & conditions safely
+        $data['joins'] = $request->filled('joins') ? json_decode($request->joins, true) : [];
+        $data['conditions'] = $request->filled('conditions') ? json_decode($request->conditions, true) : [];
 
-        $data['joins'] = $request->filled('joins') ? json_decode($request->joins, true) : null;
         Widget::create($data);
-        return redirect()->route('admin.widgets.index')->with('success', 'Widget created.');
+
+        return redirect()->route('admin.widgets.index')->with('success', 'Widget created successfully.');
+    }
+
+    public function update(StoreWidgetRequest $request, Widget $widget)
+    {
+        $data = $request->validated();
+        $data['joins'] = $request->filled('joins') ? json_decode($request->joins, true) : [];
+        $data['conditions'] = $request->filled('conditions') ? json_decode($request->conditions, true) : [];
+
+        $widget->update($data);
+
+        return redirect()->route('admin.widgets.index')->with('success', 'Widget updated successfully.');
+    }
+
+     public function destroy(Request $request, $id)
+    {
+        try {
+            Widget::destroy($id);
+            return response()->json([
+                'success' => true,
+                'message' => 'Widget deleted',
+                'redirect_url' => route('admin.widgets.index'),
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'errors' => 'Something went wrong. Please try again.'.$e->getMessage()
+            ]);
+        }
     }
 
     public function sort(Request $request)
@@ -98,7 +112,7 @@ class HomeController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'errors' => $e->errors()
+                'errors' => $e->getMessage()
             ]);
         }
     }
@@ -121,6 +135,7 @@ class HomeController extends Controller
     {
 
         // Base query with joins + conditions + date filters
+        
         $q = WidgetQueryBuilder::base($widget->table_name);
         $q = WidgetQueryBuilder::applyJoins($q, $widget->joins);
         $q = WidgetQueryBuilder::applyConditions($q, $widget->conditions);
@@ -264,6 +279,7 @@ class HomeController extends Controller
                     'widget' => $widget,
                 ];
             } else {
+                
                 $val = $this->aggregate($q, $widget->operation, $widget->column_name);
                 $data = ['value' => $val, 'widget' => $widget];
             }

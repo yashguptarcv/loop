@@ -7,8 +7,10 @@ use Modules\Admin\Models\Country;
 use Modules\Orders\Models\Status;
 use Illuminate\Support\Facades\DB;
 use Modules\Admin\Models\Currency;
+use Modules\Leads\Models\LeadSource;
 use Modules\Tax\Models\TaxCategory;
 use Modules\Leads\Models\LeadStatusModel;
+use Modules\Payments\Models\PaymentConfiguration;
 
 if (!function_exists('fn_get_countries')) {
     function fn_get_countries()
@@ -17,10 +19,31 @@ if (!function_exists('fn_get_countries')) {
     }
 }
 
-if (!function_exists('fn_get_order_status')) {
-    function fn_get_order_status($type = 'O')
+if (!function_exists('fn_get_payments')) {
+    function fn_get_payments()
+    {
+        return PaymentConfiguration::where('is_active', true)->get();
+    }
+}
+
+if (!function_exists('fn_get_order_statuses')) {
+    function fn_get_order_statuses($type = 'O')
     {
         return Status::where('type_code', $type)->get();
+    }
+}
+
+if (!function_exists('fn_get_order_status')) {
+    function fn_get_order_status($status_code, $type = 'O')
+    {
+        return Status::where('type_code', $type)->where('status_code', $status_code)->first();
+    }
+}
+
+if (!function_exists('fn_get_order_status_code')) {
+    function fn_get_order_status_code($id, $type = 'O')
+    {
+        return Status::where('type_code', $type)->where('id', $id)->first('status_code');
     }
 }
 
@@ -28,6 +51,13 @@ if (!function_exists('fn_get_taxes')) {
     function fn_get_taxes()
     {
         return TaxCategory::where('status', true)->get();
+    }
+}
+
+if (!function_exists('fn_get_tax_data')) {
+    function fn_get_tax_data($tax_category_id)
+    {
+        return TaxCategory::where('status', true)->where('id', $tax_category_id)->first();
     }
 }
 
@@ -42,6 +72,13 @@ if (!function_exists('fn_get_lead_statuses')) {
     function fn_get_lead_statuses()
     {
         return LeadStatusModel::get();
+    }
+}
+
+if (!function_exists('fn_get_lead_sources')) {
+    function fn_get_lead_sources()
+    {
+        return LeadSource::where('is_active', true)->get();
     }
 }
 
@@ -160,16 +197,25 @@ if (!function_exists('fn_convert_currency')) {
             $formattedAmount = number_format($convertedAmount, $decimalPlaces);
 
             // Add symbol if exists, else append code
-            return $currency->symbol 
-                ? $currency->symbol . $formattedAmount 
+            return $currency->symbol
+                ? $currency->symbol . $formattedAmount
                 : $formattedAmount . ' ' . $toCurrencyCode;
+        } catch (Exception $e) {
 
-        } catch(Exception $e) {
-            
             return $e->getMessage();
         }
     }
 }
+
+if (!function_exists('fn_get_currency_data')) {
+    function fn_get_currency_data($code)
+    {
+        return DB::table('currencies')
+            ->where('code', $code)
+            ->first();
+    }
+}
+
 
 if (!function_exists('fn_get_currency')) {
     function fn_get_currency(
@@ -186,12 +232,11 @@ if (!function_exists('fn_get_currency')) {
             $formattedAmount = number_format($amount, $decimalPlaces);
 
             // Add symbol if exists, else append code
-            return $currency->symbol 
-                ? $currency->symbol . $formattedAmount 
+            return $currency->symbol
+                ? $currency->symbol . $formattedAmount
                 : $formattedAmount . ' ' . $toCurrencyCode;
+        } catch (Exception $e) {
 
-        } catch(Exception $e) {
-            
             return $e->getMessage();
         }
     }

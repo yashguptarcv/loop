@@ -7,8 +7,8 @@
 
         <!-- Country Name -->
         <div class="col-span-1">
-            <label class="custom-label required" for="country">Country Name</label>
-            <select name="country_id" id="country" class="input-field" required>
+            <label class="custom-label " for="country">Country Name</label>
+            <select name="country_id" id="country" class="input-field" >
                 <option value="">-- Select Country --</option>
                 @foreach ($countries as $country)
                 <option value="{{ $country->id }}"
@@ -22,7 +22,7 @@
 
         <!-- State Name -->
         <div class="col-span-1">
-            <label class="custom-label required">State Name</label>
+            <label class="custom-label ">State Name</label>
             <input type="text" name="default_name" id="default_name"
                 value="{{ old('default_name', $state->default_name ?? '') }}"
                 class="input-field">
@@ -30,7 +30,7 @@
 
         <!-- State Code -->
         <div class="col-span-1">
-            <label class="custom-label required">Code</label>
+            <label class="custom-label ">Code</label>
             <input type="text" name="code" id="code"
                 value="{{ old('code', $state->code ?? '') }}"
                 class="input-field">

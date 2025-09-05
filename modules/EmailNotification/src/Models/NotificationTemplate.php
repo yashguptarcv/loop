@@ -28,15 +28,15 @@ class NotificationTemplate extends Model
     {
         return [
             'company_logo' => [
-                'value' => config('app.company_logo', 'https://example.com/logo.png'),
+                'value' => fn_get_image('company_logo', 0)['url'],
                 'description' => 'URL of the company logo'
             ],
             'company_name' => [
-                'value' => config('app.company_name', 'LoopLynks'),
+                'value' => fn_get_setting('general.company.name'),
                 'description' => 'Name of the company'
             ],
             'company_signature' => [
-                'value' => config('app.company_signature', 'Best regards,<br>LoopLynks Team'),
+                'value' => fn_get_setting('general.company.signature'),
                 'description' => 'Company signature block'
             ],
             'current_year' => [

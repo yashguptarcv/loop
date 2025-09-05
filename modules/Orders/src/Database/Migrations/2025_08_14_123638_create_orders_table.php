@@ -14,9 +14,12 @@ return new class extends Migration
        Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('admin_id')->constrained()->nullOnDelete();
+            $table->foreignId('admin_id')
+                ->nullable()
+                ->constrained('admins')
+                ->nullOnDelete();
             $table->string('order_number')->unique();
-            $table->string('status', '1');
+            $table->string('status', 2);
             $table->decimal('subtotal', 10, 2);
             $table->decimal('discount', 10, 2);
             $table->decimal('tax', 10, 2)->default(0);
@@ -24,7 +27,7 @@ return new class extends Migration
             $table->decimal('total', 10, 2);
             $table->text('notes')->nullable();
             $table->text('currency');
-            $table->text('coupon_code');
+            $table->text('coupon_code')->nullable();
             $table->string('payment_method')->nullable();
             $table->string('payment_status')->nullable();
             $table->json('shipping_address')->nullable();

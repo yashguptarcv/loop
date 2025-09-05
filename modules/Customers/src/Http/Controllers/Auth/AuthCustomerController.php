@@ -42,6 +42,10 @@ class AuthCustomerController extends Controller
 
         if ($this->authCustomerService->login($request->only('email', 'password'))) {
             $this->authCustomerService->clearLoginAttempts($ip);
+            session([
+                'currency'  => fn_get_setting('general.currency.customer'),
+                'language'  => fn_get_setting('general.language'),
+            ]);
             
             return response()->json([
                 'success' => true,

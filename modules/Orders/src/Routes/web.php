@@ -21,14 +21,13 @@ Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->
     Route::middleware(['admin.auth', 'admin.permission'])->group(function () {
         
         Route::resource('orders', OrderController::class);
-        Route::post('orders/bulk-delete', [OrderController::class, 'index'])->name('orders.bulk-delete');
-        Route::post('orders/toggle-status', [OrderController::class, 'index'])->name('orders.toggle-status');
+        Route::post('orders/bulk-delete', [OrderController::class, 'bulkDelete'])->name('orders.bulk-delete');
+        Route::post('orders/toggle-status', [OrderController::class, 'updateStatus'])->name('orders.toggle-status');
 
         // order edit
         Route::resource('transactions', Transaction::class);
-        Route::post('transactions/bulk-delete', [Transaction::class, 'index'])->name('transactions.bulk-delete');
-        Route::post('transactions/toggle-status', [Transaction::class, 'index'])->name('transactions.toggle-status');
-        Route::post('transactions/mark-complete', [Transaction::class, 'index'])->name('transactions.mark-complete');
+        Route::post('transactions/bulk-delete', [Transaction::class, 'bulkDelete'])->name('transactions.bulk-delete');
+        Route::post('transactions/mark-complete', [Transaction::class, 'updateStatus'])->name('transactions.mark-complete');
 
 
         Route::resource('orders-statuses', OrdersStatusController::class);

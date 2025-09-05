@@ -10,27 +10,21 @@
     <link rel="icon" href="{{fn_get_image('company_favicon', 0)['url'] ?? ''}}" type="image/x-icon">
     <link rel="shortcut icon" href="{{fn_get_image('company_favicon', 0)['url'] ?? ''}}" type="image/x-icon">
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/css/toast.css', 'resources/css/fontawesome/all.min.css', 'resources/js/app.js', 'resources/js/category-selector.js'])
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{{ asset('css/toast.css') }}">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
-
-    @if(fn_get_setting('general.editor.type') == 'tinymce')
-    @elseif(fn_get_setting('general.editor.type') == 'quill')
-    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
-    @endif
-     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- widgets -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gridstack@10.3.1/dist/gridstack.min.css"/>
-    <script src="https://cdn.jsdelivr.net/npm/gridstack@9.3.0/dist/gridstack-h5.js"></script>
+    <!-- end widgets -->
+     
     <script src="//unpkg.com/alpinejs" defer></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- meta -->
     @yield('meta')
+    @yield('links')
+
     @include('admin::layouts.tailwind-config')
     <!-- styles -->
     @yield('styles')
@@ -62,8 +56,6 @@
     <script src="{{ asset('js/toast.js') }}"></script>
     @if(fn_get_setting('general.editor.type') == 'tinymce')
     <script src="https://cdn.tiny.cloud/1/{{fn_get_setting('general.editor.api_key')}}/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
-    @elseif(fn_get_setting('general.editor.type') == 'quill')
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     @endif
     @yield('scripts')
 
@@ -161,8 +153,8 @@
 
             form.setAttribute('action', actionUrl);
             if (isAjax) {
-                form.classList.add('form-ajax');
             }
+            // form.classList.add('form-ajax');
             modal.classList.remove('hidden');
         }
 
@@ -176,7 +168,6 @@
     </script>
 
     {{-- status Chnage modal --}}
-
     <script>
         function openStatusModal(actionUrl) {
             const modal = document.getElementById('status-modal');

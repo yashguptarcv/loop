@@ -1,6 +1,6 @@
 <div class="relative inline-block text-left">
-    <button data-id="dropdownTrigger_{{$id}}" class="dropdown-trigger flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-200">
-        <span class="material-icons-outlined text-gray-700">more_vert</span>
+    <button data-id="dropdownTrigger_{{$id}}" class="dropdown-trigger flex items-center justify-center {{$class ?? 'w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200'}} focus:outline-none focus:ring-2 focus:ring-primary transition-all duration-200">
+         {{$title ?? ''}} <span class="material-icons-outlined">{{$icon ?? 'more_vert'}}</span>
     </button>
 
     <!-- Dropdown menu (hidden by default) -->

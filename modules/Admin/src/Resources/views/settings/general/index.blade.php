@@ -46,7 +46,7 @@
     <!-- Content area with left padding to avoid overlap -->
     <div id="tab-content" class="tab-content lead-details active space-y-4">
 
-        @include('admin::settings.general.general')
+        @include('admin::settings.general.components.general')
 
     </div>
     <div class="px-6 py-4 bg-gray-50 border-t divide-gray-100 flex justify-end">

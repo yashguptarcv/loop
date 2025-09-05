@@ -12,6 +12,7 @@ return new class extends Migration {
             $table->char('type_code', 1)->comment('O = Order, S = Shipping');
             $table->char('status_code', 1)->comment('P = Pending/Picked, C = Completed');
             $table->string('name');
+            $table->string('color')->nullable();
             $table->timestamps();
         });
     }

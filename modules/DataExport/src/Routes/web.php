@@ -18,7 +18,7 @@ use Modules\DataExport\Http\Controllers\ExportController;
 
 Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->group(function () {
     Route::middleware(['admin.auth', 'admin.permission'])->group(function () {
-        Route::prefix('data-export')->name('dataexport.')->group(function () {
+        Route::prefix('import')->name('import.')->group(function () {
             Route::get('/', [ExportController::class, 'index'])->name('index');
             Route::get('/columns/{table}', [ExportController::class, 'getColumns'])->name('columns');
             Route::get('/preview/{table}', [ExportController::class, 'preview'])->name('preview');

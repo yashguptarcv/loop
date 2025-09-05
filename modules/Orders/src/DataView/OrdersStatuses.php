@@ -4,6 +4,7 @@ namespace Modules\Orders\DataView;
 
 use Modules\DataView\DataGrid;
 use Illuminate\Support\Facades\DB;
+use Modules\Orders\Enums\OrderStatus;
 
 class OrdersStatuses extends DataGrid
 {
@@ -23,6 +24,7 @@ class OrdersStatuses extends DataGrid
                 'id',
                 'name',
                 'type_code',
+                'color',
                 'status_code',
                 'created_at'
             );
@@ -41,12 +43,7 @@ class OrdersStatuses extends DataGrid
             'type' => 'integer',
             'searchable' => true,
             'filterable' => false,
-            'sortable' => true,
-            'closure' => function ($row) {
-                if(in_array($row->status_code, array_column(config('admin.statuses'), 'status_code'))) {
-                    return false; 
-                }
-            },
+            'sortable' => true
         ]);
 
         $this->addColumn([
@@ -59,8 +56,8 @@ class OrdersStatuses extends DataGrid
         ]);
 
         $this->addColumn([
-            'index' => 'status_code',
-            'label' => 'Status Code',
+            'index' => 'color',
+            'label' => 'Color',
             'type' => 'string',
             'searchable' => false,
             'filterable' => true,
@@ -86,32 +83,33 @@ class OrdersStatuses extends DataGrid
      */
     public function prepareActions()
     {
-        // if (bouncer()->hasPermission('admin.orders-statuses.edit')) {
-        //     $this->addAction([
-        //         'icon' => 'edit',
-        //         'title' => 'Edit',
-        //         'method' => 'GET',
-        //         'modal' => true,
-        //         'url' => function ($row) {
-        //             if(!in_array($row->status_code, array_column(config('admin.statuses'), 'status_code'))) {
-        //                 return route('admin.orders-statuses.edit', $row->id);
-        //             }
-        //         },
-        //     ]);
-        // }
+        if (bouncer()->hasPermission('admin.orders-statuses.edit')) {
+            $this->addAction([
+                'icon' => 'edit',
+                'title' => 'Edit',
+                'method' => 'GET',
+                'modal' => true,
+                'is_popup'  => true,
+                'url' => function ($row) {
+                    if(!empty(OrderStatus::from($row->status_code))) {                    
+                        return route('admin.orders-statuses.edit', $row->id);
+                    }
+                },
+            ]);
+        }
 
-        // if (bouncer()->hasPermission('admin.orders-statuses.destroy')) {
-        //     $this->addAction([
-        //         'icon' => 'delete',
-        //         'title' => 'Delete',
-        //         'method' => 'DELETE',
-        //         'url' => function ($row) {
-        //             if(!in_array($row->status_code, array_column(config('admin.statuses'), 'status_code'))) {
-        //                 return route('admin.orders-statuses.destroy', $row->id);
-        //             }
-        //         },
-        //     ]);
-        // }
+        if (bouncer()->hasPermission('admin.orders-statuses.destroy')) {
+            $this->addAction([
+                'icon' => 'delete',
+                'title' => 'Delete',
+                'method' => 'DELETE',
+                'url' => function ($row) {
+                   if(!empty(OrderStatus::from($row->status_code))) {                    
+                        return route('admin.orders-statuses.edit', $row->id);
+                    }
+                },
+            ]);
+        }
     }
 
     /**
@@ -127,6 +125,7 @@ class OrdersStatuses extends DataGrid
                 'icon' => 'add',
                 'title' => 'Create Status',
                 'method' => 'GET',
+                'is_popup'  => true,
                 'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.orders-statuses.create',
             ]);

@@ -164,6 +164,28 @@ window.addEventListener('load', () => {
   if (stickyDropdownClose) {
     stickyDropdownClose.addEventListener('click', closeStickyDropdown);
   }
+
+  // Note: Header functionality is now handled by header-loader.js
+  // Mobile dropdown functionality
+  window.toggleMobileDropdown = function() {
+    const dropdown = document.getElementById('mobileUserDropdown');
+    const icon = document.getElementById('mobileDropdownIcon');
+    if (dropdown && icon) {
+      dropdown.classList.toggle('hidden');
+      icon.classList.toggle('rotate-180');
+    }
+  }
+
+  // Close mobile dropdown on outside click
+  document.addEventListener('click', function(e) {
+    const dropdown = document.getElementById('mobileUserDropdown');
+    const button = e.target.closest('button[onclick*="toggleMobileDropdown"]');
+    if (dropdown && !dropdown.contains(e.target) && !button) {
+      dropdown.classList.add('hidden');
+      const icon = document.getElementById('mobileDropdownIcon');
+      if (icon) icon.classList.remove('rotate-180');
+    }
+  });
   
 
   // Initialize GSAP and ScrollTrigger
@@ -273,3 +295,31 @@ window.addEventListener('load', () => {
 
 
 });
+
+document.querySelectorAll('[data-faq]').forEach(btn => {
+  btn.addEventListener('click', function () {
+      const content = this.parentElement.querySelector('[data-faq-content]');
+      const plusMinus = this.querySelector('span:last-child');
+
+      // Toggle the current item
+      if (content.style.maxHeight) {
+          // Close
+          content.style.maxHeight = null;
+          plusMinus.textContent = '+';
+      } else {
+          // Open
+          content.style.maxHeight = content.scrollHeight + 'px';
+          plusMinus.textContent = '-';
+
+          // Close others (optional - remove if you want multiple open)
+          document.querySelectorAll('[data-faq-content]').forEach(otherContent => {
+              if (otherContent !== content && otherContent.style.maxHeight) {
+                  otherContent.style.maxHeight = null;
+                  otherContent.previousElementSibling.querySelector('span:last-child').textContent = '+';
+              }
+          });
+      }
+  });
+});
+
+

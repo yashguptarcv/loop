@@ -21,7 +21,12 @@ class CustomersController extends Controller
 
     public function show(ModelsUser $customer)
     {
-        return view("customers::customers.profile.modal.form", compact('customer'));
+        return view("customers::customers.show", compact('customer'));
+    }
+
+    public function create()
+    {
+        return view("customers::customers.profile.modal.form");
     }
 
     public function edit(ModelsUser $customer = null)
@@ -141,7 +146,7 @@ class CustomersController extends Controller
                 'phone'      => $customer->phone,
                 'name'       => $customer->name,
                 'email'      => $customer->email,
-                'is_default' => $request->boolean('sameAsBilling'),
+                'is_default' => !$request->boolean('sameAsBilling'),
             ])
         );
     }

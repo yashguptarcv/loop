@@ -1,18 +1,28 @@
-@if($items->count() > 0)
+@if(request()->ajax())
+    {{-- Render wrapper only for first load --}}
+    @if($items->count() > 0)
+        <div class="space-y-4">
+    @endif
+@endif
 
-<div class="space-y-4">
-    @foreach($items as $attachment)
+{{-- Always render attachments list --}}
+<div id="render_url_lead" data-next-page="{{ $items->nextPageUrl() }}"
+                data-current="{{ $items->currentPage() }}"
+                data-total="{{ $items->lastPage() }}">
+@foreach($items as $attachment)
     <div class="border divide-gray-100 rounded-md p-4">
         <div class="flex items-center">
             <div class="flex-shrink-0 bg-gray-100 rounded-md p-3">
                 @if(str_starts_with($attachment->mime_type, 'image/'))
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
                 @else
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
                 @endif
             </div>
             <div class="ml-4">
@@ -24,30 +34,46 @@
             </div>
             <div class="ml-auto flex space-x-2">
                 @if(bouncer()->hasPermission('admin.leads.attachments.download'))
-                
-                    
-                <form action="{{route('admin.leads.attachments.download', [$lead->id, $attachment->id])}}" method="get">
-                    @csrf
-                    @method('get')
-                    <x-button type="submit"  class="primary" label="" icon="<span class='material-icons-outlined mr-1'>file_download</span>" name='button'/> 
-                    
-                </form>
+                    <form action="{{ route('admin.leads.attachments.download', [$lead->id, $attachment->id]) }}" method="get">
+                        @csrf
+                        @method('get')
+                        <x-button type="submit" class="primary" label="" 
+                                  icon="<span class='material-icons-outlined mr-1'>file_download</span>" name="button"/> 
+                    </form>
                 @endif
+
                 @if(bouncer()->hasPermission('admin.leads.attachments.destroy'))
-                
-                <form action="{{route('admin.leads.attachments.destroy', [$lead->id, $attachment->id])}}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <x-button type="submit"  class="red" label="" icon="<span class='material-icons-outlined mr-1'>delete</span>" name='button'/> 
-                    
-                </form>
-                
+                    <form action="{{ route('admin.leads.attachments.destroy', [$lead->id, $attachment->id]) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <x-button type="submit" class="red" label="" 
+                                  icon="<span class='material-icons-outlined mr-1'>delete</span>" name="button"/> 
+                    </form>
                 @endif
             </div>
         </div>
     </div>
-    @endforeach
+@endforeach
+
+{{-- Load More Button (always included) --}}
+<div class="flex justify-center my-4" id="load-more-wrapper">
+    @if ($items->hasMorePages())
+        <button id="load-more-btn"
+            class="rounded-full bg-gray-200 hover:bg-gray-300 text-gray-800 px-6 py-2 text-sm font-medium"
+            data-next-page="{{ $items->currentPage() + 1 }}">
+            Load More ({{ $items->currentPage() }} / {{ $items->lastPage() }})
+        </button>
+    @endif
 </div>
+        </div>
+@if(request()->ajax())
+    @if($items->count() > 0)
+        </div> {{-- close wrapper --}}
+    @else
+        <p class="bg-primary-100 text-amber-100 px-3 py-2">No attachments available.</p>
+    @endif
 @else
-<p class="bg-blue-100 text-blue-600 px-3 py-2">No attachments available.</p>
+    @if($items->count() === 0)
+        <p class="bg-primary-100 text-amber-100 px-3 py-2">No attachments available.</p>
+    @endif
 @endif

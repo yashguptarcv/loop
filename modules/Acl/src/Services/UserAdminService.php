@@ -35,8 +35,8 @@ class UserAdminService
         if ($user) {
             // Trigger order created event
             $this->notificationService->trigger(
-                'Admin',
-                'User',
+                'Admin', //module name
+                'User', // notification class name before Notification
                 $user,
                 $data
             );

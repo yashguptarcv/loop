@@ -152,7 +152,7 @@ class TagsController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'errors' => $e->getMessage()
-            ], 500);
+            ]);
         }
     }
 

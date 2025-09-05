@@ -8,7 +8,7 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Title *</label>
                     <input type="text" name="title" value="{{ old('title', $meeting->title) }}" 
-                           class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md" >
                     @error('title')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -28,7 +28,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-1">Start Time *</label>
                         <input type="datetime-local" name="start_time" 
                                value="{{ old('start_time', \Carbon\Carbon::parse($meeting->start_time)->format('Y-m-d\TH:i')) }}"
-                               class="w-full px-3 py-2 border border-gray-300 rounded-md" required>
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md" >
                         @error('start_time')
                             <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror

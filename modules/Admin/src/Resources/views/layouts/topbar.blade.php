@@ -18,8 +18,7 @@
     <!-- Right Controls -->
     <div class="flex items-center space-x-4">
         <!-- Search Bar -->
-
-
+        
         <!-- Notification Bell -->
         <div class="relative">
             <button
@@ -50,6 +49,9 @@
                     </p>
                 </div>
 
+                <div class="px-4 py-3 border-b border-primary-600">
+                    <a href="/" target="_blank" class="w-full text-sm font-medium" title="website">Website</a>
+                </div>
 
                 <div class="border-t border-amber-100"></div>
                 <form method="POST" action="{{ route('admin.logout') }}" class="form-ajax">

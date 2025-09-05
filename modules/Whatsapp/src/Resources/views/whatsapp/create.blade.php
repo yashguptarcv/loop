@@ -25,7 +25,7 @@
                             </label>
                             <input type="text" id="name" name="name" value="{{ old('name') }}"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
-                                placeholder="e.g., order_confirmation" required>
+                                placeholder="e.g., order_confirmation" >
                             <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
                                 Use lowercase letters, numbers, and underscores only. No spaces.
                             </p>
@@ -36,7 +36,7 @@
                             </label>
                             <select id="category" name="category"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
-                                required>
+                                >
                                 <option value="utility" {{ old('category') === 'utility' ? 'selected' : '' }}>Utility</option>
                                 <option value="marketing" {{ old('category') === 'marketing' ? 'selected' : '' }}>Marketing</option>
                                 <option value="authentication" {{ old('category') === 'authentication' ? 'selected' : '' }}>Authentication</option>
@@ -52,7 +52,7 @@
                         </label>
                         <select id="language" name="language"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
-                            required>
+                            >
                             <option value="en_US" {{ old('language') === 'en_US' ? 'selected' : '' }}>English (US)</option>
                             <option value="en_GB" {{ old('language') === 'en_GB' ? 'selected' : '' }}>English (UK)</option>
                             <option value="es_ES" {{ old('language') === 'es_ES' ? 'selected' : '' }}>Spanish (Spain)</option>
@@ -148,7 +148,7 @@
                         </label>
                         <textarea id="body_text" name="body_text" rows="5"
                             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
-                            placeholder="Enter your message body here..." required>{{ old('body_text') }}</textarea>
+                            placeholder="Enter your message body here..." >{{ old('body_text') }}</textarea>
                         <p class="text-xs text-gray-500 dark:text-gray-400">
                             Maximum 1024 characters. Use {{1}}, {{2}}, etc. for variables.
                         </p>

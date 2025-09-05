@@ -11,21 +11,21 @@ class StatusesTableSeeder extends Seeder
     {
         $statuses = [
             // NEW        
-             ['type_code' => 'O', 'status_code' => 'O', 'name' => 'New'],
+             ['type_code' => 'O', 'status_code' => 'O', 'name' => 'New', 'color'    => 'blue'],
             // INCOMPLETE 
-             ['type_code' => 'O', 'status_code' => 'N', 'name' => 'Incomplete'],
+             ['type_code' => 'O', 'status_code' => 'N', 'name' => 'Incomplete', 'color' => 'yellow'],
             // PENDING    
-             ['type_code' => 'O', 'status_code' => 'P', 'name' => 'Pending'],
+             ['type_code' => 'O', 'status_code' => 'P', 'name' => 'Pending', 'color'    => 'red'],
             // PROCESSING 
-             ['type_code' => 'O', 'status_code' => 'H', 'name' => 'Processing'],
+             ['type_code' => 'O', 'status_code' => 'H', 'name' => 'Processing', 'color' => 'yellow'],
             // COMPLETED  
-             ['type_code' => 'O', 'status_code' => 'Z', 'name' => 'Completed'],
+             ['type_code' => 'O', 'status_code' => 'Z', 'name' => 'Completed', 'color'  => 'green'],
             // FAILED     
-             ['type_code' => 'O', 'status_code' => 'F', 'name' => 'Failed'],
+             ['type_code' => 'O', 'status_code' => 'F', 'name' => 'Failed', 'color' => 'red'],
             // REFUNDED   
-             ['type_code' => 'O', 'status_code' => 'R', 'name' => 'Refunded'],
+             ['type_code' => 'O', 'status_code' => 'R', 'name' => 'Refunded', 'color'   => 'purple'],
             // CANCELLED  
-             ['type_code' => 'O', 'status_code' => 'C', 'name' => 'Cancelled'],
+             ['type_code' => 'O', 'status_code' => 'C', 'name' => 'Cancelled', 'color'  => 'red'],
         ];
 
         DB::table('statuses')->insert($statuses);

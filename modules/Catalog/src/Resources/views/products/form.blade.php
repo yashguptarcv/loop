@@ -30,7 +30,7 @@
                 <label class="custom-label">Price <span class="text-red-500">*</span></label>
                 <input type="number" step="0.01" name="price" id="price"
                     value="{{ old('price', $product->price ?? '') }}"
-                    class="input-field" required>
+                    class="input-field" >
             </div>
             <div>
                 <label class="custom-label">Sale Price</label>
@@ -39,7 +39,7 @@
                     class="input-field">
             </div>
         </div>
-
+                
         <x-autocomplete 
             label="Tax"
             field="tax_id"
@@ -92,7 +92,7 @@
             <label class="custom-label">Name <span class="text-red-500">*</span></label>
             <input type="text" name="name" id="name"
                 value="{{ old('name', $product->name ?? '') }}"
-                class="input-field" required>
+                class="input-field" >
         </div>
 
         <!-- Slug -->

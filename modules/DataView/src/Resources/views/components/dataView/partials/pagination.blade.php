@@ -3,6 +3,7 @@
     $currentPage = $pagination['page'] ?? $data['meta']['current_page'];
     $perPage = $pagination['per_page'] ?? $data['meta']['per_page'];
 @endphp
+@if(!empty($data['records']))
 <div class="flex items-center space-x-2 mt-6">
         <nav class="flex items-center space-x-2">
             <!-- First page (<<) -->
@@ -74,3 +75,4 @@
             </a>
         </nav>
     </div>
+@endif

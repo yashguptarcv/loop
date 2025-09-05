@@ -1,3 +1,11 @@
+@extends('admin::layouts.app')
+
+@section('title', 'Email Templates')
+
+@section('content')
+
+@include('admin::components.common.back-button', ['route' => route('admin.email-templates.index'), 'name' => !empty($template) ? 'Edit Template / '. $template->name : 'New Template'])
+
 <form id="templateForm" class="form-ajax" method="POST"
     action="@isset($template) {{ route('admin.email-templates.update', $template->id) }} @else {{ route('admin.email-templates.store') }} @endisset">
     @csrf
@@ -29,7 +37,7 @@
     <!-- Content Field -->
     <div class="mb-2">
         <label class="custom-label">Content</label>
-        <textarea name="content" id="content" editor="true"
+        <textarea name="content" id="content" editor="true" data-height="800"
             class="input-field @error('content') border-red-500 @enderror">{{ $template->content ?? old('content') }}</textarea>
         <div class="error-message text-red-500 text-sm mt-1" id="content-error">
             @error('content') {{ $message }} @enderror
@@ -53,3 +61,4 @@
         <x-button type="submit" class="primary" label="Save" icon='' name='button' />
     </div>
 </form>
+@endsection

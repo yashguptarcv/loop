@@ -5,6 +5,7 @@ namespace Modules\Orders\DataView;
 use Modules\DataView\DataGrid;
 use Illuminate\Support\Facades\DB;
 use Modules\Orders\Enums\OrderStatus;
+use Modules\Payments\Models\PaymentConfiguration;
 
 class OrderGrid extends DataGrid
 {
@@ -33,6 +34,7 @@ class OrderGrid extends DataGrid
                 'orders.total',
                 'orders.payment_method',
                 'orders.payment_status',
+                'orders.currency',
                 'orders.created_at',
                 'users.name'
             );
@@ -80,11 +82,20 @@ class OrderGrid extends DataGrid
             'filterable' => true,
             'sortable' => true,
             'closure' => function ($row) {
-                return '$' . number_format($row->total, 2);
-            },
+                return fn_convert_currency_rate($row->total ?? 0, $row->currency);
+            }
         ]);
 
-        $orderStatuses = fn_get_order_status();
+        $this->addColumn([
+            'index' => 'currency',
+            'label' => 'Currency',
+            'type' => 'string',
+            'searchable' => true,
+            'filterable' => false,
+            'sortable' => false,
+        ]);
+
+        $orderStatuses = fn_get_order_statuses();
         $this->addColumn([
             'index' => 'status',
             'label' => 'Order Status',
@@ -104,8 +115,8 @@ class OrderGrid extends DataGrid
                 
                 try {
                     // Convert the status value to the enum
-                    $status = OrderStatus::from($statusValue);                    
-                    return $status->label();
+                    $status = fn_get_order_status($statusValue);
+                    return "<span class='bg-{$status->color}-100 text-{$status->color}-500 rounded-lg px-1 py-1'>{$status->name}</span>";
                 } catch (\ValueError $e) {                    
                     // Handle unexpected status values
                     return 'Unknown';
@@ -129,6 +140,12 @@ class OrderGrid extends DataGrid
             'searchable' => false,
             'filterable' => true,
             'sortable' => false,
+            'closure' => function ($row) {
+                // Get the status from the row
+                return $payment_method = $row->payment_method;
+                
+                
+            },
         ]);
 
         $this->addColumn([
@@ -182,7 +199,7 @@ class OrderGrid extends DataGrid
         if (bouncer()->hasPermission('admin.orders.create')) {
             $this->addMassAction([
                 'icon' => 'add',
-                'title' => 'Order',
+                'title' => 'New Order',
                 'method' => 'GET',
                 'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.orders.create',
@@ -199,6 +216,7 @@ class OrderGrid extends DataGrid
             ]);
         }
 
+        $orderStatuses = fn_get_order_statuses();
         if (bouncer()->hasPermission('admin.orders.toggle-status')) {
             $this->addMassAction([
                 'icon' => '',
@@ -206,12 +224,12 @@ class OrderGrid extends DataGrid
                 'method' => 'POST',
                 'action' => 'bg-gray-500',
                 'url' => 'admin.orders.toggle-status',
-                'options' => [
-                    ['label' => 'Pending', 'value' => 'pending'],
-                    ['label' => 'Processing', 'value' => 'processing'],
-                    ['label' => 'Completed', 'value' => 'completed'],
-                    ['label' => 'Cancelled', 'value' => 'cancelled'],
-                ],
+                'options' => collect($orderStatuses)->map(function ($name, $id) {
+                    return [
+                        'label' => $name->name,
+                        'value' => $name->id
+                    ];
+                })->values()->toArray(),
             ]);
         }
     }

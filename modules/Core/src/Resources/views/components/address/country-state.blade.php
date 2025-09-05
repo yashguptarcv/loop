@@ -18,11 +18,11 @@
         $state_field = $state_name;
     }
 @endphp
-<div id="country_state_container" class="space-y-4">
+<div class="country_state_container grid grid-cols-1 md:grid-cols-2 mt-4 gap-4">
     <!-- Country -->
     <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Country</label>
-        <select id="country_select" name="{{ $country_field }}" class="w-full border rounded-lg px-3 py-2 text-sm">
+        <label class="custom-label">Country</label>
+        <select data-country name="{{ $country_field }}" class="input-field">
             <option value="">-- Select Country --</option>
             @foreach($countries as $country)
                 <option value="{{ $country->id }}" 
@@ -38,8 +38,9 @@
 
     <!-- State -->
     <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">State</label>
-        <select id="state_select" name="{{ $state_field }}" class="w-full border rounded-lg px-3 py-2 text-sm">
+        <label class="custom-label">State</label>
+        <input type="hidden" data-selected-state value="{{ $selectedState }}">
+        <select data-state name="{{ $state_field }}" class="input-field">
             <option value="">-- Select State --</option>
         </select>
         @error($state_field)

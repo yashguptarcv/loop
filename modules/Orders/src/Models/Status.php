@@ -16,5 +16,6 @@ class Status extends Model
         'type_code',
         'status_code',
         'new',
+        'color'
     ];
 }

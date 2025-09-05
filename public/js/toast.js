@@ -12,8 +12,6 @@ class ModernToast {
         if (this.toasts.length >= this.maxToasts) {
             this.remove(this.toasts[0]);
         }
-
-        console.log(this.container);
         
         const toast = this.create(message, type, title, duration);
         this.container.appendChild(toast);

@@ -33,7 +33,7 @@ class ApplicationRequest extends FormRequest
      * @return void
      */
     protected function prepareForValidation()
-    {
+    {        
         // If your billing address comes as separate fields, you might need to combine them
         if ($this->has(['address_line1', 'city', 'state', 'postal_code', 'country'])) {
             $this->merge([

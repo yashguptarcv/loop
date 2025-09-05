@@ -93,6 +93,18 @@ class Customers extends DataGrid
             ]);
         }
 
+        if (bouncer()->hasPermission('admin.customers.edit')) {
+            $this->addAction([
+                'icon' => 'edit',
+                'title' => 'Edit',
+                'method' => 'GET',
+                'is_popup'  => true,
+                'url' => function ($row) {
+                    return route('admin.customers.edit', $row->id);
+                },
+            ]);
+        }
+
         if (bouncer()->hasPermission('admin.customers.destroy')) {
             $this->addAction([
                 'icon' => 'delete',
@@ -127,6 +139,7 @@ class Customers extends DataGrid
                 'icon' => 'add',
                 'title' => 'Create Customer',
                 'method' => 'GET',
+                'is_popup'  => true,
                 'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.customers.create',
             ]);

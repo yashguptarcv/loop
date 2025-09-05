@@ -1,4 +1,4 @@
-<div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+<div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-primary-100">
     <div class="flex items-center justify-between">
         <div>
             <p class="text-sm font-medium text-gray-500">{{ $widget->title }}</p>

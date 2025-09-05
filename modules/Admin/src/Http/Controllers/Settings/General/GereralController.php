@@ -105,7 +105,7 @@ class GereralController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'errors' => 'Something went wrong. Please try again.' . $e
-            ], 500);
+            ]);
         }
     }
 
@@ -133,21 +133,21 @@ class GereralController extends Controller
 
             switch ($tab) {
                 case 'general':
-                    return view('admin::settings.general.general', compact(
+                    return view('admin::settings.general.components.general', compact(
                         'timezones'                       
                     ));
                 case 'company':
-                    return view('admin::settings.general.company', compact('countries'));
+                    return view('admin::settings.general.components.company', compact('countries'));
                 case 'email':
-                    return view('admin::settings.general.email');
+                    return view('admin::settings.general.components.email');
                 case 'channel':
-                    return view('admin::settings.general.channel');
+                    return view('admin::settings.general.components.channel');
                 case 'checkout':
-                    return view('admin::settings.general.checkout');
+                    return view('admin::settings.general.components.checkout');
                 case 'lead':
-                    return view('admin::settings.general.lead');
+                    return view('admin::settings.general.components.lead');
                 case 'editortab':
-                    return view('admin::settings.general.editortab');
+                    return view('admin::settings.general.components.editortab');
                 default:
                     abort(400);
             }

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Modules\Core\Views\Components\Address\CountryState;
 use Modules\Core\Views\Components\Autocomplete\Autocomplete;
+use Modules\Core\Views\Components\CategorySelector\CategorySelector;
 
 class CoreServiceProvider extends ServiceProvider
 {
@@ -140,5 +141,6 @@ class CoreServiceProvider extends ServiceProvider
     {
         Blade::component('autocomplete', Autocomplete::class);
         Blade::component('country-state', CountryState::class);
+        Blade::component('category-selector', CategorySelector::class);
     }
 } 

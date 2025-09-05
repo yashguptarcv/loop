@@ -9,78 +9,86 @@ use Illuminate\Routing\Controller;
 use Modules\Leads\Models\LeadModel;
 use Modules\Meetings\Models\Meeting;
 use Illuminate\Support\Facades\Storage;
+use Modules\Leads\Services\LeadService;
 use Illuminate\Support\Facades\Validator;
 use Modules\Leads\Models\LeadSourceModel;
 use Modules\Leads\Models\LeadStatusModel;
+use Modules\Leads\Http\Requests\LeadRequest;
 use Modules\Leads\Models\LeadAttachmentModel;
+use Modules\Meetings\Services\MeetingService;
+use Modules\Leads\Http\Requests\ActivityRequest;
 use Modules\Meetings\Services\GoogleCalendarService;
 
 class LeadsController extends Controller
 {
     protected $calendarService;
+    protected $leadService;
+    protected $meetingService;
 
-    public function __construct(GoogleCalendarService $calendarService)
-    {
+    public function __construct(
+        GoogleCalendarService $calendarService,
+        LeadService $leadService,
+        MeetingService $meetingService
+    ) {
         $this->calendarService = $calendarService;
+        $this->leadService = $leadService;
+        $this->meetingService = $meetingService;
     }
 
     public function index(Request $request)
     {
         $lead_statuses = LeadStatusModel::orderBy('sort')->get();
 
-        $query = LeadModel::with(['status', 'tags', 'createdBy'])
-            ->when(
-                fn_get_setting('general.lead.user_group') == auth('admin')->user()->role_id,
-                function ($q) {
-                    return $q;
-                },
-                function ($q) {
-                    return $q->where('assigned_to', auth('admin')->user()->role_id);
-                }
-            );
+        $query = LeadModel::with(['status', 'tags', 'createdBy']);
 
-        // Search functionality
+        $query->when(
+            fn_get_setting('general.lead.user_group') == auth('admin')->user()->role_id,
+            function ($q) {
+                return $q;
+            },
+            function ($q) {
+                return $q->where('assigned_to', auth('admin')->user()->role_id);
+            }
+        );
+
+        // 🔹 Search filter
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%")
                     ->orWhere('phone', 'like', "%{$search}%")
-                    ->orWhereHas('tags', function ($q) use ($search) {
-                        $q->where('name', 'like', "%{$search}%");
-                    });
+                    ->orWhereHas('tags', fn($q) => $q->where('name', 'like', "%{$search}%"));
             });
         }
-
-        // Date sorting
-        if ($request->filled('sort_date')) {
-            $sortDirection = in_array(strtolower($request->input('sort_date')), ['asc', 'desc'])
-                ? $request->input('sort_date')
-                : 'desc';
-            $query->orderBy('created_at', $sortDirection);
-        } else {
-            $query->orderBy('updated_at', 'desc');
+        if ($request->filled('assigned_to')) {
+            $query->where('created_by', $request->input('assigned_to'));
         }
 
-        // Pagination for infinite scroll
-        if ($request->ajax()) {
-            $leads = $query->paginate(fn_get_setting('general.per_page'));
+        if ($request->filled('source')) {
+            $query->where('source_id', $request->input('source'));
+        }
 
-            $response = ['success' => true, 'next_page' => $leads->nextPageUrl()];
+        // 🔹 Date sorting
+        $sortDirection = $request->filled('sort_date') && in_array(strtolower($request->input('sort_date')), ['asc', 'desc'])
+            ? $request->input('sort_date')
+            : 'desc';
+        $query->orderBy('created_at', $sortDirection);
 
-            // Add HTML for each status column
-            foreach ($lead_statuses as $status) {
-                $statusLeads = $leads->where('status_id', $status->id);
-                $response["status-{$status->id}-column"] = view('leads::leads.components.leads_list', [
-                    'leads' => $statusLeads
-                ])->render();
-            }
+        if ($request->ajax() && $request->has('status_id')) {
+            $leads = $query->where('status_id', $request->status_id)
+                ->paginate(fn_get_setting('general.per_page'));
 
-            return response()->json($response);
+            return response()->json([
+                'success'   => true,
+                'next_page' => $leads->nextPageUrl(),
+                'html'      => view('leads::leads.components.leads_list', [
+                    'leads' => $leads
+                ])->render()
+            ]);
         }
 
         $leads = $query->paginate(fn_get_setting('general.per_page'));
-
         return view("leads::leads.index", compact('lead_statuses', 'leads'));
     }
 
@@ -104,156 +112,181 @@ class LeadsController extends Controller
     public function show(Request $request, $id)
     {
         $lead = LeadModel::with(['status', 'source', 'assignedTo', 'tags', 'application'])
-            ->where('id', $id)
-            ->first();
+            ->findOrFail($id);
 
-        $perPage = fn_get_setting('general.per_page');
+        $perPage = fn_get_setting('general.per_page', 10);
+        $admins  = Admin::select('id', 'name')->get();
 
-        $admins = Admin::get(['id', 'name']);
-
-        if ($request->input('tab')) {
+        // Tab-based loading (for AJAX & partial loads)
+        if ($request->filled('tab')) {
             $tab = $request->input('tab');
-            // Handle infinite scroll requests
+
             switch ($tab) {
                 case 'activity':
                     $items = $lead->activities()
                         ->orderBy('created_at', 'desc')
                         ->paginate($perPage);
-                    return view('leads::leads.components.lead-detail-right.activity', ['items' => $items, 'lead' => $lead]);
+
+                    if ($request->ajax()) {
+                        return response()->json([
+                            'html'       => view('leads::leads.components.lead-detail-right.activity', [
+                                'items' => $items,
+                                'lead'  => $lead,
+                            ])->render(),
+                            'next_page'  => $items->nextPageUrl(),
+                            'current'    => $items->currentPage(),
+                            'totalPages' => $items->lastPage(),
+                        ]);
+                    }
+
+                    return view('leads::leads.components.lead-detail-right.activity', compact('items', 'lead'));
 
                 case 'notes':
                     $items = $lead->notes()
                         ->orderBy('created_at', 'desc')
                         ->paginate($perPage);
-                    return view('leads::leads.components.lead-detail-right.notes', ['items' => $items, 'lead' => $lead]);
+
+                    if ($request->ajax()) {
+                        return response()->json([
+                            'html'       => view('leads::leads.components.lead-detail-right.notes', [
+                                'items' => $items,
+                                'lead'  => $lead,
+                            ])->render(),
+                            'next_page'  => $items->nextPageUrl(),
+                            'current'    => $items->currentPage(),
+                            'totalPages' => $items->lastPage(),
+                        ]);
+                    }
+
+                    return view('leads::leads.components.lead-detail-right.notes', compact('items', 'lead'));
 
                 case 'files':
                     $items = $lead->attachments()
                         ->orderBy('created_at', 'desc')
                         ->paginate($perPage);
-                    return view('leads::leads.components.lead-detail-right.files', ['items' => $items, 'lead' => $lead]);
+
+                    if ($request->ajax()) {
+                        return response()->json([
+                            'html'       => view('leads::leads.components.lead-detail-right.files', [
+                                'items' => $items,
+                                'lead'  => $lead,
+                            ])->render(),
+                            'next_page'  => $items->nextPageUrl(),
+                            'current'    => $items->currentPage(),
+                            'totalPages' => $items->lastPage(),
+                        ]);
+                    }
+
+                    return view('leads::leads.components.lead-detail-right.files', compact('items', 'lead'));
 
                 case 'application':
                     $items = $lead->application()
                         ->orderBy('created_at', 'desc')
                         ->paginate($perPage);
 
-                    return view('leads::leads.components.lead-detail-right.application', ['items' => $items, 'lead' => $lead]);
+                    if ($request->ajax()) {
+                        return response()->json([
+                            'html'       => view('leads::leads.components.lead-detail-right.application', [
+                                'items' => $items,
+                                'lead'  => $lead,
+                            ])->render(),
+                            'next_page'  => $items->nextPageUrl(),
+                            'current'    => $items->currentPage(),
+                            'totalPages' => $items->lastPage(),
+                        ]);
+                    }
+
+                    return view('leads::leads.components.lead-detail-right.application', compact('items', 'lead'));
+
                 default:
-                    return abort(400);
+                    return abort(400, 'Invalid tab');
             }
         }
 
-        // Initial tab load
         $viewData = [
-            'lead' => $lead,
-            'admins' => $admins,
+            'lead'       => $lead,
+            'admins'     => $admins,
+            'activities' => $lead->activities()
+                ->orderBy('created_at', 'desc')
+                ->paginate($perPage),
         ];
-
-        $viewData['activities'] = $lead->activities()
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
 
         return view('leads::leads.lead-details', $viewData);
     }
 
-    public function store(Request $request)
+
+    public function store(LeadRequest $request)
     {
-        $validated = $this->validateRequest($request);
+        try {
+            $validate = $request->validated(); // returns validated data
 
-        if ($validated->fails()) {
-            return response()->json(['errors' => $validated->errors()]);
+            $lead = $this->leadService->create($request->all());
+
+            $lead->notes()->create([
+                'admin_id'  => auth('admin')->id(),
+                'note'      => "Lead created by " . auth('admin')->name,
+                'created'   => now()
+            ]);
+
+            $this->leadService->handleAttachments($request, $lead);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Lead created successfully!',
+                'redirect_url' => route('admin.leads.index')
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'errors' => 'Unable to update lead ' . $e->getMessage(),
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'errors' => $e->getMessage(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'errors' => 'Unable to update: ' . $e->getMessage(),
+            ]);
         }
-        // Create the lead
-        $lead = LeadModel::create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'phone' => $request['phone'],
-            'company' => $request['company'],
-            'status_id' => fn_get_setting('general.lead.status'),
-            'source_id' => $request['source_id'],
-            'value' => $request['value'],
-            'description' => $request['description'],
-            'industries'    => $request['industry'] ?? '',
-            'website'       => $request['website'] ?? '',
-            'address'       => $request['address'],
-            'address_2'     => $request['address_2'] ?? '',
-            'country'       => $request['country'],
-            'state'         => $request['state'],
-            'city'          => $request['city'],
-            'postal_code'   => $request['postal_code'],
-            'custom_fields' => $request['custom_fields'] ?? '',
-            'created_by' => auth('admin')->id(),
-        ]);
-
-        $lead->notes()->create([
-            'admin_id'  => auth('admin')->id(),
-            'note'      => "Lead created by " . auth('admin')->name,
-            'created'   => now()
-        ]);
-
-        // Handle tags if provided
-        if (!empty($request['tags'])) {
-            $tags = array_map('trim', explode(',', $request['tags']));
-            $lead->syncTags($tags);
-        }
-
-        // Handle file uploads
-        $this->handleImages($request, $lead);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Lead created successfully!',
-            'redirect_url' => route('admin.leads.index')
-        ]);
     }
 
-    public function update(Request $request, LeadModel $lead)
+    public function update(LeadRequest $request, LeadModel $lead)
     {
-        $validated = $this->validateRequest($request, $lead);
+        try {
+            $validate = $request->validated(); // returns validated data
 
-        if ($validated->fails()) {
-            return response()->json(['errors' => $validated->errors()]);
+            $this->leadService->update($lead, $request->all());
+
+            $this->leadService->handleAttachments($request, $lead);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Lead updated successfully!',
+                'redirect_url' => route('admin.leads.show', $lead)
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'errors' => 'Unable to update lead ' . $e->getMessage(),
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'errors' => $e->getMessage(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'errors' => 'Unable to update: ' . $e->getMessage(),
+            ]);
         }
-
-        // Update the lead
-        $lead->update([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'phone' => $request['phone'],
-            'company' => $request['company'],
-            'status_id' => $request['status_id'],
-            'source_id' => $request['source_id'],
-            'assigned_to' => $request['assigned_to'],
-            'value' => $request['value'],
-            'description' => $request['description'],
-            'industries'    => $request['industry'] ?? '',
-            'website'       => $request['website'] ?? '',
-            'address'       => $request['address'],
-            'address_2'     => $request['address_2'] ?? '',
-            'country'       => $request['country'],
-            'state'         => $request['state'],
-            'city'          => $request['city'],
-            'postal_code'   => $request['postal_code'],
-            'custom_fields' => $request['custom_fields'] ?? '',
-        ]);
-
-        // Handle tags if provided
-        if (!empty($request['tags'])) {
-            $tags = array_unique(array_map('trim', explode(',', $request['tags'])));
-            $lead->syncTags($tags);
-        }
-
-
-        // Handle file uploads
-        $this->handleImages($request, $lead);
-
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Lead updated successfully!',
-            'redirect_url' => route('admin.leads.show', $lead)
-        ]);
     }
 
     public function downloadAttachment(LeadModel $lead, LeadAttachmentModel $attachment)
@@ -264,9 +297,9 @@ class LeadsController extends Controller
             session()->flash('error', 'Unable to download attachment');
             return redirect()->route('admin.leads.show', $lead->id);
         }
-        
-        $filepath = 'uploads/' . strtolower('leads/'). $lead->id . '/'. $attachment->filename;
-        
+
+        $filepath = 'uploads/' . strtolower('leads/') . $lead->id . '/' . $attachment->filename;
+
         if (!Storage::disk(fn_get_setting('general.image_driver'))->exists($filepath)) {
             session()->flash('error', 'Unable to download attachment');
             return redirect()->route('admin.leads.show', $lead->id);
@@ -274,11 +307,11 @@ class LeadsController extends Controller
 
         $lead->notes()->create([
             'admin_id'  => auth('admin')->id(),
-            'note'      => auth('admin')->name . " has been download attachments ". $filepath,
+            'note'      => auth('admin')->name . " has been download attachments " . $filepath,
             'created'   => now()
         ]);
 
-        return response()->download('storage/'.$filepath);
+        return response()->download('storage/' . $filepath);
     }
 
     public function destroyAttachment(LeadModel $lead, LeadAttachmentModel $attachment)
@@ -290,7 +323,7 @@ class LeadsController extends Controller
         }
 
         // Delete main file
-        $path = 'uploads/' . strtolower('leads/'). $lead->id . '/';
+        $path = 'uploads/' . strtolower('leads/') . $lead->id . '/';
         Storage::disk(fn_get_setting('general.image_driver'))->delete($path . '/' . $attachment->filename);
 
         // Add note about the deletion
@@ -305,47 +338,6 @@ class LeadsController extends Controller
 
         return redirect()->back()->with('success', 'Attachment deleted successfully');
     }
-    protected function validateRequest(Request $request, $lead = null)
-    {
-        // |unique:leads,email' . ($lead ? ',' . $lead->id : ''),
-        return Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'phone' => 'nullable|string|max:20',
-            'company' => 'nullable|string|max:255',
-            'source_id' => 'nullable|exists:lead_sources,id',
-            'value' => 'nullable|numeric|min:0',
-            'description' => 'nullable|string',
-            'tags' => 'nullable|string',
-            'images.*' => 'nullable|file|max:5120', // 5MB
-        ]);
-    }
-
-    protected function handleImages(Request $request, LeadModel $lead)
-    {
-        if ($request->hasFile('images')) {
-
-            foreach ($request->file('images') as $file) {
-                $fileName = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
-                $originalName = $file->getClientOriginalName();
-                $mimeType = $file->getMimeType();
-                $extension = $file->getClientOriginalExtension();
-                $size = $file->getSize();
-                $path = 'uploads/' . strtolower('leads/'. $lead->id);
-                
-                Storage::disk(fn_get_setting('general.image_driver'))->putFileAs($path, $file, $fileName);
-
-                LeadAttachmentModel::create([
-                    'lead_id' => $lead->id,
-                    'admin_id' => auth('admin')->id(),
-                    'filename' => $fileName,
-                    'original_filename' => $originalName,
-                    'mime_type' => $mimeType,
-                    'size' => $size,
-                ]);
-            }
-        }
-    }
 
     public function updateStatus(Request $request)
     {
@@ -358,12 +350,6 @@ class LeadsController extends Controller
         $lead->status_id = $request->status_id;
         $lead->save();
 
-        // $lead->notes()->create([
-        //     'admin_id'  => auth('admin')->id(),
-        //     'note'      => auth('admin')->name . " changed lead status to " . $request->status_id,
-        //     'created'   => now()
-        // ]);
-
         return response()->json([
             'success' => true,
             'message' => 'Lead status updated successfully'
@@ -372,87 +358,75 @@ class LeadsController extends Controller
 
     // lead activity
 
-    public function storeActivity(Request $request, LeadModel $lead)
+    public function storeActivity(ActivityRequest $request, LeadModel $lead)
     {
-        $validated = Validator::make($request->all(), [
-            'type' => 'required|in:general,call,email,meeting,schedule_meeting',
-            'description' => 'required|string',
-            'duration_minutes' => 'nullable|integer|min:0',
-            'outcome' => 'nullable|in:positive,neutral,negative,follow_up',
-            'meeting_date'  => 'nullable'
-        ]);
+        try {
 
+            $request->validated(); // returns validated data
 
-        if ($validated->fails()) {
-            return response()->json(['errors' => $validated->errors()]);
-        }
+            // Process mentions in the description
+            $description = $this->processMentions($request->description);
 
-        // Process mentions in the description
-        $description = $this->processMentions($request->description);
-
-        $activity = $lead->activities()->create([
-            'admin_id' => auth('admin')->id(),
-            'type' => $request['type'],
-            'description' => $description,
-            'activity_date' => now(),
-            'duration_minutes' => $request['duration_minutes'] ?? 0,
-            'schedule_meeting' => $request['meeting_date'] ?? '',
-            'outcome' => $request['outcome'] ?? 'neutral'
-        ]);
-
-        $lead->update([
-            'updated_at' => now()
-        ]);
-
-        // Handle file uploads
-        $this->handleImages($request, $lead);
-        // $lead->notes()->create([
-        //     'admin_id'  => auth('admin')->id(),
-        //     'note'      => auth('admin')->name . " Added message",
-        //     'created'   => now()
-        // ]);
-
-        if (!empty($request['meeting_date'])) {
-
-            // Parse the meeting date and automatically set end time 2 hours later
-            $startTime = Carbon::parse($request['meeting_date']);
-            $endTime = $startTime->copy()->addMinute(30);
-            $meeting = Meeting::create([
-                'title' => auth('admin')->name . " Schedule a meeting with " . $lead->name,
-                'description' => $description,
-                'start_time' => $startTime,
-                'end_time' => $endTime,
-                'location' => '',
-                'color'    => '##0099cc',
+            $activity = $lead->activities()->create([
                 'admin_id' => auth('admin')->id(),
+                'type' => $request['type'],
+                'description' => $description,
+                'activity_date' => now(),
+                'duration_minutes' => $request['duration_minutes'] ?? 0,
+                'schedule_meeting' => $request['meeting_date'] ?? '',
+                'outcome' => $request['outcome'] ?? 'neutral'
             ]);
 
-            // Only sync if user has Google auth        
-            try {
-                $event = $this->calendarService->createEvent($meeting);
-                $meeting->update([
-                    'google_event_id' => $event->id,
-                    'google_calendar_id' => 'primary',
+            $lead->update([
+                'updated_at' => now()
+            ]);
+
+            // Handle file uploads
+            $this->leadService->handleAttachments($request, $lead);
+
+            if (!empty($request['meeting_date'])) {
+
+                $meeting = $this->meetingService->create([
+                    'start_time'    => Carbon::parse($request['meeting_date']),
+                    'title'         => auth('admin')->name . " Schedule a meeting with " . $lead->name,
+                    'description'   => $description,
+                    'location'      => '',
+                    'color'         => '##0099cc',
+                    'admin_id'      => auth('admin')->id(),
                 ]);
+
                 $lead->notes()->create([
                     'admin_id'  => auth('admin')->id(),
-                    'note'      => auth('admin')->name . " Schedule a meeting on " . $request['meeting_date'] . "\n, Google meeting ID: $event->id",
+                    'note'      => auth('admin')->name . " Schedule a meeting on " . $request['meeting_date'] . "\n, Google meeting ID: $meeting->google_event_id ?? $meeting->id",
                     'created'   => now()
                 ]);
                 session()->flash('success', 'Meeting created successfully');
-            } catch (\InvalidArgumentException $e) {
-                // Handle invalid date error
-                session()->flash('error', 'Unable to create meeting, try after some time \n' . $e->getMessage());
-            } catch (\Exception $e) {
-                session()->flash('error', 'Unable to create meeting on Google Calendar: ' . $e->getMessage());
             }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Activity added successfully',
+                'activity' => $activity,
+                'redirect_url' => route('admin.leads.show', $lead->id)
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'errors' => 'Unable to activity ' . $e->getMessage(),
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'errors' => $e->getMessage(),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'errors' => 'Unable to activity: ' . $e->getMessage(),
+            ]);
         }
-        return response()->json([
-            'success' => true,
-            'message' => 'Activity added successfully',
-            'activity' => $activity,
-            'redirect_url' => route('admin.leads.show', $lead->id)
-        ]);
     }
 
     private function processMentions($content)
@@ -498,32 +472,6 @@ class LeadsController extends Controller
         );
     }
 
-    // In your AdminController or UserController
-    public function searchAdmins(Request $request)
-    {
-        $query = $request->input('q', '');
-
-        if (strlen($query) < 3) {
-            return response()->json([]);
-        }
-
-        $admins = Admin::where('name', 'like', "%{$query}%")
-            ->orWhere('email', 'like', "%{$query}%")
-            ->limit(10)
-            ->get()
-            ->map(function ($admin) {
-                return [
-                    'id' => $admin->id,
-                    'name' => $admin->name,
-                    'avatar' => $admin->avatar_url, // Make sure this accessor exists
-                    'email' => $admin->email
-                ];
-            });
-
-        return response()->json($admins);
-    }
-
-    // app/Http/Controllers/LeadController.php
     public function updateAssignment(LeadModel $lead, Request $request)
     {
         $request->validate([

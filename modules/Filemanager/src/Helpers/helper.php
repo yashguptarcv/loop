@@ -13,6 +13,17 @@ if(!function_exists('fn_get_image')) {
     }
 }
 
+if(!function_exists('fn_get_default_image')) {
+    function fn_get_default_image() {
+        try {
+            $fileservice    =   new FileService();
+            return $fileservice->getDefaultImage();
+        } catch(Exception $e) {            
+            return false;
+        }
+    }
+}
+
 if(!function_exists('fn_get_images')) {
     function fn_get_images($object_type, $object_id = 0) {
         try {

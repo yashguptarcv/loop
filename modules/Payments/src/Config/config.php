@@ -63,9 +63,5 @@ return [
         'create' => 'Create Payment',
         'edit' => 'Edit Payment',
         'delete' => 'Delete Payment',
-    ],
-
-    'services' =>   [
-        'stripe' => StripeProcessor::class,
     ]
 ]; 

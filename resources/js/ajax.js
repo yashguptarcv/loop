@@ -318,6 +318,7 @@
      */
     function initTinyMCEEditors() {
       document.querySelectorAll('textarea[editor="true"]').forEach(textarea => {
+var heightEditor = textarea.dataset.height || 280; 
         const editorId = textarea.id || `tinymce-editor-${Math.random().toString(36).substr(2, 9)}`;
         textarea.id = editorId;
 
@@ -327,7 +328,7 @@
           toolbar: 'undo redo | bold italic | bullist numlist | link | alignleft aligncenter alignright alignjustify',
           menubar: false,
           statusbar: false,
-          height: 280,
+          height: heightEditor,
           setup: function (editor) {
             // Sync content back to textarea on change
             editor.on('change', function () {
@@ -494,11 +495,11 @@
             }));
           }
 
-          if(res.callback) {
+          if (res.callback) {
             // res.callback;
-              if (res.callback && typeof res.callback === 'string') {
-                  new Function(res.callback)(); // runs "loadOrder()"
-              }
+            if (res.callback && typeof res.callback === 'string') {
+              new Function(res.callback)(); // runs "loadOrder()"
+            }
           }
 
           if (res.redirect_url) {
@@ -542,10 +543,11 @@
       });
     }
 
-    // Modified ceAjax function with loader and CSRF token support
+    // Robust ceAjax with reliable result_ids handling and append option
     window.ceAjax = function (method, url, options = {}) {
       const config = {
-        result_ids: '',
+        result_ids: '',        // string "id1,id2" or ['id1','id2'] or { id1: 'replace', id2: 'append' }
+        append: false,         // if true -> append (insertAdjacentHTML 'beforeend'), otherwise replace innerHTML
         caching: true,
         callback: null,
         errorCallback: null,
@@ -554,71 +556,148 @@
         data: null,
         headers: {},
         loader: false,
+        debug: false,          // set true to log response & mapping
         ...options
       };
 
-      if (config.loader) Loader.show();
+      if (config.loader && window.Loader && typeof Loader.show === 'function') Loader.show();
       if (typeof config.beforeSend === 'function') config.beforeSend();
 
       const xhr = new XMLHttpRequest();
-      const finalUrl = config.caching ? url : `${url}${url.includes('?') ? '&' : '?'}_=${Date.now()}`;
+      let finalUrl = config.caching ? url : `${url}${url.includes('?') ? '&' : '?'}_=${Date.now()}`;
       const httpMethod = method.toUpperCase();
 
-      xhr.open(httpMethod, finalUrl, true);
-      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+      // Append GET data params to URL before opening (so we don't re-open)
+      if (httpMethod === 'GET' && config.data) {
+        const params = new URLSearchParams(config.data).toString();
+        finalUrl += (finalUrl.includes('?') ? '&' : '?') + params;
+      }
 
+      xhr.open(httpMethod, finalUrl, true);
+
+      // CSRF token only for non-GET
       if (httpMethod !== 'GET') {
         const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content;
         if (csrfToken) xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
       }
 
-      for (const [key, value] of Object.entries(config.headers)) {
-        xhr.setRequestHeader(key, value);
+      // Apply custom headers (if any)
+      if (config.headers && typeof config.headers === 'object') {
+        for (const [key, value] of Object.entries(config.headers)) {
+          if (key && value !== undefined) xhr.setRequestHeader(key, value);
+        }
       }
 
+      // Must be last so it never gets overridden
+      xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+
       xhr.onload = function () {
-        if (config.loader) Loader.hide();
+        if (config.loader && window.Loader && typeof Loader.hide === 'function') Loader.hide();
         if (typeof config.complete === 'function') config.complete();
 
+        // success
         if (xhr.status >= 200 && xhr.status < 300) {
           let response;
-          try { response = JSON.parse(xhr.responseText); } catch { response = xhr.responseText; }
+          try {
+            response = JSON.parse(xhr.responseText);
+          } catch (e) {
+            response = xhr.responseText;
+          }
 
+          if (config.debug) {
+            console.log('ceAjax response:', response);
+          }
+
+          // handle result_ids mapping
           if (config.result_ids) {
-            const resultIds = typeof config.result_ids === 'string' ? config.result_ids.split(',') : Object.keys(config.result_ids);
-            resultIds.forEach(id => {
-              const el = document.getElementById(id.trim());
-              if (el) {
-                if (typeof response === 'object' && response[id.trim()]) el.innerHTML = response[id.trim()];
-                else if (typeof response === 'string') el.innerHTML = response;
+            // normalize resultIds into an array of ids
+            let resultIds = [];
+            if (Array.isArray(config.result_ids)) resultIds = config.result_ids;
+            else if (typeof config.result_ids === 'string') resultIds = config.result_ids.split(',').map(s => s.trim()).filter(Boolean);
+            else if (typeof config.result_ids === 'object') resultIds = Object.keys(config.result_ids);
+
+            // function to set content on an element according to mode
+            const applyContent = (el, content, mode = 'replace') => {
+              if (!el) return;
+              if (content === null || content === undefined) return;
+              if (mode === 'append') {
+                // insert HTML as-is
+                el.insertAdjacentHTML('beforeend', typeof content === 'string' ? content : String(content));
+              } else if (mode === 'prepend') {
+                el.insertAdjacentHTML('afterbegin', typeof content === 'string' ? content : String(content));
+              } else { // replace
+                el.innerHTML = typeof content === 'string' ? content : String(content);
               }
-            });
+            };
+
+            // response is a string (HTML) -> apply same HTML to all target elements (or first only if desired)
+            if (typeof response === 'string') {
+              resultIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el && config.debug) console.warn(`ceAjax: no element with id="${id}"`);
+                applyContent(el, response, config.append ? 'append' : 'replace');
+              });
+            } else if (typeof response === 'object' && response !== null) {
+              // if server returned per-id html keys, use them (highest priority)
+              resultIds.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) {
+                  if (config.debug) console.warn(`ceAjax: no element with id="${id}"`);
+                  return;
+                }
+
+                // determine mode for this id: if config.result_ids was an object with modes, respect it
+                let mode = config.append ? 'append' : 'replace';
+                if (typeof config.result_ids === 'object' && config.result_ids[id]) {
+                  const val = config.result_ids[id];
+                  if (val === 'append' || val === 'prepend' || val === 'replace') mode = val;
+                }
+
+                // priority mapping:
+                // 1) response[id]  (exact key)
+                // 2) response.html (common pattern)
+                // 3) response.data (sometimes used)
+                // 4) fallback: stringify response (only in debug mode, normally skip)
+                if (response.hasOwnProperty(id) && (response[id] !== null && response[id] !== undefined)) {
+                  applyContent(el, response[id], mode);
+                } else if (response.hasOwnProperty('html') && response.html !== null && response.html !== undefined) {
+                  applyContent(el, response.html, mode);
+                } else if (response.hasOwnProperty('data') && typeof response.data === 'string') {
+                  applyContent(el, response.data, mode);
+                } else {
+                  if (config.debug) {
+                    console.warn(`ceAjax: response did not contain html for id="${id}". Response keys:`, Object.keys(response));
+                  }
+                }
+              });
+            }
           }
 
           if (typeof config.callback === 'function') config.callback(response, config.data);
-        } else if (typeof config.errorCallback === 'function') {
-          config.errorCallback(xhr);
+        } else {
+          // error
+          if (config.debug) console.error('ceAjax error', xhr.status, xhr.responseText);
+          if (typeof config.errorCallback === 'function') config.errorCallback(xhr);
         }
       };
 
       xhr.onerror = function () {
-        if (config.loader) Loader.hide();
+        if (config.loader && window.Loader && typeof Loader.hide === 'function') Loader.hide();
         if (typeof config.complete === 'function') config.complete();
         if (typeof config.errorCallback === 'function') config.errorCallback(xhr);
       };
 
+      // prepare body for non-GETs
       let requestData = null;
-      if (config.data) {
-        if (httpMethod === 'GET') {
-          const params = new URLSearchParams(config.data).toString();
-          xhr.open(httpMethod, `${finalUrl}${finalUrl.includes('?') ? '&' : '?'}${params}`, true);
-        } else {
-          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          requestData = new URLSearchParams(config.data).toString();
-        }
+      if (config.data && httpMethod !== 'GET') {
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        requestData = new URLSearchParams(config.data).toString();
       }
+
       xhr.send(requestData);
     };
+
+
 
   });
 

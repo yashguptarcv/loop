@@ -16,11 +16,11 @@ class UserPermissionMiddleware
             return redirect()->route('customer.login');
         }
 
-        if (!$user->status) {
-            auth('customer')->logout();
-            session()->flash('error', 'Your account has been not active.');
-            return redirect()->route('customer.login');
-        }
+        // if (!$user->status) {
+        //     auth('customer')->logout();
+        //     session()->flash('error', 'Your account has been not active.');
+        //     return redirect()->route('customer.login');
+        // }
 
         // $role = $user->role;
 

@@ -26,7 +26,7 @@
 
         <!-- meta keywords -->
          <div>
-            <label class="custom-label required">Meta Keyword </label>
+            <label class="custom-label ">Meta Keyword </label>
             <input type="text" name="meta_keywords" id="meta_keywords"
                 value="{{ old('meta_keywords', $page->meta_keywords ?? '') }}"
                 class="input-field">
@@ -34,7 +34,7 @@
        
         <!-- page view -->
          <div>
-            <label class="custom-label required">Page view</label>
+            <label class="custom-label ">Page view</label>
             <select name="view" id="view" class="input-field">
                 <option value="shop::shop.page" {{ old('view', $page->view ?? '') == 'shop::shop.page' ? 'selected' : '' }}>Default Page</option>
                 <option value="shop::shop.index" {{ old('view', $page->view ?? '') == 'shop::shop.index' ? 'selected' : '' }}>Home Page</option>
@@ -61,7 +61,7 @@
         <h3 class="text-lg font-medium text-gray-900 mb-3">Basic Info</h3>
         <!-- Title -->
         <div>
-            <label class="custom-label required">Title </label>
+            <label class="custom-label ">Title </label>
             <input type="text" name="title" id="title"
                 value="{{ old('title', $page->title ?? '') }}"
                 class="input-field" >
@@ -69,14 +69,14 @@
 
         <!-- Slug -->
         <div>
-            <label class="custom-label required">Slug</label>
+            <label class="custom-label ">Slug</label>
             <input type="text" name="slug" id="slug" value="{{ old('slug', $page->slug ?? '') }}"
                 class="input-field">
         </div>
 
         <!-- meta title -->
         <div>
-            <label class="custom-label required">Meta Title </label>
+            <label class="custom-label ">Meta Title </label>
             <input type="text" name="meta_title" id="meta_title"
                 value="{{ old('meta_title', $page->meta_title ?? '') }}"
                 class="input-field">
@@ -84,7 +84,7 @@
 
         <!-- Status -->
         <div>
-            <label class="custom-label required">Status</label>
+            <label class="custom-label ">Status</label>
             <select name="status" id="status" class="input-field">
                 <option value="active" {{ old('status', $page->status ?? 'active') == 'active' ? 'selected' : '' }}>Active</option>
                 <option value="inactive" {{ old('status', $page->status ?? 'active') == 'inactive' ? 'selected' : '' }}>Inactive</option>

@@ -50,6 +50,7 @@ class UserUpdateNotification implements Notification
         return [
             'name'              => $this->data['name'],
             'email'             => $this->data['email'],
+            'phone'             => $this->data['phone'] ?? '',
             'password'          => $this->data['password'],
             'login_url'         => route('admin.login')
 
@@ -61,6 +62,7 @@ class UserUpdateNotification implements Notification
         return [
             'name'      => "User name",
             'email'     => "User email",
+            'phone'     => "User phone",
             'password'  => "User Random password",
             'login_url' => "Login URL",
         ];

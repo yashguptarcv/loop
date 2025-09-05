@@ -110,16 +110,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Available database fields with labels and sample values
     const dbFields = {
-        'name': { label: 'Name', required: true, sample: 'Electronics' },
-        'slug': { label: 'Slug', required: false, sample: 'electronics' },
-        'parent_id': { label: 'Parent ID', required: false, sample: '1' },
-        'description': { label: 'Description', required: false, sample: 'All electronic items' },
-        'image': { label: 'Image Path', required: false, sample: 'categories/electronics.jpg' },
-        'status': { label: 'Status (1/0)', required: false, sample: '1' },
-        'position': { label: 'Position', required: false, sample: '1' },
-        'meta_title': { label: 'Meta Title', required: false, sample: 'Electronics - Best Deals' },
-        'meta_description': { label: 'Meta Description', required: false, sample: 'Shop for best electronics' },
-        'meta_keywords': { label: 'Meta Keywords', required: false, sample: 'electronics, gadgets' }
+        'name': { label: 'Name', : true, sample: 'Electronics' },
+        'slug': { label: 'Slug', : false, sample: 'electronics' },
+        'parent_id': { label: 'Parent ID', : false, sample: '1' },
+        'description': { label: 'Description', : false, sample: 'All electronic items' },
+        'image': { label: 'Image Path', : false, sample: 'categories/electronics.jpg' },
+        'status': { label: 'Status (1/0)', : false, sample: '1' },
+        'position': { label: 'Position', : false, sample: '1' },
+        'meta_title': { label: 'Meta Title', : false, sample: 'Electronics - Best Deals' },
+        'meta_description': { label: 'Meta Description', : false, sample: 'Shop for best electronics' },
+        'meta_keywords': { label: 'Meta Keywords', : false, sample: 'electronics, gadgets' }
     };
     
     // File input change handler
@@ -163,15 +163,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 return true;
             case 2:
-                // Check if required fields are mapped
-                const requiredFields = Object.keys(dbFields).filter(field => dbFields[field].required);
+                // Check if  fields are mapped
+                const Fields = Object.keys(dbFields).filter(field => dbFields[field].);
                 const mappedFields = Object.values(fieldMappings);
 
                 console.log(mappedFields);
                 
-                for (const field of requiredFields) {
+                for (const field of Fields) {
                     if (!mappedFields.includes(field)) {
-                        alert(`Please map all required fields (${dbFields[field].label})`);
+                        alert(`Please map all  fields (${dbFields[field].label})`);
                         return false;
                     }
                 }

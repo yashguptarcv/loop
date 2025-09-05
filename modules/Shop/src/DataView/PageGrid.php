@@ -138,6 +138,17 @@ class PageGrid extends DataGrid
     {
         if (bouncer()->hasPermission('admin.pages.edit')) {
             $this->addAction([
+                'icon' => 'open_in_new',
+                'title' => 'Page Preview',
+                'method' => 'GET',
+                'url' => function ($row) {
+                    return '/'.$row->slug;
+                },
+            ]);
+        }
+
+        if (bouncer()->hasPermission('admin.pages.edit')) {
+            $this->addAction([
                 'icon' => 'edit',
                 'title' => 'Edit',
                 'method' => 'GET',
@@ -181,7 +192,6 @@ class PageGrid extends DataGrid
                 'icon' => 'add',
                 'title' => 'Add Page',
                 'method' => 'GET',
-                // 'is_popup'  => true,
                 'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.pages.create',
             ]);

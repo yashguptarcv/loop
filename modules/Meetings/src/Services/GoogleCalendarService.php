@@ -33,13 +33,13 @@ class GoogleCalendarService
         $client->setAuthConfig([
             'client_id' => fn_get_setting('general.google.client_id'),
             'client_secret' => fn_get_setting('general.google.client_secret'),
-            'redirect_uris' => [fn_get_setting('general.settings.google.redirect')],
+            'redirect_uris' => [fn_get_setting('general.google.redirect_url')],
         ]);
         $client->setAccessType('offline');
         $client->setPrompt('select_account consent');
 
         // Get and validate token values        
-        
+
         if (!empty(auth('admin')->user()->google_access_token) && !empty(auth('admin')->user()->google_refresh_token)) {
             $accessToken    = auth('admin')->user()->google_access_token;
             $refreshToken   = auth('admin')->user()->google_refresh_token;

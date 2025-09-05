@@ -6,14 +6,14 @@
 
     <!-- Code Field -->
     <div class="mb-2">
-        <label class="custom-label required" for="code">Code</label>
+        <label class="custom-label " for="code">Code</label>
         <input type="text" name="code" id="code"
             value="{{ $currency->code ?? old('code') }}"
             class="input-field">
     </div>
     <!-- Currency Name Field  -->
     <div class="mb-2">
-        <label class="custom-label required">Currency Name</label>
+        <label class="custom-label ">Currency Name</label>
         <input type="text" name="name" id="name"
             value="{{ $currency->name ?? old('name') }}"
             class="input-field">

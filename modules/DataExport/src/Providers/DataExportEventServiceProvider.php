@@ -2,6 +2,8 @@
 
 namespace Modules\DataExport\Providers;
 
+use Modules\Core\Events\RegisterSettingsMenu;
+use Modules\DataExport\Listeners\RegisterSettings;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class DataExportEventServiceProvider extends ServiceProvider
@@ -12,9 +14,10 @@ class DataExportEventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        // 'SomeEvent' => [
-        //     'SomeListener',
-        // ],
+        RegisterSettingsMenu::class => [
+            RegisterSettings::class,
+            // add more listeners from other modules
+        ],
     ];
 
     /**

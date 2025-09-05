@@ -217,6 +217,10 @@ class FileService
         }
         return $this->formatFileData($fileLink->file, $fileLink);
     }
+
+    public function getDefaultImage() {
+        return ['url' => Storage::disk($this->disk)->url('default-image.jpg')];
+    }
     
     /**
      * Get file by ID.

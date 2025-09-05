@@ -86,13 +86,8 @@ class Discounts extends DataGrid
             'closure' => function ($row) {
                 if ($row->type === 'P') {
                     return $row->amount . '%';
-                } else {
-                    // Safely check if fn_get_currency exists
-                    if (function_exists('\fn_get_currency')) {
-                        return \fn_get_currency($row->amount, "INR");
-                    } else {
-                        return '₹' . number_format($row->amount, 2);
-                    }
+                } else {                   
+                    return number_format($row->amount, 2);
                 }
             }
         ]);
@@ -228,7 +223,7 @@ class Discounts extends DataGrid
                 'icon' => 'add',
                 'title' => 'Create Discount',
                 'method' => 'GET',
-                'action' => 'text-white bg-[var(--color-primary-dark)]',
+                'action' => 'text-amber-100 bg-primary-100',
                 'url' => 'admin.discount.create',
             ]);
         }

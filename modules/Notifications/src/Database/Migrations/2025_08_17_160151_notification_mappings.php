@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('channel_id')->constrained('notification_channels');
             $table->boolean('notify_admin')->default(false);
             $table->boolean('notify_customer')->default(false);
-            $table->string('template_id');
+            $table->string('template_id')->nullable();
             $table->json('custom_config')->nullable(); // Channel-specific customizations
             $table->integer('priority')->default(0); // For ordering delivery
             $table->timestamps();

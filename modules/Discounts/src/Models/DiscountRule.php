@@ -39,9 +39,9 @@ class DiscountRule extends Model
     {
         switch ($this->rule_type) {
             case 'product':
-                return $this->product?->description?->name ?? '-';
+                return $this->product?->name ?? '-';
             case 'category':
-                return $this->category?->description?->name ?? '-';
+                return $this->category?->name ?? '-';
             case 'subtotal':
                 return 'Subtotal';
             default:

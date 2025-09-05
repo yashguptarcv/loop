@@ -36,7 +36,6 @@ Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->
 
         Route::get('/leads/getActivitityTabs', [LeadsController::class, 'getActivitityTabs'])->name('leads.getActivitityTabs');
         Route::post('/leads/{lead}/activities', [LeadsController::class, 'storeActivity'])->name('leads.activities.store');
-        Route::get('/leads/users/search', [LeadsController::class, 'searchAdmins'])->name('leads.users.search');
 
         Route::resource('application', Application::class);
         Route::get('/application/send_application/{lead}', [Application::class, 'send_application'])->name('application.send_application');

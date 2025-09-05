@@ -12,7 +12,7 @@
                 <div>
                     <label class="custom-label">Name <span class="text-red-500">*</span></label>
                     <input type="text" name="name" value="{{ old('name', $discount->name ?? '') }}" class="input-field"
-                        required>
+                        >
                 </div>
 
                 <div>
@@ -33,7 +33,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="custom-label">Discount Type</label>
-                        <select name="type" id="discount-type" class="input-field" required>
+                        <select name="type" id="discount-type" class="input-field" >
                             @foreach(\Modules\Discounts\Enums\DiscountType::cases() as $type)
                                 <option value="{{ $type->value }}" {{ (string) old('type', $discount->type?->value ?? '') === (string) $type->value ? 'selected' : '' }}>
                                     {{ $type->label() }}
@@ -45,7 +45,7 @@
 
                     <div>
                         <label class="custom-label">Apply To</label>
-                        <select name="apply_to" class="input-field" required>
+                        <select name="apply_to" class="input-field" >
                             @foreach(\Modules\Discounts\Enums\DiscountApplyTo::cases() as $applyTo)
                                 <option value="{{ $applyTo->value }}" {{(string) old('apply_to', $discount->apply_to?->value ?? '') === (string) $applyTo->value ? 'selected' : '' }}>
                                     {{ $applyTo->label() }}
@@ -61,7 +61,7 @@
                     <label class="custom-label">Discount Value <span class="text-xs text-gray-500"
                             id="value-type-label">(%)</span></label>
                     <input type="number" step="0.01" name="amount" value="{{ old('amount', $discount->amount ?? 0) }}"
-                        class="input-field" placeholder="Enter discount value" required>
+                        class="input-field" placeholder="Enter discount value" >
                 </div>
             </div>
         </div>

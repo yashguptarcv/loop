@@ -23,8 +23,8 @@ return new class extends Migration
             // Transaction details
             $table->string('transaction_number', 109)->unique();
             $table->string('type', 100);
-            $table->decimal('amount', 10, 2);
-            $table->decimal('balance', 10, 2)->comment('Running balance after this transaction');
+            $table->decimal('amount', 10, 2)->nullable();
+            $table->decimal('balance', 10, 2)->nullable()->comment('Running balance after this transaction');
             $table->string('currency', 3);
             
             // Status tracking

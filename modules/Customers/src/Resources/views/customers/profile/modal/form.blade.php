@@ -3,7 +3,7 @@
     @csrf
 
     @if(isset($customer))
-        @method('PUT')
+    @method('PUT')
     @endif
 
     <!-- Customer Info -->
@@ -46,17 +46,17 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <label for="billing_address_1" class="block text-sm font-medium text-gray-700">Address 1</label>
-                <input id="billing_address_1" type="text" name="billing_address_1"
+                <input id="billing_address_1" type="text" name="billing_address_1" value="{{$customer->defaultBillingAddress->address_1 ?? ''}}"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
             </div>
             <div>
                 <label for="billing_address_2" class="block text-sm font-medium text-gray-700">Address 2</label>
-                <input id="billing_address_2" type="text" name="billing_address_2"
+                <input id="billing_address_2" type="text" name="billing_address_2" value="{{$customer->defaultBillingAddress->address_2 ?? ''}}"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
             </div>
             <div>
                 <label for="billing_city" class="block text-sm font-medium text-gray-700">City</label>
-                <input id="billing_city" type="text" name="billing_city"
+                <input id="billing_city" type="text" name="billing_city" value="{{$customer->defaultBillingAddress->city ?? ''}}"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
             </div>
             <div>
@@ -65,13 +65,12 @@
                     :state_name="'billing_state'"
                     :country_name="'billing_country'"
                     :countries="fn_get_countries()->toArray()"
-                    :selectedCountry="$lead->country ?? null"
-                    :selectedState="$lead->state ?? null"
-                />
+                    :selectedCountry="$customer->defaultBillingAddress->country ?? null"
+                    :selectedState="$customer->defaultBillingAddress->state ?? null" />
             </div>
             <div>
                 <label for="billing_zip" class="block text-sm font-medium text-gray-700">Zip Code</label>
-                <input id="billing_zip" type="text" name="billing_zip"
+                <input id="billing_zip" type="text" name="billing_zip" value="{{$customer->defaultBillingAddress->postcode ?? ''}}"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
             </div>
         </div>
@@ -82,8 +81,14 @@
         <div class="flex items-center justify-between mb-4">
             <h2 class="text-lg font-semibold text-gray-800">Shipping Address</h2>
             <label for="sameAsBilling" class="inline-flex items-center text-sm text-gray-600">
-                <input type="checkbox" id="sameAsBilling"
-                    class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+                <input
+                    type="checkbox"
+                    id="sameAsBilling"
+                    name="sameAsBilling"
+                    value="1"
+                    @if(empty($customer->defaultShippingAddress)) checked @endif
+                class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                >
                 <span class="ml-2">Same as Billing</span>
             </label>
         </div>
@@ -91,17 +96,17 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="shippingFields">
             <div>
                 <label for="shipping_address_1" class="block text-sm font-medium text-gray-700">Address 1</label>
-                <input id="shipping_address_1" type="text" name="shipping_address_1"
+                <input id="shipping_address_1" type="text" value="{{$customer->defaultShippingAddress->address_1 ?? ''}}" name="shipping_address_1"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
             </div>
             <div>
                 <label for="shipping_address_2" class="block text-sm font-medium text-gray-700">Address 2</label>
-                <input id="shipping_address_2" type="text" name="shipping_address_2"
+                <input id="shipping_address_2" type="text" value="{{$customer->defaultShippingAddress->address_2 ?? ''}}" name="shipping_address_2"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
             </div>
             <div>
                 <label for="shipping_city" class="block text-sm font-medium text-gray-700">City</label>
-                <input id="shipping_city" type="text" name="shipping_city"
+                <input id="shipping_city" type="text" value="{{$customer->defaultShippingAddress->city ?? ''}}" name="shipping_city"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
             </div>
             <div>
@@ -110,13 +115,12 @@
                     :state_name="'shipping_state'"
                     :country_name="'shipping_country'"
                     :countries="fn_get_countries()->toArray()"
-                    :selectedCountry="$lead->country ?? null"
-                    :selectedState="$lead->state ?? null"
-                />
+                    :selectedCountry="$customer->defaultShippingAddress->country ?? null"
+                    :selectedState="$customer->defaultShippingAddress->state ?? null" />
             </div>
             <div>
                 <label for="shipping_zip" class="block text-sm font-medium text-gray-700">Zip Code</label>
-                <input id="shipping_zip" type="text" name="shipping_zip"
+                <input id="shipping_zip" type="text" name="shipping_zip" value="{{$customer->defaultShippingAddress->postcode ?? ''}}"
                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md">
             </div>
         </div>

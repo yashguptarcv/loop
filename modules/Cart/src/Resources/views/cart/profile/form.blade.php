@@ -90,7 +90,7 @@
             </label>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 @if(empty($customer->defaultShippingAddress)) hidden @endif" id="shippingFields">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 @if(empty($customer->defaultShippingAddress)) @endif" id="shippingFields">
             <div>
                 <label for="shipping_address_1" class="block text-sm font-medium text-gray-700">Address 1</label>
                 <input id="shipping_address_1" type="text" value="{{$customer->defaultShippingAddress->address_1 ?? ''}}" name="shipping_address_1"

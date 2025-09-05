@@ -95,7 +95,7 @@ class ProductGrid extends DataGrid
             'filterable' => true,
             'sortable' => true,
             'closure' => function ($row) {
-                return number_format($row->price, 2);
+                return fn_get_currency($row->price);
             },
         ]);
 
@@ -107,7 +107,7 @@ class ProductGrid extends DataGrid
             'filterable' => true,
             'sortable' => true,
             'closure' => function ($row) {
-                return $row->sale_price ? number_format($row->sale_price, 2) : '-';
+                return $row->sale_price ? fn_get_currency($row->sale_price) : '-';
             },
         ]);
 

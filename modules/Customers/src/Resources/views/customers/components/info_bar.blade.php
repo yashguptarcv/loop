@@ -5,26 +5,28 @@ list($initial, $classes) = fn_get_name_placeholder($customer->name);
 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
     <div>
         <div class="flex items-center gap-4">
-            <div class=" rounded-full bg-blue-100 flex items-center justify-center">
-                <span class="text-blue-600 text-2xl font-medium p-3 rounded rounded-full {{$classes}}">{{$initial}}</span>
-            </div>
-            <div>
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-900">{{$customer->name}}</h1>
-                <div class="flex flex-wrap items-center gap-2 mt-1">
-                    <span class="px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium">
-                        <i class="fas fa-check-circle mr-1"></i> Active Customer
-                    </span>
-
-                </div>
-            </div>
+            @include('customers::dashboard.common.profile-icon', ['name' => $customer->name])
         </div>
     </div>
     <div class="flex flex-wrap gap-2">
-        <button class="px-4 py-2 rounded-md bg-blue-100 text-blue-600 hover:text-blue-300 transition flex items-center gap-2 text-sm font-medium">
-            <i class="fas fa-envelope"></i> Send Email
+        <a href="#" class="px-4 py-2 rounded-md bg-primary-100 text-amber-100 hover:text-amber-200 transition flex items-center gap-2 text-sm font-medium">
+            Lead Detail
+        </a>
+        <button class="px-4 py-2 rounded-md bg-primary-100 text-amber-100 hover:text-amber-200 transition flex items-center gap-2 text-sm font-medium">
+            Send Email
         </button>
-        <button class="px-4 py-2 rounded-md bg-blue-100 text-blue-600 hover:text-blue-300 transition flex items-center gap-2 text-sm font-medium">
+        <x-modal 
+            buttonText='Edit Profile' 
+            type='link'
+            modalTitle="Edit Profile"
+            id="edit_profile"
+            ajaxUrl="{{route('admin.customers.edit', $customer->id)}}"
+            buttonClass="px-4 py-2 rounded-md bg-primary-100 text-amber-100 hover:text-amber-200 transition flex items-center gap-2 text-sm font-medium"
+            modalSize="3xl" />
+
+                
+        <!-- <a href="{{ route('admin.customers.edit', $customer->id) }}" class="px-4 py-2 rounded-md bg-blue-100 text-blue-600 hover:bg-blue-200 transition flex items-center gap-2 text-sm font-medium">
             <i class="fas fa-edit"></i> Edit Profile
-        </button>
+        </a> -->
     </div>
 </div>

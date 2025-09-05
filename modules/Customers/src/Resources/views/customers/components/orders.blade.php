@@ -1,0 +1,1 @@
+<x-data-view :data="$lists" title="Customer Orders" url="" />

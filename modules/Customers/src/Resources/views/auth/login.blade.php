@@ -93,7 +93,7 @@
                            name="email" 
                            id="email"
                            placeholder="Email Address" 
-                           required
+                           
                            class="w-full bg-[#383c3c] text-gray-200 px-4 py-3 pr-12 rounded-full border border-white/10 shadow-lg shadow-gray-800/40 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 placeholder-gray-400 transition-all duration-300">
                     <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -108,7 +108,7 @@
                            name="password" 
                            id="password"
                            placeholder="Password" 
-                           required
+                           
                            class="w-full bg-[#383c3c] text-gray-200 px-4 py-3 pr-12 rounded-full border border-white/10 shadow-lg shadow-gray-800/40 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 placeholder-gray-400 transition-all duration-300">
                     <button type="button" 
                             id="toggle-password"

@@ -8,10 +8,19 @@ use App\Http\Controllers\Controller;
 use Modules\Meetings\Models\Meeting;
 use Illuminate\Support\Facades\Validator;
 use Modules\Meetings\DataView\MeetingsList;
+use Modules\Meetings\Http\Requests\MeetingRequest;
 use Modules\Meetings\Services\GoogleCalendarService;
+use Modules\Meetings\Services\MeetingService;
 
 class MeetingsController extends Controller
 {
+    protected MeetingService $meetingService;
+
+    public function __construct(MeetingService $meetingService)
+    {
+        $this->meetingService = $meetingService;
+    }
+
     public function index()
     {
         return view('meetings::index', [
@@ -94,44 +103,27 @@ class MeetingsController extends Controller
         return view('meetings::show', compact('meeting'));
     }
 
-    public function store(Request $request, GoogleCalendarService $calendarService)
+    public function store(MeetingRequest $request)
     {
-        $validated = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'start_time' => 'required|date',
-            'location' => 'nullable|string',
-        ]);
 
-        if ($validated->fails()) {
-            return response()->json(['errors' => $validated->errors()]);
-        }
-
+        $validated = $request->validated();
         try {
-            $startTime = Carbon::parse($request->start_time);
-            $endTime = $startTime->copy()->addMinute($request->end_time ?? fn_get_setting('general.google.meeting_gap'));
-
-            $meeting = Meeting::create([
-                'title' => $request->title,
-                'description' => $request->description,
-                'start_time' => $startTime,
-                'end_time' => $endTime,
-                'location' => $request->location,
-                'color' => $request->color ?? fn_get_setting('general.google.meeting_color'),
-                'admin_id' => auth('admin')->id(),
-            ]);
-
-            // Only sync if user has Google auth        
-            $event = $calendarService->createEvent($meeting);
-            $meeting->update([
-                'google_event_id' => $event->id,
-                'google_calendar_id' => 'primary',
-            ]);
+            $this->meetingService->create($validated);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Meeting created successfully!',
                 'redirect_url' => route('admin.meetings.index')
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'errors' => 'Unable to create meeting on Google Calendar: ' . $e->getMessage(),
             ]);
         } catch (\InvalidArgumentException $e) {
             return response()->json([
@@ -144,101 +136,88 @@ class MeetingsController extends Controller
         }
     }
 
-    public function update(Request $request, Meeting $meeting, GoogleCalendarService $calendarService)
+    public function update(MeetingRequest $request, Meeting $meeting)
     {
-        $validated = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'start_time' => 'required|date',
-            'location' => 'nullable|string',
-        ]);
-
-        if ($validated->fails()) {
-            return response()->json(['errors' => $validated->errors()]);
-        }
+        $validated = $request->validated();
 
         try {
-            $startTime = Carbon::parse($request->start_time);
-            $endTime = $startTime->copy()->addMinute($request->end_time ?? fn_get_setting('general.google.meeting_gap'));
 
-            $meeting->update([
-                'title' => $request->title,
-                'description' => $request->description,
-                'start_time' => $startTime,
-                'end_time' => $endTime,
-                'location' => $request->location,
-                'color' => $request->color ?? fn_get_setting('general.google.meeting_color'),
-            ]);
-
-            // Update Google Calendar event if exists
-            if ($meeting->google_event_id) {
-                $calendarService->updateEvent($meeting);
-            }
+            $this->meetingService->update($meeting, $validated);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Meeting updated successfully!',
                 'redirect_url' => route('admin.meetings.index')
             ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'errors' => 'Unable to update meeting on Google Calendar: ' . $e->getMessage(),
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'errors' => $e->getMessage(),
+            ]);
         } catch (\Exception $e) {
             return response()->json([
-                'errors' => 'Unable to update meeting: ' . $e->getMessage(),
+                'errors' => 'Unable to update meeting on Google Calendar: ' . $e->getMessage(),
             ]);
         }
     }
 
-    public function destroy(Meeting $meeting, GoogleCalendarService $calendarService)
+    public function destroy(Meeting $meeting)
     {
         try {
-            // Delete from Google Calendar if exists
-            if ($meeting->google_event_id) {
-                $calendarService->deleteEvent($meeting);
-            }
 
-            $meeting->delete();
+            $this->meetingService->delete($meeting);
 
             return response()->json([
                 'success' => true,
                 'message' => 'Meeting deleted successfully!',
                 'redirect_url' => route('admin.meetings.index')
             ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'errors' => $e->errors()
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'errors' => 'Unable to delete meeting on Google Calendar: ' . $e->getMessage(),
+            ]);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json([
+                'errors' => $e->getMessage(),
+            ]);
         } catch (\Exception $e) {
             return response()->json([
-                'errors' => 'Unable to delete meeting: ' . $e->getMessage(),
+                'errors' => 'Unable to delete meeting on Google Calendar: ' . $e->getMessage(),
             ]);
         }
     }
 
-    public function syncWithGoogle(GoogleCalendarService $calendarService)
+    public function syncWithGoogle()
     {
         try {
-            $events = $calendarService->getEvents('primary', [
-                'timeMin' => now()->startOfMonth()->toRfc3339String(),
-                'timeMax' => now()->endOfMonth()->toRfc3339String(),
-            ]);
 
-            if (!empty($events)) {
-                foreach ($events as $event) {
-                    Meeting::updateOrCreate(
-                        ['google_event_id' => $event['getId']],
-                        [
-                            'title' => $event['getSummary'],
-                            'description' => $event['getDescription'],
-                            'start_time' => $event['getStart']['getDateTime'],
-                            'end_time' => $event['getEnd']['getDateTime'],
-                            'location' => $event['getLocation'],
-                            'google_calendar_id' => 'primary',
-                            'admin_id' => auth('admin')->id(),
-                        ]
-                    );
-                }
-
-                return redirect()->back()
-                    ->with('success', 'Meetings synced with Google Calendar');
-            }
+            $this->meetingService->syncFromGoogle();
 
             return redirect()->back()
-                ->with('info', 'No Meetings synced with Google Calendar');
+                ->with('success', 'Meetings synced with Google Calendar');
+                
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->with('error', 'Failed to sync with Google Calendar: ' . $e->getMessage());
+        } catch (\Throwable $e) {
+            return redirect()->back()
+                ->with('error', 'Failed to sync with Google Calendar: ' . $e->getMessage());
+        } catch (\InvalidArgumentException $e) {
+            return redirect()->back()
+                ->with('error', 'Failed to sync with Google Calendar: ' . $e->getMessage());
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Failed to sync with Google Calendar: ' . $e->getMessage());

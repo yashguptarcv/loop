@@ -18,5 +18,7 @@ Route::prefix(config('core::prefix.admin'))->middleware('web')->name('admin.')->
     Route::middleware(['admin.auth', 'admin.permission'])->group(function () {
         
         Route::resource('payments', HomeController::class);
+
+        Route::get('payments/config/{code}', [HomeController::class, 'loadConfigForm'])->name('payments.config');
     });
 });

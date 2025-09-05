@@ -3,13 +3,13 @@
          <h3 class="text-sm font-medium text-gray-500 mb-2 flex items-center justify-between">
              <span>CUSTOMER DETAILS</span>
              @if($mode === 'create' || $mode === 'edit')
-             @if(!empty($customer_details))
+             @if(!empty($customer_details['id']))
              <x-modal
                  buttonText='<i class="fas fa-edit"></i>'
                  type='link'
                  modalTitle="Update Customer"
                  id="add_cart_update_customer"
-                 ajaxUrl="{{route('api.cart.customer.profile', $customer_details['id'] ?? 0)}}"
+                 ajaxUrl="{{route('api.cart.customer.profile', $customer_details['id'])}}"
                  buttonClass="text-primary-100 hover:text-amber-200 text-sm flex items-center gap-1"
                  modalSize="3xl" />
              @endif

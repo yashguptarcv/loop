@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Checkout')</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+      <!-- Favicon -->
+    <link rel="icon" href="{{fn_get_image('company_favicon', 0)['url'] ?? ''}}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{fn_get_image('company_favicon', 0)['url'] ?? ''}}" type="image/x-icon">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/css/toast.css', 'resources/css/fontawesome/all.min.css', 'resources/js/app.js'])
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- meta -->
     @yield('meta')
@@ -53,7 +55,7 @@
     @yield('content')
 
     @yield('scripts')
-    <script>
+    <!-- <script>
         // Simple step indicator update (for demonstration)
         document.addEventListener('DOMContentLoaded', function() {
             const steps = document.querySelectorAll('.step');
@@ -82,7 +84,7 @@
             // For demo purposes, set step 2 as active
             setActiveStep(2);
         });
-    </script>
+    </script> -->
 </body>
 
 </html>

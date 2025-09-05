@@ -1,7 +1,13 @@
-    <!-- Order Items Section -->
-    <div class="lg:col-span-2 space-y-6">
+<form id="order_idForm" class="form-ajax grid grid-cols-1 lg:grid-cols-5 gap-2" method="POST"
+    action="@if(!empty($order_id) && $mode != 'create') {{ route('admin.orders.update', $order_id) }} @else {{ route('admin.orders.store') }} @endisset"
+    enctype="multipart/form-data">
+    @csrf
+    @if(!empty($order_id) && $mode != 'create') @method('PUT') @endif
+
+<!-- Order Items Section -->
+    <div class="lg:col-span-3 space-y-2">
         <!-- Order Items Card -->
-        <div class="bg-white rounded-xl p-6">
+        <div class="bg-white rounded-xl p-2">
             <div class="flex justify-between items-start mb-4">
                 <h2 class="text-lg font-semibold text-gray-800">Order Items ({{ count($order_items??[]) }})</h2>
                 @if($mode === 'create' || $mode === 'edit')
@@ -28,56 +34,68 @@
     </div>
 
     <!-- Right Sidebar -->
-    <div class="lg:col-span-1 space-y-6">
+    <div class="lg:col-span-1 space-y-2">
         <!-- Customer Details Card -->
-        <div class="bg-white p-6 rounded-xl sticky top-6">
+        <div class="bg-white p-2 rounded-xl">
             <div class="relative">
-                <!-- Customer Details -->
-               @include('orders::orders.components.customer.customer')
-               @include('orders::orders.components.customer.billing_address')
-
-                <!-- Billing Address -->
-               
-
                 <!-- Payment Details -->
-                <div class="mb-6 group border-t border-gray-100 pt-6">
+                <div class="mb-6 group">
                     <div>
                         <h3 class="text-sm font-medium text-gray-500 mb-2 flex items-center justify-between">
-                            <span>PAYMENT DETAILS</span>
-                            @if($mode === 'create' || $mode === 'edit')
-                            <x-modal
-                                buttonText='<i class="fas fa-edit"></i>'
-                                type='link'
-                                modalTitle="Update Payment"
-                                id="add_cart_update_billing_payment"
-                                ajaxUrl="{{route('dataview.export')}}"
-                                buttonClass="text-primary-100 hover:text-amber-200 text-sm flex items-center gap-1"
-                                modalSize="2xl" />
-                            @endif
+                            &nbsp;
                         </h3>
                         <div id="payment_details">
-                            @if(!empty($payment_details))
-                            <div class="rounded-xl shadow-sm p-4 flex items-center gap-3 border divide-gray-100 rounded-lg bg-gray-50">
-                                <div class="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
-                                    <i class="fab fa-cc-visa text-amber-200"></i>
+                            <div class="rounded-xl shadow-sm p-4  divide-gray-100 rounded-lg bg-gray-50">
+                                <div class="mb-4">
+                                    <h3 class="text-md font-medium text-black-100 mb-2 flex items-center justify-between">
+                                        Status
+                                    </h3>
+                                    
+                                    <select name="order_status" id="order_status" class="w-full px-3 py-2 border border-gray-300 rounded-md">                                        
+                                        @foreach(fn_get_order_statuses() as $statuses)
+                                            
+                                            <option value="{{$statuses->status_code}}" @if(!empty($status) && $status == $statuses->status_code) selected @endif>{{$statuses->name}}</option>
+                                            
+                                        @endforeach
+                                    </select>
                                 </div>
-                                <div class="flex-grow">
-                                    <p class="text-sm">Payment Method: {{ $payment_method ?? 'Not specified' }}</p>
-                                    <p class="text-xs text-gray-500">Status:
-                                        <span class="{{ $payment_status == 'paid' ? 'text-green-600' : 'text-red-600' }}">
-                                            {{ ucfirst($payment_status) }}
-                                        </span>
-                                    </p>
+                                <div>
+                                    <h3 class="text-md font-medium text-black-100 mb-2 flex items-center justify-between">
+                                        Payment Information
+                                    </h3>
+                                    @if($mode === 'create' || $mode === 'edit')
+                                    <select name="payment_method" id="payment_method" class="w-full px-3 py-2 border border-gray-300 rounded-md">
+                                        <option value="">Select Payment</option>
+                                        @foreach(fn_get_payments() as $payment)
+                                            @if((!empty($total) && $total) >= $payment->amount)
+                                                <option value="{{$payment->id}}" data-payment-code="{{$payment->payment_method_id}}">{{$payment->merchant_name}}</option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    @endif
+                                    <div id="payment-detail-action">
+                                        @if(!empty($payment_details))
+                                            @include('payments::orders.components.payments.detail')
+                                        @endif
+                                    </div>
                                 </div>
-                            </div>
-                            @else
-                            <div class="rounded-xl shadow-sm p-4 border divide-gray-100 rounded-lg bg-gray-50">
-                                <p class="text-sm text-gray-600">No payment details available</p>
-                            </div>
-                            @endif
+                            </div>   
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Right Sidebar -->
+    <div class="lg:col-span-1 space-y-2">
+        <!-- Customer Details Card -->
+        <div class="bg-white p-2 rounded-xl">
+            <div class="relative">
+                <!-- Customer Details -->
+               @include('orders::orders.components.customer.customer')
+               @include('orders::orders.components.customer.billing_address')
+            </div>
+        </div>
+    </div>
+</form>

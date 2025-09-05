@@ -21,50 +21,13 @@ class OrdersStatusController extends Controller
         return view('orders::order-statuses.index', compact('lists'));
     }
 
-    // public function create()
-    // {
-    //     return view('admin::settings.statuses.order.form');
-    // }
+    public function create()
+    {
+        return view('orders::order-statuses.form');
+    }
 
-    // public function store(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'name' => 'required|string|max:255',
-    //         'color' => 'required|string',
-    //         'sort' => 'required|numeric'
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'errors' => $validator->errors(),
-    //         ]);
-    //     }
-
-    //     try {
-    //         $user = LeadStatusesModels::create([
-    //             'name'  => $request['name'],
-    //             'color'  => $request['color'],
-    //             'sort'  => $request['sort']
-    //         ]);
-
-    //         return response()->json([
-    //             'success' => true,
-    //             'message' => 'Lead statuses created successfully!',
-    //             'redirect_url' => route('admin.settings.statuses.leads.index')
-    //         ]);
-    //     } catch (\Throwable $e) {
-    //         return response()->json([
-    //             'errors' => $e->getMessage()
-    //         ]);
-    //     }
-    // }
-
-    // public function edit($id)
-    // {
-    //     $lead = Status::where('id', $id)->first(); // You should already have a method like this in your service
-    //     if (!$lead) {
-    //         return redirect()->route('admin.settings.statuses.leads.index')->with('error', 'Lead statuses not found.');
-    //     }
-    //     return view('admin::settings.statuses.leads.form', compact('lead'));
-    // }
+    public function edit(Request $request)
+    {
+        return view('orders::order-statuses.form');
+    }
 }

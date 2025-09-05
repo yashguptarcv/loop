@@ -39,15 +39,11 @@
         <!-- Submit -->
         <!-- Submit & Navigation -->
         <div class="flex space-x-3 mt-4">
-            <button type="button" id="prev-button" class="btn btn-accent px-4 py-2 hidden">
-                Previous
-            </button>
-            <button type="button" id="next-button" class="btn btn-outline px-4 py-2">
-                Next
-            </button>
-            <button type="submit" id="save-button" name="button" class="btn btn-primary px-4 py-2 hidden ">
-                @isset($discount) Update @else Create @endisset
-            </button>
+            <x-button type="submit"
+                class="primary"
+                label="Save"
+                icon=''
+                name="button" />
         </div>
 
     </form>

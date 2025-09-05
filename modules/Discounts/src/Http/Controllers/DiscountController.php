@@ -54,14 +54,6 @@ class DiscountController extends Controller
                 'rules' => $request->rules
             ]);
 
-            if ($request->has('coupons')) {
-                $this->handleCouponsUpdate($discount, $request->coupons);
-            }
-
-            if ($request->has('rules')) {
-                $this->discountService->saveDiscountRules($discount, $request->rules);
-            }
-
             DB::commit();
 
             return response()->json([
@@ -79,7 +71,7 @@ class DiscountController extends Controller
             DB::rollBack();
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'errors' => $e->getMessage()
             ]);
         }
     }
@@ -128,7 +120,7 @@ class DiscountController extends Controller
             DB::rollBack();
             return response()->json([
                 'success' => false,
-                'message' => 'Something went wrong: ' . $e->getMessage()
+                'errors' => 'Something went wrong: ' . $e->getMessage()
             ]);
         }
     }
@@ -193,7 +185,7 @@ class DiscountController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to delete discount: ' . $e->getMessage()
+                'errors' => 'Failed to delete discount: ' . $e->getMessage()
             ]);
         }
     }

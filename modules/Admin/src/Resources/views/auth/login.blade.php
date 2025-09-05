@@ -5,12 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="{{ asset('css/toast.css') }}">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="icon" href="{{fn_get_image('company_favicon', 0)['url'] ?? ''}}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{fn_get_image('company_favicon', 0)['url'] ?? ''}}" type="image/x-icon">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/css/toast.css', 'resources/css/fontawesome/all.min.css', 'resources/js/app.js'])
     @include('admin::layouts.tailwind-config')
 </head>
 
@@ -32,14 +32,14 @@
                             <div class="absolute inset-y-0 left-0 pl-3 flex mt-4 pointer-events-none">
                                 <i class="fas fa-envelope primary-100"></i>
                             </div>
-                            <input id="email" name="email" type="email" autocomplete="email" required class="block w-full pl-10 pr-3 py-3 border border-primary-100 rounded-xl bg-white/70
+                            <input id="email" name="email" type="email" autocomplete="email" class="block w-full pl-10 pr-3 py-3 border border-primary-100 rounded-xl bg-white/70
            focus:ring-2 focus:ring-primary-100 focus:border-primary-100
            placeholder-[var(--color-gray-400)] text-[var(--color-gray-800)] 
            transition-all duration-200 outline-none" placeholder="admin@example.com" />
 
                         </div>
                         @error('email')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -58,14 +58,14 @@
                                 <i class="fas fa-lock text-primary-100"></i>
                             </div>
                             <input id="password" name="password" type="password" autocomplete="current-password"
-                                required class="block w-full pl-10 pr-3 py-3 border border-primary-100 rounded-xl bg-white/70 
+                                class="block w-full pl-10 pr-3 py-3 border border-primary-100 rounded-xl bg-white/70 
            focus:ring-2 focus:ring-primary-100 focus:border-primary-100 
            placeholder-[var(--color-gray-400)] text-[var(--color-gray-800)] 
            transition-all duration-200 outline-none" placeholder="••••••••" />
 
                         </div>
                         @error('password')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror
                     </div>
 
@@ -78,7 +78,7 @@
                     </div>
 
                     <button type="submit" class="items-center px-4 py-2 border rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 hover:text-amber-200 text-amber-100 bg-primary-100 w-full" name="button">
-                
+
                         @lang('admin::app.admin.login.submit-btn')
                     </button>
                 </form>

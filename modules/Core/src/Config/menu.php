@@ -71,8 +71,8 @@ return [
             ],
             [
                 'label' => 'Invoice',
-                'route' => 'admin.settings.index',
-                'permission' => 'admin.website.cms.index',
+                'route' => 'admin.invoice.index',
+                'permission' => 'admin.invoice.index',
                 'icon' => 'chevron_right'
             ]
         ]

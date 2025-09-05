@@ -73,6 +73,7 @@
                     <p class="text-gray-700 text-sm">{{'----'}}</p>
                     @endif
                 </div>
+                
                 <div>
                     <p class="text-xs text-gray-500">Value</p>
                     @if(!empty($lead->value))
@@ -98,12 +99,13 @@
 
         <div>
             <h3 class="text-sm font-medium text-gray-500 mb-1">Assigned</h3>
-            @if(!empty($lead->assignedTo->name))
             <div class="flex">
+                @if(!empty($lead->assignedTo->name))
                 <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 text-sm font-bold mr-2">
                     {{strtoupper(substr($lead->assignedTo->name,0,2))}}
                 </div>
-
+                
+                @endif
                 @if(bouncer()->hasPermission('admin.leads.update-assignment'))
                 <div class="w-40 relative" id="auto-complete">
                     <div class="flex items-center">
@@ -113,22 +115,22 @@
                                 type="text"
                                 autocomplete="dropdown"
                                 name="assign_name"
-                                value="{{$lead->assignedTo->name}}"
-                                placeholder="{{$lead->assignedTo->name}}"
+                                value="{{$lead->assignedTo->name ?? ''}}"
+                                placeholder="{{$lead->assignedTo->name ?? ''}}"
                                 id="input-assign_id"
                                 class="w-full px-1 py-1 border border-gray-300 rounded-md"
                                 data-table="admins"
                                 data-select_columns="id, name"
                                 data-search_column="name"
                                 data-target="assign_id"
-                                data-original-value="{{$lead->assignedTo->name}}" />
+                                data-original-value="{{$lead->assignedTo->name ?? ''}}" />
                             <input
                                 type="hidden"
                                 name="assign_id"
                                 id="assign_id"
-                                value="{{$lead->assignedTo->id}}"
+                                value="{{$lead->assignedTo->id ?? 0}}"
                                 class="mt-1"
-                                data-original-value="{{$lead->assignedTo->id}}" />
+                                data-original-value="{{$lead->assignedTo->id ?? 0}}" />
                             <button
                                 type="submit"
                                 id="update-assign-btn"
@@ -141,12 +143,12 @@
                     </div>
                 </div>
                 @else
-                <span class="text-gray-700">{{$lead->assignedTo->name}}</span>
+                @if(!empty($lead->assignedTo->name))
+                    <span class="text-gray-700">{{$lead->assignedTo->name}}</span>
+                @endif
                 @endif
             </div>
-            @else
-            <div class="flex items-center">{{'Not assigned'}}</div>
-            @endif
+            
         </div>
 
         @if(!empty($lead->tags))

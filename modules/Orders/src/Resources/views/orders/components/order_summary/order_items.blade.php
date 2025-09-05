@@ -1,4 +1,4 @@
-<div class="bg-white rounded-lg border divide-gray-100 overflow-hidden">
+<div class="bg-white rounded-lg border divide-gray-100 overflow-x-auto overflow-y-hidden">
     <table class="min-w-full divide-y divide-gray-100">
         @include('orders::orders.components.order_summary.table.head')
         <tbody id="order_items" class="bg-white divide-y divide-gray-100">
@@ -12,22 +12,27 @@
                         </div>
                         <div class="ml-4">
                             
-                            <div class="text-sm font-medium text-black-100">
+                            <div class="flex text-sm font-medium text-black-100">
                                 <a href="{{ route('admin.catalog.products.edit', $item['product_id']) }}">{{ $item['product_name'] }}</a>
+                                @if($mode === 'create' || $mode === 'edit')
+                                   <span class="ml-2 flex justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                       <a href="javascript:;" class="text-gray-600 hover:text-red-600 remove-item"
+                                           data-item-id="{{ $item['id'] }}" data-product-id="{{ $item['product_id'] }}">
+                                           <i class="fas fa-times-circle"></i>
+                                       </a>
+                                   </span>
+                                @endif
                             </div>
-                            <div class="text-sm text-gray-500">Product ID: #{{ $item['product_id'] }}</div>
+                            <div class="text-sm text-gray-500"><a href="{{ route('admin.catalog.products.edit', $item['product_id']) }}">Product SKU: #{{ $item['sku'] ?? 'N/A' }}</a></div>
                         </div>
                     </div>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {{ $item['sku'] ?? 'N/A' }}
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="relative w-24">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <span class="text-gray-500 text-sm">$</span>
+                            <span class="text-gray-500 text-sm">{{fn_get_currency_data($currency)->symbol}}</span>
                         </div>
-                        <input type="text" value="{{ number_format($item['price'], 2) }}" class="block w-full pl-7 pr-2 py-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" value="{{ fn_convert_currency_rate($item['price'] ?? 0, $currency) }}" class="block w-full pl-7 pr-2 py-2 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
@@ -36,10 +41,10 @@
                 <td class="px-6 py-4 whitespace-nowrap">
                     <div class="flex items-center">
                         @if($mode === 'create' || $mode === 'edit')
-                        <button class="p-1 text-gray-500 hover:text-gray-700 quantity-decrease"
+                        <a class="p-1 text-gray-500 hover:text-gray-700 quantity-decrease"
                             data-item-id="{{ $item['id'] }}">
                             <i class="fas fa-minus-circle"></i>
-                        </button>
+                        </a>
                         @endif
                         <input type="text" 
                             value="{{ $item['quantity'] }}"
@@ -48,25 +53,15 @@
                             data-price="{{ $item['price'] }}"
                             data-original-quantity="{{ $item['quantity'] }}">
                         @if($mode === 'create' || $mode === 'edit')
-                        <button class="p-1 text-gray-500 hover:text-gray-700 quantity-increase"
+                        <a class="p-1 text-gray-500 hover:text-gray-700 quantity-increase"
                             data-item-id="{{ $item['id'] }}">
                             <i class="fas fa-plus-circle"></i>
-                        </button>
+                        </a>
                         @endif
                     </div>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 line-total">
                     {{ fn_convert_currency($item['line_total'], $currency) }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    @if($mode === 'create' || $mode === 'edit')
-                    <div class="flex justify-end space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <a href="javascript:;" class="text-gray-600 hover:text-red-600 remove-item"
-                            data-item-id="{{ $item['id'] }}" data-product-id="{{ $item['product_id'] }}">
-                            <i class="fas fa-times-circle"></i>
-                        </a>
-                    </div>
-                    @endif
                 </td>
             </tr>
             @endforeach

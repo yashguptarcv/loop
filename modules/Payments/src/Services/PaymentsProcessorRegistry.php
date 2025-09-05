@@ -3,6 +3,9 @@
 namespace Modules\Payments\Services;
 
 use InvalidArgumentException;
+use Modules\Payments\Models\Payment;
+use Illuminate\Support\Facades\Schema;
+use Modules\Payments\Models\PaymentMethod;
 use Modules\Payments\Contracts\PaymentProcessor;
 
 class PaymentsProcessorRegistry
@@ -13,10 +16,25 @@ class PaymentsProcessorRegistry
     protected array $processors = [];
 
     /**
-     * Register a processor.
+     * Register a processor and store it in the database.
      */
-    public function register(string $code, PaymentProcessor $processor): void
-    {
+    public function register(string $code, $processor): void
+    {   
+        if (Schema::hasTable('payment_methods')) {
+            // Save to database if not already registered
+            $paymentMethod = PaymentMethod::firstOrCreate(
+                ['code' => $code],
+                [
+                    'class_name' => get_class($processor),
+                    'name' => $processor->getName(), // Assuming the processor has a getName() method
+                    'template' => $processor->getTemplate(), // Assuming the processor has a getTemplate() method
+                    'processor' => $processor->getProcessorTemplate(), // Assuming the processor has a getTemplate() method
+                    'is_active' => true, // default active status
+                ]
+            );
+        }
+
+        // Store in memory for easy access
         $this->processors[$code] = $processor;
     }
 

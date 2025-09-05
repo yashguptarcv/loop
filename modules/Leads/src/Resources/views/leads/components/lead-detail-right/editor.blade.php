@@ -4,7 +4,7 @@
     <form class="form-ajax" method="POST" action="{{ route('admin.leads.activities.store', $lead) }}">
         @csrf
         <div class="mb-4">
-            <select name="type" id="type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            <select name="type" id="type" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" >
                 @foreach(config('leads.lead_options') as $opt_key => $opt)
                 <option value="{{$opt_key}}">{{$opt}}</option>
                 @endforeach
@@ -71,17 +71,17 @@ document.addEventListener('DOMContentLoaded', function() {
     activityType.addEventListener('change', function() {
         if (this.value === 'schedule_meeting') {
             meetingDateContainer.classList.remove('hidden');
-            meetingDateInput.setAttribute('required', 'required');
+            meetingDateInput.setAttribute('', '');
         } else {
             meetingDateContainer.classList.add('hidden');
-            meetingDateInput.removeAttribute('required');
+            meetingDateInput.removeAttribute('');
         }
     });
     
     // Initialize with correct visibility
     if (activityType.value === 'schedule_meeting') {
         meetingDateContainer.classList.remove('hidden');
-        meetingDateInput.setAttribute('required', 'required');
+        meetingDateInput.setAttribute('', '');
     }
 });
 </script>

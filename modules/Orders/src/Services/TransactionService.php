@@ -32,12 +32,12 @@ class TransactionService
         ?Payment $payment = null,
         array $metadata = [],
         ?string $notes = null
-    ): Transaction {
+    ) {
         return DB::transaction(function () use ($order, $type, $amount, $status, $payment, $metadata, $notes) {
             // Calculate running balance
             $balance = $this->calculateNewBalance($order, $amount, $type);
 
-            $transaction = Transaction::create([
+            $transaction = Transaction::updateOrCreate([
                 'order_id' => $order->id,
                 'payment_id' => $payment?->id,
                 'transaction_number' => $this->generateTransactionNumber(),
@@ -56,6 +56,29 @@ class TransactionService
             $this->updateOrderBalance($order, $balance);
 
             return $transaction;
+        });
+    }
+
+    public function updateTransaction(Transaction $transaction, array $data)
+    {
+        return DB::transaction(function () use ($transaction, $data) {
+            $transaction->update([
+                'status' => $data['status'] ?? $transaction->status,
+                'amount' => $data['amount'] ?? $transaction->amount,
+                'balance' => $data['balance'] ?? $transaction->balance,
+                'notes' => $data['notes'] ?? $transaction->notes,
+                'gateway_reference' => $data['gateway_reference'] ?? $transaction->gateway_reference,
+                'metadata' => $data['metadata'] ?? $transaction->metadata,
+                'processed_at' => isset($data['status']) && $data['status'] === TransactionStatus::COMPLETED
+                    ? now()
+                    : $transaction->processed_at,
+            ]);
+
+            if (isset($data['balance'])) {
+                $this->updateOrderBalance($transaction->order, $data['balance']);
+            }
+
+            return $transaction->fresh();
         });
     }
 
@@ -79,8 +102,8 @@ class TransactionService
         }
 
         if ($notes) {
-            $updates['notes'] = $transaction->notes 
-                ? $transaction->notes . "\n" . $notes 
+            $updates['notes'] = $transaction->notes
+                ? $transaction->notes . "\n" . $notes
                 : $notes;
         }
 
@@ -149,7 +172,7 @@ class TransactionService
             ->latest()
             ->value('balance') ?? 0;
 
-        return match($type) {
+        return match ($type) {
             TransactionType::PAYMENT, TransactionType::CAPTURE => $currentBalance - $amount,
             TransactionType::REFUND, TransactionType::ADJUSTMENT => $currentBalance + $amount,
             default => $currentBalance

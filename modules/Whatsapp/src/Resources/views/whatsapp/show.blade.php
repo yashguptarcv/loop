@@ -245,7 +245,7 @@
                             </label>
                             <input type="text" id="modal_recipient_phone" name="recipient_phone"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
-                                placeholder="e.g., 1234567890" required>
+                                placeholder="e.g., 1234567890" >
                         </div>
 
                         <div class="mb-4">
@@ -270,7 +270,7 @@
                                 <div class="mb-2">
                                 <input type="text" name="parameters[]"
                                     class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
-                                    placeholder="Parameter {{ $i }}" required>
+                                    placeholder="Parameter {{ $i }}" >
                         </div>
                         @endfor
                 </div>

@@ -5,9 +5,10 @@ namespace Modules\Orders\Models;
 use Modules\Customers\Models\User;
 use Modules\Orders\Models\OrderItem;
 use Modules\Payments\Models\Payment;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\Payments\Models\Payments;
+use Illuminate\Database\Eloquent\Model;
+use Modules\Orders\Enums\TransactionStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Order extends Model
 {
@@ -61,8 +62,27 @@ class Order extends Model
         return $this->hasOne(Payments::class);
     }
 
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class);
+    }
+
     public function getFormattedStatusAttribute()
     {
         return ucfirst($this->status);
+    }
+
+    public function pendingTransaction()
+    {
+        return $this->hasOne(Transaction::class, 'order_id')
+            ->where('status', TransactionStatus::PENDING)
+            ->latest();
+    }
+
+    public function pendingTransactions()
+    {
+        return $this->hasMany(Transaction::class, 'order_id')
+            ->where('status', TransactionStatus::PENDING)
+            ->orderBy('created_at', 'desc');
     }
 }

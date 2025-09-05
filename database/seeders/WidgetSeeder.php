@@ -6,7 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
-class WidgetsTableSeeder extends Seeder
+class WidgetSeeder extends Seeder
 {
     public function run(): void
     {
@@ -16,11 +16,13 @@ class WidgetsTableSeeder extends Seeder
             [
                 'title' => 'Total Orders (This Week)',
                 'table_name' => 'orders',
+                'column_name' => null,
                 'operation' => 'count',
                 'is_currency' => 'N',
                 'date_column' => 'orders.created_at',
                 'date_filter' => 'week',
                 'widget_type' => 'stat',
+                'group_by' => null,
                 'sort_order' => 2,
                 'created_at' => '2025-08-26 23:05:15',
                 'updated_at' => '2025-08-27 06:37:15',
@@ -126,3 +128,4 @@ class WidgetsTableSeeder extends Seeder
         ]);
     }
 }
+    

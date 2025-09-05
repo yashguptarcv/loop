@@ -2,10 +2,14 @@
 <div class="bg-white rounded-lg shadow p-6 space-y-4 mt-6">
     <div class="flex justify-between items-center">
         <h3 class="text-lg font-medium text-gray-900">Discount Rules</h3>
-        <button type="button" id="add-rule-btn"
-            class="text-sm bg-blue-100 text-blue-600 px-3 py-2 rounded-md hover:bg-blue-200">
-            Add Rule
-        </button>
+        
+        <x-button type="button"                     
+            class="primary" 
+            label="Add Rule" 
+            icon=''
+            id="add-rule-btn"
+            name="button" 
+        />
     </div>
 
     <div class="overflow-x-auto">
@@ -32,15 +36,16 @@
                             <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap">
                                 <select data-base-name="rule_type" class="input-field rule-type-select w-full">
                                     <option value="product" @selected($rule->rule_type == 'product')>Product</option>
-                                    <option value="category" @selected($rule->rule_type == 'category')>Category</option>
+                                    <!-- <option value="category" @selected($rule->rule_type == 'category')>Category</option> -->
                                     <option value="subtotal" @selected($rule->rule_type == 'subtotal')>Subtotal</option>
                                     <option value="quantity" @selected($rule->rule_type == 'quantity')>Quantity</option>
                                 </select>
                             </td>
 
                             <!-- Target -->
+                             <!-- 'category' -->
                             <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap target-cell">
-                                @if(in_array($rule->rule_type, ['product', 'category']))
+                                @if(in_array($rule->rule_type, ['product']))
                                     <select data-base-name="rule_id" class="input-field rule-target-select py-2 w-full">
                                         <option value="{{ $rule->rule_id }}" selected>
                                             {{ $rule->rule_name ?? 'Selected Target' }}
@@ -88,7 +93,7 @@
             <td class="px-3 py-2 md:px-6 md:py-4 whitespace-nowrap">
                 <select data-base-name="rule_type" class="input-field rule-type-select w-full">
                     <option value="product">Product</option>
-                    <option value="category">Category</option>
+                    <!-- <option value="category">Category</option> -->
                     <option value="subtotal">Subtotal</option>
                     <option value="quantity">Quantity</option>
                 </select>
@@ -170,7 +175,8 @@
 
             function setupSelect2() {
                 const td = tr.querySelector('.target-cell');
-                const needsTarget = ['product', 'category'].includes(ruleTypeSelect.value);
+                // 'category'
+                const needsTarget = ['product'].includes(ruleTypeSelect.value);
 
                 if (needsTarget) {
 
@@ -184,9 +190,11 @@
                         $(targetSelect).select2('destroy');
                     }
 
-                    const url = ruleTypeSelect.value === 'category'
-                        ? '{{ route("api.admin.categories.search") }}'
-                        : '{{ route("api.admin.products.search") }}';
+                    const url = '{{ route("api.admin.products.search") }}';
+
+                    // const url = ruleTypeSelect.value === 'category'
+                    //     ? '{{ route("api.admin.categories.search") }}'
+                    //     : '{{ route("api.admin.products.search") }}';
 
                     $(targetSelect).select2({
                         placeholder: 'Select Target...',
@@ -218,7 +226,6 @@
 
                     });
 
-                    // ✅ Prefill AFTER init
                     prefillSelect2(targetSelect);
 
                 } else {

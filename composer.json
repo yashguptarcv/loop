@@ -19,6 +19,7 @@
         "maatwebsite/excel": "^1.1",
         "mpdf/mpdf": "^8.2",
         "rcv/core": "dev-main",
+        "square/square": "^43.0",
         "symfony/http-client": "^7.3",
         "symfony/mailgun-mailer": "^7.3"
     },
@@ -56,7 +57,10 @@
             "Modules\\Payments\\": "modules/Payments/src/",
             "Modules\\DataExport\\": "modules/DataExport/src/",
             "Modules\\Widgets\\": "modules/Widgets/src/",
-            "Modules\\Cart\\": "modules/Cart/src/"
+            "Modules\\Cart\\": "modules/Cart/src/",
+            "Modules\\Stripe\\": "modules/Stripe/src/",
+            "Modules\\Invoice\\": "modules/Invoice/src/",
+            "Modules\\Square\\": "modules/Square/src/"
         },
         "files": [
             "modules/Acl/src/Helpers/helpers.php",

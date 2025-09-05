@@ -30,8 +30,20 @@ Route::prefix('api/cart')->middleware(['web'])->name('api.cart.')->group(functio
     Route::get('customer/{order_id}/form',[CartController::class, 'viewCustomerForm'])->name('customer.form');
     Route::post('customer/{order_id}/add',[CartController::class, 'addCustomerOrUpdate'])->name('customer.add');
 
+    
     // profile
-    Route::get('customer/{order_id}/profile',[CartController::class, 'profileUpdateForm'])->name('customer.profile');
-    Route::post('customer/{order_id}/profile',[CartController::class, 'updateCustomer'])->name('customer.profile');
+    Route::get('customer/{customer_id?}/profile',[CartController::class, 'profileUpdateForm'])->name('customer.profile');
+    Route::post('customer/{customer_id}/profile',[CartController::class, 'updateCustomer'])->name('customer.profile');
+
+    Route::post('customer/{customer_id}/billing_address',[CartController::class, 'updateAddress'])->name('customer.billing_address');
+
+    Route::get('payment/payment_form',[CartController::class, 'paymentForm'])->name('payment.payment_form');
+    Route::post('payment/payment_form',[CartController::class, 'updateCustomer'])->name('payment.payment_form');
+
+    Route::post('order/{order_id?}/update_status',[CartController::class, 'update_status'])->name('order.update_status');
+
+    Route::post('payment/{order_id?}/charge',[CartController::class, 'paymentProcess'])->name('payment.charge');
+
+    
 });
 

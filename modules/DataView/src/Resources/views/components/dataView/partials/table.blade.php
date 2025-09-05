@@ -1,7 +1,8 @@
 <div class="bg-white-100 shadow overflow-hidden sm:rounded-lg">
-    <div class="">
+    <div class="overflow-x-scroll overflow-y-hidden">
+        @if(!empty($data['records']))
         <table class="min-w-full">
-            <thead class="bg-white-100">
+            <thead class="bg-primary-100 text-amber-100">
                 <tr>
                     <th scope="col"
                         class="px-6 py-3 text-left text-xs font-medium text-black-100 uppercase tracking-wider">
@@ -19,7 +20,7 @@
                                             $nextOrder = $isSortedColumn && ($currentSort['order'] ?? 'asc') === 'asc' ? 'desc' : 'asc';
                                         @endphp
                                         <a href="{{ request()->fullUrlWithQuery(['sort[column]' => $column['index'], 'sort[order]' => $nextOrder]) }}"
-                                            class="hover:text-white flex items-center">
+                                            class="hover:text-black-200 flex items-center">
                                             {{ $column['label'] }}
 
                                             @if($isSortedColumn)
@@ -74,5 +75,8 @@
                 @endforeach
             </tbody>
         </table>
+        @else
+            <p class="text-center p-6">No Data</p>
+        @endif
     </div>
 </div>

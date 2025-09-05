@@ -1,4 +1,6 @@
 <?php
+
+use Modules\Acl\Models\Admin;
 use Modules\Acl\Models\Role;
 use Modules\Admin\Models\Country;
 use Modules\Admin\Models\CountryState;
@@ -9,7 +11,7 @@ use Modules\Catalog\Models\Category;
 if (!function_exists('fn_get_usergroups')) {
     function fn_get_usergroups(): mixed
     {
-        return Role::get()->toArray();
+        return Role::get();
     }
 }
 
@@ -26,11 +28,46 @@ if (!function_exists('fn_get_category_name')) {
         return Category::where('id', (int)$id)->value('name');
     }
 }
+if (!function_exists('fn_get_category_path')) {
+    function fn_get_category_path($id)
+    {
+        $category = Category::find($id);
+
+        if (! $category) {
+            return null;
+        }
+
+        $path = [$category->name];
+
+        // climb up parents
+        while ($category->parent_id) {
+            $category = Category::find($category->parent_id);
+            if ($category) {
+                array_unshift($path, $category->name);
+            } else {
+                break;
+            }
+        }
+
+        return implode(' / ', $path);
+    }
+}
 
 if (!function_exists('fn_get_categories')) {
-    function fn_get_categories(): mixed
+    function fn_get_categories($parentId = null): mixed
     {
-        return Category::get()->toArray();
+        $query = Category::query()
+            ->where('status', 'A');
+
+        if ($parentId) {
+            // fetch children
+            $query->where('parent_id', $parentId);
+        } else {
+            // fetch only parent categories
+            $query->whereNull('parent_id');
+        }
+
+        return $query->orderBy('name')->get();
     }
 }
 
@@ -82,7 +119,7 @@ if (!function_exists('fn_get_country_name')) {
 if (!function_exists('fn_get_countries')) {
     function fn_get_countries(int $id = 0): mixed
     {
-        return Country::get()->toArray();
+        return Country::get();
     }
 }
 
@@ -114,5 +151,19 @@ if (!function_exists('fn_get_states')) {
     function fn_get_states(int $id = 0): mixed
     {
         return CountryState::get();
+    }
+}
+
+if (!function_exists('fn_get_users')) {
+    function fn_get_users(): mixed
+    {
+        return Admin::where('status', true)->get();
+    }
+}
+
+if (!function_exists('fn_get_user_data')) {
+    function fn_get_user_data($id): mixed
+    {
+        return Admin::where('status', true)->where('id', $id)->first();
     }
 }

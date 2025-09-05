@@ -64,7 +64,7 @@ class StateController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'errors' => 'Something went wrong. Please try again.' . $e
-            ], 500);
+            ]);
         }
     }
 
@@ -104,7 +104,7 @@ class StateController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'errors' => 'Something went wUndefined variable $strong. Please try again.' . $e
-            ], 500);
+            ]);
         }
     }
 
@@ -126,7 +126,7 @@ class StateController extends Controller
         } catch (\Throwable $e) {
             return response()->json([
                 'errors' => 'Something went wrong. Please try again.'
-            ], 500);
+            ]);
         }
     }
 

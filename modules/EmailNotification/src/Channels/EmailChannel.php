@@ -67,7 +67,6 @@ class EmailChannel implements NotificationChannel
         try {
             $mailable = new NotificationEmail($subject, $content, $this->config, $logId);
 
-
             Mail::mailer($this->config['driver'])->to($recipient)->queue($mailable);
         } catch (\Exception $e) {
 

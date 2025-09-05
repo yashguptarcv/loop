@@ -24,18 +24,36 @@
 
                 <div>
 
-                 <x-autocomplete 
+                <x-autocomplete 
                     label="Industry"
                     field="industry"
                     table="categories"
                     value-field="id"
                     search-fields="name"
                     list-attributes="id,name"
-                    :multiple="false"
+                    :multiple="true"
                     :selected="!empty($lead->industries) ? [fn_get_category_data($lead->industries)] : []"
                 />
 
                 @error('industry')
+                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                @enderror
+                </div>
+
+                <div>
+
+                <x-autocomplete 
+                    label="Assigned To"
+                    field="assigned_to"
+                    table="admins"
+                    value-field="id"
+                    search-fields="name"
+                    list-attributes="id,name"
+                    :multiple="false"
+                    :selected="!empty($lead->assigned_to) ? [fn_get_user_data($lead->assigned_to)] : []"
+                />
+
+                @error('assigned_to')
                     <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                 @enderror
                 </div>
@@ -46,7 +64,7 @@
                     </label>
                     <select id="status_id" name="status_id"
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 @error('status_id') border-red-500 dark:border-red-400 @enderror"
-                            required>
+                            >
                         <option value="">Select Status</option>
                         @foreach($leadStatuses as $status)
                             <option value="{{ $status->id }}" 

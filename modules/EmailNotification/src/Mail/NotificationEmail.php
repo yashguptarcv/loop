@@ -53,7 +53,7 @@ class NotificationEmail extends Mailable implements ShouldQueue
             }
 
             $email = $this->subject($this->mail_subject)
-                          ->html($this->content);
+                ->html($this->content);
 
             // Add CC if specified
             if (!empty($this->config['cc'])) {
@@ -115,18 +115,18 @@ class NotificationEmail extends Mailable implements ShouldQueue
     protected function configureCustomMailer(): void
     {
         Config::set('mail.mailers.smtp', [
-            'MAIL_MAILER'     => $this->config['driver'] ?? 'smtp',
-            'MAIL_HOST'       => $this->config['host'],
-            'MAIL_PORT'       => $this->config['port'],
-            'MAIL_ENCRYPTION' => $this->config['encryption'] ?? null,
-            'MAIL_USERNAME'   => $this->config['username'],
-            'MAIL_PASSWORD'   => $this->config['password'],
-            'timeout'    => $this->config['timeout'] ?? null,
+            'transport' => $this->config['driver'] ?? 'smtp',
+            'host'      => $this->config['host'],
+            'port'      => $this->config['port'],
+            'encryption' => $this->config['encryption'] ?? 'tls',
+            'username'  => $this->config['username'],
+            'password'  => $this->config['password'],
+            'timeout'   => $this->config['timeout'] ?? null,
         ]);
 
         Config::set('mail.from', [
-            'MAIL_FROM_ADDRESS' => $this->config['from_address'],
-            'MAIL_FROM_NAME'    => $this->config['from_name'] ?? config('app.name'),
+            'address' => $this->config['from_address'],
+            'name'    => $this->config['from_name'] ?? config('app.name'),
         ]);
     }
 

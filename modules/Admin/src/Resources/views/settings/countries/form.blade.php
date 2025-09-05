@@ -7,14 +7,14 @@
             <div class="">
                 <!-- Code Field -->
                 <div class="mb-2">
-                    <label class="custom-label required">Code</label>
+                    <label class="custom-label ">Code</label>
                     <input type="text" name="code" id="code" 
                            value="{{ $country->code ?? old('code') }}"
                          class="input-field"  >
                 </div>
                 <!-- Country Name Field  -->
                 <div class="mb-2">
-                    <label class="custom-label required">Country</label>
+                    <label class="custom-label ">Country</label>
                     <input type="text" name="name" id="name" 
                            value="{{ $country->name ?? old('name') }}"
                          class="input-field"  >

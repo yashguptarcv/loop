@@ -15,6 +15,7 @@ class NotificationDispatcher
 
     public function dispatch(string $eventCode, $notifiables, $notification): void
     {
+        
         $event = NotificationEvent::where('event_code', $eventCode)->first();
 
         if (!$event) {

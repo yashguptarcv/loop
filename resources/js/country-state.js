@@ -1,8 +1,4 @@
-
 document.addEventListener("DOMContentLoaded", function () {
-    // Pass preselected state ID from backend (null if none)
-    const selectedState = [];
-
     function loadStates(countrySelect, stateSelect, preselected = null) {
         const countryId = countrySelect.value;
         if (!countryId) {
@@ -10,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // prevent duplicate fetches for same country
+        // prevent duplicate fetches for same country in same component
         if (countrySelect.dataset.loading === countryId) {
             return;
         }
@@ -26,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
                 stateSelect.innerHTML = options;
 
-                // fallback: force-select if preselected was passed
+                // fallback: force-select
                 if (preselected && !stateSelect.value) {
                     stateSelect.value = preselected;
                 }
@@ -39,32 +35,39 @@ document.addEventListener("DOMContentLoaded", function () {
     function attachCountryStateEvents(container) {
         if (!container) return;
 
-        const countrySelect = container.querySelector("#country_select");
-        const stateSelect   = container.querySelector("#state_select");
+        const countrySelect = container.querySelector("[data-country]");
+        const stateSelect   = container.querySelector("[data-state]");
+        const selectedState = container.querySelector("[data-selected-state]")?.value || null;
+
         if (!countrySelect || !stateSelect) return;
 
         // Bind change event only once
         if (!countrySelect.dataset.bound) {
             countrySelect.dataset.bound = "1";
             countrySelect.addEventListener("change", function () {
-                delete countrySelect.dataset.loading; // clear previous cache
+                delete countrySelect.dataset.loading;
                 loadStates(countrySelect, stateSelect);
             });
         }
 
-        // On first load, fetch states & apply selectedState
+        // On first load
         if (countrySelect.value && !countrySelect.dataset.loading) {
             loadStates(countrySelect, stateSelect, selectedState);
         }
     }
 
+    function initAll() {
+        document.querySelectorAll(".country_state_container").forEach(container => {
+            attachCountryStateEvents(container);
+        });
+    }
+
     // Observe AJAX inserts
     const observer = new MutationObserver(() => {
-        const container = document.getElementById("country_state_container");
-        attachCountryStateEvents(container);
+        initAll();
     });
     observer.observe(document.body, { childList: true, subtree: true });
 
-    // Initial attach
-    attachCountryStateEvents(document.getElementById("country_state_container"));
+    // Initial
+    initAll();
 });

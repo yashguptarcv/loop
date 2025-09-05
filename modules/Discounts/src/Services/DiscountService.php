@@ -116,6 +116,7 @@ class DiscountService
                 'discount_id' => $discount->id,
                 'rule_type' => $rule['rule_type'],
                 'rule_id' => $rule['rule_id'],
+                'condition_type' => $rule['condition_type'],
                 'rule_value' => $rule['rule_value'] ?? null,
             ]);
         }
@@ -153,19 +154,17 @@ class DiscountService
     public function validateCoupon(string $code, ?User $user = null, $order = null): ?Coupon
     {
         $coupon = Coupon::where('code', $code)
-            ->with('discount')
+            ->with(['discount.rules']) // eager load discount rules
             ->first();
 
         if (!$coupon) {
             return null;
         }
 
-        // Check if coupon is active
         if (!$coupon->is_active) {
             return null;
         }
 
-        // Check date validity
         $now = now();
         if ($coupon->starts_at && $now->lt($coupon->starts_at)) {
             return null;
@@ -174,12 +173,10 @@ class DiscountService
             return null;
         }
 
-        // Check usage limits
         if ($coupon->usage_limit && $coupon->times_used >= $coupon->usage_limit) {
             return null;
         }
 
-        // Check per-user usage limits
         if ($user && $coupon->usage_limit_per_user) {
             $userUsage = DB::table('coupon_user')
                 ->where('coupon_id', $coupon->id)
@@ -190,22 +187,80 @@ class DiscountService
                 return null;
             }
         }
-        
-        if ($coupon->discount->apply_to == 'subtotal') {
-            $orderTotal = $order['subtotal'];
-        } elseif ($coupon->discount->apply_to == 'total') {
-            $orderTotal = $order['total'];
-        } else {
-            $orderTotal = $order['subtotal'];
+
+
+        $orderTotal = $coupon->discount->apply_to->value === 'total'
+            ? $order['total']
+            : $order['subtotal'];
+
+        if ($coupon->min_order_amount && $orderTotal < $coupon->min_order_amount) {
+            return null;
         }
 
-        // Check minimum order amount
-        if ($orderTotal && $coupon->min_order_amount && $orderTotal < $coupon->min_order_amount) {
-            return null;
+        foreach ($coupon->discount->rules as $rule) {
+            switch ($rule->rule_type) {
+                case 'product':
+                    $productQty = collect($order['order_items'] ??  $order['items'])
+                        ->where('product_id', $rule->rule_id)
+                        ->sum('quantity');
+
+                    if (!$this->checkCondition($productQty, $rule->condition_type, $rule->rule_value)) {
+                        return null; // product rule not satisfied
+                    }
+                    break;
+
+                // case 'category':
+                //     $categoryQty = collect($order['order_items'])
+                //         ->where('category_id', $rule->rule_id)
+                //         ->sum('quantity');
+
+                //     if (!$this->checkCondition($categoryQty, $rule->condition_type, $rule->rule_value)) {
+                //         return null; // category rule not satisfied
+                //     }
+                //     break;
+
+                case 'subtotal':
+                    if (!$this->checkCondition($order['subtotal'], $rule->condition_type, $rule->rule_value)) {
+                        return null; // subtotal rule not satisfied
+                    }
+                    break;
+
+                case 'total':
+                    if (!$this->checkCondition($order['total'], $rule->condition_type, $rule->rule_value)) {
+                        return null; // total rule not satisfied
+                    }
+                    break;
+
+                default:
+                    return null; // unknown rule
+            }
         }
 
         return $coupon;
     }
+
+    protected function checkCondition($value, string $condition, $ruleValue): bool
+    {
+        switch ($condition) {
+            case 'equals':
+                return $value == $ruleValue;
+            case 'not_equals':
+                return $value != $ruleValue;
+            case 'greater_than':
+                return $value > $ruleValue;
+            case 'greater_or_equal':
+                return $value >= $ruleValue;
+            case 'less_than':
+                return $value < $ruleValue;
+            case 'less_or_equal':
+                return $value <= $ruleValue;
+            case 'any': // condition always passes if item exists
+                return $value > 0;
+            default:
+                return false;
+        }
+    }
+
 
     /**
      * Apply coupon to an order and return discount details
@@ -219,9 +274,9 @@ class DiscountService
     {
         // Validate the coupon first
         $coupon = $this->validateCoupon($couponCode, null, $order);
-        
+
         if (!$coupon) {
-            throw new Exception('Invalid or expired coupon code');
+            return [];
         }
 
         $discount = $coupon->discount;

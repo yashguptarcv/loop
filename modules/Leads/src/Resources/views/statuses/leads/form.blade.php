@@ -10,7 +10,7 @@
 
         <!-- Name -->
         <div class="col-span-1">
-            <label class="custom-label required">Name</label>
+            <label class="custom-label ">Name</label>
             <input type="text" name="name" id="name"
                 value="{{ old('name', $lead->name ?? '') }}"
                 class="input-field">
@@ -18,7 +18,7 @@
 
         <!-- Color Name -->
         <div class="col-span-1">
-            <label class="custom-label required" for="color">Color Name</label>
+            <label class="custom-label " for="color">Color Name</label>
             <select name="color" id="color" class="input-field">
                 <option value="">-- Select color --</option>
                 @foreach ($tags as $tag)

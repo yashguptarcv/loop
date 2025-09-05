@@ -55,6 +55,7 @@ class EmailNotificationServiceProvider extends ServiceProvider
             return;
         }
         
+        // dd(fn_get_setting('general.mail.driver'));
         // Create or update the email channel in database
         NotificationChannel::updateOrCreate(
             ['name' => 'email'],
